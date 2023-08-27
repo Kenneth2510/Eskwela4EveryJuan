@@ -18,5 +18,3 @@
     </section>
 
 @include('partials.footer')
-
-{{-- TEST 1 - 2 - 3 --}}
