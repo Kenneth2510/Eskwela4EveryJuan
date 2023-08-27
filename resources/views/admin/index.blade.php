@@ -15,10 +15,9 @@
              
                 </div>
             </div>
-            
         </div>
     
-        <div id="adminlogin" class="relative hidden w-2/4 h-full ml-24 right-0 py-16">
+        <div id="adminlogin" class="relative hidden w-2/4 h-full ml-24 right-0 py-16 transition-opacity duration-100">
             <form action="">
                 @csrf
     
@@ -40,8 +39,20 @@
         </div>
     
     </section>
+
     
    
     </section>
-
+    
+    <script>
+        $(document).ready(function() {
+            const form1 = $('#adminlogin');
+            const showForm2Button = $('#showloginadmin');
+    
+            showForm2Button.on('click', function(event) {
+                event.preventDefault();
+                form1.removeClass('hidden');
+            });
+        });
+      </script>
 @include('partials.footer')
