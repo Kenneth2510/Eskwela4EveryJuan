@@ -18,5 +18,3 @@
     </section>
 
 @include('partials.footer')
-
-{{-- ALISIN KO NA --}}
