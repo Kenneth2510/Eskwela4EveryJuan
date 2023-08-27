@@ -1,10 +1,15 @@
 @include('partials.header')
 
-<section id="sidebar" class="fixed h-full w-64 bg-seagreen top-0 z-20 left-0">
-
+<section id="sidebarfull" class="fixed h-full w-72 bg-seagreen top-0 z-20 left-0">
+    <div id="sidebarfull_menu" class="relative flex items-center px-2 mx-auto py-3">
+        <button class="">
+            <i class="fa-solid fa-bars text-3xl" style="color: #ffffff;"></i>
+        </button>
+        <h1 class="text-2xl font-semibold pl-2 text-black">Eskwela4EveryJuan</h1>
+    </div>
 
     <div id="sidebar" class="relative mx-auto w-56">
-        <ul class="my-48 mx-auto list-none list-inside">
+        <ul class="my-28 mx-auto list-none list-inside">
             <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
                 <div class="flex items-center px-3 rounded-lg" id="dashboard">
                     <i class="fa-solid fa-house text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -56,8 +61,58 @@
     </div>
 </section>
 
+<section id="sidebarmin" class="hidden fixed h-full w-14 bg-seagreen top-0 z-20 left-0">
+    <div id="sidebarmin_menu" class="relative flex items-center px-3 mx-auto py-3">
+        <button class="">
+            <i class="fa-solid fa-bars text-3xl" style="color: #ffffff;"></i>
+        </button>
+    </div>
+
+    <div id="sidebar" class="relative mx-auto w-56">
+        <ul class="my-28 mx-auto list-none list-inside">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+                <div class="flex items-center px-1 rounded-lg" id="dashboard">
+                    <i class="fa-solid fa-house text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
+                </div>
+            </a></li>
+
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+                <div class="flex items-center px-1 rounded-lg" id="learners">
+                    <i class="fa-solid fa-user text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
+                </div>
+            </a></li>
+
+
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+                <div class="flex items-center px-1 rounded-lg" id="instructors">
+                    <i class="fa-solid fa-user-graduate text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
+                </div>
+            </a></li>
+
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+                <div class="flex items-center px-1 rounded-lg" id="courses">
+                    <i class="fa-solid fa-book text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
+                </div>
+            </a></li>
+
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+                <div class="flex items-center px-1 rounded-lg" id="performance">
+                    <i class="fa-solid fa-chart-simple text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
+                </div>
+            </a></li>
+
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+                <div class="flex items-center px-1 rounded-lg" id="settings">
+                    <i class="fa-solid fa-gear text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
+                </div>
+            </a></li>
+
+        </ul>  
+    </div>
+</section>
+
 <section id="maincontent" class="">
-    <div id="title" class="">
+    <div id="title" class="relative bg-red-500 w-10/12 left-80">
         <h1 class="">Overview</h1>
         <div id="adminuser" class="">
             <h3 class="">admin</h3>
@@ -126,6 +181,19 @@
         </div>
     </div>
 </section>
+
+<script>
+    $(document).ready(function () {
+        $("#sidebarfull_menu").click(function () {
+            $("#sidebarfull, #sidebarmin").toggleClass("hidden");
+        });
+
+        $("#sidebarmin_menu").click(function () {
+            $("#sidebarfull, #sidebarmin").toggleClass("hidden");
+        });
+    });
+</script>
+
 
 
 @include('partials.footer')
