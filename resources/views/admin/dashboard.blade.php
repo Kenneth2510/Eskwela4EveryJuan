@@ -1,7 +1,9 @@
 @include('partials.header')
 
 <section id="sidebar" class="fixed h-full w-64 bg-seagreen top-0 z-20 left-0">
-    <div class="relative mx-auto w-56">
+
+
+    <div id="sidebar" class="relative mx-auto w-56">
         <ul class="my-48 mx-auto list-none list-inside">
             <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
                 <div class="flex items-center px-3 rounded-lg" id="dashboard">
@@ -49,8 +51,8 @@
         </ul>  
     </div>
 
-    <div id="logout" class="relative mx-auto w-56">
-        <a href="" class="py-5 bg-darthmouthgreen">Logout</a>
+    <div id="logout" class="relative mx-auto w-56 flex justify-center">
+        <a href="" class="py-5 bg-darthmouthgreen mx-auto px-14 rounded-2xl text-white text-xl font-medium hover:bg-green-900">Logout</a>
     </div>
 </section>
 
