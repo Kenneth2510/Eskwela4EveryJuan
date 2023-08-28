@@ -40,4 +40,5 @@ Route::controller(InstructorController::class)->group(function() {
 Route::controller(AdminController::class)->group(function() {
     Route::get('/admin', 'index');
     Route::get('/admin/dashboard', 'dashboard');
+    Route::get('/admin/learners', 'learners');
 });

@@ -10,14 +10,16 @@
 
     <div id="sidebar" class="relative mx-auto w-56">
         <ul class="my-28 mx-auto list-none list-inside">
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="/admin/dashboard">
                 <div class="flex items-center px-3 rounded-lg" id="dashboard">
                     <i class="fa-solid fa-house text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="text-xl text-white px-3 font-normal group-hover:text-black group-hover:text-xl group-hover:font-semibold">Dashboard</h3>
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="/admin/learners">
                 <div class="flex items-center px-3 rounded-lg" id="learners">
                     <i class="fa-solid fa-user text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="text-xl text-white px-3 font-normal group-hover:text-black group-hover:text-xl group-hover:font-semibold">Learners</h3>
@@ -25,28 +27,32 @@
             </a></li>
 
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="instructors">
                     <i class="fa-solid fa-user-graduate text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="text-xl text-white px-3 font-normal group-hover:text-black group-hover:text-xl group-hover:font-semibold">Instructors</h3>
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="courses">
                     <i class="fa-solid fa-book text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="text-xl text-white px-3 font-normal group-hover:text-black group-hover:text-xl group-hover:font-semibold">Courses</h3>
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="performance">
                     <i class="fa-solid fa-chart-simple text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="text-xl text-white px-3 font-normal group-hover:text-black group-hover:text-xl group-hover:font-semibold">Performance</h3>
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group"><a href="">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="settings">
                     <i class="fa-solid fa-gear text-2xl w-12 px-auto text-center group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="text-xl text-white px-3 font-normal group-hover:text-black group-hover:text-xl group-hover:font-semibold">Settings</h3>
@@ -146,7 +152,7 @@
                 <div id="calendar" class="h-96 rounded-2xl bg-blue-400 shadow-2xl"></div>
             </div>
             <div id="lowerright" class="w-4/12 rounded-2xl">
-                <div id="newadded" class="w-full mb-5 bg-mainwhitebg rounded-2xl shadow-2xl px-5 py-5">
+                <div id="newadded" class="w-full mb-5 bg-white rounded-2xl shadow-2xl px-5 py-5">
                     <h3 class="text-3xl font-semibold">Newly Added</h3>
                     <div id="newlearner" class="bg-green-600 my-2 rounded-xl px-5 py-3 flex justify-between items-center">
                         <h4 class="text-2xl font-medium">New Learners</h4>
@@ -162,7 +168,7 @@
                     </div>
                 </div>
 
-                <div id="pendingstatus" class="w-full bg-mainwhitebg rounded-2xl shadow-2xl px-5 py-5">
+                <div id="pendingstatus" class="w-full bg-white rounded-2xl shadow-2xl px-5 py-5">
                     <h3 class="text-3xl font-semibold">Pending Status</h3>
                     <div id="pendinglearner" class="bg-green-600 my-2 rounded-xl px-5 py-3 flex justify-between items-center">
                         <h4 class="text-2xl font-medium">Pending Learners</h4>

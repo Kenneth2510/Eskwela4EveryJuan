@@ -13,4 +13,8 @@ class AdminController extends Controller
     public function dashboard() {
         return view('admin.dashboard')->with('title', 'Admin Dashboard');
     }
+
+    public function learners() {
+        return view('admin.learners')->with('title', 'Learner Management');
+    }
 }
