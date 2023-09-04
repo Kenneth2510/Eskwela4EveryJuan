@@ -1,4 +1,5 @@
 @include('partials.header')
+{{-- rararrar --}}
 
 <section class="h-screen w-screen bg-cover" style="background-image: url('{{ asset('assets/ivan-aleksic-PDRFeeDniCk-unsplash.jpg') }}')">
 
