@@ -1,5 +1,5 @@
 @include('partials.header')
-{{-- rarararar --}}
+
 <section class="h-screen w-screen bg-cover" style="background-image: url('{{ asset('assets/ivan-aleksic-PDRFeeDniCk-unsplash.jpg') }}')">
 
     <div class="titlearea text-3xl font-bold font-poppins p-5">Eskwela4EveryJuan</div>

@@ -1,0 +1,14 @@
+/* Add this in your CSS */
+.selected {
+    background-color: rgba(220,252,231,0.10); /* Change this to your desired color */
+}
+
+.selected i {
+    font-size: 30;
+}
+
+.selected h3 {
+    color: black;
+    font-weight: 600;
+    font-size: 20;
+}
