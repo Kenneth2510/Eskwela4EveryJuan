@@ -1,8 +1,8 @@
 @include('partials.header')
 
-<section class="w-screen h-screen relative flex">
-    <div id="RegisterLeft" class="w-1/2 h-full bg-neutral-200 relative">
-        <div class="titlearea text-3xl font-bold font-poppins p-5">Eskwela4EveryJuan</div>
+<section class="relative flex w-screen h-screen">
+    <div id="RegisterLeft" class="relative w-1/2 h-full bg-neutral-200">
+        <div class="p-5 text-3xl font-bold titlearea font-poppins">Eskwela4EveryJuan</div>
 
        
 
@@ -12,7 +12,7 @@
             <div id="personinfo" class="relative w-4/5 mx-auto mt-10">
                 <div id="Registertitle" class="relative w-full mx-auto my-14">
                     <text class="text-5xl font-bold text-black">Create an Account</text>
-                    <p class="text-lg font-light mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
+                    <p class="mt-2 text-lg font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
                 </div>
                 <div class="flex justify-around my-5">
                     <div class="w-1/2">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <div class="flex justify-around my-5 w-full">
+                <div class="flex justify-around w-full my-5">
                     <div class="w-1/2">
                         <label for="bday" class="text-xl font-semibold">Birthday</label><br>
                         <input type="date" name="bday" class="w-11/12 mx-0.5 px-3 py-1 text-lg shadow-xl rounded-md">
@@ -65,15 +65,15 @@
                     <input type="password" name="password_confirm" class="w-11/12 mx-0.5 px-3 py-1 text-lg shadow-xl rounded-md" placeholder="Confirm Password">
                 </div>
 
-                <div class="w-full mt-10 flex justify-end">
-                    <button id="shownext" class="rounded-xl bg-green-700 text-white font-semibold text-xl py-3 px-7 hover:bg-green-900">Next  <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i></button>
+                <div class="flex justify-end w-full mt-10">
+                    <button id="shownext" class="py-3 text-xl font-semibold text-white bg-green-700 rounded-xl px-7 hover:bg-green-900">Next  <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i></button>
                 </div>
             </div>
 
-            <div id="businessinfo" class="hidden relative w-4/5 mx-auto mt-10">
+            <div id="businessinfo" class="relative hidden w-4/5 mx-auto mt-10">
                 <div id="Registertitle" class="relative w-full mx-auto my-14">
                     <text class="text-5xl font-bold text-black">About your Business</text>
-                    <p class="text-lg font-light mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
+                    <p class="mt-2 text-lg font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
                 </div>
 
                 <div class="w-full my-5">
@@ -96,23 +96,23 @@
                     <input type="text" name="bploaccno" class="w-11/12 mx-0.5 px-3 py-1 text-lg shadow-xl rounded-md" placeholder="BPLO Account Number">
                 </div>
 
-                <div class="relative border-t-2 border-green-800 mt-10 py-5">
+                <div class="relative py-5 mt-10 border-t-2 border-green-800">
                     <div class="flex items-center py-3">
-                        <input type="checkbox" name="rememberMe" class="bg-green-600 text-lg h-6 w-6 mr-3">
-                        <label for="rememberMe" class="text-xl font-medium">I've read and Accept <a href="" class="text-green-700 font-bold hover:text-green-900"> Terms & Conditions</a></label>
+                        <input type="checkbox" name="rememberMe" class="w-6 h-6 mr-3 text-lg bg-green-600">
+                        <label for="rememberMe" class="text-xl font-medium">I've read and Accept <a href="" class="font-bold text-green-700 hover:text-green-900"> Terms & Conditions</a></label>
                     </div>
                     <div class="flex items-center py-3">
-                        <input type="checkbox" name="rememberMe" class="bg-green-600 text-lg h-6 w-6 mr-3">
+                        <input type="checkbox" name="rememberMe" class="w-6 h-6 mr-3 text-lg bg-green-600">
                         <label for="rememberMe" class="text-xl font-medium">Remember me</label>
                     </div>
 
-                    <div class="mt-5 flex justify-end">
-                        <button id="showprev" class="mx-5 rounded-xl bg-green-700 text-white font-semibold text-xl py-3 px-7 hover:bg-green-900"><i class="fa-solid fa-arrow-right fa-rotate-180" style="color: #ffffff;"> </i>    Back</button>
-                        <button type="submit" class="rounded-xl bg-green-700 text-white font-semibold text-xl py-3 px-7 hover:bg-green-900">Create my Account</button>
+                    <div class="flex justify-end mt-5">
+                        <button id="showprev" class="py-3 mx-5 text-xl font-semibold text-white bg-green-700 rounded-xl px-7 hover:bg-green-900"><i class="fa-solid fa-arrow-right fa-rotate-180" style="color: #ffffff;"> </i>    Back</button>
+                        <button type="submit" class="py-3 text-xl font-semibold text-white bg-green-700 rounded-xl px-7 hover:bg-green-900">Create my Account</button>
 
                     </div>
                 </div>
-                <div class="relative mt-6 w-4/5 mx-auto py-2 flex justify-center" id="register">
+                <div class="relative flex justify-center w-4/5 py-2 mx-auto mt-6" id="register">
                     <p class="text-xl font-normal">Already have an account? <a href="/learner/login" class="text-xl font-semibold text-green-700 hover:text-green-900">Sign In</a></p>
                 </div>
         
@@ -125,7 +125,7 @@
 
     </div>
     
-    <div id="RegisterRight" class="w-1/2 h-full bg-seagreen relative right-0">
+    <div id="RegisterRight" class="relative right-0 w-1/2 h-full bg-seagreen">
         {{-- //put those extra content to it --}}
     </div>
 
