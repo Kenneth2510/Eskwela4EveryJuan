@@ -56,5 +56,3 @@
         });
       </script>
 @include('partials.footer')
-
-{{-- test test --}}
