@@ -94,7 +94,7 @@
 
     <div id="maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
         <div class="mb-5">
-            <a href="" class="">
+            <a href="/admin/learners" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
             </a>
         </div>
