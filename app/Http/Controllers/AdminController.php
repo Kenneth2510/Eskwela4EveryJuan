@@ -17,4 +17,8 @@ class AdminController extends Controller
     public function learners() {
         return view('admin.learners')->with('title', 'Learner Management');
     }
+
+    public function add_learner() {
+        return view('admin.add_learner')->with('title' , 'Add New Learner');
+    }
 }

@@ -79,7 +79,7 @@
         <div id="containertitle" class="flex items-center justify-between pt-1 pb-5 px-auto">
             <h3 class="text-3xl font-semibold">All Learners</h3>
             <div class="">
-                <a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">Add New</a>
+                <a href="/admin/add_learner" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">Add New</a>
                 <select name="" id="" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
                     <option value="" class=""></option>
                     <option value="id">Learner ID</option>
