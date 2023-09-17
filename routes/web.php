@@ -43,4 +43,5 @@ Route::controller(AdminController::class)->group(function() {
     Route::get('/admin/dashboard', 'dashboard');
     Route::get('/admin/learners', 'learners');
     Route::get('/admin/add_learner', 'add_learner');
+    Route::get('/admin/view_learner', 'view_learner'); //to add param later
 });

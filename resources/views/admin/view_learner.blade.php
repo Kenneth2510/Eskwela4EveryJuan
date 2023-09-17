@@ -82,10 +82,10 @@
     </div> --}}
 </section>
 
-<section id="add_new_container" class="relative ml-16 md:ml-16 lg:ml-64">
+<section id="view_learner_container" class="relative ml-16 md:ml-16 lg:ml-64">
 
     <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">Add New Learner</h1>
+        <h1 class="text-4xl font-semibold">View Learner Details</h1>
         <div id="adminuser" class="flex items-center">
             <h3 class="text-lg">admin</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
@@ -97,6 +97,17 @@
             <a href="/admin/learners" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
             </a>
+        </div>
+        
+        <div id="icon" class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full"></div>
+        <div id="learner_status" class="flex items-center justify-center ">
+            
+            <h3 class="mx-3 text-lg font-semibold">Account Status: </h3>
+            <div id="status" class="mx-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl">pending</div>
+            <div id="button" class="flex flex-col hidden mx-4">
+                <button class="my-1 text-lg text-center bg-green-500 py-auto w-28 rounded-xl hover:bg-green-700 hover:text-white">approve</button>
+                <button class="my-1 text-lg text-center bg-red-500 py-auto w-28 rounded-xl hover:bg-red-700 hover:text-white">reject</button>    
+            </div> 
         </div>
 
         <form action="">
@@ -110,11 +121,11 @@
                         <div class="mb-3">
                             <label for="fname" class="text-md font-regular md:text-lg">First Name</label>
                             <br>
-                            <input type="text" name="fname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="First Name">
+                            <input id="fname" type="text" name="fname" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="First Name" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="lname" class="text-md font-regular md:text-lg">Last Name</label><br>
-                            <input type="text" name="lname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15"  placeholder="Last Name">
+                            <input id="lname" type="text" name="lname" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15"  placeholder="Last Name" disabled>
                         </div>
                         
                     </div>
@@ -125,14 +136,14 @@
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Birthday</h4>
                         <div class="">
                             <label for="bday" class="hidden">Birthday</label>
-                            <input type="date" name="bday" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
+                            <input id="bday" type="date" name="bday" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
                         </div>
                     </div>
-                    <div id="gender" class="flex mt-5">
+                    <div id="genderfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Gender</h4>
                         <div class="">
                             <label for="gender" class="hidden">Gender</label>
-                            <select name="gender" id="gender" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
+                            <select name="gender" id="gender" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
                                 <option value="" class=""></option>
                                 <option value="male" class="">Male</option>
                                 <option value="female" class="">Female</option>
@@ -142,11 +153,11 @@
                     </div>
                 </div>
     
-                <div id="email" class="flex mt-5">
+                <div id="emailfield" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Email</h4>
                     <div class="">
                         <label for="email" class="hidden">Email</label>
-                        <input type="email" name="email" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="Email">
+                        <input id="email" type="email" name="email" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="Email" disabled>
                     </div>
                 </div>
     
@@ -154,7 +165,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="contactno" pattern="[0-9]{10}" name="contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09">
+                        <input type="tel" id="contactno" pattern="[0-9]{10}" name="contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled>
                     </div>
                 </div>
     
@@ -172,41 +183,41 @@
                 <div id="businessfields_container" class="mt-5">
                     <div id="businessname" class="flex">
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Name</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="businessname" class="hidden">Business Name</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessname" placeholder="Business Name">
+                            <input id="bname" type="text" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="businessname" placeholder="Business Name" disabled>
                         </div>
                     </div>
     
                     <div id="businessaddress" class="flex mt-5">
                         <h4 class="w-40 ml-3 text-lg font-medium md:w-60 md:text-2xl ">Business Address</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="businessaddress" class="hidden">Business Address</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessaddress" placeholder="Business Address">
+                            <input id="baddress" type="text" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="businessaddress" placeholder="Business Address" disabled>
                         </div>
                     </div>
     
                     <div id="businessownername" class="flex mt-5">
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Owner Name</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="businessownername" class="hidden">Business Owner Name</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessownername" placeholder="Business Owner Name">
+                            <input id="bowner" type="text" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="businessownername" placeholder="Business Owner Name" disabled>
                         </div>
                     </div>
     
                     <div id="businessbplonumber" class="flex mt-5">
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">BPLO Account Number</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="businessbplonumber" class="hidden">BPLO Account Number</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessbplonumber" placeholder="">
+                            <input id="bbplonum" type="text" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="businessbplonumber" placeholder="" disabled>
                         </div>
                     </div>
     
                     <div id="businesscategory" class="flex mt-5">
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Category</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                         <label for="businesscategory" class="hidden">Business Category</label>
-                            <select name="businesscategory" id="" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
+                            <select name="businesscategory" id="bcateg" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
                                 <option value="" class=""></option>
                                 <option value="micro" class="">Micro</option>
                                 <option value="small" class="">Small</option>
@@ -224,48 +235,83 @@
             <div id="logindetailsfields" class="mx-auto my-5 mt-16 smallpc:w-6/12">
                 <h3 class="mb-5 text-3xl font-medium border-b-2 border-b-black md:text-4xl">Login Details</h3>
                 <div id="logindetails_container" class="">
-                    <div id="username" class="flex">
+                    <div id="usernamefield" class="flex">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Username</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="username" class="hidden">Username</label>
-                            <input type="text" name="username" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Username">
+                            <input id="username" type="text" name="username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled>
                         </div>
                     </div>
     
-                    <div id="password" class="flex mt-5">
+                    <div id="passwordfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Password</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="password" class="hidden">Password</label>
-                            <input type="password" name="password" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Password">
+                            <input id="password" type="password" name="password" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Password" disabled>
                         </div>
                     </div>
     
-                    <div id="password_confirm" class="flex mt-5">
+                    <div id="password_confirmfield" class="flex hidden mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Cofirm Password</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="password_confirm" class="hidden">Cofirm Password</label>
-                            <input type="password" name="password_confirm" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Confirm Password">
+                            <input id="password_confirm" type="password" name="password_confirm" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Confirm Password" disabled>
                         </div>
                     </div>
     
-                    <div id="securitynum" class="flex mt-5">
+                    <div id="securitynumfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">SecurityCode</h4>
-                        <div class="">
+                        <div class="w-64 ml-4">
                             <label for="securitynum" class="hidden">SecurityCode</label>
-                            <input type="text" maxlength="6" name="securitynum" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Seucrity Code">
+                            <input id="securitynum" type="password" maxlength="6" name="securitynum" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Seucrity Code">
                         </div>
                     </div>
                 </div>
             </div>
     
             <div id="button_container" class="pt-5 mx-auto mt-16 text-center border-2 border-t-black">
-                <a href="" class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
-                <button type="submit" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Add New</button>
+                
+                <a href="" id="return"class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
+                <a href="" id="cancel" class="hidden px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
+                <button id="edit_data" type="submit" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
+
+                <button id="save_changes" type="submit" class="hidden px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+
             </div>
         </form>
     </div>
-    
-    
+
 </section>
 
+<script>
+    $(document).ready(function() {
+        $('#edit_data').on('click', function(e) {
+            e.preventDefault();
+
+            $('#password_confirmfield').removeClass('hidden');
+            $('#button').removeClass('hidden');
+            $('#save_changes').removeClass('hidden');
+            $('#edit_data').addClass('hidden');
+            $('#cancel').removeClass('hidden');
+            $('#return').addClass('hidden');
+
+            $('#fname').prop("disabled", false).focus();
+            $('#lname').prop("disabled", false);
+            $('#bday').prop("disabled", false);
+            $('#gender').prop("disabled", false);
+            $('#email').prop("disabled", false);
+
+            $('#bname').prop("disabled", false);
+            $('#baddress').prop("disabled", false);
+            $('#bowner').prop("disabled", false);
+            $('#bbplonum').prop("disabled", false);
+            $('#bcateg').prop("disabled", false);
+
+            $('#username').prop("disabled", false);
+            $('#password').prop("disabled", false);
+            $('#password_confirm').prop("disabled", false);
+            $('#securitynum').prop("disabled", false);
+        })
+    })
+</script>
 @include('partials.footer')
