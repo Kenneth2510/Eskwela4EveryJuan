@@ -28,7 +28,7 @@
 
 
             <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
+                <a href="/admin/instructors">
                 <div class="flex items-center px-3 rounded-lg" id="instructors">
                     <i class="w-12 text-2xl text-center fa-solid fa-user-graduate px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="px-3 text-xl font-normal text-white group-hover:text-black group-hover:text-xl group-hover:font-semibold">Instructors</h3>
@@ -75,7 +75,7 @@
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
         </div>
     </div>
-    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl mt-7 rounded-2xl">
+    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-mainwhitebg mt-7 rounded-2xl">
         <div id="containertitle" class="flex items-center justify-between pt-1 pb-5 px-auto">
             <h3 class="text-3xl font-semibold">All Learners</h3>
             <div class="">

@@ -18,7 +18,7 @@
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group selected">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
                 <a href="/admin/learners">
                 <div class="flex items-center px-3 rounded-lg" id="learners">
                     <i class="w-12 text-2xl text-center fa-solid fa-user px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -27,7 +27,7 @@
             </a></li>
 
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group selected">
                 <a href="/admin/instructors">
                 <div class="flex items-center px-3 rounded-lg" id="instructors">
                     <i class="w-12 text-2xl text-center fa-solid fa-user-graduate px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -82,31 +82,31 @@
     </div> --}}
 </section>
 
-<section id="add_new_container" class="relative ml-16 md:ml-16 lg:ml-64">
+<section id="AD002_LA_container" class="relative ml-16 md:ml-16 lg:ml-64">
 
-    <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">Add New Learner</h1>
+    <div id="AD002_LA_title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
+        <h1 class="text-4xl font-semibold">Add New Instructor</h1>
         <div id="adminuser" class="flex items-center">
             <h3 class="text-lg">admin</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
         </div>
     </div>
 
-    <div id="maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
+    <div id="AD002_LA_maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
         <div class="mb-5">
-            <a href="/admin/learners" class="">
+            <a href="/admin/instructors" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
             </a>
         </div>
 
         <form action="">
             @csrf
-        <div class="smallpc:flex smallpc:items-start">
-            <div id="personal_details_container" class="mx-auto my-5 smallpc:w-6/12">
+        <div id="AD002_LA_content" class="smallpc:flex smallpc:items-start">
+            <div id="AD002_LA_personal_details_container" class="mx-auto my-5 smallpc:w-6/12">
                 <h3 class="mb-5 text-3xl font-medium border-b-2 md:text-4xl border-b-black">Personal Details</h3>
                 <div id="namefield" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Name</h4>
-                    <div class="block">
+                    <div id="AD002_LA_name" class="block">
                         <div class="mb-3">
                             <label for="fname" class="text-md font-regular md:text-lg">First Name</label>
                             <br>
@@ -120,7 +120,7 @@
                     </div>
                 </div>
     
-                <div id="bday_genderfield" class="">
+                <div id="AD002_LA_bday_genderfield" class="">
                     <div id="bdayfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Birthday</h4>
                         <div class="">
@@ -142,7 +142,7 @@
                     </div>
                 </div>
     
-                <div id="email" class="flex mt-5">
+                <div id="AD002_LA_email" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Email</h4>
                     <div class="">
                         <label for="email" class="hidden">Email</label>
@@ -150,7 +150,7 @@
                     </div>
                 </div>
     
-                <div id="contactno" class="flex mt-5">
+                <div id="AD002_LA_contactno" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="contactno" class="hidden">Contact Number</label>
@@ -167,54 +167,16 @@
     
             </div>
     
-            <div id="businessdetailsfields" class="mx-auto my-5 mt-16 smallpc:w-6/12 smallpc:mt-5">
-                <h3 class="mb-5 text-3xl font-medium border-b-2 border-b-black md:text-4xl">Business Details</h3>
-                <div id="businessfields_container" class="mt-5">
-                    <div id="businessname" class="flex">
-                        <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Name</h4>
-                        <div class="">
-                            <label for="businessname" class="hidden">Business Name</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessname" placeholder="Business Name">
+            <div id="AD002_LA_credentialsfields" class="mx-auto my-5 mt-16 smallpc:w-6/12 smallpc:mt-5">
+                <h3 class="mb-5 text-3xl font-medium border-b-2 border-b-black md:text-4xl">Files</h3>
+                <div id="AD002_LA_credentials_container" class="mt-5">
+                    <div id="AD002_LA_cv" class="flex">
+                        <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Curriculum Vitae or Resume</h4>
+                        <div class="ml-4">
+                            <label for="cv_resume" class="hidden">CV or Resume</label>
+                            <input type="file" class="w-48 px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl" name="cv_resume" placeholder="">
                         </div>
                     </div>
-    
-                    <div id="businessaddress" class="flex mt-5">
-                        <h4 class="w-40 ml-3 text-lg font-medium md:w-60 md:text-2xl ">Business Address</h4>
-                        <div class="">
-                            <label for="businessaddress" class="hidden">Business Address</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessaddress" placeholder="Business Address">
-                        </div>
-                    </div>
-    
-                    <div id="businessownername" class="flex mt-5">
-                        <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Owner Name</h4>
-                        <div class="">
-                            <label for="businessownername" class="hidden">Business Owner Name</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessownername" placeholder="Business Owner Name">
-                        </div>
-                    </div>
-    
-                    <div id="businessbplonumber" class="flex mt-5">
-                        <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">BPLO Account Number</h4>
-                        <div class="">
-                            <label for="businessbplonumber" class="hidden">BPLO Account Number</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="businessbplonumber" placeholder="">
-                        </div>
-                    </div>
-    
-                    <div id="businesscategory" class="flex mt-5">
-                        <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Category</h4>
-                        <div class="">
-                        <label for="businesscategory" class="hidden">Business Category</label>
-                            <select name="businesscategory" id="" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
-                                <option value="" class=""></option>
-                                <option value="micro" class="">Micro</option>
-                                <option value="small" class="">Small</option>
-                                <option value="large" class="">Large</option>
-                            </select>
-                        </div>
-                    </div>
-    
                 </div>
             </div>
 
@@ -259,7 +221,7 @@
             </div>
     
             <div id="button_container" class="pt-5 mx-auto mt-16 text-center border-2 border-t-black">
-                <a href="/admin/learners" class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
+                <a href="/admin/instructors" class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
                 <button type="submit" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Add New</button>
             </div>
         </form>

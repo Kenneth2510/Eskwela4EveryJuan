@@ -25,4 +25,16 @@ class AdminController extends Controller
     public function view_learner() {
         return view('admin.view_learner')->with('title' , 'View Learner');
     }
+
+    public function instructors() {
+        return view('admin.instructors')->with('title' , 'Instructor Management');
+    }
+
+    public function add_instructor() {
+        return view('admin.add_instructor')->with('title' , 'Add New Instructor');
+    }
+
+    public function view_instructor () {
+        return view('admin.view_instructor')->with('title' , 'View Instructor');
+    }
 }

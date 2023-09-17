@@ -28,7 +28,7 @@
 
 
             <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
+                <a href="/admin/instructors">
                 <div class="flex items-center px-3 rounded-lg" id="instructors">
                     <i class="w-12 text-2xl text-center fa-solid fa-user-graduate px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Instructors</h3>
@@ -273,9 +273,10 @@
                 
                 <a href="" id="return"class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
                 <a href="" id="cancel" class="hidden px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
-                <button id="edit_data" type="submit" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
 
-                <button id="save_changes" type="submit" class="hidden px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+                <button id="edit_data" type="button" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
+                <button id="delete_data" type="submit" class="hidden px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
+                <button id="update_data" type="submit" class="hidden px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
 
             </div>
         </form>
@@ -290,7 +291,8 @@
 
             $('#password_confirmfield').removeClass('hidden');
             $('#button').removeClass('hidden');
-            $('#save_changes').removeClass('hidden');
+            $('#update_data').removeClass('hidden');
+            $('#delete_data').removeClass('hidden');
             $('#edit_data').addClass('hidden');
             $('#cancel').removeClass('hidden');
             $('#return').addClass('hidden');
@@ -300,6 +302,7 @@
             $('#bday').prop("disabled", false);
             $('#gender').prop("disabled", false);
             $('#email').prop("disabled", false);
+            $('#contactno').prop("disabled", false);
 
             $('#bname').prop("disabled", false);
             $('#baddress').prop("disabled", false);
