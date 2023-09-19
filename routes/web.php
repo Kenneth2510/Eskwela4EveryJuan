@@ -43,7 +43,8 @@ Route::controller(AdminController::class)->group(function() {
     Route::get('/admin/dashboard', 'dashboard');
     Route::get('/admin/learners', 'learners');
     Route::get('/admin/add_learner', 'add_learner');
-    Route::get('/admin/view_learner', 'view_learner'); //to add param later
+    Route::post('/admin/add_learner' ,'store_new_learner');
+    Route::get('/admin/view_learner/{student}', 'view_learner'); //to add param later
     Route::get('/admin/instructors' , 'instructors');
     Route::get('/admin/add_instructor' , 'add_instructor');
     Route::get('/admin/view_instructor' , 'view_instructor'); //to add param later

@@ -121,11 +121,11 @@
                         <div class="mb-3">
                             <label for="fname" class="text-md font-regular md:text-lg">First Name</label>
                             <br>
-                            <input id="fname" type="text" name="fname" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="First Name" disabled>
+                            <input id="fname" type="text" name="fname" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="First Name" disabled value={{$learner->learner_fname}} >
                         </div>
                         <div class="mb-3">
                             <label for="lname" class="text-md font-regular md:text-lg">Last Name</label><br>
-                            <input id="lname" type="text" name="lname" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15"  placeholder="Last Name" disabled>
+                            <input id="lname" type="text" name="lname" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15"  placeholder="Last Name" disabled value={{$learner->learner_lname}} >
                         </div>
                         
                     </div>
@@ -136,7 +136,7 @@
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Birthday</h4>
                         <div class="">
                             <label for="bday" class="hidden">Birthday</label>
-                            <input id="bday" type="date" name="bday" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
+                            <input id="bday" type="date" name="bday" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled value={{$learner->learner_bday}} >
                         </div>
                     </div>
                     <div id="genderfield" class="flex mt-5">
@@ -144,10 +144,10 @@
                         <div class="">
                             <label for="gender" class="hidden">Gender</label>
                             <select name="gender" id="gender" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
-                                <option value="" class=""></option>
-                                <option value="male" class="">Male</option>
-                                <option value="female" class="">Female</option>
-                                <option value="others" class="">Preferred not to say</option>
+                                <option value="" {{$learner->learner_gender == "" ? 'selected' : ''}} class=""></option>
+                                <option value="Male" {{$learner->learner_gender == "Male" ? 'selected' : ''}} class="">Male</option>
+                                <option value="Female" {{$learner->learner_gender == "Female" ? 'selected' : ''}} class="">Female</option>
+                                <option value="Others" {{$learner->learner_gender == "Others" ? 'selected' : ''}} class="">Preferred not to say</option>
                             </select>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Email</h4>
                     <div class="">
                         <label for="email" class="hidden">Email</label>
-                        <input id="email" type="email" name="email" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="Email" disabled>
+                        <input id="email" type="email" name="email" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="Email" disabled value={{$learner->learner_email}}>
                     </div>
                 </div>
     
@@ -165,7 +165,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="contactno" pattern="[0-9]{10}" name="contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled>
+                        <input type="tel" id="contactno" pattern="[0-9]{11}" name="contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled value={{$learner->learner_contactno}}>
                     </div>
                 </div>
     
@@ -185,7 +185,7 @@
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Name</h4>
                         <div class="w-64 ml-4">
                             <label for="businessname" class="hidden">Business Name</label>
-                            <input id="bname" type="text" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="businessname" placeholder="Business Name" disabled>
+                            <input id="bname" type="text" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="business_name" placeholder="Business Name" disabled value={{$business->business_name}}>
                         </div>
                     </div>
     
@@ -239,11 +239,11 @@
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Username</h4>
                         <div class="w-64 ml-4">
                             <label for="username" class="hidden">Username</label>
-                            <input id="username" type="text" name="username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled>
+                            <input id="username" type="text" name="username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled value={{$learner->learner_username}}>
                         </div>
                     </div>
     
-                    <div id="passwordfield" class="flex mt-5">
+                    <div id="passwordfield" class="flex hidden mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Password</h4>
                         <div class="w-64 ml-4">
                             <label for="password" class="hidden">Password</label>
@@ -259,7 +259,7 @@
                         </div>
                     </div>
     
-                    <div id="securitynumfield" class="flex mt-5">
+                    <div id="securitynumfield" class="flex hidden mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">SecurityCode</h4>
                         <div class="w-64 ml-4">
                             <label for="securitynum" class="hidden">SecurityCode</label>
@@ -289,7 +289,9 @@
         $('#edit_data').on('click', function(e) {
             e.preventDefault();
 
+            $('#passwordfield').removeClass('hidden');
             $('#password_confirmfield').removeClass('hidden');
+            $('#securitynumfield').removeClass('hidden');
             $('#button').removeClass('hidden');
             $('#update_data').removeClass('hidden');
             $('#delete_data').removeClass('hidden');

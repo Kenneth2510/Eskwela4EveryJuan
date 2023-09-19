@@ -1,14 +1,14 @@
 @include('partials.header')
 
-<section id="sidebarfull" class="fixed top-0 left-0 z-20 w-16 h-full max-w-lg mx-auto px-auto smallpc:w-64 md:w-16 lg:w-64 bg-seagreen">
-    <div id="sidebarfull_menu" class="relative w-full mt-5 text-center">
+<section id="AD_SB_sidebarfull" class="fixed top-0 left-0 z-20 w-16 h-full max-w-lg mx-auto px-auto smallpc:w-64 md:w-16 lg:w-64 bg-seagreen">
+    <div id="AD_SB_sidebarfull_menu" class="relative w-full mt-5 text-center">
         <h1 class="hidden mx-1 text-2xl font-semibold text-white lg:block">Eskwela4EveryJuan</h1>
         <button class="">
             <i class="text-3xl fa-solid fa-bars" style="color: #ffffff;"></i>
         </button>
     </div>
 
-    <div id="sidebar" class="relative w-16 mx-auto smallpc:w-64 lg:w-64 lg:px-5">
+    <div id="AD_SB_sidebar" class="relative w-16 mx-auto smallpc:w-64 lg:w-64 lg:px-5">
         <ul class="mx-auto list-none list-inside my-28">
             <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group ">
                 <a href="/admin/dashboard">

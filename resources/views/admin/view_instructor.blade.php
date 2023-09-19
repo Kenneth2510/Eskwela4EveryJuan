@@ -85,7 +85,7 @@
 <section id="AD002_IA_view_learner_container" class="relative ml-16 md:ml-16 lg:ml-64">
 
     <div id="AD002_IA_title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">View Learner Details</h1>
+        <h1 class="text-4xl font-semibold">View Instructor Details</h1>
         <div id="adminuser" class="flex items-center">
             <h3 class="text-lg">admin</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>

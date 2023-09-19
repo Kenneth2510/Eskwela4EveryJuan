@@ -1,5 +1,6 @@
 @include('partials.header')
 
+
 <section id="sidebarfull" class="fixed top-0 left-0 z-20 h-full w-72 bg-seagreen">
     <div id="sidebarfull_menu" class="relative flex items-center px-2 py-3 mx-auto">
         <button class="">
@@ -106,100 +107,22 @@
                 <th class="w-1/12"></th>
             </thead>
             <tbody class="">
+                @foreach ($learners as $learner)
                 <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
+                    <td class="w-1/12 py-1 text-lg font-normal">{{$learner->learner_id}}</td>
+                    <td class="w-2/12 py-1 text-lg font-normal">{{$learner->learner_fname}} {{$learner->learner_lname}}</td>
+                    <td class="w-3/12 py-1 text-lg font-normal">{{$learner->learner_email}}<br>{{$learner->learner_contactno}}</td>
                     <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="/admin/view_learner" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
+                    <td class="w-1/12 py-1 text-lg font-normal">{{$learner->created_at}}</td>
+                    <td class="w-2/12 py-1 text-lg font-normal">{{$learner->status}}</td>
+                    <td class="w-1/12"><a href="/admin/view_learner/{{$learner->learner_id}}" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
                 </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
-                <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">20230821001</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">Juan Dela Cruz</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">juandelacruz@email.com<br>09573845637</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
-                    <td class="w-1/12 py-1 text-lg font-normal">2023-08-21</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">active</td>
-                    <td class="w-1/12"><a href="" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
-                </tr>
+                @endforeach
                 
                 
             </tbody>
           </table>
+        <div class="">{{$learners->links()}}</div>
         </div>
     </div>
 
