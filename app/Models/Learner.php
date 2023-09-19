@@ -21,6 +21,7 @@ class Learner extends Model
         'learner_bday',
         'learner_gender',
         'learner_contactno',
-        'learner_email'
+        'learner_email',
+        'status'
     ];
 }

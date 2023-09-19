@@ -179,7 +179,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="learner_contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="learner_contactno" pattern="[0-9]{10}" name="learner_contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09" value={{old('learner_contactno')}}>
+                        <input type="tel" id="learner_contactno" maxlength="11" pattern="[0-9]{11}" name="learner_contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09" value={{old('learner_contactno')}}>
                         @error('learner_contactno')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
