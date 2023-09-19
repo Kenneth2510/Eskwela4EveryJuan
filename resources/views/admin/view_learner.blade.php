@@ -111,10 +111,10 @@
                         @csrf
                         <button class="my-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl hover:bg-yellow-500 hover:text-white">pending</button>
                     </form>
-                    <form action="">
-                        @method('put')
+                    <form action="/admin/reject_learner/{{$learner->learner_id}}" method="POST">
+                        @method('PUT')
                         @csrf
-                        <button class="my-1 text-lg text-center bg-red-500 py-auto w-28 rounded-xl hover:bg-red-700 hover:text-white">reject</button> 
+                        <button class="my-1 text-lg text-center bg-red-500 py-auto w-28 rounded-xl hover:bg-red-700 hover:text-white">reject</button>
                     </form>
                 </div> 
             @elseif ($learner->status == 'Rejected')
@@ -125,22 +125,22 @@
                         @csrf
                         <button class="my-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl hover:bg-yellow-500 hover:text-white">pending</button>
                     </form>
-                    <form action="">
+                    <form action="/admin/approve_learner/{{$learner->learner_id}}" method="POST">
                         @method('put')
                         @csrf
-                        <button class="my-1 text-lg text-center bg-green-500 py-auto w-28 rounded-xl hover:bg-green-700 hover:text-white">approve</button> 
+                        <button type="submit" class="my-1 text-lg text-center bg-green-500 py-auto w-28 rounded-xl hover:bg-green-700 hover:text-white">approve</button>
                     </form>
                 </div> 
             @else 
                 <div id="status" class="mx-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl">pending</div>
                 <div id="button" class="flex flex-col hidden mx-4">
-                    <form action="/admin/approve-learner/{{$learner->learner_id}}" method="POST">
+                    <form action="/admin/approve_learner/{{$learner->learner_id}}" method="POST">
                         @method('put')
                         @csrf
                         <button type="submit" class="my-1 text-lg text-center bg-green-500 py-auto w-28 rounded-xl hover:bg-green-700 hover:text-white">approve</button>
                     </form>
                     
-                    <form action="/admin/reject-learner/{{$learner->learner_id}}" method="POST">
+                    <form action="/admin/reject_learner/{{$learner->learner_id}}" method="POST">
                         @method('PUT')
                         @csrf
                         <button class="my-1 text-lg text-center bg-red-500 py-auto w-28 rounded-xl hover:bg-red-700 hover:text-white">reject</button>

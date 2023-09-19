@@ -118,17 +118,27 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function rejectLearner($id)
+    public function rejectLearner(Learner $learner)
     {
-        $learner = Learner::find($id);
-        
-        if ($learner) {
-            $learner->update(['status' => 'Rejected']);
+        try {
+            $learner->update(['status' => 'Rejected']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
         
         return redirect()->back();
     }
 
+    public function pendingLearner(Learner $learner)
+    {
+        try {
+            $learner->update(['status' => 'Rejected']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        
+        return redirect()->back();
+    }
 
     public function update_learner(Request $request, Learner $learner) {
         // dd($request);
@@ -158,7 +168,7 @@ class AdminController extends Controller
             "business_category" => ['required'],
         ]);
 
-        try {
+        try { 
             // DB::update("UPDATE learner
             // SET learner_fname = ?,
             //     learner_lname = ?,
@@ -183,17 +193,8 @@ class AdminController extends Controller
             if ($learner && !empty($businessData)) {
 
 
-                // DB::table('business')
-                // ->where('learner_id', $learner['id']) 
-                // ->update([
-                //     'business_name' => $businessData['business_name'],
-                //     'business_address' => $businessData['business_address'],
-                //     'business_owner_name' => $businessData['business_owner_name'],
-                //     'bplo_account_number' => $businessData['bplo_account_number'],
-                //     'business_category' => $businessData['business_category']
-                // ]);
+             
                 $learnerBusiness = Business::where('learner_id', $l_id)->first();
-                // dd($learnerBusiness);
                 if ($learnerBusiness) {
                     try {
                         $learnerBusiness->update($businessData);

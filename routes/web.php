@@ -45,8 +45,9 @@ Route::controller(AdminController::class)->group(function() {
     Route::get('/admin/add_learner', 'add_learner');
     Route::post('/admin/add_learner' ,'store_new_learner');
     Route::get('/admin/view_learner/{learner}', 'view_learner');
-    Route::put('/admin/approve-learner/{learner}', 'approveLearner');
-    Route::put('/admin/reject-learner/{learner}', 'rejectLearner');
+    Route::put('/admin/approve_learner/{learner}', 'approveLearner');
+    Route::put('/admin/reject_learner/{learner}', 'rejectLearner');
+    Route::put('/admin/pending_learner/{learner}', 'pendingLearner');
     Route::put('/admin/view_learner/{learner}' , 'update_learner');
     Route::delete('/admin/view_learner/{learner}', 'destroy_learner');
     Route::get('/admin/instructors' , 'instructors');
