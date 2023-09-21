@@ -11,7 +11,7 @@
         </header>
         
         {{-- MAIN --}}
-        <div class="w-full h-screen bg-mainwhitebg text-darthmouthgreen">
+        <div class="hidden w-full h-screen bg-mainwhitebg text-darthmouthgreen">
             <div class="px-4 pt-4 mt-16">
                 <h1 class="my-2 text-3xl font-bold">Instructor Login</h1>
                 <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
@@ -65,6 +65,35 @@
                         </a>
                     </span>
                 </p>
+            </div>
+        </div>
+        
+        {{-- SECURITY CODE --}}
+
+        <div class="w-full p-2 mt-16 bg-mainwhitebg text-darthmouthgreen">
+            <div class="relative h-8 text-xl font-semibold tracking-wide text-center">
+                <svg class="absolute cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+                <h1>Security Code</h1>
+            </div>
+
+            <div class="flex flex-col items-center justify-center text-lg font-medium">
+                <img class="w-40 h-36" src="{{url('assets/security-icon.png')}}" alt="">
+                <h1 class="text-black">Enter Security Code</h1>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <div class="my-6">
+                    <input class="mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                    <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                    <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                    <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                </div>
+                <button class="w-64 h-12 my-4 font-medium tracking-wide text-white rounded bg-seagreen hover:bg-darthmouthgreen focus:bg-darthmouthgreen">Verify</button>
+            </div>
+
+            <div class="text-center text-black">
+                <h1>We just sent you a verification code</>
+                <p class="font-semibold text-darthmouthgreen">Resend Code?</p>
             </div>
         </div>
     </section>
