@@ -1,51 +1,72 @@
 @include('partials.header')
 
-<section class="w-screen h-screen relative flex">
-    <div id="LoginLeft" class="w-1/2 h-full bg-seagreen relative">
-        <div class="titlearea text-3xl font-bold font-poppins p-5 text-white">Eskwela4EveryJuan</div>
+    <section class="relative flex w-full h-screen">
+        
+        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
+            <a href="#">
+                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
+                    Eskwela4EveryJuan
+                </span>
+            </a>
+        </header>
+        
+        {{-- MAIN --}}
+        <div class="w-full h-screen bg-mainwhitebg text-darthmouthgreen">
+            <div class="px-4 pt-4 mt-16">
+                <h1 class="my-2 text-3xl font-bold">Instructor Login</h1>
+                <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+            </div>
 
-        <div id="Logintitle" class="relative w-4/5 mx-auto mt-44">
-            <text class="text-5xl font-bold text-white">Instructor Login</text>
-            <p class="text-lg font-light mt-2 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
-        </div>
-
-        <form action="">
-        @csrf
-            <div class="relative mt-20 w-4/5 mx-auto px-12 border-b-2 border-green-950">
-                <div id="EorU" class="relative flex items-center py-3">
-                    <label for="EmailOrUsername" class="text-xl font-semibold w-72 text-white">Email or Username:</label>
-                    <i class="fa-regular fa-envelope text-2xl bg-white py-3 px-2 border-black border-2 rounded-tl-lg rounded-bl-lg"></i>
-                    <input type="text" name="EmailOrUsername" class="text-lg font-medium w-96 h-12 px-4 rounded-tr-lg rounded-br-lg shadow-lg" placeholder="Email">
-                </div>
-                <div id="pass" class="relative flex items-center py-3">
-                    <label for="password" class="text-xl font-semibold w-72 text-white">Password:</label>
-                    <i class="fa-solid fa-key text-2xl bg-white py-3 px-2 border-black border-2 rounded-tl-lg rounded-bl-lg"></i>
-                    <input type="password" name="password" class="text-lg font-medium w-96 h-12 px-4 rounded-tr-lg rounded-br-lg shadow-lg" placeholder="Password">
-                </div>
-                <div class="relative flex items-center pt-2 pb-5 justify-end">
-                    <a href="#" class="text-lg font-semibold text-white hover:text-green-900">Forgot Password?</a>
+            <form class="mt-10 text-black" action="">
+                @csrf
+                <div class="pb-4 mx-4 text-sm border-b-4">
+                    <div class="flex flex-col my-4">
+                        <label class="text-base font-medium" for="">Email:</label>
+                        <div class="relative">
+                            <svg class="absolute w-8 h-8 mx-1 border-r-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
+                            <input class="w-full h-8 pl-10 text-black rounded" type="email" name="" id="">
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="flex flex-col my-4">
+                        <label class="text-base font-medium" for="">Password:</label>
+                        <div class="relative">
+                            <svg class="absolute w-8 h-8 mx-1 border-r-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
+                            <svg class="absolute right-0 w-8 h-8 mx-1" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                            <svg class="absolute right-0 hidden w-8 h-8 mx-1" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
+                            
+                            <input class="w-full h-8 pl-10 text-black rounded" type="password" name="" id="">
+                        </div>
+                    </div>
+                    
+                    <a class="grid place-items-end" href="">
+                        Forgot Password?
+                    </a>
                 </div>
                 
-            </div>
-            <div id="button" class="relative mt-3 w-4/5 mx-auto px-12 py-2 flex justify-between">
-                <div id="remember" class="flex items-center">
-                    <input type="checkbox" name="rememberMe" class="bg-green-600 text-lg h-6 w-6 mr-3">
-                    <label for="rememberMe" class="text-xl font-medium text-white">Remember me</label>
+                <div class="flex items-center justify-between px-4 my-4">
+                    <div class="flex items-center">
+                        <input class="w-4 h-4 mx-1 accent-darthmouthgreen" type="checkbox" name="" id="">
+                        <label for="">Remember me</label>
+                    </div>
+                    
+                    <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500" type="submit">
+                        Log in
+                    </button>
                 </div>
-                {{-- <a href="#" class="rounded-xl bg-green-700 text-white font-semibold text-xl py-3 px-7 hover:bg-green-900">Log in</a> --}}
-                <button type="submit" class="rounded-xl bg-lemonchiffon text-black font-semibold text-xl py-3 px-7 hover:bg-green-900">Log in</button>
+            </form>
+            
+            <div class="mx-auto my-10 w-max">
+                <p class="text-black">Don't have an account yet?
+                    <span class="font-semibold">
+                        <a href="">
+                            Sign up
+                        </a>
+                    </span>
+                </p>
             </div>
-        </form>
-
-        <div class="relative mt-6 w-4/5 mx-auto py-2 flex justify-center" id="register">
-            <p class="text-xl font-normal text-white">Don't have an account yet? <a href="/instructor/register" class="text-xl font-semibold text-lemonchiffon hover:text-green-900">Sign Up</a></p>
         </div>
-    </div>
-    
-    <div id="LoginRight" class="w-1/2 h-full bg-neutral-200 relative right-0">
-        //put those extra content to it
-    </div>
-
-</section>
+    </section>
 
 @include('partials.footer')

@@ -24,10 +24,16 @@ export default {
                 darthmouthgreen: "#025C26",
                 seagreen: "#1F8247",
                 lemonchiffon: "#FFFBCE",
+                ashgray: "#9FAFA1",
             },
 
             backgroundImage: {
-                'homeImg': "url('/public/assets/alexander-grey-eMP4sYPJ9x0-unsplash.jpg')"
+                homeImg:
+                    "url('/public/assets/alexander-grey-eMP4sYPJ9x0-unsplash.jpg')",
+            },
+
+            homeIcon: {
+                homeico: "url('/public/assets/home-icon.svg')",
             },
         },
         plugins: [],
