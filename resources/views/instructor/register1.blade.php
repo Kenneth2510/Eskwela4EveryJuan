@@ -109,8 +109,13 @@
                         </div>
                     </div>
                 </div>
-                
             </form>
+
+            <div class="mb-10 text-center">
+                <h1 class="text-black">Already have an account?
+                    <a class="font-semibold text-darthmouthgreen" href="/instructor/login">Log in</a>
+                </h1>
+            </div>
         </div>
     </section>
 
