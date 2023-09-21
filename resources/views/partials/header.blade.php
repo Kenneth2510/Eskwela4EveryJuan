@@ -18,6 +18,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="{{asset('js/sidebar.js')}}" defer></script>
+    <script src="{{asset('js/instructorRegister.js')}}" defer></script>
     {{-- <script src="{{ asset('js/script.js')}}" defer></script> --}}
 </head>
 <body class="min-h-full bg-mainwhitebg font-poppins">

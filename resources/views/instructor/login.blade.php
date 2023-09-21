@@ -11,13 +11,13 @@
         </header>
         
         {{-- MAIN --}}
-        <div class="w-full h-screen bg-gradient-to-bl from-seagreen to-darthmouthgreen text-mainwhitebg">
+        <div class="w-full h-screen bg-mainwhitebg text-darthmouthgreen">
             <div class="px-4 pt-4 mt-16">
                 <h1 class="my-2 text-3xl font-bold">Instructor Login</h1>
                 <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
             </div>
 
-            <form class="mt-10" action="">
+            <form class="mt-10 text-black" action="">
                 @csrf
                 <div class="pb-4 mx-4 text-sm border-b-4">
                     <div class="flex flex-col my-4">
@@ -58,7 +58,7 @@
             </form>
             
             <div class="mx-auto my-10 w-max">
-                <p>Don't have an account yet?
+                <p class="text-black">Don't have an account yet?
                     <span class="font-semibold">
                         <a href="">
                             Sign up
