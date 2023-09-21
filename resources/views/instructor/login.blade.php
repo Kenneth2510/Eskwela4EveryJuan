@@ -11,7 +11,7 @@
         </header>
         
         {{-- MAIN --}}
-        <div class="hidden w-full h-screen bg-mainwhitebg text-darthmouthgreen">
+        <div class="w-full h-screen bg-mainwhitebg text-darthmouthgreen" id="loginForm">
             <div class="px-4 pt-4 mt-16">
                 <h1 class="my-2 text-3xl font-bold">Instructor Login</h1>
                 <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
@@ -51,7 +51,7 @@
                         <label for="">Remember me</label>
                     </div>
                     
-                    <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500" type="submit">
+                    <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500" type="submit" id="loginBtn">
                         Log in
                     </button>
                 </div>
@@ -60,7 +60,7 @@
             <div class="mx-auto my-10 w-max">
                 <p class="text-black">Don't have an account yet?
                     <span class="font-semibold text-darthmouthgreen">
-                        <a href="">
+                        <a href="/instructor/register1">
                             Sign up
                         </a>
                     </span>
@@ -70,9 +70,9 @@
         
         {{-- SECURITY CODE --}}
 
-        <div class="w-full p-2 mt-16 bg-mainwhitebg text-darthmouthgreen">
+        <div class="hidden w-full p-2 mt-16 bg-mainwhitebg text-darthmouthgreen" id="securityForm">
             <div class="relative h-8 text-xl font-semibold tracking-wide text-center">
-                <svg class="absolute cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+                <svg class="absolute cursor-pointer" id="backBtn" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
                 <h1>Security Code</h1>
             </div>
 
