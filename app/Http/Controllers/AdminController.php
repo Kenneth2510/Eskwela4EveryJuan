@@ -22,72 +22,67 @@ class AdminController extends Controller
     }
 
     public function learners() {
+        return $this->search_learner();
+    }
+    
+    public function search_learner() {
+        $search_by = request('searchBy');
+        $search_val = request('searchVal');
 
-        // $data = array("learners" => DB::table('learner')->orderBy('created_at' , 'DESC')->paginate(10));
+        $filter_date = request('filterDate');
+        $filter_status = request('filterStatus');
 
         try {
-            $data = array("learners" => DB::table('learner')
-            ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_contactno', 'learner.learner_email', 'learner.created_at', 'business.business_name', 'learner.status')
-            ->join('business', 'business.learner_id', '=', 'learner.learner_id')
-            ->orderBy('created_at' , 'DESC')
-            ->paginate(10));
+            $query = DB::table('learner')
+                ->select(
+                    'learner.learner_id',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                    'learner.learner_contactno',
+                    'learner.learner_email',
+                    'learner.created_at',
+                    'business.business_name',
+                    'learner.status'
+                )
+                ->join('business', 'business.learner_id', '=', 'learner.learner_id')
+                ->orderBy('learner.created_at', 'DESC');
+    
+            if(!empty($filter_date) || !empty($filter_status)) {
+                if(!empty($filter_date) && empty($filter_status)){
+                    $query->where('learner.created_at', 'LIKE', $filter_date.'%');
+                } elseif(empty($filter_date) && !empty($filter_status)){
+                    $query->where('learner.status', 'LIKE', $filter_status);
+                } else {
+                    $query->where(function ($query) use ($filter_date, $filter_status) {
+                        $query->where('learner.created_at', 'LIKE', $filter_date.'%')
+                            ->where('learner.status', 'LIKE', $filter_status);
+                    });
+                }
+            }
+
+            if (!empty($search_by) && !empty($search_val)) {
+                if ($search_by == 'name') {
+                    $query->where(function ($query) use ($search_val) {
+                        $query->where('learner.learner_fname', 'LIKE', $search_val . '%')
+                            ->orWhere('learner.learner_lname', 'LIKE', $search_val . '%');
+                    });
+                } elseif ($search_by == 'learner_id') {
+                    $query->where('learner.learner_id', 'LIKE', $search_val . '%');
+                } else {
+                    $query->where($search_by, 'LIKE', $search_val . '%');    
+                }
+            }
+
+
+    
+            $learners = $query->paginate(10);
+    
+            return view('admin.learners', compact('learners'))->with('title', 'Learner Management');
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
-
-        return view('admin.learners' , $data)->with('title', 'Learner Management');
     }
-
-    public function search_learner() {
-        $search_by = $_GET['searchBy'];
-        $search_val = $_GET['searchVal'];
-
-        if($search_by == '') {
-            try {
-                $learners = array("learners" => DB::table('learner')
-                ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_contactno', 'learner.learner_email', 'learner.created_at', 'business.business_name', 'learner.status')
-                ->join('business', 'business.learner_id', '=', 'learner.learner_id')
-                ->orderBy('created_at' , 'DESC')
-                ->paginate(10));
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
-        } else {
-            try { 
-                if($search_by == 'name') {
-                    $learners = array("learners" => DB::table('learner')
-                        ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_email', 'learner.learner_contactno', 'learner.created_at', 'business.business_name', 'learner.status')
-                        ->join('business', 'business.learner_id', '=', 'learner.learner_id')
-                        ->where(function ($query) use ($search_val) {
-                        $query->where('learner.learner_fname', 'LIKE', $search_val . '%')
-                            ->orWhere('learner.learner_lname', 'LIKE', $search_val . '%');
-                        })
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate(10));
     
-                } else {
-                        // $learners = array("learners" => Learner::where($search_by , 'LIKE' , ''.$search_val.'%')->orderBy('created_at' , 'DESC')->paginate(10));
-    
-    
-                        $learners = array("learners" => DB::table('learner')
-                                            ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_email', 'learner.learner_contactno', 'learner.created_at', 'business.business_name', 'learner.status')
-                                            ->join('business' , 'business.learner_id', '=', 'learner.learner_id')
-                                            ->where(function($query) use ($search_by, $search_val) {
-                                                $query->where($search_by, 'LIKE', $search_val. '%');
-                                            })
-                                            ->orderBy('created_at' , 'DESC')
-                                            ->paginate(10)
-                                            );
-                }
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
-        }
-
-        
-
-        return view('admin.search_learner' , $learners)->with('title', 'Learner Management');    
-    }
 
     public function add_learner() {
         return view('admin.add_learner')->with('title' , 'Add New Learner');
@@ -163,19 +158,12 @@ class AdminController extends Controller
 
     public function approveLearner(Learner $learner)
     {
-        // dd($id);
 
         try {
             $learner->update(['status' => 'Approved']);  
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
-        // $learner = Learner::where('learner_id', $id)->first();
-        // dd($learner);
-        // if ($learner) {
-        //     $learner->update(['status' => 'Approved']);
-        // }
-        
         return redirect()->back();
     }
 
@@ -202,14 +190,7 @@ class AdminController extends Controller
     }
 
     public function update_learner(Request $request, Learner $learner) {
-        // dd($request);
-        // dd($learner);
-
         $l_id = $learner->learner_id;
-
-        // DB::update("UPDATE learner
-        //             SET learner_fname = 'sample22'
-        //             WHERE learner_id = 38");
 
         $LearnerPersonalData = $request->validate ([
             "learner_fname" => ['required'],
@@ -253,8 +234,6 @@ class AdminController extends Controller
 
             if ($learner && !empty($businessData)) {
 
-
-             
                 $learnerBusiness = Business::where('learner_id', $l_id)->first();
                 if ($learnerBusiness) {
                     try {
@@ -270,10 +249,6 @@ class AdminController extends Controller
             dd($e->getMessage());
         }
 
-        // $LearnerData = array_merge($LearnerPersonalData , $LearnerLoginData);
-        // $learner->update($LearnerData);
-
-        // $learner->update($LearnerPersonalData);
 
         return back(); //add ->with('message') later
     }

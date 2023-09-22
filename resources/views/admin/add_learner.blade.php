@@ -260,7 +260,7 @@
                                 <option value="" {{old('business_category') == "" ? 'selected' : ''}} class=""></option>
                                 <option value="micro" {{old('business_category') == "micro" ? 'selected' : ''}} class="">Micro</option>
                                 <option value="small" {{old('business_category') == "small" ? 'selected' : ''}} class="">Small</option>
-                                <option value="large" {{old('business_category') == "large" ? 'selected' : ''}} class="">Large</option>
+                                <option value="medium" {{old('business_category') == "medium" ? 'selected' : ''}} class="">Medium</option>
                             </select>
                             @error('business_category')
                             <p class="p-1 mt-2 text-xs text-red-500">

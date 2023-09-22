@@ -45,7 +45,6 @@ Route::controller(AdminController::class)->group(function() {
     Route::get('/admin', 'index');
     Route::get('/admin/dashboard', 'dashboard');
     Route::get('/admin/learners', 'learners');
-    Route::get('/admin/search' , 'search_learner');
     Route::get('/admin/add_learner', 'add_learner');
     Route::post('/admin/add_learner' ,'store_new_learner');
     Route::get('/admin/view_learner/{learner}', 'view_learner');
