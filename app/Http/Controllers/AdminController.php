@@ -76,7 +76,7 @@ class AdminController extends Controller
                 }
             }
 
-
+ 
     
             $learners = $query->paginate(10);
     
@@ -253,7 +253,7 @@ class AdminController extends Controller
         }
 
 
-        return back(); //add ->with('message') later
+        return back()->with('message' , 'Data was successfully updated'); //add ->with('message') later
     }
 
     public function destroy_learner(Learner $learner) {
@@ -262,7 +262,7 @@ class AdminController extends Controller
         $learner->delete();
 
 
-        return redirect('/admin/learner'); //add with message later
+        return redirect('/admin/learners')->with('message' , 'Data was successfully deleted'); //add with message later
     }
 
 
