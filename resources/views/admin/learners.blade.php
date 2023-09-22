@@ -79,20 +79,43 @@
     <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-mainwhitebg mt-7 rounded-2xl">
         <div id="containertitle" class="flex items-center justify-between pt-1 pb-5 px-auto">
             <h3 class="text-3xl font-semibold">All Learners</h3>
-            <div class="">
-                <a href="/admin/add_learner" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">Add New</a>
-                <select name="" id="" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
-                    <option value="" class=""></option>
-                    <option value="id">Learner ID</option>
-                    <option value="name">Name</option>
-                    <option value="email">Email</option>
-                    <option value="contactno">Contact No.</option>
-                    <option value="businessname">Business Name</option>
-                    <option value="dateRegistered">Date Registered</option>
-                    <option value="status">Status</option>
-                </select>
-                <input type="text" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" placeholder="Type to search">
-            </div>
+            <div class="flex items-center">
+                    <a href="/admin/add_learner" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">Add New</a>
+                
+                    <form action="{{ url('/admin/learners') }}" method="GET">
+                        <div class="flex items-center mx-10">
+                            <div class="mx-2">
+                                <label for="filterDate" class="">Filter by Date</label><br>
+                                <input type="date" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl" value="">
+                            </div>
+                            <div class="mx-2">
+                                <label for="filterStatus" class="">Filter by Status</label><br>
+                                <select name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
+                                    <option value="">Select Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button>
+                        </div>
+                    </form>
+                
+                    <form action="{{ url('/admin/learners') }}" method="GET">
+                    <select name="searchBy" id="" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
+                        <option value="" class="">Search By</option>
+                        <option value="learner_id">Learner ID</option>
+                        <option value="name">Name</option>
+                        <option value="learner_email">Email</option>
+                        <option value="learner_contactno">Contact No.</option>
+                        <option value="business_name">Business Name</option>
+                        {{-- <option value="created_at">Date Registered</option> --}}
+                        <option value="status">Status</option>
+                    </select>
+                    <input type="text" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" placeholder="Type to search">
+                    <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>
+                </form>
+                </div>
         </div>
 
         <div id="contenttable" class="mt-7">
@@ -107,17 +130,21 @@
                 <th class="w-1/12"></th>
             </thead>
             <tbody class="">
-                @foreach ($learners as $learner)
+                @forelse ($learners as $learner)
                 <tr class="">
-                    <td class="w-1/12 py-1 text-lg font-normal">{{$learner->learner_id}}</td>
-                    <td class="w-2/12 py-1 text-lg font-normal">{{$learner->learner_fname}} {{$learner->learner_lname}}</td>
+                    <td>{{$learner->learner_id}}</td>
+                    <td>{{$learner->learner_fname}} {{$learner->learner_lname}}</td>
                     <td class="w-3/12 py-1 text-lg font-normal">{{$learner->learner_email}}<br>{{$learner->learner_contactno}}</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">Happy Chicken Feet</td>
+                    <td class="w-3/12 py-1 text-lg font-normal">{{$learner->business_name}}</td>
                     <td class="w-1/12 py-1 text-lg font-normal">{{$learner->created_at}}</td>
                     <td class="w-2/12 py-1 text-lg font-normal">{{$learner->status}}</td>
                     <td class="w-1/12"><a href="/admin/view_learner/{{$learner->learner_id}}" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a></td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td class="py-1 text-lg font-normal" colspan="7">No learners found.</td>
+                </tr>
+                @endforelse
                 
                 
             </tbody>
