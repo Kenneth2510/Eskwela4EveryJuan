@@ -106,7 +106,7 @@
             @if ($learner->status == 'Approved')
                 <div id="status" class="mx-1 text-lg text-center bg-green-500 py-auto w-28 rounded-xl">Approved</div>
                 <div id="button" class="flex flex-col hidden mx-4">
-                    <form action="">
+                    <form action="/admin/pending_learner/{{$learner->learner_id}}" method="POST">
                         @method('put')
                         @csrf
                         <button class="my-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl hover:bg-yellow-500 hover:text-white">pending</button>
@@ -120,7 +120,7 @@
             @elseif ($learner->status == 'Rejected')
                 <div id="status" class="mx-1 text-lg text-center bg-red-500 py-auto w-28 rounded-xl">Rejected</div>
                 <div id="button" class="flex flex-col hidden mx-4">
-                    <form action="">
+                    <form action="/admin/pending_learner/{{$learner->learner_id}}" method="POST">
                         @method('put')
                         @csrf
                         <button class="my-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl hover:bg-yellow-500 hover:text-white">pending</button>

@@ -21,6 +21,9 @@ class AdminController extends Controller
         return view('admin.dashboard')->with('title', 'Admin Dashboard');
     }
 
+
+
+// -------------------admin learner area------------------------
     public function learners() {
         return $this->search_learner();
     }
@@ -129,7 +132,7 @@ class AdminController extends Controller
 
         Business::create($businessData);
 
-        return redirect('/admin/learners')->with('title', 'Learner Management'); //add with('message') later
+        return redirect('/admin/learners')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored'); //add with('message') later
     }
 
     public function view_learner($id) {
@@ -164,7 +167,7 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'Learner Status successfully changed');
     }
 
     public function rejectLearner(Learner $learner)
@@ -175,18 +178,18 @@ class AdminController extends Controller
             dd($e->getMessage());
         }
         
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'Learner Status successfully changed');
     }
 
     public function pendingLearner(Learner $learner)
     {
         try {
-            $learner->update(['status' => 'Rejected']);  
+            $learner->update(['status' => 'Pending']);  
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
         
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'Learner Status successfully changed');
     }
 
     public function update_learner(Request $request, Learner $learner) {
@@ -262,6 +265,13 @@ class AdminController extends Controller
         return redirect('/admin/learner'); //add with message later
     }
 
+
+
+
+
+
+
+// -----------------------admin instructor------------------------- 
     public function instructors() {
         return view('admin.instructors')->with('title' , 'Instructor Management');
     }

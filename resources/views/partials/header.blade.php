@@ -23,3 +23,4 @@
     <script src="{{asset('js/instructorRegister.js')}}" defer></script>
 </head>
 <body class="min-h-full bg-mainwhitebg font-poppins">
+    <x-message />
