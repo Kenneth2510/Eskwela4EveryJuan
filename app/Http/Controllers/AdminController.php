@@ -159,7 +159,7 @@ class AdminController extends Controller
             "learner_email" => ['required' , 'email'],
         ]);
         // dd($LearnerPersonalData);
-
+ 
         $businessData = $request->validate ([
             "business_name" => ['required'],
             "business_address" => ['required'],
