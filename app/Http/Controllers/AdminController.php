@@ -23,9 +23,70 @@ class AdminController extends Controller
 
     public function learners() {
 
-        $data = array("learners" => DB::table('learner')->orderBy('created_at' , 'DESC')->paginate(10));
+        // $data = array("learners" => DB::table('learner')->orderBy('created_at' , 'DESC')->paginate(10));
+
+        try {
+            $data = array("learners" => DB::table('learner')
+            ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_contactno', 'learner.learner_email', 'learner.created_at', 'business.business_name', 'learner.status')
+            ->join('business', 'business.learner_id', '=', 'learner.learner_id')
+            ->orderBy('created_at' , 'DESC')
+            ->paginate(10));
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
         return view('admin.learners' , $data)->with('title', 'Learner Management');
+    }
+
+    public function search_learner() {
+        $search_by = $_GET['searchBy'];
+        $search_val = $_GET['searchVal'];
+
+        if($search_by == '') {
+            try {
+                $learners = array("learners" => DB::table('learner')
+                ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_contactno', 'learner.learner_email', 'learner.created_at', 'business.business_name', 'learner.status')
+                ->join('business', 'business.learner_id', '=', 'learner.learner_id')
+                ->orderBy('created_at' , 'DESC')
+                ->paginate(10));
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            try { 
+                if($search_by == 'name') {
+                    $learners = array("learners" => DB::table('learner')
+                        ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_email', 'learner.learner_contactno', 'learner.created_at', 'business.business_name', 'learner.status')
+                        ->join('business', 'business.learner_id', '=', 'learner.learner_id')
+                        ->where(function ($query) use ($search_val) {
+                        $query->where('learner.learner_fname', 'LIKE', $search_val . '%')
+                            ->orWhere('learner.learner_lname', 'LIKE', $search_val . '%');
+                        })
+                    ->orderBy('created_at', 'DESC')
+                    ->paginate(10));
+    
+                } else {
+                        // $learners = array("learners" => Learner::where($search_by , 'LIKE' , ''.$search_val.'%')->orderBy('created_at' , 'DESC')->paginate(10));
+    
+    
+                        $learners = array("learners" => DB::table('learner')
+                                            ->select('learner.learner_id', 'learner.learner_fname', 'learner.learner_lname', 'learner.learner_email', 'learner.learner_contactno', 'learner.created_at', 'business.business_name', 'learner.status')
+                                            ->join('business' , 'business.learner_id', '=', 'learner.learner_id')
+                                            ->where(function($query) use ($search_by, $search_val) {
+                                                $query->where($search_by, 'LIKE', $search_val. '%');
+                                            })
+                                            ->orderBy('created_at' , 'DESC')
+                                            ->paginate(10)
+                                            );
+                }
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        }
+
+        
+
+        return view('admin.search_learner' , $learners)->with('title', 'Learner Management');    
     }
 
     public function add_learner() {

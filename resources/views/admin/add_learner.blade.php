@@ -110,7 +110,7 @@
                         <div class="mb-3">
                             <label for="learner_fname" class="text-md font-regular md:text-lg">First Name</label>
                             <br>
-                            <input type="text" name="learner_fname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="First Name" value={{old('learner_fname')}}>
+                            <input type="text" name="learner_fname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="First Name" value="{{old('learner_fname')}}">
                             @error('learner_fname')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -119,7 +119,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="learner_lname" class="text-md font-regular md:text-lg">Last Name</label><br>
-                            <input type="text" name="learner_lname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15"  placeholder="Last Name" value={{old('learner_lname')}}>
+                            <input type="text" name="learner_lname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15"  placeholder="Last Name" value="{{old('learner_lname')}}">
                             @error('learner_lname')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -135,7 +135,7 @@
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Birthday</h4>
                         <div class="">
                             <label for="learner_bday" class="hidden">Birthday</label>
-                            <input type="date" name="learner_bday" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" value={{old('learner_bday')}}>
+                            <input type="date" name="learner_bday" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" value="{{old('learner_bday')}}">
                             @error('learner_bday')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -166,7 +166,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Email</h4>
                     <div class="">
                         <label for="learner_email" class="hidden">Email</label>
-                        <input type="email" name="learner_email" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="Email" value={{old('learner_email')}}>
+                        <input type="email" name="learner_email" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="Email" value="{{old('learner_email')}}">
                         @error('learner_email')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -179,7 +179,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="learner_contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="learner_contactno" maxlength="11" pattern="[0-9]{11}" name="learner_contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09" value={{old('learner_contactno')}}>
+                        <input type="tel" id="learner_contactno" maxlength="11" pattern="[0-9]{11}" name="learner_contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09" value="{{old('learner_contactno')}}">
                         @error('learner_contactno')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -204,7 +204,7 @@
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Name</h4>
                         <div class="">
                             <label for="business_name" class="hidden">Business Name</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="business_name" placeholder="Business Name" value={{old('business_name')}}>
+                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="business_name" placeholder="Business Name" value="{{old('business_name')}}">
                             @error('business_name')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -217,7 +217,7 @@
                         <h4 class="w-40 ml-3 text-lg font-medium md:w-60 md:text-2xl ">Business Address</h4>
                         <div class="">
                             <label for="business_address" class="hidden">Business Address</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="business_address" placeholder="Business Address" value={{old('business_address')}}>
+                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="business_address" placeholder="Business Address" value="{{old('business_address')}}">
                             @error('business_address')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -230,7 +230,7 @@
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Business Owner Name</h4>
                         <div class="">
                             <label for="business_owner_name" class="hidden">Business Owner Name</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="business_owner_name" placeholder="Business Owner Name" value={{old('business_owner_name')}}>
+                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="business_owner_name" placeholder="Business Owner Name" value="{{old('business_owner_name')}}">
                             @error('business_owner_name')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -243,7 +243,7 @@
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">BPLO Account Number</h4>
                         <div class="">
                             <label for="bplo_account_number" class="hidden">BPLO Account Number</label>
-                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="bplo_account_number" placeholder="" value={{old('bplo_account_number')}}>
+                            <input type="text" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" name="bplo_account_number" placeholder="" value="{{old('bplo_account_number')}}">
                             @error('bplo_account_number')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -283,7 +283,7 @@
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Username</h4>
                         <div class="">
                             <label for="learner_username" class="hidden">Username</label>
-                            <input type="text" name="learner_username" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Username" value={{old('learner_username')}}>
+                            <input type="text" name="learner_username" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Username" value="{{old('learner_username')}}">
                             @error('learner_username')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
