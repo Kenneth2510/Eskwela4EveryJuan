@@ -1,6 +1,6 @@
 @include('partials.header')
 
-    <section class="relative w-full h-auto bg-mainwhitebg">
+    <section class="relative w-full h-auto text-sm bg-mainwhitebg">
         <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
             <a href="#">
                 <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
@@ -11,7 +11,7 @@
 
         {{-- MAIN --}}
         <div class="w-full pt-16 text-darthmouthgreen">
-            <div class="px-4 pt-4 ">
+            <div class="px-4 pt-4 " id="ins-head">
                 <h1 class="my-2 text-3xl font-bold">Create an Instructor account</h1>
                 <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
             </div>
@@ -20,25 +20,25 @@
                 @csrf
                 <div class="" id="first-form">
                     <div class="flex flex-col">
-                        <div class="flex flex-col my-2">
-                            <label class="text-base font-medium" for="fname">Firstname:</label>
-                            <input class="w-full h-8 px-2 text-black rounded" type="text" name="fname" id="">
+                        <div class="IN-FORM-CTNR">
+                            <label for="fname">Firstname:</label>
+                            <input class="IN-V-INP" type="text" name="fname" id="">
                         </div>
-                        <div class="flex flex-col my-2">
-                            <label class="text-base font-medium" for="lname">Lastname:</label>
-                            <input class="w-full h-8 px-2 text-black rounded" type="text" name="lname" id="">
+                        <div class="IN-FORM-CTNR">
+                            <label for="lname">Lastname:</label>
+                            <input class="IN-V-INP" type="text" name="lname" id="">
                         </div>
                     </div>
                     
                     <div>
-                        <div class="flex flex-col my-2">
-                            <label class="text-base font-medium" for="birthday">Birthday:</label>
-                            <input class="w-full h-8 px-2 text-black rounded" type="date" name="birthday" id="">
+                        <div class="IN-FORM-CTNR">
+                            <label for="birthday">Birthday:</label>
+                            <input class="IN-V-INP" type="date" name="birthday" id="">
                         </div>
                         
-                        <div class="flex flex-col my-2">
-                            <label class="text-base font-medium" for="gender">Gender</label>
-                            <select class="w-full h-8 px-2 text-black rounded" name="" id="">
+                        <div class="IN-FORM-CTNR">
+                            <label for="gender">Gender</label>
+                            <select class="IN-V-INP" name="" id="">
                                 <option value="" disabled selected>-- select an option --</option>
                                 <option value="">Male</option>
                                 <option value="">Female</option>
@@ -46,27 +46,25 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-col my-2">
-                        <label class="text-base font-medium" for="email">Email:</label>
-                        <input class="w-full h-8 px-2 text-black rounded" type="email" name="email" id="">
+                    <div class="IN-FORM-CTNR">
+                        <label for="email">Email:</label>
+                        <input class="IN-V-INP" type="email" name="email" id="">
                     </div>
-                    <div class="flex flex-col my-2">
-                        <label class="text-base font-medium" for="contact_number">Contact Number:</label>
-                        <div>
-                            <input class="w-full h-8 px-2 text-black rounded" type="number" name="contact_number" id="">
-                        </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="contact_number">Contact Number:</label>
+                        <input class="IN-V-INP" type="text" name="contact_number" id="">
                     </div>
-                    <div class="flex flex-col my-2">
-                        <label class="text-base font-medium" for="username">Username:</label>
-                        <input class="w-full h-8 px-2 text-black rounded" type="text" name="" id="">
+                    <div class="IN-FORM-CTNR">
+                        <label for="username">Username:</label>
+                        <input class="IN-V-INP" type="text" name="" id="">
                     </div>
-                    <div class="flex flex-col my-2">
-                        <label class="text-base font-medium" for="password">Password:</label>
-                        <input class="w-full h-8 px-2 text-black rounded" type="password" name="password" id="">
+                    <div class="IN-FORM-CTNR">
+                        <label for="password">Password:</label>
+                        <input class="IN-V-INP" type="password" name="password" id="">
                     </div>
-                    <div class="flex flex-col my-2">
-                        <label class="text-base font-medium" for="password_confirmation">Confirm Password:</label>
-                        <input class="w-full h-8 px-2 text-black rounded" type="password" name="password_confirmation" id="">
+                    <div class="IN-FORM-CTNR">
+                        <label for="password_confirmation">Confirm Password:</label>
+                        <input class="IN-V-INP" type="password" name="password_confirmation" id="">
                     </div>
                     
                     <div class="grid h-auto my-10 text-black place-items-end" >
@@ -77,21 +75,27 @@
                     </div>
                 </div>
                 
-                <div class="hidden overflow-y-hidden" id="resumeForm">
-                    <div class="px-4 pt-4">
-                        <h1 class="my-2 text-3xl font-bold">About Credentials</h1>
+                <div class="hidden overflow-hidden" id="resumeForm">
+                    <div>
+                        <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
+                            <svg class="pr-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="px-4 mt-4">
+                        <h1 class="text-3xl font-bold text-darthmouthgreen">About Credentials</h1>
                         <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                     </div>
 
-                    <div class="pb-4 my-8 border-b-2" action="">
+                    <div class="pb-4 my-8 font-semibold border-b-2" action="">
                         <label for="">CV or Resume</label>
-                        <input type="file" name="" id="">
+                        <input class="font-normal " type="file" name="" id="">
                     </div>
 
-                    <div>
+                    <div class="">
                         <div class="flex flex-row">
                             <input class="mx-2" type="checkbox" name="" id="">
-                            <p>I've read and accept <span>Terms & Condistion</span></p>
+                            <p>I've read and accept <span class="font-medium text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
                         </div>
 
                         <div class="flex flex-row">
@@ -100,18 +104,13 @@
                         </div>
 
                         <div class="flex items-center justify-end mt-4 text-black">
-                            <button class="flex items-center justify-center w-24 h-8 mx-2 rounded bg-mainwhitebg" id="bckBtn">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                                <h1>Back</h1>
-                            </button>
-
-                            <button class="w-auto h-10 px-2 mx-2 font-medium rounded bg-amber-400">Create my account</button>
+                            <button class="h-10 px-2 mx-2 font-medium rounded bg-amber-400 hover:bg-amber-500">Create my account</button>
                         </div>
                     </div>
                 </div>
             </form>
 
-            <div class="mb-10 text-center">
+            <div class="mb-10 text-center" id="ins-foot">
                 <h1 class="text-black">Already have an account?
                     <a class="font-semibold text-darthmouthgreen" href="/instructor/login">Log in</a>
                 </h1>

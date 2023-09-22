@@ -1,10 +1,10 @@
 @include('partials.header')
 
-    <section class="relative flex w-full h-screen">
+    <section class="relative flex w-full h-screen text-sm">
         
         <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
             <a href="#">
-                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
+                <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
                     Eskwela4EveryJuan
                 </span>
             </a>
@@ -21,7 +21,7 @@
                 @csrf
                 <div class="pb-4 mx-4 text-sm border-b-4">
                     <div class="flex flex-col my-4">
-                        <label class="text-base font-medium" for="">Email:</label>
+                        <label class="font-medium" for="">Email:</label>
                         <div class="relative">
                             <svg class="absolute w-8 h-8 mx-1 border-r-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
                             <input class="w-full h-8 pl-10 text-black rounded" type="email" name="" id="">
@@ -30,7 +30,7 @@
                     </div>
                     
                     <div class="flex flex-col my-4">
-                        <label class="text-base font-medium" for="password">Password:</label>
+                        <label class="font-medium " for="password">Password:</label>
                         <div class="relative">
                             <svg class="absolute w-8 h-8 mx-1 border-r-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
                             <svg class="absolute right-0 w-6 h-6 mx-1 top-1" id="showPwd" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
@@ -40,9 +40,11 @@
                         </div>
                     </div>
                     
-                    <a class="grid place-items-end" href="">
-                        Forgot Password?
-                    </a>
+                    <div class="w-full text-right">
+                        <a href="">
+                            Forgot Password?
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="flex items-center justify-between px-4 my-4">
