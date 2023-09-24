@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use App\Models\Learner;
+use App\Models\Instructor;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -112,7 +115,7 @@ class AdminController extends Controller
         ]);
 
         $LearnerLoginData = $request->validate([
-            "learner_username" => ['required'],
+            "learner_username" => ['required', Rule::unique('learner' , 'learner_username')],
             "learner_password" => 'required|confirmed',
             "learner_security_code" => ['required' , 'max:6'],
         ]);
@@ -132,7 +135,7 @@ class AdminController extends Controller
 
         Business::create($businessData);
 
-        return redirect('/admin/learners')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored'); //add with('message') later
+        return redirect('/admin/learners')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored');
     }
 
     public function view_learner($id) {
@@ -273,14 +276,200 @@ class AdminController extends Controller
 
 // -----------------------admin instructor------------------------- 
     public function instructors() {
-        return view('admin.instructors')->with('title' , 'Instructor Management');
+        return $this->search_instructor();
+    }
+
+    public function search_instructor() {
+
+        $search_by = request('searchBy');
+        $search_val = request('searchVal');
+        
+        $filter_date = request('filterDate');
+        $filter_status = request('filterStatus');
+
+
+        try {
+            $query = DB::table('instructor')
+                ->orderBy('created_at', 'DESC');
+
+            if(!empty($filter_date) || !empty($filter_status)) {
+                if(!empty($filter_date) && empty($filter_date)) {
+                    $query->where('created_at', 'LIKE', $filter_date.'%');
+                } elseif (empty($filter_date) && !empty($filter_status)) {
+                    $query->where('status', 'LIKE', $filter_status.'%');
+                } else {
+                    $query->where('created_at', 'LIKE', $filter_date.'%')
+                        ->where('status', 'LIKE', $filter_status.'%');
+                }
+            }
+
+            if(!empty($search_by) && !empty($search_val)) {
+                if($search_by == 'name') {
+                    $query->where(function ($query) use ($search_val) {
+                        $query->where('instructor_fname', 'LIKE', $search_val.'%')
+                            ->orWhere('instructor_lname', 'LIKE', $search_val.'%');
+                    });
+                } else {
+                    $query->where($search_by, 'LIKE', $search_val.'%');
+                }
+            }
+
+
+            $instructors = $query->paginate(10);
+
+            return view('admin.instructors', compact('instructors'))
+                ->with('title', 'Instructor Management');
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
     public function add_instructor() {
         return view('admin.add_instructor')->with('title' , 'Add New Instructor');
     }
 
-    public function view_instructor () {
-        return view('admin.view_instructor')->with('title' , 'View Instructor');
+    public function store_new_instructor(Request $request) {
+  
+            $instructorData = $request->validate([
+                "instructor_fname" => ['required'],
+                "instructor_lname" => ['required'],
+                "instructor_bday" => ['required'],
+                "instructor_gender" => ['required'],
+                "instructor_contactno" => ['required', Rule::unique('instructor', 'instructor_contactno')],
+                "instructor_email" => ['required', 'email', Rule::unique('instructor', 'instructor_email')],
+                "instructor_username" => ['required', Rule::unique('instructor' , 'instructor_username')],
+                "instructor_password" => 'required|confirmed',
+                "instructor_security_code" => ['required'],
+                "instructor_credentials" => ['required', 'file', 'mimes: pdf,docx'],
+            ]);
+
+            $instructorData['instructor_credentials'] = '';
+        
+            $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
+
+            if($request->hasFile('instructor_credentials')) {
+               try {
+
+                $file = $request->file('instructor_credentials');
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $folderPath = 'instructors/' . $folderName;
+
+                // add to database
+                $instructorData['instructor_credentials'] = "{$folderPath}/{$folderName}/{$fileName}";
+                // dd($instructorData);
+                Instructor::create($instructorData);
+
+                //add to storage
+                if(!Storage::exists($folderPath)) {
+                    Storage::makeDirectory($folderPath);
+                }
+
+                Storage::putFileAs($folderPath, $file, $fileName);
+
+
+               } catch (\Exception $e) {
+                dd($e->getMessage());
+               }
+
+               return redirect('/admin/instructors')->with('title', 'Instructor Management')->with('message' , 'Data was successfully stored');
+            }
+        
+    }
+
+    public function view_instructor ($id) {
+
+        try {
+            $instructorData = Instructor::where('instructor_id', $id)->first();
+            // dd($instructorData);
+            return view('admin.view_instructor', ['instructor' => $instructorData])->with('title' , 'View Instructor');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    public function approveInstructor(Instructor $instructor)
+    {
+
+        try {
+            $instructor->update(['status' => 'Approved']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        return redirect()->back()->with('message' , 'Instructor Status successfully changed');
+    }
+
+    public function rejectInstructor(Instructor $instructor)
+    {
+        try {
+            $instructor->update(['status' => 'Rejected']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        
+        return redirect()->back()->with('message' , 'Instructor Status successfully changed');
+    }
+
+    public function pendingInstructor(Instructor $instructor)
+    {
+        try {
+            $instructor->update(['status' => 'Pending']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        
+        return redirect()->back()->with('message' , 'Instructor Status successfully changed');
+    }
+
+    public function update_instructor(Request $request, Instructor $instructor) {
+        $i_id = $instructor->instructor_id;
+
+        $instructorData = $request->validate([
+            "instructor_fname" => ['required'],
+            "instructor_lname" => ['required'],
+            "instructor_bday" => ['required'],
+            "instructor_gender" => ['required'],
+            "instructor_contactno" => ['required'],
+            // "instructor_email" => ['required' , 'email'],
+            "instructor_credentials" => ['file', 'mimes: pdfs,docx'],
+        ]);
+
+        $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
+
+        if($request->hasFile('instructor_credentials')) {
+            try {
+                $file = $request->file('instructor_credentials');
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $folderPath = 'instructors/' . $folderName;
+
+                $instructorData['instructor_credentials'] = "{$folderPath}/{$folderName}/{$fileName}";
+
+                $instructor->update($instructorData);
+
+                if(!Storage::exists($folderPath)) {
+                    Storage::makeDirectory($folderPath);
+                }
+                Storage::putFileAs($folderPath, $file, $fileName);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+        } else {
+            $instructorData['instructor_credentials'] = $instructor->instructor_credentials;
+
+            $instructor->update($instructorData);
+        }
+        
+        return back()->with('message' , 'Data was successfully updated');
+    }
+
+    public function destroy_instructor(Instructor $instructor) {
+        // dd($learner);
+
+        $instructor->delete();
+
+
+        return redirect('/admin/instructors')->with('message' , 'Data was successfully deleted'); //add with message later
     }
 }

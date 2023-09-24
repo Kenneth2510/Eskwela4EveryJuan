@@ -83,38 +83,40 @@
                     <a href="/admin/add_learner" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">Add New</a>
                 
                     <form action="{{ url('/admin/learners') }}" method="GET">
-                        <div class="flex items-center mx-10">
-                            <div class="mx-2">
-                                <label for="filterDate" class="">Filter by Date</label><br>
-                                <input type="date" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl" value="">
+                        <div class="flex items-center">
+                            <div class="flex items-center mx-10">
+                                <div class="mx-2">
+                                    <label for="filterDate" class="">Filter by Date</label><br>
+                                    <input type="date" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl" value="">
+                                </div>
+                                <div class="mx-2">
+                                    <label for="filterStatus" class="">Filter by Status</label><br>
+                                    <select name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
+                                        <option value="">Select Status</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button>
                             </div>
-                            <div class="mx-2">
-                                <label for="filterStatus" class="">Filter by Status</label><br>
-                                <select name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
-                                    <option value="">Select Status</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
+                            <div class="">
+                                <select name="searchBy" id="" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
+                                    <option value="" class="">Search By</option>
+                                    <option value="learner_id">Learner ID</option>
+                                    <option value="name">Name</option>
+                                    <option value="learner_email">Email</option>
+                                    <option value="learner_contactno">Contact No.</option>
+                                    <option value="business_name">Business Name</option>
+                                    {{-- <option value="created_at">Date Registered</option> --}}
+                                    {{-- <option value="status">Status</option> --}}
                                 </select>
+                                <input type="text" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" placeholder="Type to search">
+                                <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>        
                             </div>
-                            <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button>
                         </div>
+                        
                     </form>
-                
-                    <form action="{{ url('/admin/learners') }}" method="GET">
-                    <select name="searchBy" id="" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
-                        <option value="" class="">Search By</option>
-                        <option value="learner_id">Learner ID</option>
-                        <option value="name">Name</option>
-                        <option value="learner_email">Email</option>
-                        <option value="learner_contactno">Contact No.</option>
-                        <option value="business_name">Business Name</option>
-                        {{-- <option value="created_at">Date Registered</option> --}}
-                        <option value="status">Status</option>
-                    </select>
-                    <input type="text" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" placeholder="Type to search">
-                    <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>
-                </form>
                 </div>
         </div>
 

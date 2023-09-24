@@ -44,6 +44,7 @@ Route::controller(InstructorController::class)->group(function() {
 Route::controller(AdminController::class)->group(function() {
     Route::get('/admin', 'index');
     Route::get('/admin/dashboard', 'dashboard');
+    // learner area---------------
     Route::get('/admin/learners', 'learners');
     Route::get('/admin/add_learner', 'add_learner');
     Route::post('/admin/add_learner' ,'store_new_learner');
@@ -53,7 +54,14 @@ Route::controller(AdminController::class)->group(function() {
     Route::put('/admin/pending_learner/{learner}', 'pendingLearner');
     Route::put('/admin/view_learner/{learner}' , 'update_learner');
     Route::delete('/admin/view_learner/{learner}', 'destroy_learner');
+    // instructor area -------------------
     Route::get('/admin/instructors' , 'instructors');
     Route::get('/admin/add_instructor' , 'add_instructor');
-    Route::get('/admin/view_instructor' , 'view_instructor'); //to add param later
+    Route::post('/admin/add_instructor', 'store_new_instructor');
+    Route::get('/admin/view_instructor/{instructor}' , 'view_instructor');
+    Route::put('/admin/approve_instructor/{instructor}', 'approveInstructor');
+    Route::put('/admin/reject_instructor/{instructor}', 'rejectInstructor');
+    Route::put('/admin/pending_instructor/{instructor}', 'pendingInstructor');
+    Route::put('/admin/view_instructor/{instructor}' , 'update_instructor');
+    Route::delete('/admin/view_instructor/{instructor}', 'destroy_instructor');
 });

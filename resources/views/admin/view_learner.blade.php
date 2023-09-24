@@ -426,7 +426,7 @@
             $('#learner_lname').prop("disabled", false);
             $('#learner_bday').prop("disabled", false);
             $('#learner_gender').prop("disabled", false);
-            $('#learner_email').prop("disabled", false);
+            // $('#learner_email').prop("disabled", false);
             $('#learner_contactno').prop("disabled", false);
 
             $('#business_name').prop("disabled", false);

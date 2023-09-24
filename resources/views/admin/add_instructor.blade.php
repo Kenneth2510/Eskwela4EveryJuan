@@ -82,9 +82,9 @@
     </div> --}}
 </section>
 
-<section id="AD002_LA_container" class="relative ml-16 md:ml-16 lg:ml-64">
+<section id="AD002_IA_container" class="relative ml-16 md:ml-16 lg:ml-64">
 
-    <div id="AD002_LA_title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
+    <div id="AD002_IA_title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
         <h1 class="text-4xl font-semibold">Add New Instructor</h1>
         <div id="adminuser" class="flex items-center">
             <h3 class="text-lg">admin</h3>
@@ -92,69 +92,99 @@
         </div>
     </div>
 
-    <div id="AD002_LA_maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
+    <div id="AD002_IA_maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
         <div class="mb-5">
             <a href="/admin/instructors" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
             </a>
         </div>
 
-        <form action="">
+        <form action="/admin/add_instructor" method="POST" enctype="multipart/form-data">
             @csrf
-        <div id="AD002_LA_content" class="smallpc:flex smallpc:items-start">
-            <div id="AD002_LA_personal_details_container" class="mx-auto my-5 smallpc:w-6/12">
+        <div id="AD002_IA_content" class="smallpc:flex smallpc:items-start">
+            <div id="AD002_IA_personal_details_container" class="mx-auto my-5 smallpc:w-6/12">
                 <h3 class="mb-5 text-3xl font-medium border-b-2 md:text-4xl border-b-black">Personal Details</h3>
                 <div id="namefield" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Name</h4>
-                    <div id="AD002_LA_name" class="block">
+                    <div id="AD002_IA_name" class="block">
                         <div class="mb-3">
-                            <label for="fname" class="text-md font-regular md:text-lg">First Name</label>
+                            <label for="instructor_fname" class="text-md font-regular md:text-lg">First Name</label>
                             <br>
-                            <input type="text" name="fname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="First Name">
+                            <input type="text" name="instructor_fname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="First Name" value="{{ old('instructor_fname') }}">
+                            @error('instructor_fname')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="lname" class="text-md font-regular md:text-lg">Last Name</label><br>
-                            <input type="text" name="lname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15"  placeholder="Last Name">
+                            <label for="instructor_lname" class="text-md font-regular md:text-lg">Last Name</label><br>
+                            <input type="text" name="instructor_lname" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15"  placeholder="Last Name" value="{{ old('instructor_lname') }}">
+                            @error('instructor_lname')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                         
                     </div>
                 </div>
     
-                <div id="AD002_LA_bday_genderfield" class="">
+                <div id="AD002_IA_bday_genderfield" class="">
                     <div id="bdayfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Birthday</h4>
                         <div class="">
-                            <label for="bday" class="hidden">Birthday</label>
-                            <input type="date" name="bday" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
+                            <label for="instructor_bday" class="hidden">Birthday</label>
+                            <input type="date" name="instructor_bday" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" value="{{ old('instructor_bday') }}">
+                            @error('instructor_bday')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                     </div>
                     <div id="gender" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Gender</h4>
                         <div class="">
-                            <label for="gender" class="hidden">Gender</label>
-                            <select name="gender" id="gender" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
-                                <option value="" class=""></option>
-                                <option value="male" class="">Male</option>
-                                <option value="female" class="">Female</option>
-                                <option value="others" class="">Preferred not to say</option>
+                            <label for="instructor_gender" class="hidden">Gender</label>
+                            <select name="instructor_gender" id="gender" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
+                                <option value="" {{old('instructor_gender') == "" ? 'selected' : ''}} class=""></option>
+                                <option value="Male" {{old('instructor_gender') == "Male" ? 'selected' : ''}} class="">Male</option>
+                                <option value="Female" {{old('instructor_gender') == "Female" ? 'selected' : ''}} class="">Female</option>
+                                <option value="Others" {{old('instructor_gender') == "Others" ? 'selected' : ''}} class="">Preferred not to say</option>
                             </select>
+                            @error('instructor_gender')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                     </div>
                 </div>
     
-                <div id="AD002_LA_email" class="flex mt-5">
+                <div id="AD002_IA_email" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Email</h4>
                     <div class="">
-                        <label for="email" class="hidden">Email</label>
-                        <input type="email" name="email" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="Email">
+                        <label for="instructor_email" class="hidden">Email</label>
+                        <input type="email" name="instructor_email" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="Email" value="{{ old('instructor_email') }}">
+                        @error('instructor_email')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                     </div>
                 </div>
     
-                <div id="AD002_LA_contactno" class="flex mt-5">
+                <div id="AD002_IA_contactno" class="flex mt-5">
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
-                        <label for="contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="contactno" pattern="[0-9]{10}" name="contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09">
+                        <label for="instructor_contactno" class="hidden">Contact Number</label>
+                        <input type="tel" id="instructor_contactno" maxlength="11" pattern="[0-9]{11}" name="instructor_contactno" class="px-3 py-2 text-lg border-2 border-black rounded-md w-15 md:text-xl" placeholder="09" value="{{old('instructor_contactno')}}">
+                        @error('instructor_contactno')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                     </div>
                 </div>
     
@@ -167,14 +197,19 @@
     
             </div>
     
-            <div id="AD002_LA_credentialsfields" class="mx-auto my-5 mt-16 smallpc:w-6/12 smallpc:mt-5">
+            <div id="AD002_IA_credentialsfields" class="mx-auto my-5 mt-16 smallpc:w-6/12 smallpc:mt-5">
                 <h3 class="mb-5 text-3xl font-medium border-b-2 border-b-black md:text-4xl">Files</h3>
-                <div id="AD002_LA_credentials_container" class="mt-5">
-                    <div id="AD002_LA_cv" class="flex">
+                <div id="AD002_IA_credentials_container" class="mt-5">
+                    <div id="AD002_IA_cv" class="flex">
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Curriculum Vitae or Resume</h4>
                         <div class="ml-4">
-                            <label for="cv_resume" class="hidden">CV or Resume</label>
-                            <input type="file" class="w-48 px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl" name="cv_resume" placeholder="">
+                            <label for="instructor_credentials" class="hidden">CV or Resume</label>
+                            <input type="file" class="px-3 py-2 text-lg border-2 border-black rounded-md w-80 md:text-xl" name="instructor_credentials" placeholder="" value="{{old('instructor_credentials')}}">
+                            @error('instructor_credentials')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -189,32 +224,47 @@
                     <div id="username" class="flex">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Username</h4>
                         <div class="">
-                            <label for="username" class="hidden">Username</label>
-                            <input type="text" name="username" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Username">
+                            <label for="instructor_username" class="hidden">Username</label>
+                            <input type="text" name="instructor_username" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Username" value="{{ old('instructor_username') }}">
                         </div>
+                        @error('instructor_username')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                     </div>
     
                     <div id="password" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Password</h4>
                         <div class="">
-                            <label for="password" class="hidden">Password</label>
-                            <input type="password" name="password" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Password">
+                            <label for="instructor_password" class="hidden">Password</label>
+                            <input type="password" name="instructor_password" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Password">
+                            @error('instructor_password')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                     </div>
     
                     <div id="password_confirm" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Cofirm Password</h4>
                         <div class="">
-                            <label for="password_confirm" class="hidden">Cofirm Password</label>
-                            <input type="password" name="password_confirm" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Confirm Password">
+                            <label for="instructor_password_confirmation" class="hidden">Cofirm Password</label>
+                            <input type="password" name="instructor_password_confirmation" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Confirm Password">
+                            @error('instructor_password_confirmation')
+                            <p class="p-1 mt-2 text-xs text-red-500">
+                                {{$message}}
+                            </p>
+                            @enderror
                         </div>
                     </div>
     
                     <div id="securitynum" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">SecurityCode</h4>
                         <div class="">
-                            <label for="securitynum" class="hidden">SecurityCode</label>
-                            <input type="text" maxlength="6" name="securitynum" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Seucrity Code">
+                            <label for="instructor_security_code" class="hidden">SecurityCode</label>
+                            <input type="password" maxlength="6" name="instructor_security_code" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Seucrity Code">
                         </div>
                     </div>
                 </div>
