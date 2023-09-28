@@ -21,8 +21,26 @@ class AdminController extends Controller
     }
 
     public function dashboard() {
-        return view('admin.dashboard')->with('title', 'Admin Dashboard');
-    }
+        
+        try {
+            $learnerCount = Learner::count();
+            $approvedLearnerCount = Learner::where("status", "LIKE", "Approved%")->count();
+            $pendingLearnerCount = Learner::where("status", "LIKE", "Pending%")->count();
+        
+            $instructorCount = Instructor::count();
+            $approvedInstructorCount = Instructor::where("status", "LIKE", "Approved%")->count();
+            $pendingInstructorCount = Instructor::where("status", "LIKE", "Pending%")->count();
+
+            return view('admin.dashboard', ['totalLearner' => $learnerCount,
+                                            'totalInstructor' => $instructorCount,
+                                            'approvedLearner' => $approvedLearnerCount,
+                                            'approvedInstructor' => $approvedInstructorCount,
+                                            'pendingLearner' => $pendingLearnerCount,
+                                            'pendingInstructor' => $pendingInstructorCount])
+                        ->with('title', 'Admin Dashboard');
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }}
 
 
 
@@ -341,7 +359,7 @@ class AdminController extends Controller
                 "instructor_username" => ['required', Rule::unique('instructor' , 'instructor_username')],
                 "instructor_password" => 'required|confirmed',
                 "instructor_security_code" => ['required'],
-                "instructor_credentials" => ['required', 'file', 'mimes: pdf,docx'],
+                "instructor_credentials" => ['required', 'file'],
             ]);
 
             $instructorData['instructor_credentials'] = '';
@@ -349,23 +367,26 @@ class AdminController extends Controller
             $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
 
             if($request->hasFile('instructor_credentials')) {
-               try {
-
+                
                 $file = $request->file('instructor_credentials');
+                
+                try {
+
                 $fileName = time() . '-' . $file->getClientOriginalName();
                 $folderPath = 'instructors/' . $folderName;
+                $filePath = $file->storeAs($folderPath, $fileName, 'public');
 
                 // add to database
-                $instructorData['instructor_credentials'] = "{$folderPath}/{$folderName}/{$fileName}";
+                $instructorData['instructor_credentials'] = $filePath;
                 // dd($instructorData);
                 Instructor::create($instructorData);
 
                 //add to storage
-                if(!Storage::exists($folderPath)) {
-                    Storage::makeDirectory($folderPath);
-                }
+                // if(!Storage::exists($folderPath)) {
+                //     Storage::makeDirectory($folderPath);
+                // }
 
-                Storage::putFileAs($folderPath, $file, $fileName);
+                // Storage::putFileAs($folderPath, $file, $fileName);
 
 
                } catch (\Exception $e) {
@@ -431,25 +452,24 @@ class AdminController extends Controller
             "instructor_gender" => ['required'],
             "instructor_contactno" => ['required'],
             // "instructor_email" => ['required' , 'email'],
-            "instructor_credentials" => ['file', 'mimes: pdfs,docx'],
+            "instructor_credentials" => ['required','file'],
         ]);
 
         $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
 
         if($request->hasFile('instructor_credentials')) {
+            
+            $file = $request->file('instructor_credentials');
             try {
-                $file = $request->file('instructor_credentials');
                 $fileName = time() . '-' . $file->getClientOriginalName();
                 $folderPath = 'instructors/' . $folderName;
+                $filePath = $file->storeAs($folderPath, $fileName, 'public');
 
-                $instructorData['instructor_credentials'] = "{$folderPath}/{$folderName}/{$fileName}";
+                $instructorData['instructor_credentials'] = $filePath;
 
                 $instructor->update($instructorData);
 
-                if(!Storage::exists($folderPath)) {
-                    Storage::makeDirectory($folderPath);
-                }
-                Storage::putFileAs($folderPath, $file, $fileName);
+                // Storage::putFileAs($folderPath, $file, $fileName);
 
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -465,11 +485,27 @@ class AdminController extends Controller
     }
 
     public function destroy_instructor(Instructor $instructor) {
-        // dd($learner);
+        
+        try {
 
-        $instructor->delete();
+            $relativeFilePath = str_replace('public/', '', $instructor->instructor_credentials);
+            if (Storage::disk('public')->exists($relativeFilePath)) {
+                // Storage::disk('public')->delete($relativeFilePath);
+                $specifiedDir = explode('/', $relativeFilePath);
+                array_pop($specifiedDir);
 
+                $dirPath = implode('/', $specifiedDir);
 
-        return redirect('/admin/instructors')->with('message' , 'Data was successfully deleted'); //add with message later
+                // dd($dirPath);
+                Storage::disk('public')->deleteDirectory($dirPath);
+            }
+    
+            $instructor->delete();
+    
+            return redirect('/admin/instructors')->with('message', 'Data and associated file were successfully deleted');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
+    
 }

@@ -231,7 +231,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="instructor_contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="instructor_contactno" pattern="[0-9]{10}" name="instructor_contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled value="{{$instructor->instructor_contactno}}">
+                        <input type="tel" id="instructor_contactno" pattern="[0-9]{11}" name="instructor_contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled value="{{$instructor->instructor_contactno}}">
                         @error('instructor_contactno')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -260,12 +260,13 @@
                                 @php
                                     $pathParts = explode('/', $instructor->instructor_credentials);
                                     $filename = end($pathParts);
+                                    $fileurl = asset("storage/$instructor->instructor_credentials");
                                 @endphp
-                            <p class="text-xl w-96">File: {{$filename}}</p>
+                            <p class="text-xl w-96">File: <a href="{{ $fileurl }}" target="_blank">{{$filename}}</a></p>
                             @else
                             <p class="text-xl w-96">No file Uploaded</p>
                             @endif
-                            <input id="instructor_credentials" type="file" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="instructor_credentials" placeholder="instructor_credentials" disabled value="{{$instructor->instructor_credentials}}">
+                            <input id="instructor_credentials" type="file" accept="application/pdf" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" name="instructor_credentials" placeholder="instructor_credentials" disabled value="{{$instructor->instructor_credentials}}">
                             @error('instructor_credentials')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -319,20 +320,21 @@
                 </div>
             </div>
     
-            <div id="button_container" class="pt-5 mx-auto mt-16 text-center border-2 border-t-black">
-                
-                <a href="" id="return"class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
-                <a href="" id="cancel" class="hidden px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
+            <div id="button_container" class="flex justify-center pt-5 mx-auto mt-16 text-center border-2 border-t-black">
+                <a href="" id="return"class="px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
+                <a href="" id="cancel" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
 
-                <button id="edit_data" type="button" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
-                <button id="update_data" type="submit" class="hidden px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
-                <form action="/admin/view_instructor/{{$instructor->instructor_id}}" method="POST">
-                    @method('delete')
-                    @csrf
-                    <button id="delete_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
-                </form>
+                <button id="edit_data" type="button" class="px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
+                
+                <button id="update_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+            </form>
+            <form action="/admin/view_instructor/{{$instructor->instructor_id}}" method="POST">
+                @method('delete')
+                @csrf
+                <button id="delete_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
+            </form>
             </div>
-        </form>
+        
     </div>
 
 </section>
@@ -359,11 +361,14 @@
                     
             $('#instructor_credentials').prop("disabled", false);
 
-
-            // $('#username').prop("disabled", false);
-            // $('#password').prop("disabled", false);
-            // $('#password_confirm').prop("disabled", false);
-            // $('#securitynum').prop("disabled", false);
+            $('#instructor_username').prop("disabled", false);
+            $('#instructor_username').prop("readonly", true);
+            $('#instructor_password').prop("disabled", false);
+            $('#instructor_password').prop("readonly", true);
+            $('#instructor_password_confirmation').prop("disabled", false);
+            $('#instructor_password_confirmation').prop("readonly", true);
+            $('#instructor_security_code').prop("disabled", false);
+            $('#instructor_security_code').prop("readonly", true);
         })
     })
 </script>

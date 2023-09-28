@@ -204,7 +204,7 @@
                         <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Curriculum Vitae or Resume</h4>
                         <div class="ml-4">
                             <label for="instructor_credentials" class="hidden">CV or Resume</label>
-                            <input type="file" class="px-3 py-2 text-lg border-2 border-black rounded-md w-80 md:text-xl" name="instructor_credentials" placeholder="" value="{{old('instructor_credentials')}}">
+                            <input type="file" class="px-3 py-2 text-lg border-2 border-black rounded-md w-80 md:text-xl" name="instructor_credentials" placeholder="" accept="application/pdf" value="{{old('instructor_credentials')}}">
                             @error('instructor_credentials')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}

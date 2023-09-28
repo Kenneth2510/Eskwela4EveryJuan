@@ -336,8 +336,8 @@
                     <div id="usernamefield" class="flex">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Username</h4>
                         <div class="w-64 ml-4">
-                            <label for="username" class="hidden">Username</label>
-                            <input id="username" type="text" name="username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled value={{$learner->learner_username}}>
+                            <label for="learner_username" class="hidden">Username</label>
+                            <input id="learner_username" type="text" name="learner_username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled value={{$learner->learner_username}}>
                             @error('learner_username')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -346,11 +346,11 @@
                         </div>
                     </div>
     
-                    <div id="passwordfield" class="flex hidden mt-5">
+                    <div id="passwordfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Password</h4>
                         <div class="w-64 ml-4">
-                            <label for="password" class="hidden">Password</label>
-                            <input id="password" type="password" name="password" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Password" disabled>
+                            <label for="learner_password" class="hidden">Password</label>
+                            <input id="learner_password" type="password" name="learner_password" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Password" disabled value="{{ $learner->learner_password }}">
                             @error('learner_password')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -359,11 +359,11 @@
                         </div>
                     </div>
     
-                    <div id="password_confirmfield" class="flex hidden mt-5">
+                    <div id="password_confirmfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Cofirm Password</h4>
                         <div class="w-64 ml-4">
-                            <label for="password_confirm" class="hidden">Cofirm Password</label>
-                            <input id="password_confirm" type="password" name="password_confirm" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Confirm Password" disabled>
+                            <label for="learner_password_confirm" class="hidden">Cofirm Password</label>
+                            <input id="learner_password_confirm" type="password" name="learner_password_confirm" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Confirm Password" disabled value="{{ $learner->learner_password }}">
                             @error('learner_password_confirm')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -372,11 +372,11 @@
                         </div>
                     </div>
     
-                    <div id="securitynumfield" class="flex hidden mt-5">
+                    <div id="securitynumfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">SecurityCode</h4>
                         <div class="w-64 ml-4">
-                            <label for="securitynum" class="hidden">SecurityCode</label>
-                            <input id="securitynum" type="password" maxlength="6" name="securitynum" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Seucrity Code">
+                            <label for="learner_security_code" class="hidden">SecurityCode</label>
+                            <input id="learner_security_code" type="password" maxlength="6" name="learner_security_code" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Seucrity Code" value="{{ $learner->learner_security_code }}">
                             @error('learner_security_code')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -412,9 +412,6 @@
         $('#edit_data').on('click', function(e) {
             e.preventDefault();
 
-            // $('#passwordfield').removeClass('hidden');
-            // $('#password_confirmfield').removeClass('hidden');
-            // $('#securitynumfield').removeClass('hidden');
             $('#button').removeClass('hidden');
             $('#update_data').removeClass('hidden');
             $('#delete_data').removeClass('hidden');
@@ -426,8 +423,10 @@
             $('#learner_lname').prop("disabled", false);
             $('#learner_bday').prop("disabled", false);
             $('#learner_gender').prop("disabled", false);
-            // $('#learner_email').prop("disabled", false);
+            $('#learner_email').prop("disabled", false);
+            $('#learner_email').prop("readonly", true);
             $('#learner_contactno').prop("disabled", false);
+            $('#learner_contactno').prop("readonly", true);
 
             $('#business_name').prop("disabled", false);
             $('#business_address').prop("disabled", false);
@@ -435,10 +434,14 @@
             $('#bplo_account_number').prop("disabled", false);
             $('#business_category').prop("disabled", false);
 
-            $('#username').prop("disabled", false);
-            $('#password').prop("disabled", false);
-            $('#password_confirm').prop("disabled", false);
-            $('#securitynum').prop("disabled", false);
+            $('#learner_username').prop("disabled", false);
+            // $('#learner_username').prop("readonly", true);
+            $('#learner_password').prop("disabled", false);
+            // $('#learner_password').prop("readonly", true);
+            $('#learner_password_confirm').prop("disabled", false);
+            // $('#learner_password_confirm').prop("readonly", true);
+            $('#learner_security_code').prop("disabled", false);
+            $('#learner_security_code').prop("readonly", true);
         })
     })
 </script>
