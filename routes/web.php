@@ -42,8 +42,10 @@ Route::controller(InstructorController::class)->group(function() {
 });
 
 Route::controller(AdminController::class)->group(function() {
-    Route::get('/admin', 'index');
-    Route::get('/admin/dashboard', 'dashboard');
+    Route::get('/admin', 'index')->name('login')->middleware('web', 'guest:admin');
+    Route::post('/admin/login', 'login_process');
+    Route::post('/admin/logout', 'logout');
+    Route::get('/admin/dashboard', 'dashboard')->middleware('auth:admin');
     // learner area---------------
     Route::get('/admin/learners', 'learners');
     Route::get('/admin/add_learner', 'add_learner');

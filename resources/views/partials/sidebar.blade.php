@@ -8,7 +8,7 @@
 
     <div id="sidebar" class="relative w-56 mx-auto">
         <ul class="mx-auto list-none list-inside my-28">
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+            <li id="admin_dashboard" class=" py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
                 <a href="/admin/dashboard">
                 <div class="flex items-center px-3 rounded-lg" id="dashboard">
                     <i class="w-12 text-2xl text-center fa-solid fa-house px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -16,7 +16,7 @@
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+            <li id="admin_learners" class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
                 <a href="/admin/learners">
                 <div class="flex items-center px-3 rounded-lg" id="learners">
                     <i class="w-12 text-2xl text-center fa-solid fa-user px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -25,15 +25,15 @@
             </a></li>
 
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
+            <li id="admin_instructors" class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+                <a href="/admin/instructors">
                 <div class="flex items-center px-3 rounded-lg" id="instructors">
                     <i class="w-12 text-2xl text-center fa-solid fa-user-graduate px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="px-3 text-xl font-normal text-white group-hover:text-black group-hover:text-xl group-hover:font-semibold">Instructors</h3>
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+            <li id="admin_courses" class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
                 <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="courses">
                     <i class="w-12 text-2xl text-center fa-solid fa-book px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -41,7 +41,7 @@
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+            <li id="admin_performance" class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
                 <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="performance">
                     <i class="w-12 text-2xl text-center fa-solid fa-chart-simple px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -49,7 +49,7 @@
                 </div>
             </a></li>
 
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
+            <li id="admin_settings" class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
                 <a href="">
                 <div class="flex items-center px-3 rounded-lg" id="settings">
                     <i class="w-12 text-2xl text-center fa-solid fa-gear px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
@@ -61,7 +61,11 @@
     </div>
 
     <div id="logout" class="relative flex justify-center w-56 mx-auto">
-        <a href="" class="py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen px-14 rounded-2xl hover:bg-green-900">Logout</a>
+        <form action="{{ url('/admin/logout') }}" method="POST">
+            @csrf
+            <button class="py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen px-14 rounded-2xl hover:bg-green-900">Logout</button>
+        </form>
+        
     </div>
 </section>
 
@@ -114,3 +118,27 @@
         </ul>  
     </div>
 </section>
+
+
+
+<script>
+    $(document).ready(function() {
+    var currentUrl = window.location.href;
+
+    if(currentUrl.includes('/admin/dashboard')) {
+        $('#admin_dashboard').addClass('selected');
+    } else if (currentUrl.includes('/admin/learners') || currentUrl.includes('/admin/add_learner') || currentUrl.includes('/admin/view_learner')) {
+        $('#admin_learners').addClass('selected');
+    } else if (currentUrl.includes('/admin/instructors') || currentUrl.includes('/admin/add_instructor') || currentUrl.includes('/admin/view_instructor')) {
+        $('#admin_instructors').addClass('selected');
+    } else if (currentUrl.includes('/admin/courses')) {
+        $('#admin_courses').addClass('selected');
+    } else if (currentUrl.includes('/admin/performance')) {
+        $('#admin_performance').addClass('selected');
+    } else if (currentUrl.includes('/admin/settings')) {
+        $('#admin_settings').addClass('selected');
+    } else {
+        
+    }
+})
+</script>

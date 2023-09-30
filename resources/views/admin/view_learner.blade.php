@@ -1,93 +1,12 @@
 @include('partials.header')
-
-<section id="sidebarfull" class="fixed top-0 left-0 z-20 w-16 h-full max-w-lg mx-auto px-auto smallpc:w-64 md:w-16 lg:w-64 bg-seagreen">
-    <div id="sidebarfull_menu" class="relative w-full mt-5 text-center">
-        <h1 class="hidden mx-1 text-2xl font-semibold text-white lg:block">Eskwela4EveryJuan</h1>
-        <button class="">
-            <i class="text-3xl fa-solid fa-bars" style="color: #ffffff;"></i>
-        </button>
-    </div>
-
-    <div id="sidebar" class="relative w-16 mx-auto smallpc:w-64 lg:w-64 lg:px-5">
-        <ul class="mx-auto list-none list-inside my-28">
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group ">
-                <a href="/admin/dashboard">
-                <div class="flex items-center px-3 rounded-lg" id="dashboard">
-                    <i class="w-12 text-2xl text-center fa-solid fa-house px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Dashboard</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group selected">
-                <a href="/admin/learners">
-                <div class="flex items-center px-3 rounded-lg" id="learners">
-                    <i class="w-12 text-2xl text-center fa-solid fa-user px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Learners</h3>
-                </div>
-            </a></li>
-
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="/admin/instructors">
-                <div class="flex items-center px-3 rounded-lg" id="instructors">
-                    <i class="w-12 text-2xl text-center fa-solid fa-user-graduate px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Instructors</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 rounded-lg" id="courses">
-                    <i class="w-12 text-2xl text-center fa-solid fa-book px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Courses</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 rounded-lg" id="performance">
-                    <i class="w-12 text-2xl text-center fa-solid fa-chart-simple px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Performance</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 rounded-lg" id="settings">
-                    <i class="w-12 text-2xl text-center fa-solid fa-gear px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Settings</h3>
-                </div>
-            </a></li>
-
-
-            <li class="py-5 mt-24 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen rounded-2xl hover:bg-green-900" id="logout">
-                    <i class="w-12 text-2xl text-center fa-solid fa-right-from-bracket px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Logout</h3>
-                </div>
-            </a></li>
-
-        </ul>  
-    </div>
-
-    {{-- <div id="logout" class="flex justify-center py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen px-14 rounded-2xl hover:bg-green-900">
-        <a href="" class="py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen px-14 rounded-2xl hover:bg-green-900">Logout</a>
-        <a href="" class="">
-            <div class="flex items-center " id="logout">
-                <i class="w-12 text-2xl text-center fa-solid fa-right-from-bracket px-auto group-hover:text-3x" style="color: #ffffff;"></i>
-                <h3 class="hidden px-3 text-xl font-normal text-white group-hover:text-black group-hover:text-xl group-hover:font-semibold">Settings</h3>
-            </div>
-        </a>
-    </div> --}}
-</section>
+@include('partials.sidebar')
 
 <section id="view_learner_container" class="relative ml-16 md:ml-16 lg:ml-64">
 
     <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
         <h1 class="text-4xl font-semibold">View Learner Details</h1>
         <div id="adminuser" class="flex items-center">
-            <h3 class="text-lg">admin</h3>
+            <h3 class="text-lg">{{ $adminCodeName }}</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
         </div>
     </div>

@@ -5,23 +5,74 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Learner;
 use App\Models\Instructor;
+use App\Models\Admin;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
-    public function index() {
-
-      
-        return view('admin.index')->with('title', 'Eskwela4EveryJuan Admin');
+    public function index()
+{
+    if (auth('admin')->check()) {
+        return redirect('/admin/dashboard');
     }
 
+    // Return the login page for administrators
+    return view('admin.index')->with('title', 'Eskwela4EveryJuan Admin');
+}
+
+
+    public function login_process(Request $request) {
+        $adminData = $request->validate([
+            "admin_username" => ['required'],
+            "password" => ['required']
+        ]);
+    
+        if (auth('admin')->attempt($adminData)) {
+
+            $admin = auth('admin')->user();
+            // dd($admin);
+
+            $admin = Admin::find($admin->admin_id);
+
+            if($admin) {
+                $request->session()->put('admin' , $admin);
+            }
+
+            $request->session()->regenerate();
+    
+            return redirect('/admin/dashboard')->with('message', "Welcome Back");
+        }
+    
+        return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+    }
+    
+    public function logout(Request $request) {
+        auth()->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/admin')->with('message', 'Logout Successful');
+    
+    }
+    
+
     public function dashboard() {
-        
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
+
         try {
             $learnerCount = Learner::count();
             $approvedLearnerCount = Learner::where("status", "LIKE", "Approved%")->count();
@@ -36,7 +87,8 @@ class AdminController extends Controller
                                             'approvedLearner' => $approvedLearnerCount,
                                             'approvedInstructor' => $approvedInstructorCount,
                                             'pendingLearner' => $pendingLearnerCount,
-                                            'pendingInstructor' => $pendingInstructorCount])
+                                            'pendingInstructor' => $pendingInstructorCount,
+                                            'adminCodeName' => $admin_codename])
                         ->with('title', 'Admin Dashboard');
         } catch(\Exception $e) {
             dd($e->getMessage());
@@ -50,6 +102,15 @@ class AdminController extends Controller
     }
     
     public function search_learner() {
+        
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
         $search_by = request('searchBy');
         $search_val = request('searchVal');
 
@@ -101,7 +162,7 @@ class AdminController extends Controller
     
             $learners = $query->paginate(10);
     
-            return view('admin.learners', compact('learners'))->with('title', 'Learner Management');
+            return view('admin.learners', compact('learners'))->with(['title' => 'Learner Management', 'adminCodeName' => $admin_codename]);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -109,7 +170,15 @@ class AdminController extends Controller
     
 
     public function add_learner() {
-        return view('admin.add_learner')->with('title' , 'Add New Learner');
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
+        return view('admin.add_learner')->with(['title' => 'Add New Learner', 'adminCodeName' => $admin_codename]);
     }
     
     public function store_new_learner(Request $request) {
@@ -157,6 +226,15 @@ class AdminController extends Controller
     }
 
     public function view_learner($id) {
+
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
         // dd($id);
 
         // $learnerdata = Learner::findOrFail($id);
@@ -177,7 +255,7 @@ class AdminController extends Controller
         return view('admin.view_learner', [ 
             'learner' => $learnerdata,
             'business' => $businessdata,
-        ])->with('title', 'View Learner');
+        ])->with(['title' => 'View Learner', 'adminCodeName' => $admin_codename]);
     }
 
     public function approveLearner(Learner $learner)
@@ -299,6 +377,14 @@ class AdminController extends Controller
 
     public function search_instructor() {
 
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
         $search_by = request('searchBy');
         $search_val = request('searchVal');
         
@@ -336,7 +422,7 @@ class AdminController extends Controller
             $instructors = $query->paginate(10);
 
             return view('admin.instructors', compact('instructors'))
-                ->with('title', 'Instructor Management');
+                ->with(['title' => 'Instructor Management', 'adminCodeName' => $admin_codename]);
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -344,7 +430,15 @@ class AdminController extends Controller
     }
 
     public function add_instructor() {
-        return view('admin.add_instructor')->with('title' , 'Add New Instructor');
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
+        return view('admin.add_instructor')->with(['title' => 'Add New Instructor', 'adminCodeName' => $admin_codename]);
     }
 
     public function store_new_instructor(Request $request) {
@@ -363,6 +457,7 @@ class AdminController extends Controller
             ]);
 
             $instructorData['instructor_credentials'] = '';
+            $instructorData['instructor_password'] = bcrypt($instructorData['instructor_password']);
         
             $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
 
@@ -399,11 +494,18 @@ class AdminController extends Controller
     }
 
     public function view_instructor ($id) {
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
 
         try {
             $instructorData = Instructor::where('instructor_id', $id)->first();
             // dd($instructorData);
-            return view('admin.view_instructor', ['instructor' => $instructorData])->with('title' , 'View Instructor');
+            return view('admin.view_instructor', ['instructor' => $instructorData])->with(['title' => 'View Instructor', 'adminCodeName' => $admin_codename]);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }

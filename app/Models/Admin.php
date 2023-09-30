@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
 
     protected $connection = 'mysql';
@@ -17,6 +18,10 @@ class Admin extends Model
     protected $fillable = [
         'admin_username',
         'admin_codename',
-        'admin_password'
+        'admin_password',
     ];
+
+    // public function getAuthPassword() {
+    //     return $this->admin_password;
+    // }
 }
