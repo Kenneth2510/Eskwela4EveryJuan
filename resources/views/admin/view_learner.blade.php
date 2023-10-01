@@ -1,7 +1,7 @@
 @include('partials.header')
 @include('partials.sidebar')
 
-<section id="view_learner_container" class="relative ml-16 md:ml-16 lg:ml-64">
+<section id="view_learner_container" class="relative w-4/5 h-full left-80">
 
     <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
         <h1 class="text-4xl font-semibold">View Learner Details</h1>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div id="maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
+    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
         <div class="mb-5">
             <a href="/admin/learners" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>

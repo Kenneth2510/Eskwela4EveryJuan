@@ -9,7 +9,7 @@
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
         </div>
     </div>
-    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-mainwhitebg mt-7 rounded-2xl">
+    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
         <div id="containertitle" class="flex items-center justify-between pt-1 pb-5 px-auto">
             <h3 class="text-3xl font-semibold">All Learners</h3>
             <div class="flex items-center">
