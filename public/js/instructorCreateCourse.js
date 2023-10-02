@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    $("#addNewCourse").on("click", function () {
+        window.location.replace("/instructor/courses/create");
+    });
+
     $("#nextAddCourse").on("click", function (event) {
         event.preventDefault();
 

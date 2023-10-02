@@ -13,4 +13,8 @@ class LearnerController extends Controller
     public function register(){
         return view('learner.register')->with('title', 'Learner Register');
     }
+
+    public function dashboard() {
+        return view('learner.dashboard')->with('title', 'Learner Dashboard');
+    }
 }

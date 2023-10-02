@@ -83,7 +83,7 @@
                     </tbody>
                 </table>
                 <div class="w-full text-right">
-                    <button class="h-10 px-2 mx-2 my-10 font-medium rounded bg-amber-400 hover:bg-amber-500">
+                    <button class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">
                         Add New Course
                     </button>
                 </div>
