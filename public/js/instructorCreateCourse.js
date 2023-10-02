@@ -24,14 +24,12 @@ $(document).ready(function () {
     $("#fileInput").on("change", function () {
         var files = $("#fileInput").prop("files");
         let filename = $.map(files, (val) => {
-            return val.name;
+            return "<li class='border-b-2'>" + val.name + "</li>";
         });
 
         console.log("Filename:");
         console.log(filename);
 
-        $("#uploadedFileName").append(
-            "<li class='border-b-2'>" + filename + "</li>",
-        );
+        $("#uploadedFileName").append(filename);
     });
 });
