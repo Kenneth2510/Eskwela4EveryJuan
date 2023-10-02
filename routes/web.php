@@ -41,6 +41,7 @@ Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor/courses', 'courses');
     Route::get('/instructor/register1', 'register1');
     Route::get('/instructor/courses/create', 'courseCreate');
+    Route::get('/instructor/settings', 'settings');
 });
 
 Route::controller(AdminController::class)->group(function() {
