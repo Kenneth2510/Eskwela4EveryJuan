@@ -1,98 +1,17 @@
 @include('partials.header')
+@include('partials.sidebar')
 
-<section id="sidebarfull" class="fixed top-0 left-0 z-20 w-16 h-full max-w-lg mx-auto px-auto smallpc:w-64 md:w-16 lg:w-64 bg-seagreen">
-    <div id="sidebarfull_menu" class="relative w-full mt-5 text-center">
-        <h1 class="hidden mx-1 text-2xl font-semibold text-white lg:block">Eskwela4EveryJuan</h1>
-        <button class="">
-            <i class="text-3xl fa-solid fa-bars" style="color: #ffffff;"></i>
-        </button>
-    </div>
-
-    <div id="sidebar" class="relative w-16 mx-auto smallpc:w-64 lg:w-64 lg:px-5">
-        <ul class="mx-auto list-none list-inside my-28">
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group ">
-                <a href="/admin/dashboard">
-                <div class="flex items-center px-3 rounded-lg" id="dashboard">
-                    <i class="w-12 text-2xl text-center fa-solid fa-house px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Dashboard</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group selected">
-                <a href="/admin/learners">
-                <div class="flex items-center px-3 rounded-lg" id="learners">
-                    <i class="w-12 text-2xl text-center fa-solid fa-user px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Learners</h3>
-                </div>
-            </a></li>
-
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="/admin/instructors">
-                <div class="flex items-center px-3 rounded-lg" id="instructors">
-                    <i class="w-12 text-2xl text-center fa-solid fa-user-graduate px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Instructors</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 rounded-lg" id="courses">
-                    <i class="w-12 text-2xl text-center fa-solid fa-book px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Courses</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 rounded-lg" id="performance">
-                    <i class="w-12 text-2xl text-center fa-solid fa-chart-simple px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Performance</h3>
-                </div>
-            </a></li>
-
-            <li class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 rounded-lg" id="settings">
-                    <i class="w-12 text-2xl text-center fa-solid fa-gear px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Settings</h3>
-                </div>
-            </a></li>
-
-
-            <li class="py-5 mt-24 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
-                <div class="flex items-center px-3 py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen rounded-2xl hover:bg-green-900" id="logout">
-                    <i class="w-12 text-2xl text-center fa-solid fa-right-from-bracket px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
-                    <h3 class="hidden px-3 text-xl font-normal text-white lg:block group-hover:text-black group-hover:text-xl group-hover:font-semibold">Logout</h3>
-                </div>
-            </a></li>
-
-        </ul>  
-    </div>
-
-    {{-- <div id="logout" class="flex justify-center py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen px-14 rounded-2xl hover:bg-green-900">
-        <a href="" class="py-5 mx-auto text-xl font-medium text-white bg-darthmouthgreen px-14 rounded-2xl hover:bg-green-900">Logout</a>
-        <a href="" class="">
-            <div class="flex items-center " id="logout">
-                <i class="w-12 text-2xl text-center fa-solid fa-right-from-bracket px-auto group-hover:text-3x" style="color: #ffffff;"></i>
-                <h3 class="hidden px-3 text-xl font-normal text-white group-hover:text-black group-hover:text-xl group-hover:font-semibold">Settings</h3>
-            </div>
-        </a>
-    </div> --}}
-</section>
-
-<section id="view_learner_container" class="relative ml-16 md:ml-16 lg:ml-64">
+<section id="view_learner_container" class="relative w-4/5 h-full left-80">
 
     <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
         <h1 class="text-4xl font-semibold">View Learner Details</h1>
         <div id="adminuser" class="flex items-center">
-            <h3 class="text-lg">admin</h3>
+            <h3 class="text-lg">{{ $adminCodeName }}</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
         </div>
     </div>
 
-    <div id="maincontainer" class="relative h-full px-5 py-5 mx-5 mt-5 bg-white shadow-2xl rounded-xl">
+    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
         <div class="mb-5">
             <a href="/admin/learners" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
@@ -106,7 +25,7 @@
             @if ($learner->status == 'Approved')
                 <div id="status" class="mx-1 text-lg text-center bg-green-500 py-auto w-28 rounded-xl">Approved</div>
                 <div id="button" class="flex flex-col hidden mx-4">
-                    <form action="">
+                    <form action="/admin/pending_learner/{{$learner->learner_id}}" method="POST">
                         @method('put')
                         @csrf
                         <button class="my-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl hover:bg-yellow-500 hover:text-white">pending</button>
@@ -120,7 +39,7 @@
             @elseif ($learner->status == 'Rejected')
                 <div id="status" class="mx-1 text-lg text-center bg-red-500 py-auto w-28 rounded-xl">Rejected</div>
                 <div id="button" class="flex flex-col hidden mx-4">
-                    <form action="">
+                    <form action="/admin/pending_learner/{{$learner->learner_id}}" method="POST">
                         @method('put')
                         @csrf
                         <button class="my-1 text-lg text-center bg-yellow-300 py-auto w-28 rounded-xl hover:bg-yellow-500 hover:text-white">pending</button>
@@ -336,8 +255,8 @@
                     <div id="usernamefield" class="flex">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Username</h4>
                         <div class="w-64 ml-4">
-                            <label for="username" class="hidden">Username</label>
-                            <input id="username" type="text" name="username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled value={{$learner->learner_username}}>
+                            <label for="learner_username" class="hidden">Username</label>
+                            <input id="learner_username" type="text" name="learner_username" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Username" disabled value={{$learner->learner_username}}>
                             @error('learner_username')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -346,11 +265,11 @@
                         </div>
                     </div>
     
-                    <div id="passwordfield" class="flex hidden mt-5">
+                    <div id="passwordfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Password</h4>
                         <div class="w-64 ml-4">
-                            <label for="password" class="hidden">Password</label>
-                            <input id="password" type="password" name="password" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Password" disabled>
+                            <label for="learner_password" class="hidden">Password</label>
+                            <input id="learner_password" type="password" name="learner_password" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Password" disabled value="{{ $learner->learner_password }}">
                             @error('learner_password')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -359,11 +278,11 @@
                         </div>
                     </div>
     
-                    <div id="password_confirmfield" class="flex hidden mt-5">
+                    <div id="password_confirmfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Cofirm Password</h4>
                         <div class="w-64 ml-4">
-                            <label for="password_confirm" class="hidden">Cofirm Password</label>
-                            <input id="password_confirm" type="password" name="password_confirm" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Confirm Password" disabled>
+                            <label for="learner_password_confirm" class="hidden">Cofirm Password</label>
+                            <input id="learner_password_confirm" type="password" name="learner_password_confirm" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Confirm Password" disabled value="{{ $learner->learner_password }}">
                             @error('learner_password_confirm')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -372,11 +291,11 @@
                         </div>
                     </div>
     
-                    <div id="securitynumfield" class="flex hidden mt-5">
+                    <div id="securitynumfield" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">SecurityCode</h4>
                         <div class="w-64 ml-4">
-                            <label for="securitynum" class="hidden">SecurityCode</label>
-                            <input id="securitynum" type="password" maxlength="6" name="securitynum" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Seucrity Code">
+                            <label for="learner_security_code" class="hidden">SecurityCode</label>
+                            <input id="learner_security_code" type="password" maxlength="6" name="learner_security_code" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" placeholder="Seucrity Code" value="{{ $learner->learner_security_code }}">
                             @error('learner_security_code')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -412,9 +331,6 @@
         $('#edit_data').on('click', function(e) {
             e.preventDefault();
 
-            // $('#passwordfield').removeClass('hidden');
-            // $('#password_confirmfield').removeClass('hidden');
-            // $('#securitynumfield').removeClass('hidden');
             $('#button').removeClass('hidden');
             $('#update_data').removeClass('hidden');
             $('#delete_data').removeClass('hidden');
@@ -427,7 +343,9 @@
             $('#learner_bday').prop("disabled", false);
             $('#learner_gender').prop("disabled", false);
             $('#learner_email').prop("disabled", false);
+            $('#learner_email').prop("readonly", true);
             $('#learner_contactno').prop("disabled", false);
+            $('#learner_contactno').prop("readonly", true);
 
             $('#business_name').prop("disabled", false);
             $('#business_address').prop("disabled", false);
@@ -435,10 +353,14 @@
             $('#bplo_account_number').prop("disabled", false);
             $('#business_category').prop("disabled", false);
 
-            $('#username').prop("disabled", false);
-            $('#password').prop("disabled", false);
-            $('#password_confirm').prop("disabled", false);
-            $('#securitynum').prop("disabled", false);
+            $('#learner_username').prop("disabled", false);
+            // $('#learner_username').prop("readonly", true);
+            $('#learner_password').prop("disabled", false);
+            // $('#learner_password').prop("readonly", true);
+            $('#learner_password_confirm').prop("disabled", false);
+            // $('#learner_password_confirm').prop("readonly", true);
+            $('#learner_security_code').prop("disabled", false);
+            $('#learner_security_code').prop("readonly", true);
         })
     })
 </script>

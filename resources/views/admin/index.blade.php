@@ -17,18 +17,23 @@
             </div>
         </div>
     
-        <div id="adminlogin" class="relative hidden w-2/4 h-full ml-24 right-0 py-16 transition-opacity duration-100">
-            <form action="">
+        <div id="adminlogin" class="relative w-2/4 h-full ml-24 right-0 py-16 transition-opacity duration-100">
+            <form action="/admin/login" method="POST">
                 @csrf
-    
+                
                 <div class="relative w-4/5">
+                    @error('admin_username')
+                    <p class="text-red-500 text-xs mt-2 p-1">
+                        {{$message}}
+                    </p>
+                    @enderror
                     <div class="flex items-center my-5">
-                        <label for="username" class="w-32 text-black font-bold text-2xl mr-16">Username:</label>
-                        <input type="text" name="username" class="py-3 text-base px-5 w-96 rounded-lg" placeholder="Username">
+                        <label for="admin_username" class="w-32 text-black font-bold text-2xl mr-16">Username:</label>
+                        <input type="text" name="admin_username" class="py-3 text-base px-5 w-96 rounded-lg" placeholder="Username" value="{{ old('admin_username') }}">
                     </div>
                     <div class="flex items-center my-5">
                         <label for="password" class="w-32 text-black font-bold text-2xl mr-16">Password</label>
-                        <input type="text" class="py-3 text-base px-5 w-96 rounded-lg" name="password" placeholder="Password">
+                        <input type="password" class="py-3 text-base px-5 w-96 rounded-lg" name="password" placeholder="Password">
                     </div>
                     <div class="relative flex justify-between">
                         <p></p>
@@ -44,7 +49,7 @@
    
     </section>
     
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             const form1 = $('#adminlogin');
             const showForm2Button = $('#showloginadmin');
@@ -54,5 +59,5 @@
                 form1.removeClass('hidden');
             });
         });
-      </script>
+      </script> --}}
 @include('partials.footer')
