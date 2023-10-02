@@ -17,4 +17,8 @@ class LearnerController extends Controller
     public function dashboard() {
         return view('learner.dashboard')->with('title', 'Learner Dashboard');
     }
+
+    public function settings() {
+        return view('learner.settings')->with('title', 'Learner Settings');
+    }
 }

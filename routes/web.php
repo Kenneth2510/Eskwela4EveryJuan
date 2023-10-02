@@ -32,6 +32,7 @@ Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner/login', 'index');
     Route::get('/learner/register', 'register');
     Route::get('learner/dashboard', 'dashboard');
+    Route::get('/learner/settings', 'settings');
 });
 
 Route::controller(InstructorController::class)->group(function() {

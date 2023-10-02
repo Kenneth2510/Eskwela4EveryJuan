@@ -93,7 +93,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
             </button>
 
-            <h1 class="mb-4 text-lg font-semibold text-center">Instructor Settings</h1>
+            <h1 class="mb-4 text-lg font-semibold text-center">Learner Settings</h1>
 
             <form class="pb-4 mx-4 text-sm text-black" action="">
                 @csrf
@@ -101,65 +101,112 @@
                     <div class="w-20 h-20 bg-teal-500 rounded-full">
                         
                     </div>
-                    <h1 class="text-lg font-medium">Instructor 1</h1>
+                    <h1 class="text-lg font-medium">Learner 1</h1>
                     <button class="underline text-darthmouthgreen ">Update Picture</button>
                 </div>
-                <div class="flex flex-col">
+                    
+                <div class="flex flex-row items-center justify-start w-full h-10 px-2 my-2 border-2 rounded shadow-lg cursor-pointer border-seagreen" id="showLearnerPersonal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                    <h1>Edit Personal Information</h1>
+                </div>
+                
+                <div class="hidden" id="learnerPersonal">
+                    <div class="flex flex-col">
+                        <div class="IN-FORM-CTNR">
+                            <label for="fname">Firstname:</label>
+                            <input class="IN-V-INP" type="text" name="fname" id="">
+                        </div>
+                        <div class="IN-FORM-CTNR">
+                            <label for="lname">Lastname:</label>
+                            <input class="IN-V-INP" type="text" name="lname" id="">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="IN-FORM-CTNR">
+                            <label for="birthday">Birthday:</label>
+                            <input class="IN-V-INP" type="date" name="birthday" id="">
+                        </div>
+                        
+                        <div class="IN-FORM-CTNR">
+                            <label for="gender">Gender</label>
+                            <select class="IN-V-INP" name="" id="">
+                                <option value="" disabled selected>-- select an option --</option>
+                                <option value="">Male</option>
+                                <option value="">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="IN-FORM-CTNR">
-                        <label for="fname">Firstname:</label>
+                        <label for="email">Email:</label>
+                        <input class="IN-V-INP" type="email" name="email" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="contact_number">Contact Number:</label>
+                        <input class="IN-V-INP" type="text" name="contact_number" id="">
+                    </div>
+                </div>
+
+                <div class="flex flex-row items-center justify-start w-full h-10 px-2 my-2 border-2 rounded shadow-lg cursor-pointer border-seagreen" id="showLearnerLogin">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                        <h1>Edit Login Information</h1>
+                </div>
+
+                <div class="hidden" id="learnerLogin">
+                    <div class="IN-FORM-CTNR">
+                        <label for="username">Username:</label>
+                        <input class="IN-V-INP" type="text" name="" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="password">Old Password:</label>
+                        <input class="IN-V-INP" type="password" name="old_password" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="password">New Password:</label>
+                        <input class="IN-V-INP" type="password" name="new_password" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="password_confirmation">Confirm New Password:</label>
+                        <input class="IN-V-INP" type="password" name="password_confirmation" id="">
+                    </div>
+                </div>
+                
+                <div class="flex flex-row items-center justify-start w-full h-10 px-2 my-2 border-2 rounded shadow-lg cursor-pointer border-seagreen" id="showLearnerBusiness">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                        <h1>Edit Business Information</h1>
+                </div>
+                
+                <div class="hidden" id="learnerBusiness">
+                    <div class="IN-FORM-CTNR">
+                        <label for="fname">Business Name:</label>
                         <input class="IN-V-INP" type="text" name="fname" id="">
                     </div>
                     <div class="IN-FORM-CTNR">
-                        <label for="lname">Lastname:</label>
+                        <label for="lname">Account Number:</label>
+                        <input class="IN-V-INP" type="text" name="lname" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="lname">Business Address:</label>
+                        <input class="IN-V-INP" type="text" name="lname" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="lname">Business Owner:</label>
+                        <input class="IN-V-INP" type="text" name="lname" id="">
+                    </div>
+                    <div class="IN-FORM-CTNR">
+                        <label for="lname">Business Category:</label>
                         <input class="IN-V-INP" type="text" name="lname" id="">
                     </div>
                 </div>
                 
-                <div>
-                    <div class="IN-FORM-CTNR">
-                        <label for="birthday">Birthday:</label>
-                        <input class="IN-V-INP" type="date" name="birthday" id="">
-                    </div>
                     
-                    <div class="IN-FORM-CTNR">
-                        <label for="gender">Gender</label>
-                        <select class="IN-V-INP" name="" id="">
-                            <option value="" disabled selected>-- select an option --</option>
-                            <option value="">Male</option>
-                            <option value="">Female</option>
-                        </select>
+                    
+                    <div class="grid h-auto my-10 text-black place-items-end" >
+                        <button class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500" id="nxtBtn">
+                            Update
+                        </button>
                     </div>
-                </div>
-
-                <div class="IN-FORM-CTNR">
-                    <label for="email">Email:</label>
-                    <input class="IN-V-INP" type="email" name="email" id="">
-                </div>
-                <div class="IN-FORM-CTNR">
-                    <label for="contact_number">Contact Number:</label>
-                    <input class="IN-V-INP" type="text" name="contact_number" id="">
-                </div>
-                <div class="IN-FORM-CTNR">
-                    <label for="username">Username:</label>
-                    <input class="IN-V-INP" type="text" name="" id="">
-                </div>
-                <div class="IN-FORM-CTNR">
-                    <label for="password">Old Password:</label>
-                    <input class="IN-V-INP" type="password" name="old_password" id="">
-                </div>
-                <div class="IN-FORM-CTNR">
-                    <label for="password">New Password:</label>
-                    <input class="IN-V-INP" type="password" name="new_password" id="">
-                </div>
-                <div class="IN-FORM-CTNR">
-                    <label for="password_confirmation">Confirm New Password:</label>
-                    <input class="IN-V-INP" type="password" name="password_confirmation" id="">
-                </div>
-                
-                <div class="grid h-auto my-10 text-black place-items-end" >
-                    <button class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500" id="nxtBtn">
-                        Update
-                    </button>
                 </div>
             </form>
         </section>
