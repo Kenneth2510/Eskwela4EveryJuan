@@ -19,13 +19,13 @@
     </div>
     
     <section class="flex flex-col text-sm md:flex-row md:text-xl lg:text-2xl">
-        <button class="IND-BTN IND-BTN-L">
-            Learner    
-        </button>
+        <a href="{{ url('/learner') }}" class="IND-BTN IND-BTN-L">
+            Sign in as Learner    
+        </a>
         
-        <button class="IND-BTN IND-BTN-IN">
+        <a href="{{ url('/instructor') }}" class="IND-BTN IND-BTN-IN">
             Sign in as Instructor
-        </button>
+        </a>
     </section>
     
 @include('partials.footer')

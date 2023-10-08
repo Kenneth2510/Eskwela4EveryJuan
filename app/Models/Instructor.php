@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Instructor extends Model
+class Instructor extends Authenticatable
 {
     use HasFactory;
     protected $connection = 'mysql';
@@ -14,7 +15,7 @@ class Instructor extends Model
 
     protected $fillable = [
         'instructor_username',
-        'instructor_password',
+        'password',
         'instructor_security_code',
         'instructor_fname',
         'instructor_lname',
@@ -25,4 +26,10 @@ class Instructor extends Model
         'status',
         'instructor_credentials'
     ];
+
+
+    // public function getAuthPassword()
+    // {
+    //     return $this->instructor_password;
+    // }
 }

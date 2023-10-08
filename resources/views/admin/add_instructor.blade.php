@@ -153,12 +153,12 @@
                             @enderror
                     </div>
     
-                    <div id="password" class="flex mt-5">
+                    <div id="" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Password</h4>
                         <div class="">
-                            <label for="instructor_password" class="hidden">Password</label>
-                            <input type="password" name="instructor_password" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Password">
-                            @error('instructor_password')
+                            <label for="password" class="hidden">Password</label>
+                            <input type="password" name="password" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Password">
+                            @error('password')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
                             </p>
@@ -166,12 +166,12 @@
                         </div>
                     </div>
     
-                    <div id="password_confirm" class="flex mt-5">
+                    <div id="" class="flex mt-5">
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Cofirm Password</h4>
                         <div class="">
-                            <label for="instructor_password_confirmation" class="hidden">Cofirm Password</label>
-                            <input type="password" name="instructor_password_confirmation" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Confirm Password">
-                            @error('instructor_password_confirmation')
+                            <label for="password_confirmation" class="hidden">Cofirm Password</label>
+                            <input type="password" name="password_confirmation" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Confirm Password">
+                            @error('password_confirmation')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
                             </p>

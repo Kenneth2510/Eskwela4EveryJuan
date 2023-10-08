@@ -17,20 +17,25 @@
                 <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
             </div>
 
-            <form class="mt-10 text-black" action="">
+            <form class="mt-10 text-black" action="{{ url('/instructor/login') }}" method="POST">
                 @csrf
                 <div class="pb-4 mx-4 text-sm border-b-4">
                     <div class="flex flex-col my-4">
-                        <label class="font-medium" for="">Email:</label>
+                        @error('instructor_username')
+                        <p class="text-red-500 text-xs mt-2 p-1">
+                            {{$message}}
+                        </p>
+                        @enderror
+                        <label class="font-medium" for="instructor_username">Username:</label>
                         <div class="relative">
                             <svg class="absolute w-8 h-8 mx-1 border-r-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
-                            <input class="w-full h-8 pl-10 text-black rounded" type="email" name="" id="">
+                            <input class="w-full h-8 pl-10 text-black rounded" type="text" name="instructor_username" id="instructor_username">
                         </div>
                         
                     </div>
                     
                     <div class="flex flex-col my-4">
-                        <label class="font-medium " for="password">Password:</label>
+                        <label class="font-medium " for="instructor_password">Password:</label>
                         <div class="relative">
                             <svg class="absolute w-8 h-8 mx-1 border-r-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
                             <svg class="absolute right-0 w-6 h-6 mx-1 top-1" id="showPwd" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
@@ -70,34 +75,7 @@
             </div>
         </div>
         
-        {{-- SECURITY CODE --}}
-
-        <div class="hidden w-full p-2 mt-16 bg-mainwhitebg text-darthmouthgreen" id="securityForm">
-            <div class="relative h-8 text-xl font-semibold tracking-wide text-center">
-                <svg class="absolute cursor-pointer" id="backBtn" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                <h1>Security Code</h1>
-            </div>
-
-            <div class="flex flex-col items-center justify-center text-lg font-medium">
-                <img class="w-40 h-36" src="{{url('assets/security-icon.png')}}" alt="">
-                <h1 class="text-black">Enter Security Code</h1>
-            </div>
-
-            <div class="flex flex-col items-center">
-                <div class="my-6">
-                    <input class="mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                    <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                    <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                    <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                </div>
-                <button class="w-64 h-12 my-4 font-medium tracking-wide text-white rounded bg-seagreen hover:bg-darthmouthgreen focus:bg-darthmouthgreen">Verify</button>
-            </div>
-
-            <div class="text-center text-black">
-                <h1>We just sent you a verification code</>
-                <p class="font-semibold text-darthmouthgreen">Resend Code?</p>
-            </div>
-        </div>
+        
     </section>
 
 @include('partials.footer')

@@ -4,15 +4,15 @@
 
 @layer components {
     .IND-BTN {
-        @apply h-10 mx-10 my-2 font-medium rounded md:w-52 md:rounded-xl lg:h-20;
+        @apply h-10 mx-10 my-2 font-medium rounded md:w-52 md:rounded-xl lg:h-20 text-center py-2;
     }
 
     .IND-BTN-L {
-        @apply text-white bg-darthmouthgreen md:mr-0;
+        @apply text-white bg-green-700 md:mr-0 hover:bg-green-900;
     }
 
     .IND-BTN-IN {
-        @apply bg-white md:bg-transparent lg:w-60;
+        @apply bg-white md:bg-transparent lg:w-60 hover:text-gray-100;
     }
 
     .IN-V-INP {

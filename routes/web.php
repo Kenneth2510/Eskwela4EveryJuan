@@ -29,12 +29,15 @@ Route::controller(UserController::class)->group(function() {
 
 
 Route::controller(LearnerController::class)->group(function() {
-    Route::get('/learner/login', 'index');
+    Route::get('/learner', 'index');
     Route::get('/learner/register', 'register');
 });
 
 Route::controller(InstructorController::class)->group(function() {
-    Route::get('/instructor/login', 'index');
+    Route::get('/instructor', 'index');
+    Route::post('/instructor/login', 'login_process');
+    Route::get('/instructor/authenticate', 'login_authentication');
+    Route::post('/instructor/authenticate', 'authenticate_instructor');
     Route::get('/instructor/register', 'register');
     Route::get('/instructor/dashboard', 'dashboard');
     Route::get('/instructor/courses', 'courses');

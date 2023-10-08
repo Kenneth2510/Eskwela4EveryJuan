@@ -10,10 +10,10 @@
                 <text class="text-7xl font-semibold leading-none text-black">Eskwela4EveryJuan</text>
                 <p class="text-2xl font-normal pt-5 text-black">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
         
-                <div class="relative mt-12">
+                {{-- <div class="relative mt-12">
                     <button id="showloginadmin" class="py-6 px-16 rounded-full bg-seagreen text-white font-medium text-2xl hover:bg-green-800">Sign In</button>
              
-                </div>
+                </div> --}}
             </div>
         </div>
     
