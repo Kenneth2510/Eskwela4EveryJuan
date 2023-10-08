@@ -53,7 +53,7 @@ class AdminController extends Controller
     }
     
     public function logout(Request $request) {
-        auth()->logout();
+        auth('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -13,6 +13,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+
 
 class InstructorController extends Controller
 {
@@ -33,6 +35,8 @@ class InstructorController extends Controller
             // dd($instructor);
 
             if($instructor) {
+                $request->session()->put("instructor", $instructor);
+                // dd(session('instructor'));
                 $request->session()->put("instructor_authenticated", true);
                 // dd($request->session()->get("instructor_authenticated"));
             }
@@ -49,7 +53,6 @@ class InstructorController extends Controller
 
     public function login_authentication(Request $request) {
         if (!$request->session()->has('instructor_authenticated')) {
-            dd($request->session()->get('instructor_authenticated'));
             return redirect(route('instructor.login'))->withErrors(['instructor_username' => 'Authentication Required']);
         }
 
@@ -62,7 +65,8 @@ class InstructorController extends Controller
     public function authenticate_instructor(Request $request) {
 
         if (!$request->session()->has('instructor_authenticated')) {
-            // dd($request->session()->get('instructor_authenticated'));
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             return redirect(route('instructor.login'))->withErrors(['instructor_username' => 'Authentication Required']);
         }
             // dd($request);
@@ -87,10 +91,20 @@ class InstructorController extends Controller
 
             // $request->session()->regenerate();
             return redirect('/instructor/dashboard')->with('message', 'Authenticated Successfully');
-        }
+        } 
 
-        // return back()->withErrors(['security_code' => 'Invalid Security Code']);
+        return back()->withErrors(['security_code' => 'Invalid Security Code']);
 }
+
+    public function logout(Request $request) {
+        auth('instructor')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/instructor')->with('message', 'Logout Successful');
+
+    }
 
     public function register(){
         return view('instructor.register')->with('title', 'Instructor Register');
@@ -101,7 +115,22 @@ class InstructorController extends Controller
     }
 
     public function dashboard(){
-        return view('instructor.dashboard')->with('title', 'Instructor Dashboard');
+
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+        } else {
+            return redirect('/instructor');
+        }
+
+        if($instructor) {
+            $instructor_fname = $instructor['instructor_fname'];
+            $instructor_lname = $instructor['instructor_lname'];
+            $instructor_id = $instructor['instructor_id'];
+        }
+
+        return view('instructor.dashboard', ["instructor_fname" => $instructor_fname,
+                                             "instructor_lname" => $instructor_lname,
+                                             "instructor_id" => $instructor_id])->with('title', 'Instructor Dashboard');
     }
 
     public function courses(){
@@ -113,6 +142,58 @@ class InstructorController extends Controller
     }
 
     public function settings(){
-        return view('instructor.settings')->with('title', 'Instructor Profile');
+
+        
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            // dd($instructor);
+        } else {
+            return redirect('/instructor');
+        }
+
+        return view('instructor.settings', compact('instructor'))->with('title', 'Instructor Profile');
+    }
+
+    public function update_info(Request $request) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            // dd($instructor);
+
+
+            
+        $updated_instructorData = $request->validate([
+            "instructor_fname" => ['required'],
+            "instructor_lname" => ['required'],
+            "instructor_bday" => ['required'],
+            "instructor_gender" => ['required'],
+            "instructor_contactno" => ['required'],
+        ]);
+
+        $passwordConfirm = $request->input('password_confirmation');
+
+        if (!empty($passwordConfirm)) {
+            if (!Hash::check($passwordConfirm, $instructor['password'])) {
+                return back()->withErrors(['password_confirmation' => 'Password confirmation does not match.'])->withInput();
+            }
+        } else {
+            return back()->withErrors(['password_confirmation' => 'Password confirmation is required.'])->withInput();
+        }
+
+        Instructor::where('instructor_id', $instructor['instructor_id'])
+                    ->update($updated_instructorData);
+        
+        $instructor->instructor_fname = $updated_instructorData['instructor_fname'];
+        $instructor->instructor_lname = $updated_instructorData['instructor_lname'];
+        $instructor->instructor_bday = $updated_instructorData['instructor_bday'];
+        $instructor->instructor_gender = $updated_instructorData['instructor_gender'];
+        $instructor->instructor_contactno = $updated_instructorData['instructor_contactno'];
+            
+        session(['instructor' => $instructor]);
+
+        return redirect('/instructor/settings')->with('message' , 'Profile updated successfully');
+        
+        } else {
+            return redirect('/instructor');
+        }  
     }
 }

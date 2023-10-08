@@ -40,12 +40,14 @@ Route::controller(InstructorController::class)->group(function() {
     Route::post('/instructor/login', 'login_process');
     Route::get('/instructor/authenticate', 'login_authentication');
     Route::post('/instructor/authenticate', 'authenticate_instructor');
+    Route::post('/instructor/logout', 'logout');
     Route::get('/instructor/register', 'register');
     Route::get('/instructor/dashboard', 'dashboard');
     Route::get('/instructor/courses', 'courses');
     Route::get('/instructor/register1', 'register1');
     Route::get('/instructor/courses/create', 'courseCreate');
     Route::get('/instructor/settings', 'settings');
+    Route::put('/instructor/settings', 'update_info');
 });
 
 Route::controller(AdminController::class)->group(function() {

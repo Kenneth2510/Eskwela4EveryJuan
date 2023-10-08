@@ -21,11 +21,27 @@
                 <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="security_code_5" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
                 <input class="h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="text" name="security_code_6" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
             </div>
+            @error('security_code')
+                        <p class="text-red-500 text-xs mt-2 p-1">
+                            {{$message}}
+                        </p>
+                        @enderror
             <button type="submit" class="w-64 h-12 my-4 font-medium tracking-wide text-white rounded bg-seagreen hover:bg-darthmouthgreen focus:bg-darthmouthgreen">Verify</button>
         </div>
     </form>
   
 
+    <script>
+        // Add event listeners to the input fields
+        const inputFields = document.querySelectorAll('input[type="text"]');
+        inputFields.forEach((input, index) => {
+            input.addEventListener('input', (event) => {
+                if (event.target.value !== '' && index < inputFields.length - 1) {
+                    inputFields[index + 1].focus();
+                }
+            });
+        });
+    </script>
 
     {{-- <div class="text-center text-black">
         <h1>We just sent you a verification code</>
