@@ -107,4 +107,12 @@ class InstructorController extends Controller
     public function courses(){
         return view('instructor.courses')->with('title', 'Instructor Courses');
     }
+
+    public function courseCreate(){
+        return view('instructor.coursesCreate')->with('title', 'Create Course');
+    }
+
+    public function settings(){
+        return view('instructor.settings')->with('title', 'Instructor Profile');
+    }
 }

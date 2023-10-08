@@ -31,6 +31,8 @@ Route::controller(UserController::class)->group(function() {
 Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner', 'index');
     Route::get('/learner/register', 'register');
+    Route::get('learner/dashboard', 'dashboard');
+    Route::get('/learner/settings', 'settings');
 });
 
 Route::controller(InstructorController::class)->group(function() {
@@ -42,6 +44,8 @@ Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor/dashboard', 'dashboard');
     Route::get('/instructor/courses', 'courses');
     Route::get('/instructor/register1', 'register1');
+    Route::get('/instructor/courses/create', 'courseCreate');
+    Route::get('/instructor/settings', 'settings');
 });
 
 Route::controller(AdminController::class)->group(function() {
