@@ -1,13 +1,9 @@
 @include('partials.header')
 
     <section class="relative w-full h-auto overflow-hidden text-sm bg-mainwhitebg">
-        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-            <a href="#">
-                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-                    Eskwela4EveryJuan
-                </span>
-            </a>
-        </header>
+        
+        @include('partials.instructorNav')
+        @include('partials.instructorSidebar')
 
     @include('partials.instructor_sidebar')
 

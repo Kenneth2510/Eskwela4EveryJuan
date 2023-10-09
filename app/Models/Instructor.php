@@ -8,10 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Instructor extends Authenticatable
 {
-    use HasFactory;
+    
     protected $connection = 'mysql';
     protected $primaryKey = 'instructor_id';
     protected $table = 'instructor';
+
+    use HasFactory;
 
     protected $fillable = [
         'instructor_username',

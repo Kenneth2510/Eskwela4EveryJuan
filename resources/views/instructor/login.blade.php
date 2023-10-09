@@ -2,7 +2,7 @@
 
     <section class="relative flex w-full h-screen text-sm">
         
-        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
+        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-transparent">
             <a href="#">
                 <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
                     Eskwela4EveryJuan
@@ -11,11 +11,13 @@
         </header>
         
         {{-- MAIN --}}
-        <div class="w-full h-screen bg-mainwhitebg text-darthmouthgreen" id="loginForm">
-            <div class="px-4 pt-4 mt-16">
-                <h1 class="my-2 text-3xl font-bold">Instructor Login</h1>
-                <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-            </div>
+        <div class="w-full h-screen bg-mainwhitebg text-darthmouthgreen md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
+            <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent">
+                <div class="px-4 pt-4 mt-16 md:mx-auto md:w-3/4 md:pt-8 lg:w-full">
+                    <h1 class="my-2 text-3xl font-bold md:text-4xl">Instructor Login</h1>
+                    <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+                </div>
+
 
             <form class="mt-10 text-black" action="{{ url('/instructor/login') }}" method="POST">
                 @csrf
@@ -42,31 +44,26 @@
                             <svg class="absolute right-0 hidden w-6 h-6 mx-1 top-1" id="hidePwd" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
                             
                             <input class="w-full h-8 pl-10 text-black rounded" type="password" name="password" id="password">
+
                         </div>
                     </div>
                     
-                    <div class="w-full text-right">
-                        <a href="">
-                            Forgot Password?
-                        </a>
+                    <div class="flex items-center justify-between px-4 my-4 md:text-base">
+                        <div class="flex items-center">
+                            <input class="w-4 h-4 mx-1 accent-darthmouthgreen" type="checkbox" name="" id="">
+                            <label for="">Remember me</label>
+                        </div>
+                        
+                        <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500 md:h-10 md:w-24 lg:rounded-lg" type="submit" id="">
+                            Log in
+                        </button>
                     </div>
-                </div>
-                
-                <div class="flex items-center justify-between px-4 my-4">
-                    <div class="flex items-center">
-                        <input class="w-4 h-4 mx-1 accent-darthmouthgreen" type="checkbox" name="" id="">
-                        <label for="">Remember me</label>
-                    </div>
-                    
-                    <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500" type="submit" id="loginBtn">
-                        Log in
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
             
-            <div class="mx-auto my-10 w-max">
-                <p class="text-black">Don't have an account yet?
-                    <span class="font-semibold text-darthmouthgreen">
+            <div class="mx-auto my-10 text-sm w-max md:text-base">
+                <p class="text-black md:text-mainwhitebg">Don't have an account yet?
+                    <span class="font-semibold text-darthmouthgreen md:text-white">
                         <a href="/instructor/register1">
                             Sign up
                         </a>
@@ -74,6 +71,64 @@
                 </p>
             </div>
         </div>
+
+        {{-- MAIN LEFT --}}
+        <div class="relative hidden w-1/2 lg:block bg-ashgray">
+            {{-- IMAGE HOLDER --}}
+            <div class="relative w-full h-full overflow-hidden rounded-lg">
+                {{-- img-1 --}}
+                <div class="hidden slides" id="slide1">
+                    <img src="{{asset('/images/ins-login-img1.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/3 left-1/2" alt="image-1">
+                    <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
+                        <h1 class="text-2xl font-bold">Maintain your Business</h1>
+                        <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
+                    </div>
+                    
+                </div>
+                {{-- img-2 --}}
+                <div class="hidden slides" id="slide2">
+                    <img src="{{asset('/images/ins-login-img2.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="image-2">
+                    <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
+                        <h1 class="text-2xl font-bold">Maintain your Business</h1>
+                        <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
+                    </div>
+                </div>
+                {{-- img-3 --}}
+                <div class="hidden slides" id="slide3">
+                    <img src="{{asset('/images/ins-login-img3.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="image-3">
+                    <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
+                        <h1 class="text-2xl font-bold">Maintain your Business</h1>
+                        <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- BOTTOM BUTTONS --}}
+            <div class="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2" id="carouselBtn">
+                <button type="button" class="w-2 h-2 rounded-full bg-slate-200" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" class="w-2 h-2 rounded-full bg-slate-200" aria-current="true" aria-label="Slide 2"></button>
+                <button type="button" class="w-2 h-2 rounded-full bg-slate-200" aria-current="true" aria-label="Slide 3"></button>
+            </div>
+            
+            <button type="button" class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" id="l-prevBtn">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    </svg>
+                    <span class="sr-only">Previous</span>
+                </span>
+            </button>
+
+            <button type="button" class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" id="l-nextBtn">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <span class="sr-only">Next</span>
+                </span>
+            </button>
+        </div>
+        
         
         
     </section>

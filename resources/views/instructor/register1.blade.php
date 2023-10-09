@@ -10,11 +10,13 @@
         </header>        
 
         {{-- MAIN --}}
-        <div class="w-full pt-16 text-darthmouthgreen">
-            <div class="px-4 pt-4 " id="ins-head">
-                <h1 class="my-2 text-3xl font-bold">Create an Instructor account</h1>
-                <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-            </div>
+        <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-hidden text-darthmouthgreen md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
+            <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent ">
+                <div class="px-4 pt-4 md:mx-auto md:w-3/4 md:pt-8 lg:w-full lg:pt-0" id="ins-head">
+                    <h1 class="my-2 text-3xl font-bold md:text-4xl">Create an Instructor account</h1>
+                    <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+                </div>
+
 
             <form class="pb-4 mx-4 mt-10 text-sm text-black" action="{{ url('/instructor/register1') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -243,10 +245,11 @@
                             <p>I've read and accept <span class="font-medium text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
                         </div>
 
-                        <div class="flex flex-row">
-                            <input class="mx-2" type="checkbox" name="" id="">
-                            <p>Remember me</p>
+                        <div class="pb-4 my-8 font-semibold border-b-2 lg:text-base" action="">
+                            <label for="">CV or Resume</label>
+                            <input class="font-normal " type="file" name="" id="">
                         </div>
+
 
                         
                         <div class="grid h-auto my-10 text-black place-items-end" >
@@ -258,15 +261,17 @@
                                 <button type="submit" class="h-10 px-2 mx-2 font-medium rounded bg-amber-400 hover:bg-amber-500">Create my account</button>
                             </div>
                             
+
                         </div>
                        
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
 
-            <div class="mb-10 text-center" id="ins-foot">
-                <h1 class="text-black">Already have an account?
-                    <a class="font-semibold text-darthmouthgreen" href="/instructor/login">Log in</a>
+
+            <div class="flex flex-row items-center justify-center text-center md:h-14 lg:h-auto " id="ins-foot ">
+                <h1 class="text-black md:text-mainwhitebg">Already have an account?
+                    <a class="font-semibold text-darthmouthgreen md:text-mainwhitebg" href="/instructor/login">Log in</a>
                 </h1>
             </div>
         </div>

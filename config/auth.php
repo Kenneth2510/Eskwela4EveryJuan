@@ -49,7 +49,8 @@ return [
         'instructor' => [
             'driver' => 'session',
             'provider' => 'instructors',
-        ]
+        ],
+
     ],
 
     /*
@@ -88,7 +89,8 @@ return [
         'instructors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Instructor::class,
-        ]
+        ],
+
     ],
 
     /*

@@ -52,6 +52,8 @@ Route::controller(InstructorController::class)->group(function() {
     Route::put('/instructor/update_profile', 'update_profile');
 });
 
+
+
 Route::controller(AdminController::class)->group(function() {
     Route::get('/admin', 'index')->name('login')->middleware('web', 'guest:admin');
     Route::post('/admin/login', 'login_process');
