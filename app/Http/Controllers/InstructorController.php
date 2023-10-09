@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 
 class InstructorController extends Controller
@@ -114,6 +115,72 @@ class InstructorController extends Controller
         return view('instructor.register1')->with('title', 'Instructor Register');
     }
 
+    public function register_process(Request $request) {
+        // dd($request);
+        $instructorData = $request->validate([
+            "instructor_fname" => ['required'],
+            "instructor_lname" => ['required'],
+            "instructor_bday" => ['required'],
+            "instructor_gender" => ['required'],
+            "instructor_contactno" => ['required', Rule::unique('instructor', 'instructor_contactno')],
+            "instructor_email" => ['required', 'email', Rule::unique('instructor', 'instructor_email')],
+            "instructor_username" => ['required', Rule::unique('instructor' , 'instructor_username')],
+            "password" => 'required|confirmed',
+            // "instructor_security_code" => ['required'],
+            "instructor_credentials" => ['required', 'file'],
+        ]);
+
+        $codeNumber = $request->validate([
+            "security_code_1" => ['required', 'alpha_num'],
+            "security_code_2" => ['required', 'alpha_num'],
+            "security_code_3" => ['required', 'alpha_num'],
+            "security_code_4" => ['required', 'alpha_num'],
+            "security_code_5" => ['required', 'alpha_num'],
+            "security_code_6" => ['required', 'alpha_num'],
+        ]);
+
+
+        $securityCodeNumber = implode('', $codeNumber);
+        // dd($securityCodeNumber);
+        $instructorData['instructor_security_code'] = $securityCodeNumber;
+
+
+        $instructorData['instructor_credentials'] = '';
+        $instructorData['password'] = bcrypt($instructorData['password']);
+    
+        $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
+
+        if($request->hasFile('instructor_credentials')) {
+            
+            $file = $request->file('instructor_credentials');
+            
+            try {
+
+            $fileName = time() . '-' . $file->getClientOriginalName();
+            $folderPath = 'instructors/' . $folderName;
+            $filePath = $file->storeAs($folderPath, $fileName, 'public');
+
+            // add to database
+            $instructorData['instructor_credentials'] = $filePath;
+            // dd($instructorData);
+            Instructor::create($instructorData);
+
+            //add to storage
+            // if(!Storage::exists($folderPath)) {
+            //     Storage::makeDirectory($folderPath);
+            // }
+
+            // Storage::putFileAs($folderPath, $file, $fileName);
+
+
+           } catch (\Exception $e) {
+            dd($e->getMessage());
+           }
+
+           return redirect('/instructor')->with('title', 'Instructor Login')->with('message' , 'Account Successfully created');
+        }
+    }
+
     public function dashboard(){
 
         if (auth('instructor')->check()) {
@@ -147,10 +214,10 @@ class InstructorController extends Controller
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
             // dd($instructor);
+
         } else {
             return redirect('/instructor');
         }
-
         return view('instructor.settings', compact('instructor'))->with('title', 'Instructor Profile');
     }
 
@@ -196,4 +263,38 @@ class InstructorController extends Controller
             return redirect('/instructor');
         }  
     }
+
+    public function update_profile(Request $request) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+        } else {
+            return redirect('/instructor');
+        }
+    
+        $instructorData = $request->validate([
+            "profile_picture" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $folderName = "{$instructor['instructor_lname']} {$instructor['instructor_fname']}";
+    
+        $fileName = time() . '-' . $instructorData['profile_picture']->getClientOriginalName();
+        $folderPath = 'instructors/' . $folderName; // Specify the public directory
+        $filePath = $instructorData['profile_picture']->storeAs($folderPath, $fileName, 'public');
+    
+        try {
+            // Update the instructor's profile_picture directly with the correct path
+            Instructor::where('instructor_id', $instructor['instructor_id'])
+                ->update(['profile_picture' => $filePath]);
+
+                $instructor['profile_picture'] = $filePath;
+                session(['instructor' => $instructor]);
+    
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    
+        return redirect('/instructor/settings')->with('message', 'Profile picture updated successfully');
+    }
+    
+    
 }

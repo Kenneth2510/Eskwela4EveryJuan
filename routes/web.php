@@ -45,9 +45,11 @@ Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor/dashboard', 'dashboard');
     Route::get('/instructor/courses', 'courses');
     Route::get('/instructor/register1', 'register1');
+    Route::post('/instructor/register1', 'register_process');
     Route::get('/instructor/courses/create', 'courseCreate');
     Route::get('/instructor/settings', 'settings');
     Route::put('/instructor/settings', 'update_info');
+    Route::put('/instructor/update_profile', 'update_profile');
 });
 
 Route::controller(AdminController::class)->group(function() {
