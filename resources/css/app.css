@@ -16,11 +16,10 @@
     }
 
     .IN-V-INP {
-        @apply w-full h-8 px-2 text-black rounded font-normal
+        @apply w-full h-8 px-2 text-black rounded font-normal;
     }
 
-    .IN-FORM-CTNR {
-        @apply flex flex-col my-2 font-medium
+    .FORM-CTNR {
+        @apply flex flex-col my-2 font-medium;
     }
-
 }

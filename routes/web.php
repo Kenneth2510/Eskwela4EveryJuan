@@ -35,15 +35,27 @@ Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner/settings', 'settings');
 });
 
-Route::controller(InstructorController::class)->group(function() {
-    Route::get('/instructor/login', 'index');
-    Route::get('/instructor/register', 'register');
-    Route::get('/instructor/dashboard', 'dashboard');
-    Route::get('/instructor/courses', 'courses');
-    Route::get('/instructor/register1', 'register1');
-    Route::get('/instructor/courses/create', 'courseCreate');
-    Route::get('/instructor/settings', 'settings');
+Route::prefix('instructor')->group(function() {
+    Route::controller(InstructorController::class)->group(function() {
+
+        Route::group(['middleware'=>['instructor']],function() {
+              
+        });
+
+        Route::get('/dashboard', 'dashboard');
+        Route::get('/courses', 'courses');
+        Route::get('/courses/create', 'courseCreate');
+        Route::get('/settings', 'settings');  
+
+        Route::get('/login', 'index');
+        Route::post('/login/process', 'login');
+        Route::get('/register', 'register');
+        Route::get('/register1', 'register1');
+        
+    });
 });
+
+
 
 Route::controller(AdminController::class)->group(function() {
     Route::get('/admin', 'index')->name('login')->middleware('web', 'guest:admin');

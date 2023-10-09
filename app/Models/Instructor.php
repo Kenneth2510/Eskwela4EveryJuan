@@ -4,13 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Instructor extends Model
+class Instructor extends Authenticatable
 {
-    use HasFactory;
+    
     protected $connection = 'mysql';
     protected $primaryKey = 'instructor_id';
     protected $table = 'instructor';
+
+    use HasFactory;
 
     protected $fillable = [
         'instructor_username',

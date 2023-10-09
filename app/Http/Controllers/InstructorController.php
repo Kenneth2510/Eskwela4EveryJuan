@@ -2,12 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instructor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class InstructorController extends Controller
 {
     public function index() {
         return view('instructor.login')->with('title', 'Instructor Login');
+    }
+
+    public function login(Request $request) {
+        $instructorData = $request->validate([
+        "instructor_email" => ['required', 'email'],
+        "password" => 'required'
+        ]);
+
+        
+        if (Auth::guard('instructor')->attempt($instructorData)) {
+            echo('hello');
+        } else {
+            echo("error occured");
+        }
     }
 
     public function register(){
