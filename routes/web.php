@@ -29,30 +29,27 @@ Route::controller(UserController::class)->group(function() {
 
 
 Route::controller(LearnerController::class)->group(function() {
-    Route::get('/learner/login', 'index');
+    Route::get('/learner', 'index');
     Route::get('/learner/register', 'register');
     Route::get('learner/dashboard', 'dashboard');
     Route::get('/learner/settings', 'settings');
 });
 
-Route::prefix('instructor')->group(function() {
-    Route::controller(InstructorController::class)->group(function() {
-
-        Route::group(['middleware'=>['instructor']],function() {
-              
-        });
-
-        Route::get('/dashboard', 'dashboard');
-        Route::get('/courses', 'courses');
-        Route::get('/courses/create', 'courseCreate');
-        Route::get('/settings', 'settings');  
-
-        Route::get('/login', 'index');
-        Route::post('/login/process', 'login');
-        Route::get('/register', 'register');
-        Route::get('/register1', 'register1');
-        
-    });
+Route::controller(InstructorController::class)->group(function() {
+    Route::get('/instructor', 'index');
+    Route::post('/instructor/login', 'login_process');
+    Route::get('/instructor/authenticate', 'login_authentication');
+    Route::post('/instructor/authenticate', 'authenticate_instructor');
+    Route::post('/instructor/logout', 'logout');
+    Route::get('/instructor/register', 'register');
+    Route::get('/instructor/dashboard', 'dashboard');
+    Route::get('/instructor/courses', 'courses');
+    Route::get('/instructor/register1', 'register1');
+    Route::post('/instructor/register1', 'register_process');
+    Route::get('/instructor/courses/create', 'courseCreate');
+    Route::get('/instructor/settings', 'settings');
+    Route::put('/instructor/settings', 'update_info');
+    Route::put('/instructor/update_profile', 'update_profile');
 });
 
 

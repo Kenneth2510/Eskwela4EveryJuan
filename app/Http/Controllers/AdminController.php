@@ -53,7 +53,7 @@ class AdminController extends Controller
     }
     
     public function logout(Request $request) {
-        auth()->logout();
+        auth('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -451,13 +451,13 @@ class AdminController extends Controller
                 "instructor_contactno" => ['required', Rule::unique('instructor', 'instructor_contactno')],
                 "instructor_email" => ['required', 'email', Rule::unique('instructor', 'instructor_email')],
                 "instructor_username" => ['required', Rule::unique('instructor' , 'instructor_username')],
-                "instructor_password" => 'required|confirmed',
+                "password" => 'required|confirmed',
                 "instructor_security_code" => ['required'],
                 "instructor_credentials" => ['required', 'file'],
             ]);
 
             $instructorData['instructor_credentials'] = '';
-            $instructorData['instructor_password'] = bcrypt($instructorData['instructor_password']);
+            $instructorData['password'] = bcrypt($instructorData['password']);
         
             $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
 

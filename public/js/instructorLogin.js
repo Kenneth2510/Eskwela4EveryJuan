@@ -3,9 +3,9 @@ $(document).ready(function () {
     const hidePass = $("#hidePwd");
     const pwd = $("#password");
 
-    const loginBtn = $("#loginBtn");
-    const loginForm = $("#loginForm");
-    const securityForm = $("#securityForm");
+    // const loginBtn = $("#loginBtn");
+    // const loginForm = $("#loginForm");
+    // const securityForm = $("#securityForm");
 
     const backBtn = $("#backBtn");
 
@@ -28,15 +28,16 @@ $(document).ready(function () {
         pwd.prop("type", "password");
     });
 
-    loginBtn.on("click", function (event) {
-        event.preventDefault();
+    // loginBtn.on("click", function (event) {
+    //     event.preventDefault();
 
-        loginForm.addClass("hidden");
-        securityForm.removeClass("hidden");
-    });
+    //     loginForm.addClass("hidden");
+    //     securityForm.removeClass("hidden");
+    // });
 
-    backBtn.on("click", function (event) {
-        event.preventDefault();
+    // backBtn.on("click", function (event) {
+    //     event.preventDefault();
+
 
         loginForm.removeClass("hidden");
         securityForm.addClass("hidden");
@@ -119,5 +120,6 @@ $(document).ready(function () {
     //         slide1.removeClass("hidden");
     //         slide3.addClass("hidden");
     //     }
+
     // });
 });

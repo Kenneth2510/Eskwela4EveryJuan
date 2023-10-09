@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Instructor extends Authenticatable
@@ -18,7 +17,7 @@ class Instructor extends Authenticatable
 
     protected $fillable = [
         'instructor_username',
-        'instructor_password',
+        'password',
         'instructor_security_code',
         'instructor_fname',
         'instructor_lname',
@@ -29,4 +28,10 @@ class Instructor extends Authenticatable
         'status',
         'instructor_credentials'
     ];
+
+
+    // public function getAuthPassword()
+    // {
+    //     return $this->instructor_password;
+    // }
 }

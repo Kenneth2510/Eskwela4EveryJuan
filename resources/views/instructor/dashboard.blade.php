@@ -1,8 +1,27 @@
 @include('partials.header')
     
     <section class="relative w-full h-auto bg-mainwhitebg">
-        @include('partials.instructorNav')
-        @include('partials.instructorSidebar')
+
+
+        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
+            <button class="hidden" id="hamb-but">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="0 -960 960 960" width="40"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+            </button>
+
+            <a href="#">
+                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
+                    Eskwela4EveryJuan
+                </span>
+            </a>
+
+            <button class="absolute right-4" id="prof-open-btn">
+                <img class="w-10 h-10" src="{{url('/assets/account-icon.svg')}}" alt="">
+            </button>
+        </header>  
+        @include('partials.instructor_sidebar')
+    
+        {{-- SIDEBAR END --}}
 
         {{-- MAIN START --}}
         <section class="relative h-screen px-2 mx-auto overflow-auto">
@@ -192,8 +211,8 @@
 
                     <div class="grid place-items-center">
                         <img class="w-10 h-10 my-4 bg-green-500 rounded-full" src="" alt="">
-                        <h1 class="text-lg font-medium">Person 1</h1>
-                        <h3 class="text-sm opacity-50">Instructor ID 2</h3>
+                        <h1 class="text-lg font-medium">{{ $instructor_fname }} {{ $instructor_lname }}</h1>
+                        <h3 class="text-sm opacity-50">Instructor ID: {{ $instructor_id }}</h3>
                     </div>
 
                     <div class="grid grid-flow-col">

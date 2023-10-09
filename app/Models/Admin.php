@@ -18,7 +18,7 @@ class Admin extends Authenticatable
     protected $fillable = [
         'admin_username',
         'admin_codename',
-        'admin_password',
+        'password',
     ];
 
     // public function getAuthPassword() {

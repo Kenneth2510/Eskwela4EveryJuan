@@ -64,10 +64,15 @@
                     <label for="password_confirm" class="text-xl font-semibold">Confirm Password</label><br>
                     <input type="password" name="password_confirm" class="w-11/12 mx-0.5 px-3 py-1 text-lg shadow-xl rounded-md" placeholder="Confirm Password">
                 </div>
-
-                <div class="flex justify-end w-full mt-10">
-                    <button id="shownext" class="py-3 text-xl font-semibold text-white bg-green-700 rounded-xl px-7 hover:bg-green-900">Next  <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i></button>
+                <div class=" flex items-center">
+                    <div class="relative flex justify-center w-10/12 py- mx-auto mt-6" id="register">
+                        <p class="text-xl font-normal">Already have an account? <a href="{{ url('/learner') }}" class="text-xl font-semibold text-green-700 hover:text-green-900">Sign In</a></p>
+                    </div>
+                    <div class="flex justify-end w-full mt-10">
+                        <button id="shownext" class="py-3 text-xl font-semibold text-white bg-green-700 rounded-xl px-7 hover:bg-green-900">Next  <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i></button>
+                    </div>
                 </div>
+                
             </div>
 
             <div id="businessinfo" class="relative hidden w-4/5 mx-auto mt-10">
@@ -113,7 +118,7 @@
                     </div>
                 </div>
                 <div class="relative flex justify-center w-4/5 py-2 mx-auto mt-6" id="register">
-                    <p class="text-xl font-normal">Already have an account? <a href="/learner/login" class="text-xl font-semibold text-green-700 hover:text-green-900">Sign In</a></p>
+                    <p class="text-xl font-normal">Already have an account? <a href="{{ url('/learner') }}" class="text-xl font-semibold text-green-700 hover:text-green-900">Sign In</a></p>
                 </div>
         
             </div>
