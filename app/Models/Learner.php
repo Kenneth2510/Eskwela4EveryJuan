@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Learner extends Model
+class Learner extends Authenticatable
 {
     use HasFactory;
     protected $connection = 'mysql';
@@ -14,7 +15,7 @@ class Learner extends Model
 
     protected $fillable = [
         'learner_username',
-        'learner_password',
+        'password',
         'learner_security_code',
         'learner_fname',
         'learner_lname',

@@ -9,13 +9,18 @@
             <p class="mt-2 text-lg font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
         </div>
 
-        <form action="">
+        <form action="{{ url('/learner/login') }}" method="POST">
         @csrf
             <div class="relative w-4/5 px-12 mx-auto mt-20 border-b-2 border-green-950">
+                @error('learner_username')
+                        <p class="text-red-500 text-lg mt-2 p-1">
+                            {{$message}}
+                        </p>
+                        @enderror
                 <div id="EorU" class="relative flex items-center py-3">
-                    <label for="EmailOrUsername" class="text-xl font-semibold w-72">Email or Username:</label>
+                    <label for="learner_username" class="text-xl font-semibold w-72">Username:</label>
                     <i class="px-2 py-3 text-2xl bg-white border-2 border-black rounded-tl-lg rounded-bl-lg fa-regular fa-envelope"></i>
-                    <input type="text" name="EmailOrUsername" class="h-12 px-4 text-lg font-medium rounded-tr-lg rounded-br-lg shadow-lg w-96" placeholder="Email">
+                    <input type="text" name="learner_username" class="h-12 px-4 text-lg font-medium rounded-tr-lg rounded-br-lg shadow-lg w-96" placeholder="Username" autofocus>
                 </div>
                 <div id="pass" class="relative flex items-center py-3">
                     <label for="password" class="text-xl font-semibold w-72">Password:</label>

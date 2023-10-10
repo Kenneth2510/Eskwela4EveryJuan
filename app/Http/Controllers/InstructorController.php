@@ -20,7 +20,14 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 class InstructorController extends Controller
 {
     public function index() {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            // return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
+            return back();
+        } else {
         return view('instructor.login')->with('title', 'Instructor Login');
+        }
+
     }
 
     public function login_process(Request $request) {

@@ -3,7 +3,7 @@
     <section class="relative w-full h-auto overflow-hidden text-sm bg-mainwhitebg">
         
         @include('partials.instructorNav')
-        @include('partials.instructorSidebar')
+        {{-- @include('partials.instructorSidebar') --}}
 
     @include('partials.instructor_sidebar')
 
@@ -131,7 +131,7 @@
                             <option value="" {{ $instructor->instructor_gender == "" ? 'selected': '' }} disabled>-- select an option --</option>
                             <option value="Male" {{ $instructor->instructor_gender == "Male" ? 'selected': '' }} >Male</option>
                             <option value="Female" {{ $instructor->instructor_gender == "Femnale" ? 'selected': '' }} >Female</option>
-                            <option value="Others" {{ $instructor->instructor_gender == "Others" ? 'selected': '' }} >Female</option>
+                            <option value="Others" {{ $instructor->instructor_gender == "Others" ? 'selected': '' }} >Preferred not to say</option>
                             @error('instructor_gender')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
