@@ -1,6 +1,6 @@
-<section class="relative z-40 float-left w-full text-white top-14" >
-    <div class="fixed w-full bg-seagreen md:h-screen md:pt-16 md:w-1/4 lg:w-2/12" id="instructorSidebar">
-        <ul class="flex flex-row justify-between px-2 md:flex-col md:text-base">
+<section class="fixed z-20 w-full h-screen overflow-hidden text-white md:w-1/3 lg:w-2/12 md:relative" id="insSideCont">
+    <div class="fixed w-full bg-seagreen md:h-screen md:pt-16 top-14 md:relative" id="instructorSidebar">
+        <ul class="flex flex-row justify-between md:flex-col md:text-base">
             <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                 <a class="flex items-center justify-center md:justify-start md:px-4 " href="#">
                     <svg class="mx-2 duration-500 stroke-white group-hover:stroke-black group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
