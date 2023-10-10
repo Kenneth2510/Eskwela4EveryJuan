@@ -1,19 +1,10 @@
 @include('partials.header')
 
-    <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-        <a href="#">
-            <span class="self-center text-xl font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-                Eskwela4EveryJuan
-            </span>
-        </a>
-        
-        <button class="absolute right-4" id="prof-open-btn">
-            <svg class="w-8 h-8 fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
-        </button>
-    </header>
+<section class="flex flex-row w-full h-screen bg-mainwhitebg">
+    @include('partials.instructorNav')
     
     {{-- PROFILE SETTINGS --}}
-    <section class="fixed top-0 z-50 hidden w-full h-full bg-white bg-opacity-50" id="profile">
+    {{-- <section class="fixed top-0 z-50 hidden w-full h-full bg-white bg-opacity-50" id="profile">
         <div class="float-right w-64 h-screen bg-white">
             <button class="absolute right-4 top-4" id="prof-btn">
                 <svg class="" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
@@ -78,10 +69,10 @@
                 <p class="mx-auto underline cursor-pointer underline-offset-4 w-max">View all</p>
             </div>
         </div>
-    </section>
+    </section> --}}
     
     {{-- SIDEBAR START --}}
-    <section class="fixed z-40 w-screen text-white md:h-screen top-14">
+    {{-- <section class="fixed z-40 w-screen text-white md:h-screen top-14">
         <div class="bg-seagreen md:w-52 md:h-screen md:pt-16">
             <ul class="flex justify-between px-2 sm:flex-row md:flex-col">
                 <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group ">
@@ -157,25 +148,26 @@
                     </button>
             </ul>
         </div>
-    </section>
+    </section> --}}
+    @include('partials.instructorSidebar')
     {{-- SIDEBAR END --}}
     
     {{-- MAIN START --}}
-    <section class="relative w-full h-auto px-4 mt-28">
+    <section class="relative w-full h-screen px-4 pt-28 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
         {{-- MAIN HEADER --}}
-        <div class="flex flex-row items-center justify-between h-20">
-            <h1 class="text-xl font-semibold">My Courses</h1>
+        <div class="flex flex-row items-center justify-between h-20 px-4">
+            <h1 class="text-xl font-semibold md:text-4xl ">My Courses</h1>
             <form class="relative flex flex-row items-center" action="">
                 <button class="absolute left-0" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
                 </button>
-                <input class="w-32 h-10 pl-6 rounded-lg" type="search" name="search" id="search" placeholder="search">
+                <input class="w-32 h-10 pl-6 rounded-lg md:w-64 md:h-12" type="search" name="search" id="search" placeholder="search">
             </form>
         </div>
 
         {{-- MAIN CONTENT --}}
-        <div class="grid w-full grid-flow-row mx-auto border-2 rounded-lg shadow place-items-center md:grid-cols-3 lg:grid-cols-5 md:place-items-start">
-            <div class="my-4 bg-teal-400 rounded-lg shadow-lg h-72 w-52">
+        <div class="flex flex-row flex-wrap items-center justify-center mx-auto border-2 rounded-lg shadow grow lg:justify-start">
+            <div class="m-4 bg-teal-400 rounded-lg shadow-lg h-72 w-52">
                 <div class="relative h-32 mx-auto my-4 bg-teal-600 rounded w-44">
                     <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="" alt="">
                 </div>
@@ -192,7 +184,7 @@
                     <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
                 </button>
             </div>
-            <div class="my-4 rounded-lg shadow-lg h-72 w-52 bg-cyan-400">
+            <div class="m-4 rounded-lg shadow-lg h-72 w-52 bg-cyan-400">
                 <div class="relative h-32 mx-auto my-4 rounded bg-cyan-600 w-44">
                     <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="" alt="">
                 </div>
@@ -209,7 +201,7 @@
                     <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
                 </button>
             </div>
-            <div class="my-4 bg-indigo-400 rounded-lg shadow-lg h-72 w-52">
+            <div class="m-4 bg-indigo-400 rounded-lg shadow-lg h-72 w-52">
                 <div class="relative h-32 mx-auto my-4 bg-indigo-600 rounded w-44">
                     <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="" alt="">
                 </div>
@@ -226,7 +218,7 @@
                     <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
                 </button>
             </div>
-            <div class="my-4 rounded-lg shadow-lg bg-amber-400 h-72 w-52">
+            <div class="m-4 rounded-lg shadow-lg bg-amber-400 h-72 w-52">
                 <div class="relative h-32 mx-auto my-4 rounded bg-amber-600 w-44">
                     <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="" alt="">
                 </div>
@@ -246,12 +238,18 @@
             
 
             
-            <button class="flex flex-col items-center justify-center my-4 bg-white rounded-lg shadow-lg w-52 h-72" id="addNewCourse">
+            <button class="flex flex-col items-center justify-center m-4 bg-white rounded-lg shadow-lg w-52 h-72" id="addNewCourse">
                 <svg class="w-24 h-24" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                 <h1 class="text-lg font-medium">add new course</h1>
             </button>
         </div>
     </section>
     {{-- MAIN END --}}
+
+    {{--! variables undefined --}}
+    {{-- @include('partials.instructorProfile') --}}
     
+
+</section>
+
 @include('partials.footer')
