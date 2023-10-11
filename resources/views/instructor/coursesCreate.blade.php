@@ -86,7 +86,7 @@
         </form>
     </section>
         {{--! variables undefined --}}
-    {{-- @include('partials.instructorProfile') --}}
+    @include('partials.instructorProfile')
 </section>
 
 @include('partials.footer')

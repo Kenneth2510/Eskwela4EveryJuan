@@ -201,11 +201,39 @@ class InstructorController extends Controller
     }
 
     public function courses(){
-        return view('instructor.courses')->with('title', 'Instructor Courses');
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+        } else {
+            return redirect('/instructor');
+        }
+
+        if($instructor) {
+            $instructor_fname = $instructor['instructor_fname'];
+            $instructor_lname = $instructor['instructor_lname'];
+            $instructor_id = $instructor['instructor_id'];
+        }
+        
+        return view('instructor.courses', ["instructor_fname" => $instructor_fname,
+                                             "instructor_lname" => $instructor_lname,
+                                             "instructor_id" => $instructor_id])->with('title', 'Instructor Courses');
     }
 
     public function courseCreate(){
-        return view('instructor.coursesCreate')->with('title', 'Create Course');
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+        } else {
+            return redirect('/instructor');
+        }
+
+        if($instructor) {
+            $instructor_fname = $instructor['instructor_fname'];
+            $instructor_lname = $instructor['instructor_lname'];
+            $instructor_id = $instructor['instructor_id'];
+        }
+
+        return view('instructor.coursesCreate', ["instructor_fname" => $instructor_fname,
+                                             "instructor_lname" => $instructor_lname,
+                                             "instructor_id" => $instructor_id])->with('title', 'Create Course');
     }
 
     public function settings(){

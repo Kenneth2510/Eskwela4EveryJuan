@@ -247,7 +247,7 @@
     {{-- MAIN END --}}
 
     {{--! variables undefined --}}
-    {{-- @include('partials.instructorProfile') --}}
+    @include('partials.instructorProfile')
     
 
 </section>
