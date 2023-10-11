@@ -35,9 +35,11 @@ Route::controller(LearnerController::class)->group(function() {
     Route::post('/learner/authenticate', 'authenticate_learner');
     Route::post('/learner/logout', 'logout');
     Route::get('/learner/register', 'register');
+    Route::post('/learner/register', 'register_process');
     Route::get('learner/dashboard', 'dashboard');
     Route::get('/learner/settings', 'settings');
     Route::put('/learner/settings', 'update_info');
+    Route::put('/learner/update_profile', 'update_profile');
 });
 
 Route::controller(InstructorController::class)->group(function() {

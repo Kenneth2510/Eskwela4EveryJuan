@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Business;
 use App\Models\Learner;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class LearnerController extends Controller
 {
@@ -114,6 +117,75 @@ class LearnerController extends Controller
         return view('learner.register')->with('title', 'Learner Register');
     }
 
+
+    public function register_process(Request $request) {
+        $LearnerPersonalData = $request->validate ([
+            "learner_fname" => ['required'],
+            "learner_lname" => ['required'],
+            "learner_bday" => ['required'],
+            "learner_gender" => ['required'],
+            "learner_contactno" => ['required' , Rule::unique('learner' , 'learner_contactno')],
+            "learner_email" => ['required' , 'email' , Rule::unique('learner' , 'learner_email')],
+        ]);
+
+        $businessData = $request->validate ([
+            "business_name" => ['required'],
+            "business_address" => ['required'],
+            "business_owner_name" => ['required'],
+            "bplo_account_number" => ['required'],
+            "business_category" => ['required'],
+        ]);
+
+        $LearnerLoginData = $request->validate([
+            "learner_username" => ['required', Rule::unique('learner' , 'learner_username')],
+            "password" => 'required|confirmed',
+        ]);
+
+        $codeNumber = $request->validate([
+            "security_code_1" => ['required', 'alpha_num'],
+            "security_code_2" => ['required', 'alpha_num'],
+            "security_code_3" => ['required', 'alpha_num'],
+            "security_code_4" => ['required', 'alpha_num'],
+            "security_code_5" => ['required', 'alpha_num'],
+            "security_code_6" => ['required', 'alpha_num'],
+        ]);
+
+
+        $securityCodeNumber = implode('', $codeNumber);
+        // dd($securityCodeNumber);
+
+
+        
+
+        $LearnerData = array_merge($LearnerPersonalData , $LearnerLoginData , ["learner_security_code" => $securityCodeNumber]);
+        $LearnerData['password'] = bcrypt($LearnerData['password']);
+        
+        $LearnerData['learner_security_code'] = $securityCodeNumber;
+
+        Learner::create($LearnerData);
+
+        $latestStudent = DB::table('learner')->orderBy('created_at', 'DESC')->first();
+
+        $latestStudentId = $latestStudent->learner_id;
+
+        $businessData['learner_id'] = $latestStudentId;
+
+        Business::create($businessData);
+
+        $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        
+        // $fileName = time() . '-' . $file->getClientOriginalName();
+        $folderPath = '/public/learners/' . $folderName;
+        // $filePath = $file->storeAs($folderPath, $fileName, 'public');
+
+        if(!Storage::exists($folderPath)) { 
+            Storage::makeDirectory($folderPath);
+        }
+
+        return redirect('/learner')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored');
+    
+    }
+
     public function dashboard() {
         if (auth('learner')->check()) {
             $learner = session('learner');
@@ -199,5 +271,38 @@ class LearnerController extends Controller
             return redirect('/learner');
         }  
     }
+
+    public function update_profile(Request $request) {
+        if (auth('learner')->check()) {
+            $learner = session('learner');
+        } else {
+            return redirect('/learner');
+        }
+    
+        $learnerData = $request->validate([
+            "profile_picture" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $folderName = "{$learner['learner_lname']} {$learner['learner_fname']}";
+    
+        $fileName = time() . '-' . $learnerData['profile_picture']->getClientOriginalName();
+        $folderPath = 'learners/' . $folderName; // Specify the public directory
+        $filePath = $learnerData['profile_picture']->storeAs($folderPath, $fileName, 'public');
+    
+        try {
+            // Update the instructor's profile_picture directly with the correct path
+            Learner::where('learner_id', $learner['learner_id'])
+                ->update(['profile_picture' => $filePath]);
+
+                $learner['profile_picture'] = $filePath;
+                session(['learner' => $learner]);
+    
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    
+        return redirect('/learner/settings')->with('message', 'Profile picture updated successfully');
+    }
+    
     
 }
