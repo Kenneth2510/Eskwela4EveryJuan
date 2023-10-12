@@ -2,7 +2,13 @@
 
 <section class="relative flex w-screen h-screen">
     <div id="RegisterLeft" class="relative w-1/2 h-full bg-neutral-200">
-        <div class="p-5 text-3xl font-bold titlearea font-poppins">Eskwela4EveryJuan</div>
+        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
+            <a href="#">
+                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
+                    Eskwela4EveryJuan
+                </span>
+            </a>
+        </header>      
 
        
 
@@ -64,8 +70,8 @@
                     <label for="password_confirm" class="text-xl font-semibold">Confirm Password</label><br>
                     <input type="password" name="password_confirm" class="w-11/12 mx-0.5 px-3 py-1 text-lg shadow-xl rounded-md" placeholder="Confirm Password">
                 </div>
-                <div class=" flex items-center">
-                    <div class="relative flex justify-center w-10/12 py- mx-auto mt-6" id="register">
+                <div class="flex items-center ">
+                    <div class="relative flex justify-center w-10/12 mx-auto mt-6 py-" id="register">
                         <p class="text-xl font-normal">Already have an account? <a href="{{ url('/learner') }}" class="text-xl font-semibold text-green-700 hover:text-green-900">Sign In</a></p>
                     </div>
                     <div class="flex justify-end w-full mt-10">
