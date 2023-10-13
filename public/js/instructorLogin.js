@@ -106,20 +106,3 @@ $(document).ready(function () {
 
     // Initialize the carousel on page load
     initCarousel();
-
-    // $("#l-nextBtn").on("click", (event) => {
-    //     event.preventDefault();
-
-    //     if (!slide1.hasClass("hidden")) {
-    //         slide2.removeClass("hidden");
-    //         slide1.addClass("hidden");
-    //     } else if (!slide2.hasClass("hidden")) {
-    //         slide3.removeClass("hidden");
-    //         slide2.addClass("hidden");
-    //     } else if (!slide3.hasClass("hidden")) {
-    //         slide1.removeClass("hidden");
-    //         slide3.addClass("hidden");
-    //     }
-
-    // });
-});

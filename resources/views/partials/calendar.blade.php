@@ -1,5 +1,5 @@
-    <div class="wrapper">
-      <header>
+    <div class="calendarWrapper">
+      <header class="calendarHeader">
         <p class="current-date"></p>
         <div class="icons">
           <span id="prev" class="material-symbols-rounded">chevron_left</span>

@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('instructor', function (Blueprint $table) {
-            $table->renameColumn('instructor_password', 'password');
-        });
-    }
+    // public function up(): void
+    // {
+    //     Schema::table('instructor', function (Blueprint $table) {
+    //         $table->renameColumn('instructor_password', 'password');
+    //     });
+    // }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::table('instructor', function (Blueprint $table) {
-            $table->renameColumn('password', 'instructor_password');
-        });
-    }
+    // public function down(): void
+    // {
+    //     Schema::table('instructor', function (Blueprint $table) {
+    //         $table->renameColumn('password', 'instructor_password');
+    //     });
+    // }
 };

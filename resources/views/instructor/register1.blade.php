@@ -157,11 +157,11 @@
 
                         <div class="grid h-auto my-10 text-black place-items-end" >
                             <div class="flex" >
-                                <button class=" mx-2 flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-red-500 hover:bg-red-700" id="prevBtn">
+                                <button class="flex flex-row items-center justify-center w-24 h-10 mx-2 bg-red-500 rounded-lg hover:bg-red-700" id="prevBtn">
                                     <h1>Back</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                                 </button>
-                                <button class="mx-2 flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500" id="nxtBtn2">
+                                <button class="flex flex-row items-center justify-center w-24 h-10 mx-2 rounded-lg bg-amber-400 hover:bg-amber-500" id="nxtBtn2">
                                     <h1>Next</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                                 </button>
@@ -184,7 +184,7 @@
                         <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                     </div>
 
-                   <div class="security-code-container pb-4 my-8 font-semibold border-b-2">
+                   <div class="pb-4 my-8 font-semibold border-b-2 security-code-container">
                         <label for="instructor_security_code">Security Code:</label>
                         <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
                         <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
@@ -255,7 +255,7 @@
                         
                         <div class="grid h-auto my-10 text-black place-items-end" >
                             <div class="flex">
-                                <button class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-red-500 hover:bg-red-700" id="prevBtn2">
+                                <button class="flex flex-row items-center justify-center w-24 h-10 bg-red-500 rounded-lg hover:bg-red-700" id="prevBtn2">
                                     <h1>Return</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                                 </button>
@@ -275,7 +275,10 @@
                     <a class="font-semibold text-darthmouthgreen md:text-mainwhitebg" href="/instructor/login">Log in</a>
                 </h1>
             </div>
+            
+            
         </div>
+        
     </section>
 
 @include('partials.footer')

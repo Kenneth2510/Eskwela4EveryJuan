@@ -4,7 +4,7 @@
 
 @layer components {
     .IND-BTN {
-        @apply h-10 mx-10 my-2 font-medium rounded md:w-52 md:rounded-xl lg:h-20 text-center py-2;
+        @apply h-10 py-2 mx-10 my-2 font-medium text-center rounded md:w-52 md:rounded-xl lg:h-20;
     }
 
     .IND-BTN-L {
@@ -16,7 +16,7 @@
     }
 
     .IN-V-INP {
-        @apply w-full h-8 px-2 text-black rounded font-normal;
+        @apply w-full h-8 px-2 font-normal text-black rounded lg:h-10;
     }
 
     .FORM-CTNR {

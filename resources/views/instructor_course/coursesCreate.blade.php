@@ -1,16 +1,10 @@
-@include('partials.header');
+@include('partials.header')
 
-<section class="relative w-full h-auto text-sm bg-mainwhitebg">
-    <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-            <a href="#">
-                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-                    Eskwela4EveryJuan
-                </span>
-            </a>
-        </header>
-    
+<section class="flex flex-row w-full h-screen bg-mainwhitebg">
+    @include('partials.instructorNav')
+    @include('partials.instructorSidebar')
     {{-- MAIN CONTENT --}}
-    <div class="px-2 mt-12">
+    <section class="w-full px-2 pt-28 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
         <div class="flex flex-row items-center mb-4">
             <button class="p-1 mr-2 bg-gray-300 rounded-full" id="backCreateCourse">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
@@ -90,7 +84,9 @@
                 
             </div>
         </form>
-    </div>
+    </section>
+        {{--! variables undefined --}}
+    @include('partials.instructorProfile')
 </section>
 
-@include('partials.footer');
+@include('partials.footer')
