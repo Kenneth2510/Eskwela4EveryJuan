@@ -13,7 +13,10 @@
                 </button>
                 <h1 class="w-1/2 text-xl font-semibold">Business Administration</h1>
                 <p>Instructor 1</p>
-                <p class="opacity-50">000000</p> 
+                <p class="opacity-50">000000</p>
+                <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
+                    <h1>Edit</h1>
+                </button>
             </div>
 
             {{-- main content --}}
