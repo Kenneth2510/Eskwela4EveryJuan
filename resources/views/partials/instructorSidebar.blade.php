@@ -1,4 +1,4 @@
-<section class="fixed z-20 w-full h-screen overflow-hidden text-white md:w-1/3 lg:w-2/12 md:relative" id="insSideCont">
+<section class="fixed z-20 w-full h-auto overflow-hidden text-white md:w-1/3 lg:w-2/12 md:relative" id="insSideCont">
     <div class="fixed w-full bg-seagreen md:h-screen md:pt-16 top-14 md:relative" id="instructorSidebar">
         <ul class="flex flex-row justify-between md:flex-col md:text-base">
             <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">

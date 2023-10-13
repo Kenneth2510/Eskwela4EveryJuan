@@ -61,9 +61,10 @@ Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor/settings', 'settings');
     Route::put('/instructor/settings', 'update_info');
     Route::put('/instructor/update_profile', 'update_profile');
-    Route::get('/instructor/courses/overview', 'overview');
-    Route::get('/instructor/courses/content', 'content');
-    Route::get('/instructor/courses/syllabus', 'syllabus');
+    Route::get('/instructor/mycourse', 'overview');
+    Route::get('/instructor/mycourse/content', 'content');
+    Route::get('/instructor/mycourse/syllabus', 'syllabus');
+    Route::get('/instructor/mycourse/lesson1', 'lesson');
 });
 
 
