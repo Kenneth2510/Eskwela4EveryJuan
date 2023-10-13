@@ -55,7 +55,7 @@
 
                     
                     
-                    <div class="flex justify-end w-full">
+                    <div class="flex justify-end hidden w-full">
                         <button class="w-1/2 py-2 mt-4 text-white rounded-lg shadow-lg bg-seagreen">
                             <h1>Save</h1>
                         </button>
