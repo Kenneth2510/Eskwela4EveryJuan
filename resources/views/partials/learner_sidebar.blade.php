@@ -1,6 +1,6 @@
 {{-- SIDEBAR --}}
 <section class="fixed z-40 w-screen text-white md:h-screen top-14">
-    <div class="bg-seagreen md:w-52 md:h-screen md:pt-16">
+    <div class="bg-seagreen  md:w-52 md:h-screen md:pt-16">
         <ul class="flex justify-between px-2 sm:flex-row md:flex-col">
             <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group ">
                 <a class="flex items-center justify-center md:justify-start md:px-4 " href="{{ url('/learner/dashboard') }}">

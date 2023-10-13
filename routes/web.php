@@ -50,10 +50,8 @@ Route::controller(InstructorController::class)->group(function() {
     Route::post('/instructor/logout', 'logout');
     Route::get('/instructor/register', 'register');
     Route::get('/instructor/dashboard', 'dashboard');
-    Route::get('/instructor/courses', 'courses');
     Route::get('/instructor/register1', 'register1');
     Route::post('/instructor/register1', 'register_process');
-    Route::get('/instructor/courses/create', 'courseCreate');
     Route::get('/instructor/settings', 'settings');
     Route::put('/instructor/settings', 'update_info');
     Route::put('/instructor/update_profile', 'update_profile');
@@ -86,4 +84,18 @@ Route::controller(AdminController::class)->group(function() {
     Route::put('/admin/pending_instructor/{instructor}', 'pendingInstructor');
     Route::put('/admin/view_instructor/{instructor}' , 'update_instructor');
     Route::delete('/admin/view_instructor/{instructor}', 'destroy_instructor');
+});
+
+// Route::controller(InstructorCourseController::class)->group(function() {
+//     Route::get('/instructor/courses', 'courses');
+//     Route::get('/instructor/courses/create', 'courseCreate');
+// });
+
+// Route::get('/instructor/courses', 'App\Http\Controllers\InstructorCourseController@courses');
+// Route::get('/instructor/courses/create', 'App\Http\Controllers\InstructorCourseController@courseCreate');
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/instructor/courses', 'InstructorCourseController@courses');
+    Route::get('/instructor/courses/create', 'InstructorCourseController@courseCreate');
+// })->middleware('web');
 });

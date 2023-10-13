@@ -207,13 +207,6 @@ class InstructorController extends Controller
                                              "instructor_id" => $instructor_id])->with('title', 'Instructor Dashboard');
     }
 
-    public function courses(){
-        return view('instructor.courses')->with('title', 'Instructor Courses');
-    }
-
-    public function courseCreate(){
-        return view('instructor.coursesCreate')->with('title', 'Create Course');
-    }
 
     public function settings(){
 
@@ -302,6 +295,6 @@ class InstructorController extends Controller
     
         return redirect('/instructor/settings')->with('message', 'Profile picture updated successfully');
     }
-    
+
     
 }
