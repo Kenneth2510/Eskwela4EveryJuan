@@ -1,35 +1,35 @@
 /* Import Google font - Poppins */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-}
-body {
+} */
+/* body {
     display: flex;
     align-items: center;
     padding: 0 10px;
     justify-content: center;
     min-height: 100vh;
     background: #9b59b6;
-}
-.wrapper {
-    width: 450px;
+} */
+.calendarWrapper {
+    width: 100%;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
-.wrapper header {
+.calendarWrapper .calendarHeader {
     display: flex;
     align-items: center;
     padding: 25px 30px 10px;
     justify-content: space-between;
 }
-header .icons {
+.calendarHeader .icons {
     display: flex;
 }
-header .icons span {
+.calendarHeader .icons span {
     height: 38px;
     width: 38px;
     margin: 0 1px;
@@ -44,10 +44,10 @@ header .icons span {
 .icons span:last-child {
     margin-right: -10px;
 }
-header .icons span:hover {
+.calendarHeader .icons span:hover {
     background: #f2f2f2;
 }
-header .current-date {
+.calendarHeader .current-date {
     font-size: 1.45rem;
     font-weight: 500;
 }
@@ -76,7 +76,7 @@ header .current-date {
     z-index: 1;
     cursor: pointer;
     position: relative;
-    margin-top: 30px;
+    margin-top: 15px;
 }
 .days li.inactive {
     color: #aaa;

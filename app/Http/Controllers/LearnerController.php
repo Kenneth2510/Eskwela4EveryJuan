@@ -116,6 +116,9 @@ class LearnerController extends Controller
     public function register(){
         return view('learner.register')->with('title', 'Learner Register');
     }
+    public function register1(){
+        return view('learner.register1')->with('title', 'Learner Register');
+    }
 
 
     public function register_process(Request $request) {
