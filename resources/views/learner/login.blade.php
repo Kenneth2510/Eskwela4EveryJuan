@@ -19,7 +19,8 @@
                 </div>
 
 
-                <form class="flex flex-col justify-center text-black rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full lg:text-mainwhitebg" action="" method="POST">
+
+                <form class="flex flex-col justify-center text-black rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full lg:text-mainwhitebg" action="{{ url('/learner/login') }}" method="POST">
                     @csrf
                     <div class="pb-4 mx-4 text-sm border-b-4 md:text-base">
                         @error('instructor_username')
@@ -92,7 +93,7 @@
                         <h1 class="text-2xl font-bold">Maintain your Business</h1>
                         <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
                     </div>
-                    
+
                 </div>
                 {{-- img-2 --}}
                 <div class="hidden slides" id="slide2">

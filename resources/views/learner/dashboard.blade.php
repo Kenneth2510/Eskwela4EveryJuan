@@ -3,8 +3,10 @@
     <section class="flex flex-row w-full h-auto bg-mainwhitebg">
         @include('partials.instructorNav')
         
+
         {{-- SIDEBAR --}}
         @include('partials.learnerSidebar')
+
         
         {{-- MAIN --}}
         <section class="relative w-full h-screen px-4 overflow-auto md:w-3/4 lg:w-9/12">   

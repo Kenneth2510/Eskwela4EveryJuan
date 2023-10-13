@@ -51,6 +51,12 @@ return [
             'provider' => 'instructors',
         ],
 
+        'learner' => [
+            'driver' => 'session',
+            'provider' => 'learners',
+        ],
+
+
     ],
 
     /*
@@ -89,6 +95,11 @@ return [
         'instructors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Instructor::class,
+        ],
+
+        'learners' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Learner::class,
         ],
 
     ],

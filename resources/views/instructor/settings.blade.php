@@ -3,7 +3,7 @@
     <section class="relative w-full h-auto overflow-hidden text-sm bg-mainwhitebg">
         
         @include('partials.instructorNav')
-        @include('partials.instructorSidebar')
+        {{-- @include('partials.instructorSidebar') --}}
 
     {{-- @include('partials.instructor_sidebar') --}}
 
@@ -171,6 +171,7 @@
                                 @enderror
                     </div>
                     <div class="IN-FORM-CTNR">
+
                         <label for="password">Password:</label>
                         <input class="IN-V-INP" type="password" name="password" id="password" value="{{ $instructor->password }}" disabled>
                         @error('password_confirmation')
@@ -186,6 +187,7 @@
                     <div id="pass_confirm" class="hidden IN-FORM-CTNR">
                         <label for="password_confirmation">Confirm Password:</label>
                         <input class="IN-V-INP" type="password" name="password_confirmation" id="password_confirmation">
+
                     </div>
 
                     <div class="IN-FORM-CTNR">
