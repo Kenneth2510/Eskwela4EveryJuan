@@ -30,10 +30,20 @@ Route::controller(UserController::class)->group(function() {
 
 Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner', 'index');
+    Route::post('/learner/login', 'login_process');
+    Route::get('/learner/authenticate', 'login_authentication');
+    Route::post('/learner/authenticate', 'authenticate_learner');
+    Route::post('/learner/logout', 'logout');
     Route::get('/learner/register', 'register');
+    Route::post('/learner/register', 'register_process');
     Route::get('learner/dashboard', 'dashboard');
     Route::get('/learner/settings', 'settings');
+
     Route::get('/learner/register1', 'register1');
+
+    Route::put('/learner/settings', 'update_info');
+    Route::put('/learner/update_profile', 'update_profile');
+
 });
 
 Route::controller(InstructorController::class)->group(function() {

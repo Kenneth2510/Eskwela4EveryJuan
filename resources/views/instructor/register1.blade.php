@@ -238,6 +238,7 @@
                             {{$message}}
                         </p>
                         @enderror
+                </div>
 
                     <div class="">
                         <div class="flex flex-row">
