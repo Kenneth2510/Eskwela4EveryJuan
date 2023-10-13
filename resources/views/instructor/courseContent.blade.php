@@ -4,14 +4,14 @@
     @include('partials.instructorSidebar')
     
     {{-- MAIN --}}
-    <section class="w-full  pt-[125px] mx-2  overscroll-auto md:overflow-auto">
+    <section class="w-full  pt-[120px] mx-2  overscroll-auto md:overflow-auto">
         <div class="shadow-lg pb-4rounded-lg">
             {{-- header --}}
             <div class="relative px-2 rounded-t-lg bg-seagreen text-mainwhitebg">
                 <button class="my-2 bg-gray-400 rounded-full ">
                     <svg  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                 </button>
-                <h1 class="w-1/2 text-xl font-semibold">Introduction to Business Administration</h1>
+                <h1 class="w-1/2 text-xl font-semibold">Business Administration</h1>
                 <p>Instructor 1</p>
                 <p class="opacity-50">000000</p> 
             </div>
@@ -63,7 +63,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                     </button>
                     
-                    <button class="self-center w-1/2 py-4 rounded-lg shadow-lg bg-seagreen">
+                    <button class="self-center w-1/2 py-4 mt-4 rounded-lg shadow-lg bg-seagreen">
                         <h1>Add Content</h1>
                     </button>
                 </div>
