@@ -1,5 +1,5 @@
 @include('partials.header')
-<section class="flex flex-row w-full h-auto text-sm bg-mainwhitebg md:text-base lg:h-screen">
+<section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
         <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
         <a href="#">
             <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
@@ -11,7 +11,7 @@
     @include('partials.instructorSidebar')
 
     {{-- MAIN --}}
-    <section class="w-full pt-[125px] mx-4  h-screen">
+    <section class="w-full pt-[125px] mx-4  overscroll-auto md:overflow-auto">
         {{-- course name/title --}}
         <div class="relative z-0 pb-4 bg-black border border-gray-400 rounded-lg shadow-lg text-mainwhitebg">
             <img class="absolute top-0 left-0 object-cover w-full h-full pointer-events-none -z-10 opacity-30" src="{{asset('images/marketing-img.png')}}" alt="computer with microphone">
