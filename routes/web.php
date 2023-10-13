@@ -63,6 +63,7 @@ Route::controller(InstructorController::class)->group(function() {
     Route::put('/instructor/update_profile', 'update_profile');
     Route::get('/instructor/courses/overview', 'overview');
     Route::get('/instructor/courses/content', 'content');
+    Route::get('/instructor/courses/syllabus', 'syllabus');
 });
 
 

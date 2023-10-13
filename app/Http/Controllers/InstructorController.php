@@ -338,6 +338,9 @@ class InstructorController extends Controller
     public function content(){
         return view('instructor.courseContent')->with('title', 'Course Content');
     }
+    public function syllabus(){
+        return view('instructor.courseSyllabus')->with('title', 'Course Content');
+    }
     
     
 }
