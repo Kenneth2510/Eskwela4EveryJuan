@@ -61,4 +61,5 @@ $(document).ready(function () {
     $('#closePopup').click(function () {
         $('#profilePicturePopup').addClass('hidden');
     });
+
 });

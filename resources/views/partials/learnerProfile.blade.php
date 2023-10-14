@@ -15,9 +15,11 @@
                         
 
                         <div class="grid mb-10 place-items-center">
-                            <img class="my-4 bg-green-500 rounded-full w-14 h-14 lg:w-20 lg:h-20" src="" alt="">
-                            <h1 class="text-lg font-medium">John Doe</h1>
-                            <h3 class="text-sm opacity-50">Learner ID: 01</h3>
+                            {{-- <img class="my-4 bg-green-500 rounded-full w-14 h-14 lg:w-20 lg:h-20" src="" alt=""> --}}
+                            <img class="my-4 bg-green-500 rounded-full w-14 h-14 lg:w-20 lg:h-20" src="{{ asset('storage/' . $learner->profile_picture) }}
+                                " alt="Profile Picture">
+                            <h1 class="text-lg font-medium">{{ $learner->learner_fname }}  {{ $learner->learner_lname }}</h1>
+                            <h3 class="text-sm opacity-50">Learner ID: {{ $learner->learner_id }}</h3>
                         </div>
                         
                         <div class="hidden lg:block">

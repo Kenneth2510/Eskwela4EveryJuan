@@ -3,6 +3,7 @@
     <section class="relative w-full h-auto overflow-hidden text-sm bg-mainwhitebg">
         
         @include('partials.instructorNav')
+
         {{-- @include('partials.instructorSidebar') --}}
 
     {{-- @include('partials.instructor_sidebar') --}}
@@ -10,16 +11,16 @@
         {{-- MAIN --}}
         <section class="relative h-screen mx-2 overflow-auto shadow-lg text-darthmouthgreen">
             <div class="top-0 right-0 md:absolute z-1 md:w-3/4 pt-[110px] md:pt-[60px] md:h-screen lg:w-10/12">
-                <button class="w-8 h-8 m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                </button>
+                <a href="{{ url('/instructor/dashboard') }}" class="w-8 h-8 m-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+                </a>
 
                 <h1 class="mb-4 text-lg font-semibold text-center md:text-xl">Instructor Settings</h1>
 
                 
                     <div class="flex flex-col items-center justify-center mb-4">
                         <div class="w-20 h-20 bg-teal-500 rounded-full">
-                            @php
+                            {{-- @php
                                 $pathParts = explode('/', $instructor->profile_picture);
                                 
                                 // $filename = end($pathParts);
@@ -29,9 +30,10 @@
 
                                 $fileurl = asset(implode('/', $pathParts));
                                 // dd($fileurl);
-                            @endphp
+                            @endphp --}}
 
-                                <img src="{{ $fileurl }}" alt="Profile Picture">
+                                <img class="rounded-full w-20 h-20" src="{{ asset('storage/' . $instructor->profile_picture) }}
+                                " alt="Profile Picture">
                                 {{-- <img src="{{ asset($instructor->profile_picture) }}" alt="Profile Picture"> --}}
                             {{-- <h3>{{ asset($instructor->profile_picture) }}</h3> --}}
                             {{-- <img src="{{ asset($cleaned_profile_picture_url) }}" alt="Profile Picture"> --}}

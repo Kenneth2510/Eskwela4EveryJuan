@@ -22,8 +22,8 @@ class InstructorController extends Controller
     public function index() {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
-            // return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
-            return back();
+            return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
+            // return back();
         } else {
         return view('instructor.login')->with('title', 'Instructor Login');
         }
@@ -163,11 +163,26 @@ class InstructorController extends Controller
             
             try {
 
-            $fileName = time() . '-' . $file->getClientOriginalName();
-            $folderPath = 'instructors/' . $folderName;
-            $filePath = $file->storeAs($folderPath, $fileName, 'public');
+           
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $folderPath = 'instructors/' . $folderName;
+                $filePath = $file->storeAs($folderPath, $fileName, 'public');
 
-            // add to database
+                // Copy the default photo to the same directory
+                $defaultPhoto = 'public/images/default_profile.png';
+                // $isExists = Storage::exists($defaultPhoto);
+
+                $defaultPhoto_path = $folderPath . '/default_profile.png';
+                // dd($defaultPhoto_path);
+
+                Storage::copy($defaultPhoto, 'public/' . $defaultPhoto_path);
+                // $isExists = Storage::exists($defaultPhoto_path);
+                // dd($isExists);
+              
+                
+                // add to database
+                $instructorData['profile_picture'] = $defaultPhoto_path;
+
             $instructorData['instructor_credentials'] = $filePath;
             // dd($instructorData);
             Instructor::create($instructorData);
@@ -202,46 +217,16 @@ class InstructorController extends Controller
             $instructor_id = $instructor['instructor_id'];
         }
 
-        return view('instructor.dashboard', ["instructor_fname" => $instructor_fname,
-                                             "instructor_lname" => $instructor_lname,
-                                             "instructor_id" => $instructor_id])->with('title', 'Instructor Dashboard');
+        return view('instructor.dashboard', compact('instructor'))->with('title', 'Instructor Dashboard');
     }
 
-    public function courses(){
-        if (auth('instructor')->check()) {
-            $instructor = session('instructor');
-        } else {
-            return redirect('/instructor');
-        }
+    // public function courses(){
+    //     return view('instructor.courses')->with('title', 'Instructor Courses');
+    // }
 
-        if($instructor) {
-            $instructor_fname = $instructor['instructor_fname'];
-            $instructor_lname = $instructor['instructor_lname'];
-            $instructor_id = $instructor['instructor_id'];
-        }
-        
-        return view('instructor.courses', ["instructor_fname" => $instructor_fname,
-                                             "instructor_lname" => $instructor_lname,
-                                             "instructor_id" => $instructor_id])->with('title', 'Instructor Courses');
-    }
-
-    public function courseCreate(){
-        if (auth('instructor')->check()) {
-            $instructor = session('instructor');
-        } else {
-            return redirect('/instructor');
-        }
-
-        if($instructor) {
-            $instructor_fname = $instructor['instructor_fname'];
-            $instructor_lname = $instructor['instructor_lname'];
-            $instructor_id = $instructor['instructor_id'];
-        }
-
-        return view('instructor.coursesCreate', ["instructor_fname" => $instructor_fname,
-                                             "instructor_lname" => $instructor_lname,
-                                             "instructor_id" => $instructor_id])->with('title', 'Create Course');
-    }
+    // public function courseCreate(){
+    //     return view('instructor.coursesCreate')->with('title', 'Create Course');
+    // }
 
     public function settings(){
 
