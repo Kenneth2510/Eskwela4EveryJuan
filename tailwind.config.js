@@ -16,6 +16,10 @@ export default {
                 smallpc: "1440px",
                 largepc: "1920px",
             },
+            
+            spacing: {
+                '1/5': '20%',
+              },
 
             colors: {
                 transparent: "transparent",

@@ -165,6 +165,21 @@ class LearnerController extends Controller
         
         $LearnerData['learner_security_code'] = $securityCodeNumber;
 
+        $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderPath = 'learners/' . $folderName;
+
+        // Copy the default photo to the same directory
+        $defaultPhoto = 'public/images/default_profile.png';
+        // $isExists = Storage::exists($defaultPhoto);
+
+        $defaultPhoto_path = $folderPath . '/default_profile.png';
+        // dd($defaultPhoto_path);
+
+        $LearnerData['profile_picture'] = $defaultPhoto_path;
+        Storage::copy($defaultPhoto, 'public/' . $defaultPhoto_path);
+        // $isExists = Storage::exists($defaultPhoto_path);
+        // dd($isExists);
+
         Learner::create($LearnerData);
 
         $latestStudent = DB::table('learner')->orderBy('created_at', 'DESC')->first();
@@ -196,7 +211,7 @@ class LearnerController extends Controller
             return redirect('/learner');
         }
 
-        return view('learner.dashboard')->with('title', 'Learner Dashboard');
+        return view('learner.dashboard', compact('learner'))->with('title', 'Learner Dashboard');
     }
 
     public function settings() {

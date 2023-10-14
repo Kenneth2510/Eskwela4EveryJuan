@@ -23,6 +23,7 @@ class Learner extends Authenticatable
         'learner_gender',
         'learner_contactno',
         'learner_email',
-        'status'
+        'status',
+        'profile_picture',
     ];
 }

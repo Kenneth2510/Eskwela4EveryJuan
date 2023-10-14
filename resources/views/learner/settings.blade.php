@@ -9,10 +9,10 @@
             </a>
         </header>
 
-        @include('partials.learner_sidebar');
+        @include('partials.learnerSidebar')
 
         {{-- MAIN --}}
-        <section class="mx-2 mt-[110px] shadow-lg text-darthmouthgreen">
+        <section style="left: 12%;" class="w-10/12 mx-2 mt-[110px] shadow-lg text-dartmouthgreen relative">
             <button class="w-8 h-8 m-2">
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
             </button>
@@ -22,26 +22,11 @@
             
             <div class="flex flex-col items-center justify-center mb-4">
                 <div class="w-20 h-20 bg-teal-500 rounded-full">
-                    {{-- @php
-                        $pathParts = explode('/', $learner->profile_picture);
-                        
-                        // $filename = end($pathParts);
-
-                        // Add "storage/app/public" to the beginning of the URL path
-                        $pathParts = array_merge(['Storage', 'app', 'public'], $pathParts);
-
-                        $fileurl = asset(implode('/', $pathParts));
-                        // dd($fileurl);
-                    @endphp --}}
-
-                        {{-- <img src="{{ $fileurl }}" alt="Profile Picture"> --}}
-                        {{-- <img src="{{ asset($instructor->profile_picture) }}" alt="Profile Picture"> --}}
-                    {{-- <h3>{{ asset($instructor->profile_picture) }}</h3> --}}
-                    {{-- <img src="{{ asset($cleaned_profile_picture_url) }}" alt="Profile Picture"> --}}
-                </div>
-                {{-- <img src="{{ asset('storage/instructors/Rano Steph/1696837493-defaul_profile.png') }}" alt="Profile Picture"> --}}
-                {{-- /storage/instructors/Rano Steph/1696837865-defaul_profile.png --}}
-
+                  
+                    <img class="rounded-full w-20 h-20" src="{{ asset('storage/' . $learner->profile_picture) }}
+                    " alt="Profile Picture">
+              </div>
+               
 
                 <h1 class="text-lg font-medium">{{ $learner->learner_fname }} {{ $learner->learner_lname }} </h1>
                 

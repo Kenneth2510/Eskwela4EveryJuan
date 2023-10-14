@@ -26,7 +26,8 @@ class Instructor extends Authenticatable
         'instructor_contactno',
         'instructor_email',
         'status',
-        'instructor_credentials'
+        'instructor_credentials',
+        'profile_picture'
     ];
 
 
