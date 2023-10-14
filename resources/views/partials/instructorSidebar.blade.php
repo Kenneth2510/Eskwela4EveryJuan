@@ -1,8 +1,8 @@
 <section class="fixed z-20 w-full h-screen overflow-hidden text-white md:w-1/3 lg:w-2/12 md:relative" id="insSideCont">
     <div class="fixed w-full bg-seagreen md:h-screen md:pt-16 top-14 md:relative" id="instructorSidebar">
         <ul class="flex flex-row justify-between md:flex-col md:text-base">
-            <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
-                <a class="flex items-center justify-center md:justify-start md:px-4 " href="#">
+            <li id="instructor_dashboard" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+                <a class="flex items-center justify-center md:justify-start md:px-4 " href="{{ url('/instructor/dashboard')}}">
                     <svg class="mx-2 duration-500 stroke-white group-hover:stroke-black group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g opacity="0.7">
                     <path d="M21.875 19.7917V12.7781C21.875 12.213 21.76 11.6537 21.5371 11.1344C21.3141 10.6151 20.9879 10.1465 20.5781 9.75729L13.9354 3.44792C13.5482 3.08009 13.0346 2.875 12.5005 2.875C11.9665 2.875 11.4528 3.08009 11.0656 3.44792L4.42187 9.75729C4.01214 10.1465 3.68587 10.6151 3.46292 11.1344C3.23997 11.6537 3.125 12.213 3.125 12.7781V19.7917C3.125 20.3442 3.34449 20.8741 3.73519 21.2648C4.12589 21.6555 4.6558 21.875 5.20833 21.875H19.7917C20.3442 21.875 20.8741 21.6555 21.2648 21.2648C21.6555 20.8741 21.875 20.3442 21.875 19.7917Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -12,7 +12,7 @@
                 </a>
             </li>
             
-            <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+            <li id="instructor_chats" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                 <a class="flex items-center justify-center md:justify-start md:px-4" href="">
                     <svg class="mx-2 duration-500 fill-white group-hover:fill-black group-hover:animate-bounce" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.84962 17.0976C3.99883 17.2474 4.11317 17.4282 4.18448 17.6273C4.25579 17.8263 4.28232 18.0386 4.26219 18.2491C4.16116 19.2231 3.96962 20.1856 3.69006 21.1241C5.69537 20.6597 6.92013 20.1221 7.47644 19.8404C7.79197 19.6806 8.15535 19.6427 8.49706 19.734C9.47662 19.9951 10.4862 20.1266 11.5 20.125C17.2442 20.125 21.5625 16.0899 21.5625 11.5C21.5625 6.9115 17.2442 2.875 11.5 2.875C5.75575 2.875 1.4375 6.9115 1.4375 11.5C1.4375 13.6102 2.32444 15.5681 3.84962 17.0976ZM3.14094 22.7111C2.80035 22.7786 2.45865 22.8404 2.116 22.8965C1.8285 22.9425 1.61 22.6435 1.72356 22.3761C1.8512 22.0751 1.96819 21.7697 2.07431 21.4604L2.07862 21.4461C2.43512 20.4111 2.7255 19.2208 2.83188 18.1125C1.06806 16.3444 0 14.03 0 11.5C0 5.94262 5.14912 1.4375 11.5 1.4375C17.8509 1.4375 23 5.94262 23 11.5C23 17.0574 17.8509 21.5625 11.5 21.5625C10.361 21.564 9.22672 21.4161 8.12619 21.1226C7.37869 21.5007 5.77012 22.1892 3.14094 22.7111Z" fill-opacity="0.75"/>
@@ -21,7 +21,7 @@
                 </a>
             </li>
             
-            <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+            <li id="instructor_courses" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                 <a class="flex items-center justify-center md:justify-start md:px-4" href="">
                     
                     <svg class="mx-2 duration-500 fill-white group-hover:fill-black group-hover:animate-bounce" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +32,7 @@
                 </a>
             </li>
 
-            <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+            <li id="instructor_performance" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                 <a class="flex items-center justify-center md:justify-start md:px-4" href="">
                     
                     <svg class="mx-2 duration-500 fill-white group-hover:fill-black group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,8 +42,8 @@
                     <h1 class="hidden md:block group-hover:text-black">Performance</h1>
                 </a>
             </li>
-
-            <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+ 
+            <li id="instructor_calendar" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                 <a class="flex items-center justify-center md:justify-start md:px-4" href="">
                     
                     <svg class="mx-2 duration-500 stroke-white group-hover:stroke-black group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,8 +56,8 @@
                 </a>
             </li>
 
-            <li class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
-                <a class="flex items-center justify-center md:justify-start md:px-4" href="">
+            <li id="instructor_settings" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+                <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/settings') }}">
                     
                     <svg class="mx-2 duration-500 fill-white group-hover:fill-black group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M11.6656 2.69475C11.9209 2.55301 12.208 2.47864 12.5 2.47864C12.792 2.47864 13.0791 2.55301 13.3344 2.69475L20.8344 6.86142C21.3802 7.16454 21.7188 7.73954 21.7188 8.36454V16.6354C21.7188 17.2604 21.3802 17.8354 20.8344 18.1385L13.3344 22.3052C13.0791 22.4469 12.792 22.5213 12.5 22.5213C12.208 22.5213 11.9209 22.4469 11.6656 22.3052L4.16562 18.1385C3.89752 17.9896 3.67414 17.7717 3.51863 17.5074C3.36312 17.2431 3.28116 16.942 3.28125 16.6354V8.36454C3.28125 7.73954 3.61979 7.16454 4.16562 6.86142L11.6656 2.69475ZM12.576 4.06142C12.5528 4.04846 12.5266 4.04167 12.5 4.04167C12.4734 4.04167 12.4472 4.04846 12.424 4.06142L4.92396 8.22808C4.8998 8.24154 4.87965 8.26117 4.86556 8.28496C4.85147 8.30875 4.84394 8.33585 4.84375 8.3635V16.6354C4.84375 16.6927 4.875 16.7448 4.92396 16.7729L12.424 20.9395C12.4472 20.9525 12.4734 20.9593 12.5 20.9593C12.5266 20.9593 12.5528 20.9525 12.576 20.9395L20.076 16.7729C20.1005 16.7592 20.1209 16.7393 20.135 16.7151C20.1491 16.6909 20.1564 16.6634 20.1562 16.6354V8.36454C20.1562 8.33672 20.1488 8.30939 20.1347 8.28541C20.1206 8.26142 20.1004 8.24163 20.076 8.22808L12.576 4.06142Z" fill-opacity="0.75"/>
@@ -68,8 +68,9 @@
                 </a>
             </li>
             
-            <form class="hidden mx-4 mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-seagreen" action="">
-                <button class="flex flex-row items-center justify-center w-full h-12 group-hover:cursor-pointer" >
+            <form class=" mx-4 mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-seagreen" action="{{ url('/instructor/logout') }}" method="POST"> 
+                @csrf
+                <button type="submit" class="flex flex-row items-center justify-center w-full h-12 group-hover:cursor-pointer" >
                     <svg class="fill-white group-hover:fill-black" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
                     <h1 class="group-hover:text-black">Logout</h1>
                 </button>
@@ -78,3 +79,17 @@
         </ul>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+    var currentUrl = window.location.href;
+
+    if(currentUrl.includes('/instructor/dashboard')) {
+        $('#instructor_dashboard').addClass('selected');
+    } else if (currentUrl.includes('/instructor/settings')) {
+        $('#instructor_settings').addClass('selected');
+    } else {
+        
+    }
+})
+</script>

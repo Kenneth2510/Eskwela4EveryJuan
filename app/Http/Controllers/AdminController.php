@@ -9,6 +9,7 @@ use App\Models\Admin;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as FacadesView;
@@ -213,6 +214,21 @@ class AdminController extends Controller
 
         $LearnerData = array_merge($LearnerPersonalData , $LearnerLoginData);
         $LearnerData['password'] = bcrypt($LearnerData['password']);
+        
+        $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderPath = 'learners/' . $folderName;
+
+        // Copy the default photo to the same directory
+        $defaultPhoto = 'public/images/default_profile.png';
+        // $isExists = Storage::exists($defaultPhoto);
+
+        $defaultPhoto_path = $folderPath . '/default_profile.png';
+        // dd($defaultPhoto_path);
+
+        $LearnerData['profile_picture'] = $defaultPhoto_path;
+        Storage::copy($defaultPhoto, 'public/' . $defaultPhoto_path);
+        // $isExists = Storage::exists($defaultPhoto_path);
+        // dd($isExists);
 
         Learner::create($LearnerData);
 
@@ -454,7 +470,6 @@ class AdminController extends Controller
     }
 
     public function store_new_instructor(Request $request) {
-            $defaultProfilePhoto = 'images/default_profile.png';  
 
             $instructorData = $request->validate([
                 "instructor_fname" => ['required'],
@@ -465,7 +480,7 @@ class AdminController extends Controller
                 "instructor_email" => ['required', 'email', Rule::unique('instructor', 'instructor_email')],
                 "instructor_username" => ['required', Rule::unique('instructor' , 'instructor_username')],
                 "password" => 'required|confirmed',
-                "instructor_security_code" => ['required'],
+                "instructor_security_code" => ['required', 'min:6'],
                 "instructor_credentials" => ['required', 'file'],
             ]);
 
@@ -474,6 +489,7 @@ class AdminController extends Controller
             $instructorData['password'] = bcrypt($instructorData['password']);
         
             $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
+
 
             if($request->hasFile('instructor_credentials')) {
                 
@@ -485,10 +501,21 @@ class AdminController extends Controller
                 $folderPath = 'instructors/' . $folderName;
                 $filePath = $file->storeAs($folderPath, $fileName, 'public');
 
+                // Copy the default photo to the same directory
+                $defaultPhoto = 'public/images/default_profile.png';
+                // $isExists = Storage::exists($defaultPhoto);
+
+                $defaultPhoto_path = $folderPath . '/default_profile.png';
+                // dd($defaultPhoto_path);
+
+                Storage::copy($defaultPhoto, 'public/' . $defaultPhoto_path);
+                // $isExists = Storage::exists($defaultPhoto_path);
+                // dd($isExists);
+              
                 
-
-
                 // add to database
+                $instructorData['profile_picture'] = $defaultPhoto_path;
+
                 $instructorData['instructor_credentials'] = $filePath;
                 // dd($instructorData);
                 Instructor::create($instructorData);
@@ -512,59 +539,6 @@ class AdminController extends Controller
         
     }
 
-
-    // public function store_new_instructor(Request $request) {
-    //     // Define the default profile photo path
-    //     $defaultProfilePhotoPath = public_path('images/default_profile.png');
-    
-    //     $instructorData = $request->validate([
-    //             "instructor_fname" => ['required'],
-    //             "instructor_lname" => ['required'],
-    //             "instructor_bday" => ['required'],
-    //             "instructor_gender" => ['required'],
-    //             "instructor_contactno" => ['required', Rule::unique('instructor', 'instructor_contactno')],
-    //             "instructor_email" => ['required', 'email', Rule::unique('instructor', 'instructor_email')],
-    //             "instructor_username" => ['required', Rule::unique('instructor' , 'instructor_username')],
-    //             "password" => 'required|confirmed',
-    //             "instructor_security_code" => ['required'],
-    //             "instructor_credentials" => ['required', 'file'],
-    //         ]);
-
-    
-    //     $instructorData['instructor_credentials'] = '';
-    //     $instructorData['profile_picture'] = '';
-    //     $instructorData['password'] = bcrypt($instructorData['password']);
-    
-    //     $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
-    
-    //     if ($request->hasFile('instructor_credentials')) {
-    //         $file = $request->file('instructor_credentials');
-    
-    //         try {
-    //             $fileName = time() . '-' . $file->getClientOriginalName();
-    //             $folderPath = 'instructors/' . $folderName;
-    //             $filePath = $file->storeAs($folderPath, $fileName, 'public');
-    
-    //             $instructorData['instructor_credentials'] = $filePath;
-    //             $instructor = Instructor::create($instructorData);
-    
-    //             // Copy the default profile photo to the instructor's folder
-    //             // $destinationPath = 'instructors/' . $folderName . '/' . $fileName;
-    //             // File::copy($defaultProfilePhotoPath, public_path($destinationPath));
-    
-    //             // Set the instructor's profile picture field to the copied path
-    //             $instructor->profile_picture = $destinationPath;
-    //             $instructor->save();
-    
-    //             return redirect('/admin/instructors')
-    //                 ->with('title', 'Instructor Management')
-    //                 ->with('message', 'Data was successfully stored');
-    //         } catch (\Exception $e) {
-    //             dd($e->getMessage());
-    //         }
-    //     }
-    // }
-    
 
     public function view_instructor ($id) {
         if (auth('admin')->check()) {

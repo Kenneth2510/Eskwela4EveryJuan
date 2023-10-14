@@ -19,7 +19,15 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 class InstructorCourseController extends Controller
 {
     public function courses(){
-        return view('instructor_course.courses')->with('title', 'Instructor Courses');
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            // dd($instructor);
+
+        } else {
+            return redirect('/instructor');
+        }
+
+        return view('instructor_course.courses' , compact('instructor'))->with('title', 'Instructor Courses');
     }
 
     public function courseCreate(){

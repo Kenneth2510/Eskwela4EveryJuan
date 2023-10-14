@@ -14,7 +14,7 @@
         <div class="relative w-full h-screen bg-mainwhitebg text-darthmouthgreen md:flex md:justify-center md:items-center md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent">
                 <div class="px-4 pt-4 mt-16 md:mx-auto md:w-3/4 md:pt-8 lg:w-full lg:p-0 lg:m-0">
-                    <h1 class="my-2 text-3xl font-bold md:text-4xl">Instructor Login</h1>
+                    <h1 class="my-2 text-3xl font-bold md:text-4xl">learner Login</h1>
                     <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                 </div>
 
@@ -23,21 +23,21 @@
                 <form class="flex flex-col justify-center text-black rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full lg:text-mainwhitebg" action="{{ url('/learner/login') }}" method="POST">
                     @csrf
                     <div class="pb-4 mx-4 text-sm border-b-4 md:text-base">
-                        @error('instructor_username')
+                        @error('learner_username')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
                             </p>
                         @enderror
                         <div class="flex flex-col my-4 lg:flex-row lg:justify-between lg:items-center" id="EorU">
-                            <label class="font-medium lg:w-1/2" for="instructor_username">Email or Username:</label>
+                            <label class="font-medium lg:w-1/2" for="learner_username">Email or Username:</label>
                             <div class="relative lg:w-1/2">
                                 <svg class="absolute w-8 h-8 mx-1 border-r-2 md:w-10 md:h-10 lg:my-1" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
-                                <input class="w-full h-8 pl-10 text-black rounded md:h-10 lg:h-12 md:pl-12" type="text" name="instructor_username" id="instructor_username" placeholder="Email or username">
+                                <input class="w-full h-8 pl-10 text-black rounded md:h-10 lg:h-12 md:pl-12" type="text" name="learner_username" id="learner_username" placeholder="Email or username" required>
                             </div>
                         </div>
                         
                         <div class="flex flex-col my-4 lg:flex-row lg:justify-between lg:items-center">
-                            <label class="font-medium lg:w-1/2" for="instructor_password">Password:</label>
+                            <label class="font-medium lg:w-1/2" for="password">Password:</label>
                             <div class="relative lg:w-1/2">
                                 <svg class="absolute w-8 h-8 mx-1 border-r-2 md:w-10 md:h-10 lg:my-1" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
                                 <svg class="absolute right-0 w-6 h-6 mx-1 top-1 lg:w-8 lg:h-8" id="showPwd" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
