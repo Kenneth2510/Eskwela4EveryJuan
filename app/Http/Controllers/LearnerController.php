@@ -216,16 +216,16 @@ class LearnerController extends Controller
 
     public function settings() {
 
-        if (auth('learner')->check()) {
-            $learner = session('learner');
-            // dd($learner);
+        // if (auth('learner')->check()) {
+        //     $learner = session('learner');
+        //     // dd($learner);
 
-            $business = Business::where('learner_id', $learner->learner_id)->first();
-            // dd($business);
-        } else {
-            return redirect('/learner');
-        }
-        return view('learner.settings', compact('learner', 'business'))->with('title', 'Learner Settings');
+        //     $business = Business::where('learner_id', $learner->learner_id)->first();
+        //     // dd($business);
+        // } else {
+        //     return redirect('/learner');
+        // }
+        return view('learner.settings')->with('title', 'Learner Settings');
     }
 
     public function update_info(Request $request) {

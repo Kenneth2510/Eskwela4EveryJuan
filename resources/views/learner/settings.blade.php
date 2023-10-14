@@ -1,13 +1,7 @@
 @include('partials.header')
 
     <section class="relative w-full h-auto overflow-hidden text-sm bg-mainwhitebg">
-        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-            <a href="#">
-                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-                    Eskwela4EveryJuan
-                </span>
-            </a>
-        </header>
+        @include('partials.instructorNav')
 
         @include('partials.learnerSidebar')
 
@@ -23,7 +17,7 @@
             <div class="flex flex-col items-center justify-center mb-4">
                 <div class="w-20 h-20 bg-teal-500 rounded-full">
                   
-                    <img class="rounded-full w-20 h-20" src="{{ asset('storage/' . $learner->profile_picture) }}
+                    <img class="w-20 h-20 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}
                     " alt="Profile Picture">
               </div>
                
@@ -41,9 +35,9 @@
                 </h3>
                   
 
-                <div id="profilePicturePopup" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 hidden">
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h1 class="text-lg font-semibold mb-4">Upload Profile Picture</h1>
+                <div id="profilePicturePopup" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-800 bg-opacity-50">
+                    <div class="p-6 bg-white rounded-lg shadow-lg w-96">
+                        <h1 class="mb-4 text-lg font-semibold">Upload Profile Picture</h1>
                         
                         <form id="profilePictureForm" enctype="multipart/form-data" action="{{ url('/learner/update_profile') }}" method="POST">
                             @method('PUT')
@@ -52,7 +46,7 @@
                             <input type="hidden" name="_method" value="PUT">
                             <div class="mb-4">
                                 <input type="file" name="profile_picture" id="profile_picture" class="">
-                                <label for="profile_picture" class="cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                                <label for="profile_picture" class="px-4 py-2 text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600">
                                     Select Image
                                 </label>
                                 @error('profile_picture')
@@ -62,14 +56,14 @@
                                 @enderror
                             </div>
                             <div class="mb-4">
-                                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+                                <button type="submit" class="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600">
                                     Upload
                                 </button>
                             </div>
                         </form>
                         
                         
-                        <button id="closePopup" class="text-gray-600 hover:text-gray-800 text-sm cursor-pointer">Close</button>
+                        <button id="closePopup" class="text-sm text-gray-600 cursor-pointer hover:text-gray-800">Close</button>
                     </div>
                 </div>
 
@@ -94,7 +88,7 @@
                             <label for="learner_fname">Firstname:</label>
                             <input class="IN-V-INP" type="text" name="learner_fname" id="learner_fname" value="{{ $learner->learner_fname }}" disabled>
                             @error('fname')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -103,7 +97,7 @@
                             <label for="learner_lname">Lastname:</label>
                             <input class="IN-V-INP" type="text" name="learner_lname" id="learner_lname" value="{{ $learner->learner_lname }}" disabled>
                             @error('learner_lname')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -115,7 +109,7 @@
                             <label for="learner_bday">Birthday:</label>
                             <input class="IN-V-INP" type="date" name="learner_bday" id="learner_bday" value="{{ $learner->learner_bday }}" disabled>
                             @error('learner_bday')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -130,7 +124,7 @@
                                 <option value="Others" {{ $learner->learner_gender == "Others" ? 'selected': '' }} >Preferred not to say</option>
                             </select>
                             @error('learner_gender')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -141,7 +135,7 @@
                         <label for="learner_email">Email:</label>
                         <input class="IN-V-INP" type="email" name="learner_email" id="learner_email" value="{{ $learner->learner_email }}" disabled>
                         @error('learner_email')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -150,7 +144,7 @@
                         <label for="learner_contactno">Contact Number:</label>
                         <input class="IN-V-INP" type="text" name="learner_contactno" id="learner_contactno" value="{{ $learner->learner_contactno }}" disabled>
                         @error('learner_contactno')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -167,7 +161,7 @@
                     <label for="business_name">Business Name:</label>
                     <input class="IN-V-INP" type="text" name="business_name" id="business_name" value="{{ $business->business_name }}" disabled>
                     @error('business_name')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -176,7 +170,7 @@
                     <label for="bplo_account_number">Account Number:</label>
                     <input class="IN-V-INP" type="text" name="bplo_account_number" id="bplo_account_number" value="{{ $business->bplo_account_number }}" disabled>
                     @error('bplo_account_numnber')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -185,7 +179,7 @@
                     <label for="business_address">Business Address:</label>
                     <input class="IN-V-INP" type="text" name="business_address" id="business_address" value="{{ $business->business_address }}" disabled>
                     @error('business_address')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -194,7 +188,7 @@
                     <label for="business_owner_name">Business Owner:</label>
                     <input class="IN-V-INP" type="text" name="business_owner_name" id="business_owner_name" value="{{ $business->business_owner_name }}" disabled>
                     @error('business_owner_name')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -203,7 +197,7 @@
                     <label for="business_category">Business Category:</label>
                     <input class="IN-V-INP" type="text" name="business_category" id="business_category" value="{{ $business->business_category }}" disabled>
                     @error('business_category')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -220,7 +214,7 @@
                         <label for="learner_username">Username:</label>
                         <input class="IN-V-INP" type="text" name="learner_username" id="learner_username" value="{{ $learner->learner_username }}" disabled>
                         @error('learner_username')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -229,11 +223,11 @@
                         <label for="password">Password:</label>
                         <input class="IN-V-INP" type="password" name="old_password" id="password" value="{{ $learner->password }}" disabled>
                     </div>
-                    <div id="password_confirmForm" class="IN-FORM-CTNR hidden">
+                    <div id="password_confirmForm" class="hidden IN-FORM-CTNR">
                         <label for="password_confirmation">Confirm Password:</label>
                         <input class="IN-V-INP" type="password" name="password_confirmation" id="" required>
                         @error('password_confirmation')
-                        <p class="text-red-500 text-lg mt-2 p-1">
+                        <p class="p-1 mt-2 text-lg text-red-500">
                             {{$message}}
                         </p>
                         @enderror
@@ -248,8 +242,8 @@
                         <button type="button" class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500" id="editBtn">
                             Update
                         </button>
-                        <a href="" id="cancelBtn" class="hidden mx-2 flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-red-500 hover:bg-red-600">Cancel</a>
-                        <button type="submit" class="hidden mx-2 flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-green-500 hover:bg-green-600" id="updateBtn">
+                        <a href="" id="cancelBtn" class="flex flex-row items-center justify-center hidden w-24 h-10 mx-2 bg-red-500 rounded-lg hover:bg-red-600">Cancel</a>
+                        <button type="submit" class="flex flex-row items-center justify-center hidden w-24 h-10 mx-2 bg-green-500 rounded-lg hover:bg-green-600" id="updateBtn">
                             Save Changes
                         </button>
                         
