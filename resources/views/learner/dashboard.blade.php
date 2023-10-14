@@ -9,7 +9,7 @@
 
         
         {{-- MAIN --}}
-        <section class="relative w-full h-screen px-4 overflow-auto md:w-3/4 lg:w-9/12">   
+        <section class="relative w-full h-screen px-4 md:overflow-auto md:w-3/4 lg:w-9/12">   
             <div class="flex flex-row items-center justify-between h-20 mt-28 md:mt-14">
                 <h1 class="text-xl font-semibold md:text-4xl">Dashboard</h1>
                 <form class="relative flex flex-row items-center" action="">
