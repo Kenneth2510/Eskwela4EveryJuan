@@ -5,7 +5,7 @@
         @include('partials.instructorNav')
         {{-- @include('partials.instructorSidebar') --}}
 
-    {{-- @include('partials.instructor_sidebar') --}}
+        {{-- @include('partials.instructor_sidebar') --}}
 
         {{-- MAIN --}}
         <section class="relative h-screen mx-2 overflow-auto shadow-lg text-darthmouthgreen">
@@ -95,7 +95,7 @@
                         @method('PUT')
                         @csrf
                     <div class="flex flex-col">
-                        <div class="IN-FORM-CTNR">
+                        <div class="FORM-CTNR">
                             <label for="instructor_fname">Firstname:</label>
                             <input class="IN-V-INP" type="text" name="instructor_fname" id="instructor_fname" value="{{ $instructor->instructor_fname }}" disabled>
                             @error('instructor_fname')
@@ -104,7 +104,7 @@
                                 </p>
                                 @enderror
                         </div>
-                        <div class="IN-FORM-CTNR">
+                        <div class="FORM-CTNR">
                             <label for="instructor_lname">Lastname:</label>
                             <input class="IN-V-INP" type="text" name="instructor_lname" id="instructor_lname" value="{{ $instructor->instructor_lname }}" disabled>
                             @error('instructor_lname')
@@ -116,7 +116,7 @@
                     </div>
                     
                     <div>
-                        <div class="IN-FORM-CTNR">
+                        <div class="FORM-CTNR">
                             <label for="instructor_bday">Birthday:</label>
                             <input class="IN-V-INP" type="date" name="instructor_bday" id="instructor_bday" value="{{ $instructor->instructor_bday }}" disabled>
                             @error('instructor_bday')
@@ -126,7 +126,7 @@
                                 @enderror
                         </div>
                         
-                        <div class="IN-FORM-CTNR">
+                        <div class="FORM-CTNR">
                             <label for="instructor_gender">Gender</label>
                             <select class="IN-V-INP" name="instructor_gender" id="instructor_gender" disabled>
                                 <option value="" {{ $instructor->instructor_gender == "" ? 'selected': '' }} disabled>-- select an option --</option>
@@ -143,7 +143,7 @@
                         </div>
                     </div>
 
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_email">Email:</label>
                         <input class="IN-V-INP" type="instructor_email" name="instructor_email" id="" value="{{ $instructor->instructor_email }}" disabled>
                         @error('intructor_email')
@@ -152,7 +152,7 @@
                                 </p>
                                 @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_contactno">Contact Number:</label>
                         <input class="IN-V-INP" type="text" name="instructor_contactno" id="instructor_contactno" value="{{ $instructor->instructor_contactno }}" disabled>
                         @error('instructor_contactno')
@@ -161,7 +161,7 @@
                                 </p>
                                 @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_username">Username:</label>
                         <input class="IN-V-INP" type="text" name="instructor_username" id="instructor_username" value="{{ $instructor->instructor_username }}" disabled>
                         @error('instructor_username')
@@ -170,7 +170,7 @@
                                 </p>
                                 @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
 
                         <label for="password">Password:</label>
                         <input class="IN-V-INP" type="password" name="password" id="password" value="{{ $instructor->password }}" disabled>
@@ -190,7 +190,7 @@
 
                     </div>
 
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_credentials" class="">CV or Resume</label>
                                 @if($instructor->instructor_credentials)
                                     @php
