@@ -31,7 +31,14 @@ class InstructorCourseController extends Controller
     }
 
     public function courseCreate(){
-        return view('instructor_course.coursesCreate')->with('title', 'Create Course');
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            // dd($instructor);
+
+        } else {
+            return redirect('/instructor');
+        }
+        return view('instructor_course.coursesCreate', compact('instructor'))->with('title', 'Create Course');
     }
 
 }
