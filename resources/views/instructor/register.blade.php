@@ -1,6 +1,6 @@
 @include('partials.header')
 
-<section class="relative flex w-screen h-screen">
+{{-- <section class="relative flex w-screen h-screen">
     <div id="RegisterLeft" class="relative w-1/2 h-full bg-seagreen">
         <div class="p-5 text-3xl font-bold text-white titlearea font-poppins">Eskwela4EveryJuan</div>
 
@@ -117,7 +117,7 @@
         {{-- //put those extra content to it --}}
     </div>
 
-</section>
+</section> --}}
 
 <script>
     // Add event listener to restrict input to numbers only

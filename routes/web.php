@@ -59,10 +59,6 @@ Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor/settings', 'settings');
     Route::put('/instructor/settings', 'update_info');
     Route::put('/instructor/update_profile', 'update_profile');
-    Route::get('/instructor/mycourse', 'overview');
-    Route::get('/instructor/mycourse/content', 'content');
-    Route::get('/instructor/mycourse/syllabus', 'syllabus');
-    Route::get('/instructor/mycourse/lesson1', 'lesson');
 });
 
 
@@ -105,5 +101,16 @@ Route::controller(AdminController::class)->group(function() {
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/courses', 'InstructorCourseController@courses');
     Route::get('/instructor/courses/create', 'InstructorCourseController@courseCreate');
-// })->middleware('web');
+    Route::post('/instructor/courses/create', 'InstructorCourseController@courseCreate_process');
+    Route::get('/instructor/course/{course}', 'InstructorCourseController@overview');
+    Route::get('/instructor/mycourse/content', 'InstructorCourseController@content');
+    Route::get('/instructor/mycourse/syllabus', 'InstructorCourseController@syllabus');
+    Route::get('/instructor/mycourse/lesson1', 'InstructorCourseController@lesson');
+// // })->middleware('web');
+});
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/learner/courses', 'LearnerCourseController@courses');
+    Route::get('/learner/course/overview', 'LearnerCourseController@overview');
+// // })->middleware('web');
 });

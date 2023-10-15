@@ -32,14 +32,14 @@
                             <div class="flex flex-col items-center">
                                 <svg class="w-20 h-20 bg-teal-600 rounded-3xl" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M41.5312 21.9062V11.75L22 1.59375L2.46875 11.75L22 21.9062L32.1562 17.2188V28.1562C32.1562 31.2812 27.4688 34.4062 22 34.4062C16.5312 34.4062 11.8438 31.2812 11.8438 28.1562V17.2188" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                 <div class="flex flex-col items-center py-2">
-                                    <h1 class="text-5xl ">3</h1>
+                                    <h1 class="text-5xl ">{{ $courseApproved }}</h1>
                                     <p>Active Courses</p>
                                 </div>
                             </div>
 
                             <div class="py-4">  
                                 <h3>
-                                    Created Courses: <span>5</span>
+                                    Created Courses: <span>{{ $coursesCount }}</span>
                                 </h3>
                             </div>
                         </div>
@@ -111,70 +111,33 @@
                         </thead>
 
                         <tbody class="text-center">
-                            <tr class="">
-                                <td class="flex flex-row items-center justify-center mb-4">
-                                    <img class="hidden w-10 h-10 mx-2 bg-red-500 rounded-lg lg:block" src="" alt="">
-                                    <div>
-                                        <h1 class="">Course1</h1>
-                                        <h3 class="hidden text-xs opacity-50 lg:block">10 lessons</h3>
-                                    </div>
-                                </td>
-                                <td class="">
-                                    <svg class="w-4 h-4 mx-auto" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 14C28 21.732 21.732 28 14 28C6.268 28 0 21.732 0 14C0 6.268 6.268 0 14 0C21.732 0 28 6.268 28 14Z" fill="#00D26A"/>
-                                    </svg>
-                                </td>
-                                <td>000000</td>
-                                <td>43</td>
-                                <td>35/43</td>
-                            </tr>
-                            <tr class="">
-                                <td class="flex flex-row items-center justify-center mb-4">
-                                    <img class="hidden w-10 h-10 mx-2 bg-red-500 rounded-lg lg:block" src="" alt="">
-                                    <div>
-                                        <h1 class="">Course1</h1>
-                                        <h3 class="hidden text-xs opacity-50 lg:block">10 lessons</h3>
-                                    </div>
-                                </td>
-                                <td class="">
-                                    <svg class="w-4 h-4 mx-auto" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 14C28 21.732 21.732 28 14 28C6.268 28 0 21.732 0 14C0 6.268 6.268 0 14 0C21.732 0 28 6.268 28 14Z" fill="#00D26A"/>
-                                    </svg>
-                                </td>
-                                <td>000000</td>
-                                <td>43</td>
-                                <td>35/43</td>
-                            </tr>
-                            <tr class="">
-                                <td class="flex flex-row items-center justify-center mb-4">
-                                    <img class="hidden w-10 h-10 mx-2 bg-red-500 rounded-lg lg:block" src="" alt="">
-                                    <div>
-                                        <h1 class="">Course1</h1>
-                                        <h3 class="hidden text-xs opacity-50 lg:block">10 lessons</h3>
-                                    </div>
-                                </td>
-                                <td class="">
-                                    <svg class="w-4 h-4 mx-auto" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 14C28 21.732 21.732 28 14 28C6.268 28 0 21.732 0 14C0 6.268 6.268 0 14 0C21.732 0 28 6.268 28 14Z" fill="#00D26A"/>
-                                    </svg>
-                                </td>
-                                <td>000000</td>
-                                <td>43</td>
-                                <td>35/43</td>
-                            </tr>
-                            <tr class="">
-                                <td class="flex flex-row items-center justify-center mb-4">
-                                    <img class="hidden w-10 h-10 mx-2 bg-red-500 rounded-lg lg:block" src="" alt="">
-                                    <div>
-                                        <h1 class="">Course1</h1>
-                                        <h3 class="hidden text-xs opacity-50 lg:block">10 lessons</h3>
-                                    </div>
-                                </td>
-                                <td class="">
-                                    <svg class="w-4 h-4 mx-auto" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 14C28 21.732 21.732 28 14 28C6.268 28 0 21.732 0 14C0 6.268 6.268 0 14 0C21.732 0 28 6.268 28 14Z" fill="#00D26A"/>
-                                    </svg>
-                                </td>
-                                <td>000000</td>
-                                <td>43</td>
-                                <td>35/43</td>
-                            </tr>
+                            @foreach ($courses as $course)
+                            @php
+                                $firstColor = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+
+                                $firstColorRGB = sscanf($firstColor, "#%02x%02x%02x");
+                                $darkenedColor = sprintf("#%02x%02x%02x", $firstColorRGB[0] * 0.8, $firstColorRGB[1] * 0.8, $firstColorRGB[2] * 0.8);
+                            @endphp
+                                <tr class="">
+                                    <td class="flex flex-row items-center mb-4">
+                                        <div style="background-color: {{ $firstColor }}" class="hidden w-10 h-10 mx-2 bg-red-500 rounded-lg lg:block"></div>
+                                        <div>
+                                            <h1 class="">{{ $course->course_name }}</h1>
+                                            <h3 class="hidden text-xs opacity-50 lg:block">10 lessons</h3>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        {{-- <svg class="w-4 h-4 mx-auto" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 14C28 21.732 21.732 28 14 28C6.268 28 0 21.732 0 14C0 6.268 6.268 0 14 0C21.732 0 28 6.268 28 14Z" fill="#00D26A"/>
+                                        </svg> --}}
+                                        <p class="mb-2">{{ $course->course_status }}</p>
+                                    </td>
+                                    <td>{{ $course->course_code}}</td>
+                                    <td>43</td>
+                                    <td>35/43</td>
+                                </tr>
+                            @endforeach
+                           
+                            
                             
                         </tbody>
                     </table>

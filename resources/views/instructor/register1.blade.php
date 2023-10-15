@@ -116,11 +116,11 @@
                     
                     <div class="grid h-auto my-10 text-black place-items-end" >
                         <button class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500" id="nxtBtn">
-                            <h1>Next</h1>
+                            <h1 class="text-xl">Next</h1>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </button>
                     </div>
-                </div>
+                </div> 
                 
                 <div class="hidden overflow-hidden" id="resumeForm">
                     {{-- <div>
@@ -145,24 +145,15 @@
                     </div>
 
                     <div class="">
-                        {{-- <div class="flex flex-row">
-                            <input class="mx-2" type="checkbox" name="" id="">
-                            <p>I've read and accept <span class="font-medium text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
-                        </div>
-
-                        <div class="flex flex-row">
-                            <input class="mx-2" type="checkbox" name="" id="">
-                            <p>Remember me</p>
-                        </div> --}}
 
                         <div class="grid h-auto my-10 text-black place-items-end" >
                             <div class="flex" >
                                 <button class="flex flex-row items-center justify-center w-24 h-10 mx-2 bg-red-500 rounded-lg hover:bg-red-700" id="prevBtn">
-                                    <h1>Back</h1>
+                                    <h1 class="text-xl">Back</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                                 </button>
                                 <button class="flex flex-row items-center justify-center w-24 h-10 mx-2 rounded-lg bg-amber-400 hover:bg-amber-500" id="nxtBtn2">
-                                    <h1>Next</h1>
+                                    <h1 class="text-xl">Next</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                                 </button>
                             </div>
@@ -184,8 +175,8 @@
                         <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                     </div>
 
-                   <div class="pb-4 my-8 font-semibold border-b-2 security-code-container">
-                        <label for="instructor_security_code">Security Code:</label>
+                   <div class="flex items-center pb-4 my-8 font-semibold border-b-2 security-code-container">
+                        <label for="instructor_security_code" class="text-xl text-white">Security Code:</label>
                         <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
                         <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
                         <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
@@ -238,7 +229,7 @@
                             {{$message}}
                         </p>
                         @enderror
-                </div>
+                
 
                     <div class="">
                         <div class="flex flex-row">
@@ -246,20 +237,15 @@
                             <p>I've read and accept <span class="font-medium text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
                         </div>
 
-                        <div class="pb-4 my-8 font-semibold border-b-2 lg:text-base" action="">
-                            <label for="">CV or Resume</label>
-                            <input class="font-normal " type="file" name="" id="">
-                        </div>
-
 
                         
                         <div class="grid h-auto my-10 text-black place-items-end" >
                             <div class="flex">
                                 <button class="flex flex-row items-center justify-center w-24 h-10 bg-red-500 rounded-lg hover:bg-red-700" id="prevBtn2">
-                                    <h1>Return</h1>
+                                    <h1 class="text-xl">Return</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                                 </button>
-                                <button type="submit" class="h-10 px-2 mx-2 font-medium rounded bg-amber-400 hover:bg-amber-500">Create my account</button>
+                                <button type="submit" class="h-10 px-2 mx-2 text-xl font-medium rounded bg-amber-400 hover:bg-amber-500">Create my account</button>
                             </div>
                             
 
@@ -272,7 +258,7 @@
 
             <div class="flex flex-row items-center justify-center text-center md:h-14 lg:h-auto " id="ins-foot ">
                 <h1 class="text-black md:text-mainwhitebg">Already have an account?
-                    <a class="font-semibold text-darthmouthgreen md:text-mainwhitebg" href="/instructor/login">Log in</a>
+                    <a class="font-semibold text-darthmouthgreen md:text-mainwhitebg" href="{{ url('/instructor') }}">Log in</a>
                 </h1>
             </div>
             

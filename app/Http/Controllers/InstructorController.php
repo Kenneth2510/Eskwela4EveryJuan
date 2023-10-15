@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Learner;
 use App\Models\Instructor;
+use App\Models\Course;
 use App\Models\Admin;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -114,9 +115,9 @@ class InstructorController extends Controller
 
     }
 
-    public function register(){
-        return view('instructor.register')->with('title', 'Instructor Register');
-    }
+    // public function register(){
+    //     return view('instructor.register')->with('title', 'Instructor Register');
+    // }
 
     public function register1(){
         return view('instructor.register1')->with('title', 'Instructor Register');
@@ -211,13 +212,21 @@ class InstructorController extends Controller
             return redirect('/instructor');
         }
 
-        if($instructor) {
-            $instructor_fname = $instructor['instructor_fname'];
-            $instructor_lname = $instructor['instructor_lname'];
-            $instructor_id = $instructor['instructor_id'];
-        }
+        try {
+            $coursesCount = Course::where('instructor_id', $instructor->instructor_id)->count();
+            $courseApproved = Course::where('course_status', "LIKE", 'Approved%')
+            ->where('instructor_id', $instructor->instructor_id)
+            ->count();
 
-        return view('instructor.dashboard', compact('instructor'))->with('title', 'Instructor Dashboard');
+            $courses = Course::where('instructor_id', $instructor->instructor_id)->limit(3)->get();
+
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+       
+
+        return view('instructor.dashboard', compact('instructor', 'courses', 'coursesCount', 'courseApproved'))->with('title', 'Instructor Dashboard');
     }
 
     // public function courses(){
@@ -316,19 +325,8 @@ class InstructorController extends Controller
         return redirect('/instructor/settings')->with('message', 'Profile picture updated successfully');
     }
 
-    public function overview(){
-        return view('instructor.courseOverview')->with('title', 'Course Overview');
-    }
+   
 
-    public function content(){
-        return view('instructor.courseContent')->with('title', 'Course Content');
-    }
-    public function syllabus(){
-        return view('instructor.courseSyllabus')->with('title', 'Course Content');
-    }
-    public function lesson(){
-        return view('instructor.courseLesson')->with('title', 'Course Content');
-    }
     
     
 }

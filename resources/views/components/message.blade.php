@@ -10,3 +10,19 @@
     </div>
 </div>
 @endif
+
+{{-- <script>
+    // JavaScript to handle JSON response message
+    var jsonResponse = @json(session('message'));
+
+    if (jsonResponse) {
+        // Display the message and handle redirection
+        var alertElement = document.querySelector(".alert-message");
+        if (alertElement) {
+            alertElement.style.display = "block";
+            setTimeout(function() {
+                alertElement.style.display = "none";
+            }, 5000);
+        }
+    }
+</script> --}}
