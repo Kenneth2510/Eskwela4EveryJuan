@@ -26,6 +26,7 @@
     <script src="{{asset('js/learnerUserSettings.js')}}" defer></script>
     <script src="{{asset('js/instructorSettings.js')}}" defer></script>
     <script src="{{asset('js/learnerRegister.js')}}" defer></script>
+    <script src="{{asset('js/instructorNewContent.js')}}" defer></script>
 </head>
 <body class="min-h-full bg-mainwhitebg font-poppins">
     <x-message />

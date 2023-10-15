@@ -316,5 +316,19 @@ class InstructorController extends Controller
         return redirect('/instructor/settings')->with('message', 'Profile picture updated successfully');
     }
 
+    public function overview(){
+        return view('instructor.courseOverview')->with('title', 'Course Overview');
+    }
+
+    public function content(){
+        return view('instructor.courseContent')->with('title', 'Course Content');
+    }
+    public function syllabus(){
+        return view('instructor.courseSyllabus')->with('title', 'Course Content');
+    }
+    public function lesson(){
+        return view('instructor.courseLesson')->with('title', 'Course Content');
+    }
+    
     
 }
