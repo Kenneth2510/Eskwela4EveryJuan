@@ -88,6 +88,10 @@ Route::controller(AdminController::class)->group(function() {
     Route::put('/admin/pending_instructor/{instructor}', 'pendingInstructor');
     Route::put('/admin/view_instructor/{instructor}' , 'update_instructor');
     Route::delete('/admin/view_instructor/{instructor}', 'destroy_instructor');
+    // courses area ----------------------
+    Route::get('/admin/courses' , 'courses');
+    Route::get('/admin/add_course', 'add_course');
+    Route::post('/admin/add_course', 'store_new_course');
 });
 
 // Route::controller(InstructorCourseController::class)->group(function() {
@@ -103,6 +107,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/courses/create', 'InstructorCourseController@courseCreate');
     Route::post('/instructor/courses/create', 'InstructorCourseController@courseCreate_process');
     Route::get('/instructor/course/{course}', 'InstructorCourseController@overview');
+    Route::get('/instructor/course/manage/{course}', 'InstructorCourseController@manage_course');
+    Route::post('/instructor/course/manage/{course}', 'InstructorCourseController@update_course');
+    Route::post('/instructor/course/delete/{course}', 'InstructorCourseController@delete_course');
     Route::get('/instructor/mycourse/content', 'InstructorCourseController@content');
     Route::get('/instructor/mycourse/syllabus', 'InstructorCourseController@syllabus');
     Route::get('/instructor/mycourse/lesson1', 'InstructorCourseController@lesson');

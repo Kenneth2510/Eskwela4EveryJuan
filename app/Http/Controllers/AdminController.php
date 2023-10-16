@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Learner;
 use App\Models\Instructor;
+use App\Models\Course;
 use App\Models\Admin;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\ValidationException;
 
 
 class AdminController extends Controller
@@ -393,6 +395,9 @@ class AdminController extends Controller
     }
 
 
+    
+
+
 
 
 
@@ -656,5 +661,133 @@ class AdminController extends Controller
             dd($e->getMessage());
         }
     }
+
+
     
+
+// -----------------------admin courses------------------------- 
+    public function courses() {
+        return $this->search_course();
+    }
+
+    public function search_course() {
+
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
+        $search_by = request('searchBy');
+        $search_val = request('searchVal');
+        
+        $filter_date = request('filterDate');
+        $filter_status = request('filterStatus');
+
+
+        try {
+            $query = DB::table('course')
+                ->select(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.course_description',
+                    'instructor.instructor_lname',
+                    'instructor.instructor_fname',
+                    'course.created_at',
+                )
+                ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                ->orderBy('course.created_at', 'DESC');
+
+            if(!empty($filter_date) || !empty($filter_status)) {
+                if(!empty($filter_date) && empty($filter_date)) {
+                    $query->where('course.created_at', 'LIKE', $filter_date.'%');
+                } elseif (empty($filter_date) && !empty($filter_status)) {
+                    $query->where('course.course_status', 'LIKE', $filter_status.'%');
+                } else {
+                    $query->where('course.created_at', 'LIKE', $filter_date.'%')
+                        ->where('course.course_status', 'LIKE', $filter_status.'%');
+                }
+            }
+
+            if(!empty($search_by) && !empty($search_val)) {
+                if($search_by == 'instructor') {
+                    $query->where(function ($query) use ($search_val) {
+                        $query->where('instructor_fname', 'LIKE', $search_val.'%')
+                            ->orWhere('instructor_lname', 'LIKE', $search_val.'%');
+                    });
+                } else {
+                    $query->where('course.'.$search_by, 'LIKE', $search_val.'%');
+                }
+            }
+
+
+            $courses = $query->paginate(10);
+
+            return view('admin.courses', compact('courses'))
+                ->with(['title' => 'Course Management', 'adminCodeName' => $admin_codename]);
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    public function add_course() {
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            $admin_codename = $admin['admin_codename'];
+    
+            $instructors = DB::table('instructor')
+                ->select(
+                    DB::raw("CONCAT(instructor_fname, ' ', instructor_lname) as name"), 
+                    'instructor_id as id'
+                )
+                ->where('status', '=', 'Approved')
+                ->orderBy('instructor_fname', 'ASC')
+                ->get();
+    
+            return view('admin.add_course', [
+                'title' => 'Course Management',
+                'adminCodeName' => $admin_codename,
+                'instructors' => $instructors,
+            ]);
+        } else {
+            return redirect('/admin');
+        }
+    }
+    
+    public function store_new_course(Request $request) {
+        try {
+            $courseData = $request->validate([
+                'course_name' => ['required'],
+                'course_description' => ['required'],
+                'course_difficulty' => ['required'],
+                'instructor_id' => ['required'],
+            ]);
+    
+            $courseData['course_code'] = Str::random(6);
+
+            
+            $folderName = $courseData['course_name'];
+            $folderPath = 'courses/' . $folderName;
+
+            if(!Storage::exists($folderPath)) {
+                Storage::makeDirectory($folderPath);
+            }
+
+            Course::create($courseData);
+
+            session()->flash('message', 'Course created Successfully');
+            return response()->json(['message' => 'Course created successfully', 'redirect_url' => '/admin/courses']);
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+    
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
 }

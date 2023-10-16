@@ -34,7 +34,7 @@
             </a></li>
 
             <li id="admin_courses" class="py-5 rounded-lg hover:bg-green-100 hover:bg-opacity-10 group">
-                <a href="">
+                <a href="/admin/courses">
                 <div class="flex items-center px-3 rounded-lg" id="courses">
                     <i class="w-12 text-2xl text-center fa-solid fa-book px-auto group-hover:text-3xl" style="color: #ffffff;"></i>
                     <h3 class="px-3 text-xl font-normal text-white group-hover:text-black group-hover:text-xl group-hover:font-semibold">Courses</h3>
