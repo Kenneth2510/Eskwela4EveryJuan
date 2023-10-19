@@ -4,7 +4,7 @@
                     <img src="{{url('/assets/close-icon.svg')}}" alt="">
                 </button>
 
-                <div class="float-right w-1/2 h-screen p-4 pt-24 bg-white md:w-2/5 lg:w-full">
+                <div class="float-right w-1/2 h-screen p-4 pt-10 bg-white md:w-2/5 lg:w-full">
                     <div class="">
                         <div class="flex flex-row items-center justify-between px-4">
                             <h1 class="text-2xl font-semibold">Profile</h1>
@@ -21,6 +21,12 @@
                             <h1 class="text-lg font-medium">{{ $instructor->instructor_fname }} {{ $instructor->instructor_lname }}</h1>
                             <h3 class="text-sm opacity-50">Instructor ID: {{ $instructor->instructor_id }}</h3>
                         </div>
+
+                        <div class="mt-4 text-center text-mainwhitebg md:hidden">
+                            <form  action="">
+                                <button class="w-32 h-10 font-medium underline rounded-lg shadow-lg underline-offset-2 bg-darthmouthgreen">Logout</button>
+                            </form>
+                        </div>
                         
                         <div class="hidden lg:block">
                             @include('partials.calendar')
@@ -29,13 +35,9 @@
 
                         <div class="flex flex-col items-center justify-center my-8">
                             <a class="lg:hidden" href="">Edit Profile</a>
+                            <a href="">view enrollees</a>
+                            <a href="">view lessons</a>
                             <a class="" href="">view activity logs</a>
-                        </div>
-
-                        <div class="mt-4 text-center text-mainwhitebg md:hidden">
-                            <form  action="">
-                                <button class="w-32 h-10 font-medium underline rounded-lg shadow-lg underline-offset-2 bg-darthmouthgreen">Logout</button>
-                            </form>
                         </div>
                     </div>
                 </div>
