@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(UserController::class)->group(function() {
     Route::get('/', 'index');
-    Route::get('/home', 'home');
+    // Route::get('/home', 'home');
 });
 
 
@@ -77,7 +77,7 @@ Route::controller(AdminController::class)->group(function() {
     Route::put('/admin/reject_learner/{learner}', 'rejectLearner');
     Route::put('/admin/pending_learner/{learner}', 'pendingLearner');
     Route::put('/admin/view_learner/{learner}' , 'update_learner');
-    Route::delete('/admin/view_learner/{learner}', 'destroy_learner');
+    Route::post('/admin/delete_learner/{learner}', 'destroy_learner');
     // instructor area -------------------
     Route::get('/admin/instructors' , 'instructors');
     Route::get('/admin/add_instructor' , 'add_instructor');
@@ -87,11 +87,17 @@ Route::controller(AdminController::class)->group(function() {
     Route::put('/admin/reject_instructor/{instructor}', 'rejectInstructor');
     Route::put('/admin/pending_instructor/{instructor}', 'pendingInstructor');
     Route::put('/admin/view_instructor/{instructor}' , 'update_instructor');
-    Route::delete('/admin/view_instructor/{instructor}', 'destroy_instructor');
+    Route::post('/admin/delete_instructor/{instructor}', 'destroy_instructor');
     // courses area ----------------------
     Route::get('/admin/courses' , 'courses');
     Route::get('/admin/add_course', 'add_course');
     Route::post('/admin/add_course', 'store_new_course');
+    Route::get('/admin/view_course/{course}', 'view_course');
+    Route::post('/admin/view_course/{course}', 'update_course');
+    Route::post('/admin/delete_course/{course}', 'delete_course');
+    Route::put('/admin/approve_course/{course}', 'approveCourse');
+    Route::put('/admin/reject_course/{course}', 'rejectCourse');
+    Route::put('/admin/pending_course/{course}', 'pendingCourse');
 });
 
 // Route::controller(InstructorCourseController::class)->group(function() {
@@ -118,6 +124,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/courses', 'LearnerCourseController@courses');
-    Route::get('/learner/course/overview', 'LearnerCourseController@overview');
+    Route::get('/learner/course/{course}', 'LearnerCourseController@overview');
+    Route::post('/learner/course/enroll/{course}', 'LearnerCourseController@enroll_course');
+    Route::post('/learner/course/unEnroll/{learnerCourse}', 'LearnerCourseController@unEnroll_course');
 // // })->middleware('web');
 });

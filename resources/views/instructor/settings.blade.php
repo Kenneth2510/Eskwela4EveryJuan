@@ -11,7 +11,7 @@
         {{-- MAIN --}}
         <section class="relative h-screen mx-2 overflow-auto shadow-lg text-darthmouthgreen">
             <div class="top-0 right-0 md:absolute z-1 md:w-3/4 pt-[110px] md:pt-[60px] md:h-screen lg:w-10/12">
-                <a href="{{ url()->previous() }}" class="w-8 h-8 m-2">
+                <a href="{{ url('/instructor/dashboard') }}" class="w-8 h-8 m-2">
                     <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
                 </a>
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Business;
 use App\Models\Learner;
+use App\Models\Course;
+use App\Models\LearnerCourse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -207,11 +209,62 @@ class LearnerController extends Controller
     public function dashboard() {
         if (auth('learner')->check()) {
             $learner = session('learner');
+    
+            try {
+                // Get the courses the learner is enrolled in
+                $enrolledCoursesCheck = DB::table('learner_course')
+                    ->select('learner_course.course_id')
+                    ->where('learner_course.learner_id', '=', $learner->learner_id)
+                    ->get()
+                    ->pluck('course_id'); // Get an array of course_ids
+    
+                // Query for approved courses not in the enrolledCourses list
+                $query = DB::table('course')
+                    ->select(
+                        "course.course_id",
+                        "course.course_name",
+                        "course.course_code",
+                        "instructor.instructor_lname",
+                        "instructor.instructor_fname",
+                        "instructor.profile_picture"
+                    )
+                    ->where('course.course_status', '=', 'Approved')
+                    ->whereNotIn('course.course_id', $enrolledCoursesCheck)
+                    ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                    ->orderBy("course.course_name", "ASC");
+    
+                $courses = $query->get();
+
+                      // Get the courses the learner is enrolled in
+                $enrolledCourses = DB::table('learner_course')
+                    ->select(
+                        'learner_course.course_id',
+                        'learner_course.status',
+                        'learner_course.created_at',
+                        'course.course_name',
+                        'course.course_code',
+                        'course.course_difficulty',
+                        'course.instructor_id',
+                        'instructor.instructor_fname',
+                        'instructor.instructor_lname',
+                    )
+                    ->join('course', 'learner_course.course_id', '=', 'course.course_id')
+                    ->join('instructor', 'course.instructor_id', '=', 'instructor.instructor_id')
+                    ->where('learner_course.learner_id', '=', $learner->learner_id)
+                    ->where('learner_course.status', '=', 'Approved')
+                    ->get();
+
+                // dd($enrolledCourses);
+    
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+    
+            return view('learner.dashboard', compact('learner', 'courses', 'enrolledCourses'))->with('title', 'Learner Dashboard');
+    
         } else {
             return redirect('/learner');
         }
-
-        return view('learner.dashboard', compact('learner'))->with('title', 'Learner Dashboard');
     }
 
     public function settings() {

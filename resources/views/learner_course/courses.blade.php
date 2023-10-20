@@ -21,7 +21,34 @@
     
             {{-- MAIN CONTENT --}}
             <div class="flex flex-row flex-wrap items-center justify-center mx-auto border-2 rounded-lg shadow grow lg:justify-start">
-                <div class="m-4 bg-teal-400 rounded-lg shadow-lg h-72 w-52">
+                @foreach ($learnerCourse as $course)
+    
+                @php
+                    $firstColor = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+
+                    $firstColorRGB = sscanf($firstColor, "#%02x%02x%02x");
+                    $darkenedColor = sprintf("#%02x%02x%02x", $firstColorRGB[0] * 0.8, $firstColorRGB[1] * 0.8, $firstColorRGB[2] * 0.8);
+                @endphp
+                <div style="background-color: {{$firstColor}}" class="relative m-4 bg-indigo-400 rounded-lg shadow-lg h-72 w-52">
+                    <div style="background-color: {{$darkenedColor}}" class="relative h-32 mx-auto my-4 rounded w-44">
+                        <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $course->profile_picture) }}"" alt="">
+                    </div>
+                    
+                    <div class="px-4">
+                        <h1 class="mb-2 overflow-hidden text-lg font-bold text-white whitespace-no-wrap">{{ $course->course_name }}</h1>
+
+                        <div class="text-sm text-gray-100 ">
+                            <p>{{ $course->course_code }}</p>
+                            <h3>{{ $course->instructor_fname }} {{ $course->instructor_lname }}</h3>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ url("/learner/course/$course->course_id") }}" style="background-color: {{$darkenedColor}}; right:0; bottom: 0;" class="absolute float-right mx-4 mb-3 rounded">
+                        <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+                    </a>
+                </div>
+            @endforeach
+                {{-- <div class="m-4 bg-teal-400 rounded-lg shadow-lg h-72 w-52">
                     <div class="relative h-32 mx-auto my-4 bg-teal-600 rounded w-44">
                         <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="" alt="">
                     </div>
@@ -88,7 +115,7 @@
                     <button class="float-right mx-4 rounded bg-amber-700">
                         <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
                     </button>
-                </div>
+                </div> --}}
                 
     
 {{--                 

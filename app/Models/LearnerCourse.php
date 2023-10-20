@@ -19,11 +19,11 @@ class LearnerCourse extends Model
 
     public function learner()
     {
-        return $this->belongsToMany(Learner::class, 'learner_id');
+        return $this->belongsTo(Learner::class, 'learner_id');
     }
 
     public function course()
     {
-        return $this->belongsToMany(Course::class, 'course_id');
+        return $this->belongsTo(Course::class, 'course_id');
     }
 }

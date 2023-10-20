@@ -8,6 +8,7 @@ use App\Models\Learner;
 use App\Models\Instructor;
 use App\Models\Admin;
 use App\Models\Course;
+use App\Models\LearnerCourse;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Profiler\Profile;
+use Illuminate\Support\Facades\Auth;
 
 class InstructorCourseController extends Controller
 {
@@ -88,7 +90,7 @@ class InstructorCourseController extends Controller
     
                 
                 $folderName = $courseData['course_name'];
-                $folderPath = 'courses/' . $folderName;
+                $folderPath = 'public/courses/' . $folderName;
     
                 if(!Storage::exists($folderPath)) {
                     Storage::makeDirectory($folderPath);
@@ -129,7 +131,7 @@ class InstructorCourseController extends Controller
         return view('instructor_course.courseOverview', compact('course'))->with('title', 'Course Overview');
     }
 
-    public function manage_course(Course $course) {
+    public function manage_course(Request $request, Course $course) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
             // dd($instructor);
@@ -158,6 +160,39 @@ class InstructorCourseController extends Controller
             ->first();
 
 
+            $enrolleesQuery = DB::table('learner_course')
+            ->select(
+                'learner_course.learner_course_id',
+                'learner_course.learner_id',
+                'learner_course.status',
+                'learner_course.created_at',
+                'learner.learner_fname',
+                'learner.learner_lname',
+                'learner.learner_email'
+            )
+            ->join('learner', 'learner_course.learner_id', '=', 'learner.learner_id')
+            ->where('learner_course.course_id', '=', $course->course_id);
+
+            // Filtering by Date
+            if ($request->has('filterDate')) {
+                $enrolleesQuery->whereDate('learner_course.created_at', '=', $request->input('filterDate'));
+            }
+
+            // Filtering by Status
+            if ($request->has('filterStatus')) {
+                $enrolleesQuery->where('learner_course.status','=', $request->filterStatus);
+            }
+
+            // Searching
+            if ($request->has('searchBy') && $request->has('searchVal')) {
+                $searchBy = $request->input('searchBy');
+                $searchVal = $request->input('searchVal');
+                $enrolleesQuery->where($searchBy, 'LIKE', "%$searchVal%");
+            }
+
+            $enrollees = $enrolleesQuery->get();
+
+
             } catch (\Exception $e) {
                 dd($e->getMessage());
             }
@@ -166,8 +201,65 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseManage', compact('course'))->with('title', 'Manage Course');
+        return view('instructor_course.courseManage', compact('course', 'enrollees'))->with('title', 'Manage Course');
     }
+
+//     public function manage_course(Request $request, $courseId)
+// {
+//     if (auth('instructor')->check()) {
+//                 $instructor = session('instructor');
+//         try {
+//             $course = Course::select(
+//                 'course.*',
+//                 'instructor.instructor_lname',
+//                 'instructor.instructor_fname'
+//             )
+//                 ->where('course.course_id', $courseId)
+//                 ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+//                 ->first();
+
+//             $enrolleesQuery = DB::table('learner_course')
+//                 ->select(
+//                     'learner_course.learner_course_id',
+//                     'learner_course.learner_id',
+//                     'learner_course.status',
+//                     'learner_course.created_at',
+//                     'learner.learner_fname',
+//                     'learner.learner_lname',
+//                     'learner.learner_email'
+//                 )
+//                 ->join('learner', 'learner_course.learner_id', '=', 'learner.learner_id')
+//                 ->where('learner_course.course_id', $course->course_id);
+
+//             // Filtering by Date
+//             if ($request->has('filterDate')) {
+//                 $enrolleesQuery->whereDate('learner_course.created_at', '=', $request->input('filterDate'));
+//             }
+
+//             // Filtering by Status
+//             if ($request->has('filterStatus')) {
+//                 $enrolleesQuery->where('learner_course.status', $request->input('filterStatus'));
+//             }
+
+//             // Searching
+//             if ($request->has('searchBy') && $request->has('searchVal')) {
+//                 $searchBy = $request->input('searchBy');
+//                 $searchVal = $request->input('searchVal');
+//                 $enrolleesQuery->where($searchBy, 'LIKE', "%$searchVal%");
+//             }
+
+//             $enrollees = $enrolleesQuery->get();
+
+//         } catch (\Exception $e) {
+//             dd($e->getMessage());
+//         }
+//     } else {
+//         return redirect('/instructor');
+//     }
+
+//     return view('instructor_course.courseManage', compact('course', 'enrollees'))->with('title', 'Manage Course');
+// }
+
 
     public function update_course(Course $course, Request $request) {
         $instructor = session('instructor');

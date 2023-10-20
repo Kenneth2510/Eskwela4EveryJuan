@@ -18,7 +18,10 @@
             </a>
         </div>
         
-        <div id="icon" class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full"></div>
+        <div id="icon" class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full">
+            <img class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full" src="{{ asset('storage/' . $instructor->profile_picture) }}
+                                " alt="Profile Picture">
+        </div>
         <div id="AD002_IA_instructor_status" class="flex items-center justify-center ">
             
             <h3 class="mx-3 text-lg font-semibold">Account Status: </h3>
@@ -69,8 +72,11 @@
         @endif
         </div>
 
-        <form action="{{ url("/admin/view_instructor/$instructor->instructor_id") }}" method="POST" enctype="multipart/form-data">
-            @method('PUT')
+        {{-- <form action="/admin/view_instructor/{{ $instructor->instructor_id }}" id="instructor_updateData_form" data-instructor-id="{{ $instructor->instructor_id }}" enctype="multipart/form-data"> --}}
+
+            
+        <form action="/admin/view_instructor/{{$instructor->instructor_id}}" method="POST" enctype="multipart/form-data">
+            @method('PUT');
             @csrf
         <div id="AD002_IV_maincontainer" class="smallpc:flex smallpc:items-start">
             <div id="AD002_IV_personal_details_container" class="mx-auto my-5 smallpc:w-6/12">
@@ -121,7 +127,7 @@
                             <select name="instructor_gender" id="instructor_gender" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
                                 <option value="" {{ $instructor->instructor_gender == "" ? 'selected': '' }} class=""></option>
                                 <option value="Male" {{ $instructor->instructor_gender == "Male" ? 'selected': '' }} class="">Male</option>
-                                <option value="Femnale" {{ $instructor->instructor_gender == "Femnale" ? 'selected': '' }} class="">Female</option>
+                                <option value="Female" {{ $instructor->instructor_gender == "Female" ? 'selected': '' }} class="">Female</option>
                                 <option value="Others" {{ $instructor->instructor_gender == "Others" ? 'selected': '' }} class="">Preferred not to say</option>
                             </select>
                             @error('instructor_gender')
@@ -150,7 +156,7 @@
                     <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-40 md:text-2xl">Contact Number</h4>
                     <div class="">
                         <label for="instructor_contactno" class="hidden">Contact Number</label>
-                        <input type="tel" id="instructor_contactno" pattern="[0-9]{11}" name="instructor_contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled value="{{$instructor->instructor_contactno}}">
+                        <input type="tel" id="instructor_contactno" maxlength="11" pattern="[0-9]{11}" name="instructor_contactno" class="px-3 py-2 text-lg border-2 rounded-md w-15 md:text-xl" placeholder="09" disabled value="{{$instructor->instructor_contactno}}">
                         @error('instructor_contactno')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
@@ -238,57 +244,80 @@
                     </div>
                 </div>
             </div>
+
+            <div class="">
+                <h1>Created at: {{ $instructor->created_at }}</h1>
+                <h1>Last Modified at: {{ $instructor->updated_at }}</h1>
+            </div>
     
             <div id="button_container" class="flex justify-center pt-5 mx-auto mt-16 text-center border-2 border-t-black">
-                <a href="" id="return"class="px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
-                <a href="" id="cancel" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
+                <a href="{{ url('/admin/instructors') }}" id="return"class="px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
+                <button type="button" id="cancel" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</button>
 
-                <button id="edit_data" type="button" class="px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
+                <button type="button" id="instructor_edit_data" type="button" class="px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
                 
-                <button id="update_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+                <button id="instructor_update_data" type="button" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+
+                <div id="updateInstructorModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                    <div class="bg-white p-5 rounded-lg text-center">
+                        <p>Are you sure you want to update this instructor?</p>
+                        <button type="submit" id="instructor_confirmUpdate" class="px-4 py-2 bg-green-600 text-white rounded-md m-2">Confirm</button>
+                        <button type="button" id="instructor_cancelUpdate" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                    </div>
+                </div>
             </form>
-            <form action="/admin/view_instructor/{{$instructor->instructor_id}}" method="POST">
-                @method('delete')
-                @csrf
-                <button id="delete_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
-            </form>
+
+                <button id="instructor_delete_data" type="button" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
+
+                <div id="deleteInstructorModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                    <form id="instructor_deleteCourse" action="" data-instructor-id="{{ $instructor->instructor_id }}">
+                        @csrf
+                        <div class="bg-white p-5 rounded-lg text-center">
+                            <p>Are you sure you want to delete this course?</p>
+                            <button type="submit" id="instructor_confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">Confirm</button>
+                            <button type="button" id="instructor_cancelDelete" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                        </div>
+                    </form>
+                    
+                </div>
             </div>
+        </div>
         
     </div>
 
 </section>
 
 <script>
-    $(document).ready(function() {
-        $('#edit_data').on('click', function(e) {
-            e.preventDefault();
+    // $(document).ready(function() {
+    //     $('#edit_data').on('click', function(e) {
+    //         e.preventDefault();
 
-            // $('#password_confirmfield').removeClass('hidden');
-            $('#button').removeClass('hidden');
-            $('#update_data').removeClass('hidden');
-            $('#delete_data').removeClass('hidden');
-            $('#edit_data').addClass('hidden');
-            $('#cancel').removeClass('hidden');
-            $('#return').addClass('hidden');
+    //         // $('#password_confirmfield').removeClass('hidden');
+    //         $('#button').removeClass('hidden');
+    //         $('#update_data').removeClass('hidden');
+    //         $('#delete_data').removeClass('hidden');
+    //         $('#edit_data').addClass('hidden');
+    //         $('#cancel').removeClass('hidden');
+    //         $('#return').addClass('hidden');
 
-            $('#instructor_fname').prop("disabled", false).focus();
-            $('#instructor_lname').prop("disabled", false);
-            $('#instructor_bday').prop("disabled", false);
-            $('#instructor_gender').prop("disabled", false);
-            // $('#instructor_email').prop("disabled", false);     9       
-            $('#instructor_contactno').prop("disabled", false);
+    //         $('#instructor_fname').prop("disabled", false).focus();
+    //         $('#instructor_lname').prop("disabled", false);
+    //         $('#instructor_bday').prop("disabled", false);
+    //         $('#instructor_gender').prop("disabled", false);
+    //         // $('#instructor_email').prop("disabled", false);     9       
+    //         $('#instructor_contactno').prop("disabled", false);
                     
-            $('#instructor_credentials').prop("disabled", false);
+    //         $('#instructor_credentials').prop("disabled", false);
 
-            $('#instructor_username').prop("disabled", false);
-            $('#instructor_username').prop("readonly", true);
-            $('#instructor_password').prop("disabled", false);
-            $('#instructor_password').prop("readonly", true);
-            $('#instructor_password_confirmation').prop("disabled", false);
-            $('#instructor_password_confirmation').prop("readonly", true);
-            $('#instructor_security_code').prop("disabled", false);
-            $('#instructor_security_code').prop("readonly", true);
-        })
-    })
+    //         $('#instructor_username').prop("disabled", false);
+    //         $('#instructor_username').prop("readonly", true);
+    //         $('#instructor_password').prop("disabled", false);
+    //         $('#instructor_password').prop("readonly", true);
+    //         $('#instructor_password_confirmation').prop("disabled", false);
+    //         $('#instructor_password_confirmation').prop("readonly", true);
+    //         $('#instructor_security_code').prop("disabled", false);
+    //         $('#instructor_security_code').prop("readonly", true);
+    //     })
+    // })
 </script>
 @include('partials.footer')

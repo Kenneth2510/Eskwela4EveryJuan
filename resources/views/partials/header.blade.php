@@ -30,6 +30,10 @@
     <script src="{{asset('js/instructorNewContent.js')}}" defer></script>
     <script src="{{asset('js/instructor_course_create.js')}}" defer></script>
     <script src="{{asset('js/instructor_course_manage.js')}}" defer></script>
+    <script src="{{asset('js/AD_course_manage.js')}}" defer></script>
+    <script src="{{asset('js/AD_instructor_manage.js')}}" defer></script>
+    <script src="{{asset('js/AD_learner_manage.js')}}" defer></script>
+    <script src="{{asset('js/L_course_manage.js')}}" defer></script>
 </head>
 <body class="min-h-full bg-mainwhitebg font-poppins">
     <x-message />

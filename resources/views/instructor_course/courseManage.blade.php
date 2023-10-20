@@ -165,7 +165,7 @@
                     <div id="enrolled_learners" class="hidden">
                         <h1 class="text-2xl font-semibold border-black border-b-2">Enrolled Learner</h1>
 
-                        <form action="" method="GET">
+                        <form action="/instructor/course/manage/{{$course->course_id}}" method="GET">
                             <div class="flex items-center">
                                 <div class="flex items-center mx-10">
                                     <div class="mx-2">
@@ -190,7 +190,6 @@
                                         <option value="name">Name</option>
                                         <option value="learner_email">Email</option>
                                         <option value="learner_contactno">Contact No.</option>
-                                        <option value="business_name">Business Name</option>
                                         {{-- <option value="created_at">Date Registered</option> --}}
                                         {{-- <option value="status">Status</option> --}}
                                     </select>
@@ -205,25 +204,33 @@
                                 <thead class="text-left">
                                     <th class="w-1/5">Enrollee ID</th>
                                     <th class="w-1/5">Learner ID</th>
-                                    <th class="w-2/5">Enrollee Info</th>
+                                    <th class="w-1/5">Enrollee Info</th>
                                     <th class="w-1/5">Date</th>
+                                    <th class="w-1/5">Status</th>
                                     <th class="w-1/5"></th>
                                 </thead>
                                 <tbody>
+                                    @forelse ($enrollees as $enrollee)
                                     <tr>
-                                        <td>1</td>
-                                        <td>1</td>
+                                        <td>{{$enrollee->learner_course_id}}</td>
+                                        <td>{{$enrollee->learner_id}}</td>
                                         <td>
-                                            <h1>Kenneth Timblaco</h1>
-                                            <p>ktimblaco25@email.com</p>
+                                            <h1>{{$enrollee->learner_fname}} {{$enrollee->learner_lname}} </h1>
+                                            <p>{{$enrollee->learner_email}}</p>
                                         </td>
-                                        <td>October 25, 2023</td>
+                                        <td>{{$enrollee->created_at}}</td>
+                                        <td>{{$enrollee->status}}</td>
                                         <td>
-                                            <button class="px-5 py-2 rounded-2xl bg-green-500 hover:bg-green-700">
+                                            {{-- <button class="px-5 py-2 rounded-2xl bg-green-500 hover:bg-green-700">
                                                 view
-                                            </button>
+                                            </button> --}}
                                         </td>
                                     </tr>
+                                    @empty
+                                    <tr>
+                                        <td class="py-1 text-lg font-normal" colspan="7">No enrollees found.</td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

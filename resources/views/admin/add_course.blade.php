@@ -4,7 +4,7 @@
 <section id="AD002_IA_container" class="relative w-4/5 h-full left-80">
 
     <div id="AD002_IA_title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">Add New Instructor</h1>
+        <h1 class="text-4xl font-semibold">Add New Instructor</ h1>
         <div id="adminuser" class="flex items-center">
             <h3 class="text-lg">{{ $adminCodeName }}</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>

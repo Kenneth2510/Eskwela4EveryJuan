@@ -221,7 +221,7 @@ class AdminController extends Controller
         $folderPath = 'learners/' . $folderName;
 
         // Copy the default photo to the same directory
-        $defaultPhoto = 'public/images/default_profile.png';
+        $defaultPhoto = '/public/images/default_profile.png';
         // $isExists = Storage::exists($defaultPhoto);
 
         $defaultPhoto_path = $folderPath . '/default_profile.png';
@@ -387,11 +387,31 @@ class AdminController extends Controller
 
     public function destroy_learner(Learner $learner) {
         // dd($learner);
+        try {
 
-        $learner->delete();
+            $relativeFilePath = str_replace('public/', '', $learner->profile_picture);
+            if (Storage::disk('public')->exists($relativeFilePath)) {
+                // Storage::disk('public')->delete($relativeFilePath);
+                $specifiedDir = explode('/', $relativeFilePath);
+                array_pop($specifiedDir);
 
+                $dirPath = implode('/', $specifiedDir);
 
-        return redirect('/admin/learners')->with('message' , 'Data was successfully deleted'); //add with message later
+                // dd($dirPath);
+                Storage::disk('public')->deleteDirectory($dirPath);
+            
+                $learner->delete();
+            }
+    
+    
+            session()->flash('message', 'Learner deleted Successfully');
+            return response()->json(['message' => 'Learner deleted successfully', 'redirect_url' => "/admin/learners"]);
+            
+        
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
     }
 
 
@@ -606,7 +626,7 @@ class AdminController extends Controller
             "instructor_gender" => ['required'],
             "instructor_contactno" => ['required'],
             // "instructor_email" => ['required' , 'email'],
-            "instructor_credentials" => ['required','file'],
+            // "instructor_credentials" => ['required','file'],
         ]);
 
         $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
@@ -656,7 +676,10 @@ class AdminController extends Controller
     
             $instructor->delete();
     
-            return redirect('/admin/instructors')->with('message', 'Data and associated file were successfully deleted');
+            session()->flash('message', 'Instructor deleted Successfully');
+            return response()->json(['message' => 'Instructor deleted successfully', 'redirect_url' => "/admin/instructors"]);
+            
+        
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -773,7 +796,7 @@ class AdminController extends Controller
 
             
             $folderName = $courseData['course_name'];
-            $folderPath = 'courses/' . $folderName;
+            $folderPath = 'public/courses/' . $folderName;
 
             if(!Storage::exists($folderPath)) {
                 Storage::makeDirectory($folderPath);
@@ -788,6 +811,130 @@ class AdminController extends Controller
     
             return response()->json(['errors' => $errors], 422);
         }
+    }
+
+    public function view_course($id) {
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            $admin_codename = $admin['admin_codename'];
+
+            try {
+                $course = DB::table('course')
+                ->select(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.course_description',
+                    'course.instructor_id',
+                    'instructor.instructor_lname',
+                    'instructor.instructor_fname',
+                    'instructor.profile_picture',
+                    'course.created_at',
+                    'course.updated_at',
+                )
+                ->where('course_id', $id)
+                ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                ->orderBy('course.created_at', 'DESC')
+                ->first();
+
+
+                $instructors = DB::table('instructor')
+                ->select(
+                    DB::raw("CONCAT(instructor_fname, ' ', instructor_lname) as name"), 
+                    'instructor_id as id'
+                )
+                ->where('status', '=', 'Approved')
+                ->orderBy('instructor_fname', 'ASC')
+                ->get();
+
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+        } else {
+            return redirect('/admin');
+        }
+        return view('admin.view_course', compact('course'), [
+            'title' => 'Course Management',
+            'adminCodeName' => $admin_codename,
+            'instructors' => $instructors,
+        ]);
+
+    }
+
+    public function update_course(Course $course, Request $request) {
+    
+            try {
+                $courseData = $request->validate([
+                    'course_name' => ['required'],
+                    'course_description' => ['required'],
+                    'course_difficulty' => ['required'],
+                    'instructor_id' => ['required'],
+                ]);
+
+                $course->update($courseData);
+
+                session()->flash('message', 'Course updated Successfully');
+                return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/admin/view_course/$course->course_id"]);
+                
+            
+            } catch (ValidationException $e) {
+                // dd($e->getMessage());
+                $errors = $e->validator->errors();        
+                return response()->json(['errors' => $errors], 422);
+            }
+    }
+
+    public function delete_course(Course $course) {
+        try {
+            $course->delete();
+
+
+            session()->flash('message', 'Course deleted Successfully');
+            return response()->json(['message' => 'Course deleted successfully', 'redirect_url' => "/admin/courses"]);
+            
+        
+        } catch (ValidationException $e) {
+            // dd($e->getMessage());
+            $errors = $e->validator->errors();        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+    public function approveCourse(Course $course)
+    {
+
+        try {
+            $course->update(['course_status' => 'Approved']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        return redirect()->back()->with('message' , 'Course Status successfully changed');
+    }
+
+    public function rejectCourse(Course $course)
+    {
+        try {
+            $course->update(['course_status' => 'Rejected']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        
+        return redirect()->back()->with('message' , 'Course Status successfully changed');
+    }
+
+    public function pendingCourse(Course $course)
+    {
+        try {
+            $course->update(['course_status' => 'Pending']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        
+        return redirect()->back()->with('message' , 'Course Status successfully changed');
     }
 
 }

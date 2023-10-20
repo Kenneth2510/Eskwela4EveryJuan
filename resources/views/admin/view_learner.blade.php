@@ -18,7 +18,10 @@
             </a>
         </div>
         
-        <div id="icon" class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full"></div>
+        <div id="icon" class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full">
+            <img class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}
+                                " alt="Profile Picture">
+        </div>
         <div id="learner_status" class="flex items-center justify-center ">
             
             <h3 class="mx-3 text-lg font-semibold">Account Status: </h3>
@@ -231,9 +234,9 @@
                         <label for="business_category" class="hidden">Business Category</label>
                             <select name="business_category" id="business_category" class="px-3 py-2 text-lg border-2 rounded-md md:text-xl w-15" disabled>
                                 <option value="" {{$business->business_category == "" ? 'selected' : ''}} class=""></option>
-                                <option value="micro" {{$business->business_category == "micro" ? 'selected' : ''}} class="">Micro</option>
-                                <option value="small" {{$business->business_category == "small" ? 'selected' : ''}} class="">Small</option>
-                                <option value="medium" {{$business->business_category == "medium" ? 'selected' : ''}} class="">Medium</option>
+                                <option value="Micro" {{$business->business_category == "Micro" ? 'selected' : ''}} class="">Micro</option>
+                                <option value="Small" {{$business->business_category == "Small" ? 'selected' : ''}} class="">Small</option>
+                                <option value="Medium" {{$business->business_category == "Medium" ? 'selected' : ''}} class="">Medium</option>
                             </select>
                             @error('business_category')
                             <p class="p-1 mt-2 text-xs text-red-500">
@@ -305,21 +308,44 @@
                     </div>
                 </div>
             </div>
+
+            <div class="">
+                <h1>Created at: {{ $learner->created_at }}</h1>
+                <h1>Last Modified at: {{ $learner->updated_at }}</h1>
+            </div>
     
             <div id="button_container" class="flex justify-center pt-5 mx-auto mt-16 text-center border-2 border-t-black">
-                <a href="" id="return"class="px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
-                <a href="" id="cancel" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
+                <a href="{{ url('/admin/learners') }}" id="return"class="px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Return</a>
+                <button type="button" id="cancel" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</button>
 
-                <button id="edit_data" type="button" class="px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
+                <button type="button" id="learner_edit_data" type="button" class="px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Edit Data</button>
                 
-                <button id="update_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+                <button id="learner_update_data" type="button" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Apply Changes</button>
+
+                <div id="updateLearnerModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                    <div class="bg-white p-5 rounded-lg text-center">
+                        <p>Are you sure you want to update this learner?</p>
+                        <button type="submit" id="learner_confirmUpdate" class="px-4 py-2 bg-green-600 text-white rounded-md m-2">Confirm</button>
+                        <button type="button" id="learner_cancelUpdate" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                    </div>
+                </div>
             </form>
-            <form action="/admin/view_learner/{{$learner->learner_id}}" method="POST">
-                @method('delete')
-                @csrf
-                <button id="delete_data" type="submit" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
-            </form>
+
+                <button id="learner_delete_data" type="button" class="hidden px-5 py-5 mx-3 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">Delete Data</button>
+
+                <div id="deleteLearnerModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                    <form id="learner_deleteCourse" action="" data-learner-id="{{ $learner->learner_id }}">
+                        @csrf
+                        <div class="bg-white p-5 rounded-lg text-center">
+                            <p>Are you sure you want to delete this learner?</p>
+                            <button type="submit" id="learner_confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">Confirm</button>
+                            <button type="button" id="learner_cancelDelete" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                        </div>
+                    </form>
+                    
+                </div>
             </div>
+        </div>
                 
                 
     </div>
@@ -327,41 +353,41 @@
 </section>
 
 <script>
-    $(document).ready(function() {
-        $('#edit_data').on('click', function(e) {
-            e.preventDefault();
+    // $(document).ready(function() {
+    //     $('#edit_data').on('click', function(e) {
+    //         e.preventDefault();
 
-            $('#button').removeClass('hidden');
-            $('#update_data').removeClass('hidden');
-            $('#delete_data').removeClass('hidden');
-            $('#edit_data').addClass('hidden');
-            $('#cancel').removeClass('hidden');
-            $('#return').addClass('hidden');
+    //         $('#button').removeClass('hidden');
+    //         $('#update_data').removeClass('hidden');
+    //         $('#delete_data').removeClass('hidden');
+    //         $('#edit_data').addClass('hidden');
+    //         $('#cancel').removeClass('hidden');
+    //         $('#return').addClass('hidden');
 
-            $('#learner_fname').prop("disabled", false).focus();
-            $('#learner_lname').prop("disabled", false);
-            $('#learner_bday').prop("disabled", false);
-            $('#learner_gender').prop("disabled", false);
-            $('#learner_email').prop("disabled", false);
-            $('#learner_email').prop("readonly", true);
-            $('#learner_contactno').prop("disabled", false);
-            $('#learner_contactno').prop("readonly", true);
+    //         $('#learner_fname').prop("disabled", false).focus();
+    //         $('#learner_lname').prop("disabled", false);
+    //         $('#learner_bday').prop("disabled", false);
+    //         $('#learner_gender').prop("disabled", false);
+    //         $('#learner_email').prop("disabled", false);
+    //         $('#learner_email').prop("readonly", true);
+    //         $('#learner_contactno').prop("disabled", false);
+    //         $('#learner_contactno').prop("readonly", true);
 
-            $('#business_name').prop("disabled", false);
-            $('#business_address').prop("disabled", false);
-            $('#business_owner_name').prop("disabled", false);
-            $('#bplo_account_number').prop("disabled", false);
-            $('#business_category').prop("disabled", false);
+    //         $('#business_name').prop("disabled", false);
+    //         $('#business_address').prop("disabled", false);
+    //         $('#business_owner_name').prop("disabled", false);
+    //         $('#bplo_account_number').prop("disabled", false);
+    //         $('#business_category').prop("disabled", false);
 
-            $('#learner_username').prop("disabled", false);
-            // $('#learner_username').prop("readonly", true);
-            $('#learner_password').prop("disabled", false);
-            // $('#learner_password').prop("readonly", true);
-            $('#learner_password_confirm').prop("disabled", false);
-            // $('#learner_password_confirm').prop("readonly", true);
-            $('#learner_security_code').prop("disabled", false);
-            $('#learner_security_code').prop("readonly", true);
-        })
-    })
+    //         $('#learner_username').prop("disabled", false);
+    //         // $('#learner_username').prop("readonly", true);
+    //         $('#learner_password').prop("disabled", false);
+    //         // $('#learner_password').prop("readonly", true);
+    //         $('#learner_password_confirm').prop("disabled", false);
+    //         // $('#learner_password_confirm').prop("readonly", true);
+    //         $('#learner_security_code').prop("disabled", false);
+    //         $('#learner_security_code').prop("readonly", true);
+    //     })
+    // })
 </script>
 @include('partials.footer')

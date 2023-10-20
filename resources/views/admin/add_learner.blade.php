@@ -177,9 +177,9 @@
                         <label for="business_category" class="hidden">Business Category</label>
                             <select name="business_category" id="" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
                                 <option value="" {{old('business_category') == "" ? 'selected' : ''}} class=""></option>
-                                <option value="micro" {{old('business_category') == "micro" ? 'selected' : ''}} class="">Micro</option>
-                                <option value="small" {{old('business_category') == "small" ? 'selected' : ''}} class="">Small</option>
-                                <option value="medium" {{old('business_category') == "medium" ? 'selected' : ''}} class="">Medium</option>
+                                <option value="Micro" {{old('business_category') == "Micro" ? 'selected' : ''}} class="">Micro</option>
+                                <option value="Small" {{old('business_category') == "Small" ? 'selected' : ''}} class="">Small</option>
+                                <option value="Medium" {{old('business_category') == "Medium" ? 'selected' : ''}} class="">Medium</option>
                             </select>
                             @error('business_category')
                             <p class="p-1 mt-2 text-xs text-red-500">

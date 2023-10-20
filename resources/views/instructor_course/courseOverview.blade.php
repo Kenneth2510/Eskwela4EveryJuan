@@ -13,7 +13,7 @@
     {{-- MAIN --}}
     <section class="w-full pt-[125px] mx-4  overscroll-auto md:overflow-auto">
         {{-- course name/title --}}
-        <a href="{{ url()->previous() }}" class="w-8 h-8 m-2">
+        <a href="{{ url('/instructor/courses') }}" class="w-8 h-8 m-2">
             <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
         </a>
         <div class="relative z-0 pb-4 bg-black border border-gray-400 rounded-lg shadow-lg text-mainwhitebg">

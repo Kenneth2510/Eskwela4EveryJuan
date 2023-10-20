@@ -67,7 +67,7 @@
                 <tr class="">
                     <td>{{ $course->course_id }}</td>
                     <td>{{ $course->course_code }}</td>
-                    <td class="w-3/12 py-1 text-lg font-normal">{{ $course->course_name }}</td>
+                    <td class="w-3/12 py-3 text-lg font-normal">{{ $course->course_name }}</td>
                     <td class="w-3/12 py-1 text-lg font-normal">{{ $course->instructor_lname }}  {{ $course->instructor_fname }}</td>
                     <td class="w-1/12 py-1 text-lg font-normal">{{ $course->created_at }}</td>
                     <td class="w-2/12 py-1 text-lg font-normal">{{$course->course_status}}</td>
