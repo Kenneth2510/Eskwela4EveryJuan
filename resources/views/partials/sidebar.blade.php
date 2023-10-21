@@ -131,7 +131,7 @@
         $('#admin_learners').addClass('selected');
     } else if (currentUrl.includes('/admin/instructors') || currentUrl.includes('/admin/add_instructor') || currentUrl.includes('/admin/view_instructor')) {
         $('#admin_instructors').addClass('selected');
-    } else if (currentUrl.includes('/admin/courses')) {
+    } else if (currentUrl.includes('/admin/courses')) || currentUrl.includes('/admin/add_course') || currentUrl.includes('/admin/view_course') || currentUrl.includes('/admin/manage_course'){
         $('#admin_courses').addClass('selected');
     } else if (currentUrl.includes('/admin/performance')) {
         $('#admin_performance').addClass('selected');

@@ -98,6 +98,11 @@ Route::controller(AdminController::class)->group(function() {
     Route::put('/admin/approve_course/{course}', 'approveCourse');
     Route::put('/admin/reject_course/{course}', 'rejectCourse');
     Route::put('/admin/pending_course/{course}', 'pendingCourse');
+    Route::get('/admin/manage_course/course_overview/{course}' , 'manage_course');
+    Route::get('/admin/manage_course/enrollees/{course}' , 'course_enrollees');
+    Route::put('/admin/manage_course/enrollee/approve/{learner_course}', 'approve_learner_course');
+    Route::put('/admin/manage_course/enrollee/pending/{learner_course}', 'pending_learner_course');
+    Route::put('/admin/manage_course/enrollee/reject/{learner_course}', 'reject_learner_course');
 });
 
 // Route::controller(InstructorCourseController::class)->group(function() {
@@ -127,5 +132,6 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/{course}', 'LearnerCourseController@overview');
     Route::post('/learner/course/enroll/{course}', 'LearnerCourseController@enroll_course');
     Route::post('/learner/course/unEnroll/{learnerCourse}', 'LearnerCourseController@unEnroll_course');
-// // })->middleware('web');
+    Route::get('/learner/course/manage/{course}', 'LearnerCourseController@manage_course');
+    // // })->middleware('web');
 });

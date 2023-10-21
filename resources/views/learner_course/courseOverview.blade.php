@@ -97,16 +97,32 @@
     {{-- course management --}}
     <div class="relative w-full mt-5">
         {{-- course left --}}
+        @if($isEnrolled !== null)
         <div class="flex justify-between text-mainwhitebg fill-mainwhitebg">
-            <button class="relative w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
-                <h1>Enroll Now</h1>
+            <a href="/learner/course/manage/{{ $course->course_id }}" class="relative w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
+                <h1>Manage Course</h1>
                 <svg class="absolute bottom-0 right-0 hidden mx-2 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
-            </button>
+            </a>
             <button class="relative w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
                 <h1>View Progress</h1>
                 <svg class="absolute bottom-0 right-0 hidden mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
             </button>
         </div>
+        @else 
+        <div class="flex justify-between text-mainwhitebg fill-mainwhitebg">
+            <a href="" class="relative w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
+                <h1>Manage Course</h1>
+                <svg class="absolute bottom-0 right-0 hidden mx-2 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+            </a>
+            <button class="relative w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
+                <h1>View Progress</h1>
+                <svg class="absolute bottom-0 right-0 hidden mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+            </button>
+        </div>
+        @endif
+
+
+
         {{-- course right --}}
         <div class="flex flex-col pt-4">
             <div class="flex flex-row items-center py-4 my-2 bg-teal-400 rounded-lg shadow-lg justify-evenly">

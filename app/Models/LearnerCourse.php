@@ -15,6 +15,7 @@ class LearnerCourse extends Model
     protected $fillable = [
       'learner_id',
       'course_id',
+      'status'
     ];
 
     public function learner()

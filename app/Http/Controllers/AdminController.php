@@ -7,6 +7,7 @@ use App\Models\Learner;
 use App\Models\Instructor;
 use App\Models\Course;
 use App\Models\Admin;
+use App\Models\LearnerCourse;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -934,6 +935,158 @@ class AdminController extends Controller
             dd($e->getMessage());
         }
         
+        return redirect()->back()->with('message' , 'Course Status successfully changed');
+    }
+
+    public function manage_course (Course $course) {
+
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+
+            try {
+
+                $course = DB::table('course')
+                ->select(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.instructor_id',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                    'instructor.profile_picture',
+                )
+                ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+                ->where('course.course_id',$course->course_id)
+                ->first();
+                // dd($courseData);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/admin');
+        }
+
+        return view('admin.manage_course', compact('course'))
+        ->with(['title' => 'Course Management', 'adminCodeName' => $admin_codename]);
+
+    }
+
+    public function course_enrollees (Request $request, Course $course) {
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+
+            try {
+
+                $search_by = request('searchBy');
+                $search_val = request('searchVal');
+        
+                $filter_date = request('filterDate');
+                $filter_status = request('filterStatus');
+
+
+                $course = DB::table('course')
+                ->select(
+                    "course.course_id",
+                    "course.course_name",
+                    "course.course_code",
+                    "course.course_status",
+                    "course.course_difficulty",
+                    "course.course_description",
+                    "course.created_at",
+                    "course.updated_at",
+                    "instructor.instructor_lname",
+                    "instructor.instructor_fname",
+                )
+            ->where('course.course_id', $course->course_id)
+            ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+            ->first();
+
+
+            $enrolleesQuery = DB::table('learner_course')
+            ->select(
+                'learner_course.learner_course_id',
+                'learner_course.learner_id',
+                'learner_course.status',
+                'learner_course.created_at',
+                'learner.learner_fname',
+                'learner.learner_lname',
+                'learner.learner_email'
+            )
+            ->join('learner', 'learner_course.learner_id', '=', 'learner.learner_id')
+            ->orderBy('learner_course.created_at','DESC')
+            ->where('learner_course.course_id', '=', $course->course_id);
+
+            if(!empty($filter_date) || !empty($filter_status)) {
+                if(!empty($filter_date) && empty($filter_date)) {
+                    $enrolleesQuery->where('learner_course.created_at', 'LIKE', $filter_date.'%');
+                } elseif (empty($filter_date) && !empty($filter_status)) {
+                    $enrolleesQuery->where('learner_course.status', 'LIKE', $filter_status.'%');
+                } else {
+                    $enrolleesQuery->where('learner_course.created_at', 'LIKE', $filter_date.'%')
+                        ->where('learner_course.status', 'LIKE', $filter_status.'%');
+                }
+            }
+
+            if(!empty($search_by) && !empty($search_val)) {
+                if($search_by == 'name') {
+                    $enrolleesQuery->where(function ($enrolleesQuery) use ($search_val) {
+                        $enrolleesQuery->where('learner.learner_fname', 'LIKE', $search_val.'%')
+                            ->orWhere('learner.learner_lname', 'LIKE', $search_val.'%');
+                    });
+                } else if ($search_by == 'learner_course_id') {
+                    $enrolleesQuery->where('learner_course.'.$search_by, 'LIKE', $search_val.'%');
+                } else {
+                    $enrolleesQuery->where('learner.'.$search_by, 'LIKE', $search_val. '%');
+                }
+            }
+
+            $enrollees = $enrolleesQuery->get();
+
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+        } else {
+            return redirect('/admin');
+        }
+
+        return view('admin.course_enrollees', compact('course', 'enrollees'))
+        ->with(['title' => 'Course Management', 'adminCodeName' => $admin_codename]);
+    }
+
+    public function approve_learner_course(LearnerCourse $learnerCourse) {
+        try {
+            // dd($learnerCourse);
+            $learnerCourse->update(['status' => 'Approved']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        return redirect()->back()->with('message' , 'Course Status successfully changed');
+    }
+
+    public function reject_learner_course(LearnerCourse $learnerCourse) {
+        try {
+            $learnerCourse->update(['status' => 'Rejected']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        return redirect()->back()->with('message' , 'Course Status successfully changed');
+    }
+
+    public function pending_learner_course(LearnerCourse $learnerCourse) {
+        try {
+            $learnerCourse->update(['status' => 'Pending']);  
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
         return redirect()->back()->with('message' , 'Course Status successfully changed');
     }
 

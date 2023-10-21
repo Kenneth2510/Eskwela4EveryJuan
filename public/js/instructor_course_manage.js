@@ -128,4 +128,29 @@ $(document).ready(function() {
         });
         });
 
+
+    // $('#enrolleeForm').on('submit', function(e) {
+    //     e.preventDefault(); // Prevent the default form submission
+
+    //     // Gather form data
+    //     var courseID = $(this).data("course-id");
+    //     var formData = $(this).serialize();
+
+    //     // Make an AJAX request
+    //     $.ajax({
+    //         type: 'GET', // Use the appropriate HTTP method
+    //         url: '/instructor/course/manage/' . courseID, // Set your form action URL
+    //         data: formData, // Include the form data
+    //         success: function(response) {
+    //             // Handle the response here, e.g., update the table with new data
+    //             // You can replace the table content with the new data received from the server
+    //             $('#learner_table').html(response);
+    //         },
+    //         error: function(error) {
+    //             // Handle errors if any
+    //             console.log(error);
+    //         }
+    //     });
+    // });
+
 })

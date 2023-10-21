@@ -169,6 +169,12 @@
                 <h1>Created at: {{ $course->created_at }}</h1>
                 <h1>Last Modified at: {{ $course->updated_at }}</h1>
             </div>
+
+            <div class="mt-5 text-center">
+                <a href="/admin/manage_course/course_overview/{{$course->course_id}}" class="rounded-xl text-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                    Manage Course
+                </a>
+            </div>
             
         </div>
             
