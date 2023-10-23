@@ -1,5 +1,5 @@
 <?php
-
+// sample
 namespace App\Http\Controllers;
 
 use App\Models\Business;
@@ -67,6 +67,7 @@ class AdminController extends Controller
         return redirect('/admin')->with('message', 'Logout Successful');
     
     }
+
     
 
     public function dashboard() {
