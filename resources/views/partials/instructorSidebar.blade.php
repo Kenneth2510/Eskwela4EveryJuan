@@ -68,9 +68,9 @@
                 </a>
             </li>
             
-            <form class="mx-4 mt-10 rounded-lg  bg-darthmouthgreen md:block group hover:bg-seagreen" action="{{ url('/instructor/logout') }}" method="POST"> 
+            <form class="mx-4 mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-seagreen" action="{{ url('/instructor/logout') }}" method="POST"> 
                 @csrf
-                <button type="submit" class="flex flex-row items-center justify-center w-full h-12 group-hover:cursor-pointer" >
+                <button type="submit" class="flex flex-row items-center justify-center hidden w-full h-12 group-hover:cursor-pointer" >
                     <svg class="fill-white group-hover:fill-black" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
                     <h1 class="group-hover:text-black">Logout</h1>
                 </button>
