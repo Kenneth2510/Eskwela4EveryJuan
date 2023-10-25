@@ -77,7 +77,7 @@
                 </div>
                 <div class="flex items-center justify-around">
                     <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_start">
-                        Add Lesson
+                        Add New
                     </button>
 
                     <div id="addLesson_form" class="hidden">
@@ -92,11 +92,7 @@
                             Cancel
                         </button>
                     </div>
-                </div>
-
-
-
-
+                </div>          
                 
                 <div class="w-full text-right">
                     <button type="submit" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">
@@ -107,6 +103,30 @@
             </div>
         </form>
     </section>
+
+                <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50 rounded shadow-lg hiddenn backdrop-blur-sm" aria-hidden="true" id="selectTypeParent">
+                    <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="selectTypeChild">
+                        <div class="flex flex-col items-center">
+                            <label class="my-2 text-white" for="">Select one</label>
+                            <select class="max-w-xs select select-bordered IN-V-INP" name="" id="">
+                                <option value="" disabled selected>--Select here--</option>
+                                <option value="">Lesson</option>
+                                <option value="">Quiz</option>
+                                <option value="">Assignment</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex flex-row items-center justify-center m-4">
+                            <button class="px-4 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg " id="selectTypeCloseBtn">
+                                <h1>Close</h1>
+                            </button>
+                            <button class="px-4 py-2 mx-1 text-white rounded-lg shadow-lg bg-darthmouthgreen" id="selectTypeConfirmBtn">
+                                <h1>Confirm</h1>
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>      
     
     @include('partials.instructorProfile')
 </section>
