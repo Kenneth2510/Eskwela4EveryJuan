@@ -287,7 +287,10 @@ class AdminController extends Controller
         return view('admin.view_learner', [ 
             'learner' => $learnerdata,
             'business' => $businessdata,
-        ])->with(['title' => 'View Learner', 'adminCodeName' => $admin_codename]);
+        ])->with(['title' => 'View Learner', 
+                'adminCodeName' => $admin_codename ,
+                'scripts' => ['AD_learner_manage.js'] ,
+        ]);
     }
 
     public function approveLearner(Learner $learner)
@@ -579,7 +582,11 @@ class AdminController extends Controller
         try {
             $instructorData = Instructor::where('instructor_id', $id)->first();
             // dd($instructorData);
-            return view('admin.view_instructor', ['instructor' => $instructorData])->with(['title' => 'View Instructor', 'adminCodeName' => $admin_codename]);
+            return view('admin.view_instructor', ['instructor' => $instructorData])
+            ->with(['title' => 'View Instructor', 
+                    'adminCodeName' => $admin_codename ,
+                    'scripts' => ['AD_instructor_manage.js'],
+                ]);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -863,6 +870,7 @@ class AdminController extends Controller
             'title' => 'Course Management',
             'adminCodeName' => $admin_codename,
             'instructors' => $instructors,
+            'scripts' => ['AD_course_manage.js'],
         ]);
 
     }
