@@ -66,7 +66,7 @@
                 <div class="mx-auto my-10 text-sm w-max md:text-base">
                     <p class="text-black md:text-mainwhitebg">Don't have an account yet?
                         <span class="font-semibold text-darthmouthgreen md:text-white">
-                            <a href="{{url('/instructor/register1')}}">
+                            <a href="{{url('/instructor/register')}}">
                                 Sign up
                             </a>
                         </span>

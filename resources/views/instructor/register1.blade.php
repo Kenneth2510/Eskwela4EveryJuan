@@ -18,7 +18,7 @@
                 </div>
 
 
-            <form class="pb-4 mx-4 mt-10 text-sm text-black" action="{{ url('/instructor/register1') }}" method="POST" enctype="multipart/form-data">
+            <form class="pb-4 mx-4 mt-10 text-sm text-black" action="{{ url('/instructor/register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="" id="first-form">
                     <div class="flex flex-col">
