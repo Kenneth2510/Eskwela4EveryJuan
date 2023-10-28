@@ -66,9 +66,7 @@
     </section>
 
     <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
-        <div class="relative w-full pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen h-1/2" id="lessonChildContent">
-            <svg class="absolute top-0 right-0 m-4 cursor-pointer" id="lessonNewContentCloseSVG" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-            
+        <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
             <div class="flex flex-col m-4">
                 <input class="h-8 px-2 rounded" type="text" placeholder="Enter Title">
             </div>
@@ -77,7 +75,7 @@
                 <textarea class="w-full h-32 px-2 rounded resize-none" name="" id=""  placeholder="Enter Content"></textarea>
             </div>
 
-            <div class="flex items-center justify-end mx-4">
+            <div class="flex items-center justify-end mx-4 mb-4">
                 <button class="w-16 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg" id="lessonNewContentCloseBtn">
                     <h1>Close</h1>
                 </button>

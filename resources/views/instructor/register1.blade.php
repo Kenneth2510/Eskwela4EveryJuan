@@ -18,11 +18,15 @@
                 </div>
 
 
+
+           {{-- <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/instructor/register1') }}" method="POST" enctype="multipart/form-data"> --}}
+
             <form class="pb-4 mx-4 mt-10 text-sm text-black" action="{{ url('/instructor/register') }}" method="POST" enctype="multipart/form-data">
+
                 @csrf
                 <div class="" id="first-form">
-                    <div class="flex flex-col">
-                        <div class="IN-FORM-CTNR">
+                    <div class="flex flex-col flex-nowrap lg:flex-row">
+                        <div class=" FORM-CTNR lg:w-1/2 lg:mr-2">
                             <label for="instructor_fname">Firstname:</label>
                             <input class="IN-V-INP" type="text" name="instructor_fname" id="instructor_fname" value="{{old('instructor_fname')}}">
                             @error('instructor_fname')
@@ -31,7 +35,7 @@
                             </p>
                             @enderror
                         </div>
-                        <div class="IN-FORM-CTNR">
+                        <div class=" FORM-CTNR lg:w-1/2 lg:ml-2">
                             <label for="instructor_lname">Lastname:</label>
                             <input class="IN-V-INP" type="text" name="instructor_lname" id="instructor_lname" value="{{old('instructor_lname')}}">
                             @error('instructor_lname')
@@ -42,8 +46,8 @@
                         </div>
                     </div>
                     
-                    <div>
-                        <div class="IN-FORM-CTNR">
+                    <div class="flex flex-col lg:flex-row lg:justify-between">
+                        <div class="lg:mr-2 FORM-CTNR lg:w-1/2">
                             <label for="instructor_bday">Birthday:</label>
                             <input class="IN-V-INP" type="date" name="instructor_bday" id="instructor_bday" value="{{old('instructor_bday')}}">
                             @error('instructor_bday')
@@ -53,7 +57,7 @@
                             @enderror
                         </div>
                         
-                        <div class="IN-FORM-CTNR">
+                        <div class="lg:ml-2 FORM-CTNR lg:w-1/2">
                             <label for="instructor_gender">Gender</label>
                             <select name="instructor_gender" id="gender" class="IN-V-INP">
                                 <option value="" {{old('instructor_gender') == "" ? 'selected' : ''}} class=""></option>
@@ -69,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_email">Email:</label>
                         <input class="IN-V-INP" type="email" name="instructor_email" id="instructor_email" value="{{old('instructor_email')}}">
                         @error('instructor_email')
@@ -78,7 +82,7 @@
                             </p>
                             @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_contactno">Contact Number:</label>
                         {{-- <input class="IN-V-INP" type="text" name="instructor_contactno" id="instructor_contactno"> --}}
                         <input type="tel" id="instructor_contactno" maxlength="11" pattern="[0-9]{11}" name="instructor_contactno" class="IN-V-INP" placeholder="09" value="{{old('instructor_contactno')}}">
@@ -88,7 +92,7 @@
                             </p>
                             @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="instructor_username">Username:</label>
                         <input class="IN-V-INP" type="text" name="instructor_username" id="instructor_username" value="{{old('instructor_username')}}">
                         @error('instructor_username')
@@ -97,7 +101,7 @@
                             </p>
                             @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="password">Password:</label>
                         <input class="IN-V-INP" type="password" name="password" id="">
                         @error('password')
@@ -106,7 +110,7 @@
                             </p>
                             @enderror
                     </div>
-                    <div class="IN-FORM-CTNR">
+                    <div class="FORM-CTNR">
                         <label for="password_confirmation">Confirm Password:</label>
                         <input class="IN-V-INP" type="password" name="password_confirmation" id="">
                     </div>
