@@ -21,7 +21,11 @@ class LearnerController extends Controller
             // return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
             return back();
         } else {
-        return view('learner.login')->with('title', 'Learner Login');
+        return view('learner.login')
+        ->with([
+            'title' => 'Learner Login',
+            'scripts' => ['instructorLogin']
+        ]);
         }
 
         // return view('learner.login')->with('title', 'Learner Login');
@@ -116,11 +120,15 @@ class LearnerController extends Controller
     }
 
     public function register(){
-        return view('learner.register')->with('title', 'Learner Register');
+        return view('learner.register')
+        ->with([
+            'title' => 'Learner Register',
+            'scripts' => ['learnerRegister.js'] ,
+        ]);
     }
-    public function register1(){
-        return view('learner.register1')->with('title', 'Learner Register');
-    }
+    // public function register1(){
+    //     return view('learner.register1')->with('title', 'Learner Register');
+    // }
 
 
     public function register_process(Request $request) {
@@ -278,7 +286,11 @@ class LearnerController extends Controller
         } else {
             return redirect('/learner');
         }
-        return view('learner.settings', compact('learner', 'business'))->with('title', 'Learner Settings');
+        return view('learner.settings', compact('learner', 'business'))
+        ->with([
+            'title' => 'Learner Settings',
+            'scripts' => ['learnerUserSettings.js'],
+        ]);
     }
 
     public function update_info(Request $request) {

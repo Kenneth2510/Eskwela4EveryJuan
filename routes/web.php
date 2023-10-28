@@ -36,7 +36,7 @@ Route::controller(LearnerController::class)->group(function() {
     Route::post('/learner/logout', 'logout');
     Route::get('/learner/register', 'register');
     Route::post('/learner/register', 'register_process');
-    Route::get('learner/dashboard', 'dashboard');
+    Route::get('/learner/dashboard', 'dashboard');
     Route::get('/learner/settings', 'settings');
 
     Route::get('/learner/register1', 'register1');
@@ -54,8 +54,8 @@ Route::controller(InstructorController::class)->group(function() {
     Route::post('/instructor/logout', 'logout');
     Route::get('/instructor/register', 'register');
     Route::get('/instructor/dashboard', 'dashboard');
-    Route::get('/instructor/register1', 'register1');
-    Route::post('/instructor/register1', 'register_process');
+    Route::get('/instructor/register', 'register1');
+    Route::post('/instructor/register', 'register_process');
     Route::get('/instructor/settings', 'settings');
     Route::put('/instructor/settings', 'update_info');
     Route::put('/instructor/update_profile', 'update_profile');

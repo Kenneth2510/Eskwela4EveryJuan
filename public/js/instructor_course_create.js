@@ -72,6 +72,18 @@ $(document).ready(function() {
         // console.log(lessons);
     });
 
+    $('#nextAddCourse').on('click', function(e) {
+        e.preventDefault();
+        
+        $('#secondCreateCourse').removeClass('hidden');
+        $('#firstCreateCourse').addClass('hidden');
+    })
+
+    $('#returnTo_first').on('click', function(e) {
+        $('#secondCreateCourse').addClass('hidden');
+        $('#firstCreateCourse').removeClass('hidden');
+    })
+
 
     // $('#edit-lesson[data-id="' + lesson.id + '"]').on('click', function(e) {
     //     e.preventDefault(); // Prevent the default form submission

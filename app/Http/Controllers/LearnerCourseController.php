@@ -266,7 +266,11 @@ class LearnerCourseController extends Controller
             return redirect('/learner');
         }
 
-        return view('learner_course.courseManage', compact('course', 'enrollees', 'isEnrolled'))->with('title', 'Manage Course');
+        return view('learner_course.courseManage', compact('course', 'enrollees', 'isEnrolled'))
+        ->with([
+            'title' => 'Manage Course',
+            'scripts' => ['L_course_manage.js'],
+        ]);
     }
 
 }
