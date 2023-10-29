@@ -24,7 +24,7 @@ class LearnerController extends Controller
         return view('learner.login')
         ->with([
             'title' => 'Learner Login',
-            'scripts' => ['instructorLogin']
+            'scripts' => ['instructorLogin.js']
         ]);
         }
 

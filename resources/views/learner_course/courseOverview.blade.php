@@ -99,10 +99,10 @@
         {{-- course left --}}
         @if($isEnrolled !== null)
         <div class="flex justify-between text-mainwhitebg fill-mainwhitebg">
-            <a href="/learner/course/manage/{{ $course->course_id }}" class="relative w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
+            <button data-course-id="{{$course->course_id}}" id="showCourseManageModal" class="relative w-1/2 h-16 p-2 mr-2 items-center text-center rounded-lg bg-darthmouthgreen">
                 <h1>Manage Course</h1>
                 <svg class="absolute bottom-0 right-0 hidden mx-2 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
-            </a>
+            </button>
             <button class="relative w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
                 <h1>View Progress</h1>
                 <svg class="absolute bottom-0 right-0 hidden mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
@@ -110,14 +110,14 @@
         </div>
         @else 
         <div class="flex justify-between text-mainwhitebg fill-mainwhitebg">
-            <a href="" class="relative w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
+            <a href="/learner/course/manage/{{ $course->course_id }}" class="relative w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
                 <h1>Manage Course</h1>
                 <svg class="absolute bottom-0 right-0 hidden mx-2 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
             </a>
-            <button class="relative w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
+            {{-- <button class="relative w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
                 <h1>View Progress</h1>
                 <svg class="absolute bottom-0 right-0 hidden mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
-            </button>
+            </button> --}}
         </div>
         @endif
 
@@ -141,6 +141,102 @@
                 <h1 class="text-xl font-medium">98</h1>
             </div>
         </div>
+
+        <div id="L_courseManageModal"  class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+            
+            <div id="courseManage" style="margin-left:15%;" class="w-full  mx-5 overscroll-auto md:overflow-auto bg-white p-5 rounded-lg">
+                <a href="" class="w-8 h-8 m-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24">
+                        <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+                    </svg>
+                </a>
+
+                <div id="course_mainBody" class="mt-5 rounded-lg flex">
+                    <div id="side_items" class="w-1/6 h-full rounded-lg bg-green-700 h-">
+                        <ul class="px-5 py-5 text-white text-xl font-medium">
+                            <li id="display_info_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
+                                <i class="fa-solid fa-book-open text-3xl pr-2"></i>
+                                Course Info
+                        </li>
+                        <li id="enrolled_learners_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
+                                <i class="fa-solid fa-users text-3xl pr-2"></i>
+                                Enrolled Learners
+                        </li>
+                        <li id="enrollment_summary_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
+                                <i class="fa-solid fa-book text-3xl pr-2"></i>
+                                Enrollment Summary
+                        </li>
+                            <li class="w-full py-3 rounded-xl px-2 mt-2"></li>
+                            <li class="w-full py-3 rounded-xl px-2 mt-2"></li>
+                        </ul>
+                    </div>
+    
+    
+                    <div id="learner_course_info" class="mx-5 w-full">
+    
+                    </div>
+    
+                    <div id="learner_enrolled_learners" class="hidden mx-5 w-full">
+                        <h1 class="text-2xl font-semibold border-black border-b-2">Enrolled Learner</h1>
+    
+                        <form id="l_enrolleeForm" method="GET">
+                            <div class="flex items-center">
+                                <div class="flex items-center mx-10">
+                                    <div class="mx-2">
+                                        <label for="filterDate" class="">Filter by Date</label><br>
+                                        <input type="date" id="filterDate" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl">
+                                    </div>
+                                    <div class="mx-2">
+                                        <label for="filterStatus" class="">Filter by Status</label><br>
+                                        <select name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
+                                            <option value="">Select Status</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Approved">Approved</option>
+                                            <option value="Rejected">Rejected</option>
+                                        </select>
+                                    </div>
+                                    {{-- <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button> --}}
+                                </div>
+                                <div class="">
+                                    <select name="searchBy" id="searchBy" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
+                                        <option value=""class="">Search By</option>
+                                        <option value="learner_course_id">Enrollee ID</option>
+                                        <option value="learner_id">Learner ID</option>
+                                        <option value="name">Name</option>
+                                        <option value="learner_email">Email</option>
+                                        <option value="learner_contactno">Contact No.</option>
+                                        {{-- <option value="created_at">Date Registered</option> --}}
+                                        {{-- <option value="status">Status</option> --}}
+                                    </select>
+                                    <input type="text" id="searchVal" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl"  placeholder="Type to search">
+                                    {{-- <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>         --}}
+                                </div>
+                            </div>
+                        </form>
+    
+                        <div id="learner_table" class="mt-5">
+                            <table>
+                                <thead class="text-left">
+                                    <th class="w-1/5">Enrollee ID</th>
+                                    <th class="w-1/5">Learner ID</th>
+                                    <th class="w-1/5">Enrollee Info</th>
+                                    <th class="w-1/5">Date</th>
+                                    <th class="w-1/5">Status</th>
+                                    <th class="w-1/5"></th>
+                                </thead>
+                                <tbody id="l_enrolleeTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div id="enrollment_summary" class="overflow-y-auto hidden mx-5 w-full">
+    
+                    </div>
+  
+        </div>
+
     </div>
 </section>
 </section>

@@ -90,5 +90,28 @@
             </div>
         </div>
     </section>
+    
+    
+    <div class="fixed z-50 flex items-center w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
+        <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
+            <h1 class="text-xl font-medium text-center text-white">Lesson</h1>
+            <div class="flex flex-col m-4">
+                <input class="h-8 px-2 rounded" type="text" placeholder="Enter Title">
+            </div>
+
+            <div class="m-4">
+                <textarea class="w-full h-32 px-2 rounded resize-none" name="" id=""  placeholder="Enter Content"></textarea>
+            </div>
+
+            <div class="flex items-center justify-end mx-4 mb-4">
+                <button class="px-4 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg" id="lessonNewContentCloseBtn">
+                    <h1>Close</h1>
+                </button>
+                <button class="w-16 py-2 mx-1 text-white rounded-lg shadow-lg bg-darthmouthgreen">
+                    <h1>Save</h1>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>
 @include('partials.footer')

@@ -131,7 +131,12 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseOverview', compact('course'))->with('title', 'Course Overview');
+        return view('instructor_course.courseOverview', compact('course'))
+        ->with([
+            'title' => 'Course Overview',
+            'scripts' => ['instructor_course_manage.js'],
+        ]
+        );
     }
 
     public function manage_course(Request $request, Course $course) {
@@ -141,12 +146,11 @@ class InstructorCourseController extends Controller
 
             try {
 
-                $search_by = request('searchBy');
-                $search_val = request('searchVal');
-        
-                $filter_date = request('filterDate');
-                $filter_status = request('filterStatus');
+                $search_by = $request->input('searchBy');
+                $search_val = $request->input('searchVal');
 
+                $filter_date = $request->input('filterDate');
+                $filter_status = $request->input('filterStatus');
 
                 $course = DB::table('course')
                 ->select(
@@ -215,12 +219,18 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseManage', compact('course', 'enrollees'))
-        ->with([
-            'title' => 'Manage Course',
-            'scripts' => ['instructor_course_manage.js'] ,
-        ]);
+        $response = [
+            'course' => $course,
+            'enrollees'=> $enrollees,
+            'filterDate' => $filter_date,
+            'filterStatus' => $filter_status,
+            'searchBy' => $search_by,
+            'searchVal' => $search_val,
+        ];
+
+        return response()->json($response);
     }
+
 
 
     public function update_course(Course $course, Request $request) {
@@ -240,7 +250,7 @@ class InstructorCourseController extends Controller
                 $course->update($courseData);
 
                 session()->flash('message', 'Course updated Successfully');
-                return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/manage/$course->course_id"]);
+                return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/$course->course_id"]);
                 
             
             } catch (ValidationException $e) {

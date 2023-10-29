@@ -119,6 +119,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/courses/create', 'InstructorCourseController@courseCreate_process');
     Route::get('/instructor/course/{course}', 'InstructorCourseController@overview');
     Route::get('/instructor/course/manage/{course}', 'InstructorCourseController@manage_course');
+    // Route::post('/instructor/course/search/{course}', 'InstructorCourseController@search_enrollee');
     Route::post('/instructor/course/manage/{course}', 'InstructorCourseController@update_course');
     Route::post('/instructor/course/delete/{course}', 'InstructorCourseController@delete_course');
     Route::get('/instructor/mycourse/content', 'InstructorCourseController@content');

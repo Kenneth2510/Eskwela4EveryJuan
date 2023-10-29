@@ -128,6 +128,7 @@
                     </li>
                 </ul>
             </div>
+            
             <div id="content_area" class=" w-5/6 m-5 overflow-y-auto">
                 <div id="learner_course_info" class="">
                     <h1 class="text-2xl font-semibold border-black border-b-2">Course Information</h1>
