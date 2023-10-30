@@ -68,7 +68,10 @@ class InstructorCourseController extends Controller
         } else {
             return redirect('/instructor');
         }
-        return view('instructor_course.coursesCreate', compact('instructor'))->with('title', 'Create Course');
+        return view('instructor_course.coursesCreate', compact('instructor'))
+        ->with(['title' => 'Creeate Course',
+                'scripts' => ['instructor_course_create.js']]);
+        
     }
 
     public function courseCreate_process(Request $request) {
@@ -212,7 +215,11 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseManage', compact('course', 'enrollees'))->with('title', 'Manage Course');
+        return view('instructor_course.courseManage', compact('course', 'enrollees'))
+        ->with([
+            'title' => 'Manage Course',
+            'scripts' => ['instructor_course_manage.js'] ,
+        ]);
     }
 
 

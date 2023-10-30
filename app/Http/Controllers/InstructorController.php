@@ -26,7 +26,11 @@ class InstructorController extends Controller
             return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
             // return back();
         } else {
-        return view('instructor.login')->with('title', 'Instructor Login');
+        return view('instructor.login')
+        ->with([
+            'title'=> 'Instructor Login',
+            'scripts' => ['instructorLogin.js'],
+        ]);
         }
 
     }
@@ -120,7 +124,11 @@ class InstructorController extends Controller
     // }
 
     public function register1(){
-        return view('instructor.register1')->with('title', 'Instructor Register');
+        return view('instructor.register1')
+        ->with([
+            'title' => 'Instructor Register',
+            'scripts' =>  ['instructorRegister.js'],
+        ]);
     }
 
     public function register_process(Request $request) {
@@ -247,7 +255,11 @@ class InstructorController extends Controller
         } else {
             return redirect('/instructor');
         }
-        return view('instructor.settings', compact('instructor'))->with('title', 'Instructor Profile');
+        return view('instructor.settings', compact('instructor'))
+        ->with([
+            'title' => 'Instructor Profile',
+            'scripts' => ['instructorSettings.js'],
+        ]);
     }
 
     public function update_info(Request $request) {

@@ -95,6 +95,9 @@
                 </div>          
                 
                 <div class="w-full text-right">
+                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-red-600" id="returnTo_first">
+                        Return
+                    </button>
                     <button type="submit" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">
                         Add New Course
                     </button>
