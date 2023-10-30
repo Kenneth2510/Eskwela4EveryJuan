@@ -85,8 +85,8 @@
                         <input type="text" id="lesson_name" name="lesson_name">
                     </div>
                     <div id="addLesson_type" class="hidden">
-                        <label for="">Type:</label>
-                        <select name="" id="">
+                        <label for="lesson_type">Type:</label>
+                        <select name="lesson_type" id="">
                             <option value="" disabled>--select type--</option>
                             <option value="">Lesson</option>
                             <option value="">Quiz</option>
@@ -116,7 +116,7 @@
         </form>
     </section>
 
-                <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50 rounded shadow-lg hiddenn backdrop-blur-sm" aria-hidden="true" id="selectTypeParent">
+                {{-- <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50 rounded shadow-lg hiddenn backdrop-blur-sm" aria-hidden="true" id="selectTypeParent">
                     <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="selectTypeChild">
                         <div class="flex flex-col items-center">
                             <label class="my-2 text-white" for="">Select one</label>
@@ -138,7 +138,7 @@
                         </div>
                         
                     </div>
-                </div>      
+                </div>       --}}
     
     @include('partials.instructorProfile')
 </section>
