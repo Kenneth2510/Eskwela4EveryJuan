@@ -81,7 +81,7 @@
                     </button>
 
                     <div id="addLesson_form" class="hidden">
-                        <label for="lesson_name">Lesson Name:</label><br>
+                        <label for="lesson_name">Name:</label><br>
                         <input type="text" id="lesson_name" name="lesson_name">
                     </div>
                     <div id="addLesson_type" class="hidden">
