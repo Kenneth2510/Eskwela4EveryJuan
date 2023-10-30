@@ -40,7 +40,7 @@
                     </ul>
                 </div> --}}
                 <div class="w-full mt-8 text-right">
-                    <button class="w-24 h-8 bg-amber-400 hover:bg-amber-600" id="nextAddCourse">
+                    <button type="button" class="w-24 h-8 bg-amber-400 hover:bg-amber-600" id="nextAddCourse">
                         Next
                     </button>
                 </div>
@@ -84,6 +84,15 @@
                         <label for="lesson_name">Lesson Name:</label><br>
                         <input type="text" id="lesson_name" name="lesson_name">
                     </div>
+                    <div id="addLesson_type" class="hidden">
+                        <label for="">Type:</label>
+                        <select name="" id="">
+                            <option value="" disabled>--select type--</option>
+                            <option value="">Lesson</option>
+                            <option value="">Quiz</option>
+                            <option value="">Assignment</option>
+                        </select>
+                    </div>
                     <div id="addLesson_button" class="hidden">
                         <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_now">
                             Add Lesson Now
@@ -95,7 +104,7 @@
                 </div>          
                 
                 <div class="w-full text-right">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-red-600" id="returnTo_first">
+                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium bg-red-600 rounded cursor-pointer" id="returnTo_first">
                         Return
                     </button>
                     <button type="submit" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">

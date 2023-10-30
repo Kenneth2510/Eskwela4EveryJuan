@@ -35,8 +35,15 @@ $(document).ready(function () {
 
     $("#addLesson_start").on("click", function (e) {
         e.preventDefault();
+        $("#addLesson_form").removeClass("hidden");
+        $("#lesson_name").focus();
+        $("#addLesson_start").addClass("hidden");
+        $("#addLesson_button").removeClass("hidden");
+        $("#addLesson_type").removeClass("hidden");
 
-        $("#selectTypeParent").removeClass("hidden");
+        $("#selectTypeParent").addClass("hidden");
+
+        // $("#selectTypeParent").removeClass("hidden");
     });
 
     $("#selectTypeCloseBtn").on("click", (e) => {
@@ -72,6 +79,7 @@ $(document).ready(function () {
         $("#addLesson_form").addClass("hidden");
         $("#addLesson_start").removeClass("hidden");
         $("#addLesson_button").addClass("hidden");
+        $("#addLesson_type").addClass("hidden");
     });
 
     $("#addLesson_now").on("click", function (e) {
@@ -95,25 +103,24 @@ $(document).ready(function () {
         $("#addLesson_form").addClass("hidden");
         $("#addLesson_start").removeClass("hidden");
         $("#addLesson_button").addClass("hidden");
+        $("#addLesson_type").addClass("hidden");
 
         displayLessons();
 
         // console.log(lessons);
     });
 
+    //     $('#nextAddCourse').on('click', function(e) {
+    //         e.preventDefault();
 
-//     $('#nextAddCourse').on('click', function(e) {
-//         e.preventDefault();
-        
-//         $('#secondCreateCourse').removeClass('hidden');
-//         $('#firstCreateCourse').addClass('hidden');
-//     })
+    //         $('#secondCreateCourse').removeClass('hidden');
+    //         $('#firstCreateCourse').addClass('hidden');
+    //     })
 
-//     $('#returnTo_first').on('click', function(e) {
-//         $('#secondCreateCourse').addClass('hidden');
-//         $('#firstCreateCourse').removeClass('hidden');
-//     })
-
+    //     $('#returnTo_first').on('click', function(e) {
+    //         $('#secondCreateCourse').addClass('hidden');
+    //         $('#firstCreateCourse').removeClass('hidden');
+    //     })
 
     // $('#edit-lesson[data-id="' + lesson.id + '"]').on('click', function(e) {
     //     e.preventDefault(); // Prevent the default form submission

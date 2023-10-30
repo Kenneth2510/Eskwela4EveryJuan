@@ -11,7 +11,7 @@
 
         {{-- MAIN START --}}
         <section class="relative w-full h-screen px-4 overflow-auto md:w-3/4 lg:w-9/12" id="insDashCont">
-            <div class="top-0 right-0 md:absolute z-1  pt-[110px] md:pt-[60px] ">
+            <div class="top-0 right-0 md:absolute z-1 pt-[110px] md:pt-[60px] ">
                 <div class="flex flex-row items-center justify-between h-20 px-4">
                     <h1 class="text-xl font-semibold md:text-4xl ">Dashboard</h1>
                     <form class="relative flex flex-row items-center" action="">
