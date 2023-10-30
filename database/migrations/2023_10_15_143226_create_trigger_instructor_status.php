@@ -12,8 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $triggerName = 'add_new_L_status';
-        $tableName = 'learner';
+        $triggerName = 'add_new_I_status';
+        $tableName = 'instructor';
 
         DB::unprepared("DROP TRIGGER IF EXISTS $triggerName");
 
@@ -31,8 +31,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $triggerName = 'add_new_L_status';
+        $triggerName = 'add_new_I_status';
 
-        DB::unprepared("DROP TRIGGER IF EXISTS '$triggerName'");
+        DB::unprepared("DROP TRIGGER IF EXISTS $triggerName");
     }
 };
