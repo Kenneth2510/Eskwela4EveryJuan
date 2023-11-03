@@ -68,12 +68,12 @@
                 </a>
             </li>
             
-            <li id="instructor_profile" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
+            <li id="instructor_profile" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4 md:hidden">
                 <a class="flex items-center justify-center md:justify-start md:px-4" href="">
                     
                     <svg class="mx-2 duration-500 fill-mainwhitebg group-hover:fill-black group-hover:animate-bounce" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
 
-                    <h1 class="hidden md:block group-hover:text-black">Settings</h1>
+                    <h1 class="hidden group-hover:text-black">Profile</h1>
                 </a>
             </li>
             
