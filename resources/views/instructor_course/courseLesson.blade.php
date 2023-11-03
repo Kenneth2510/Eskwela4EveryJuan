@@ -14,9 +14,12 @@
                 <h1 class="w-1/2 text-xl font-semibold">Business Administration</h1>
                 <p>Instructor 1</p>
                 <p class="opacity-50">000000</p>
-                <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
-                    <h1>Edit</h1>
-                </button>
+                <div class="flex justify-end w-full">
+                    <x-forms.primary-button
+                    color="white"
+                    name="Edit"
+                    id=""/>          
+                </div>
             </div>
 
             {{-- main content --}}
@@ -49,16 +52,18 @@
                     </div>
 
                     <button class="flex items-center w-full py-4 mt-4 rounded-lg shadow-lg ring-2 ring-seagreen" id="lessonAddContent">
-                        <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
-                        <h1>Add New Content</h1>
+                        <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        <h1>Edit Content</h1>
                     </button>
 
                     
                     
                     <div class="flex justify-end w-full">
-                        <button class="w-1/2 py-2 mt-4 text-white rounded-lg shadow-lg bg-seagreen">
-                            <h1>Save</h1>
-                        </button>
+                        <x-forms.primary-button
+                        color="seagreen"
+                        name="Save"
+                        class="text-white"
+                        id=""/>          
                     </div>             
                 </div>
             </div>
@@ -67,6 +72,14 @@
 
     <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
         <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
+            <div class="flex flex-col m-4">
+                <select name="" id="">
+                    <option value="" selected disabled>--select lesson/quiz/assignment</option>
+                    <option value="">Lesson 1</option>
+                    <option value="">Quiz 1</option>
+                    <option value="">Assignment 1</option>
+                </select>
+            </div>
             <div class="flex flex-col m-4">
                 <input class="h-8 px-2 rounded" type="text" placeholder="Enter Title">
             </div>
