@@ -138,8 +138,9 @@
                         </div> --}}
                         
                         <div class="px-4 mt-4">
-                            <h1 class="text-3xl font-bold text-darthmouthgreen lg:text-mainwhitebg">About Credentials</h1>
-                            <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+                            <x-header title="About Credentials">
+                                <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+                            </x-header>
                         </div>
 
                         <div class="pb-4 my-8 font-semibold border-b-2" action="">
@@ -156,7 +157,9 @@
 
                             <div class="grid h-auto my-10 text-black place-items-end" >
                                 <div class="flex" >
-                                    <x-forms.secondary-button name="Back" id="prevBtn">
+                                    <x-forms.secondary-button
+                                    name="Back"
+                                    id="prevBtn">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                             <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
                                         </svg>
@@ -185,8 +188,9 @@
                         </div> --}}
                         
                         <div class="px-4 mt-4">
-                            <h1 class="text-3xl font-bold text-darthmouthgreen lg:text-mainwhitebg">Create your Security Code</h1>
-                            <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+                            <x-header title="Create your Security Code">
+                                <p class="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
+                            </x-header>
                         </div>
 
                     <div class="flex items-center pb-4 my-8 font-semibold text-black border-b-2 security-code-container">
