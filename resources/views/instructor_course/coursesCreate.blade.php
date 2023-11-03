@@ -39,10 +39,8 @@
                     <ul class="px-2 py-2" id="uploadedFileName">
                     </ul>
                 </div> --}}
-                <div class="w-full mt-8 text-right">
-                    <button type="button" class="w-24 h-8 bg-amber-400 hover:bg-amber-600" id="nextAddCourse">
-                        Next
-                    </button>
+                <div class="flex justify-end w-full mt-8">
+                    <x-forms.primary-button color="amber" name="Next" id="nextAddCourse"/>
                 </div>
                 
             </div>
@@ -75,10 +73,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="flex items-center justify-around">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_start">
-                        Add New
-                    </button>
+                <div class="flex items-center justify-around my-4">
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Add New"
+                    class="my-10"
+                    id="addLesson_start"/>
 
                     <div id="addLesson_form" class="hidden">
                         <label for="lesson_name">Name:</label><br>
@@ -93,23 +93,27 @@
                             <option value="">Assignment</option>
                         </select>
                     </div>
-                    <div id="addLesson_button" class="hidden">
-                        <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_now">
-                            Add Lesson Now
-                        </button>
-                        <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_cancel">
-                            Cancel
-                        </button>
+                    <div id="addLesson_button" class="flex hidden">
+                        <x-forms.primary-button
+                        color="amber"
+                        name="Add Lesson Now"
+                        id="addLesson_now"/>
+                        
+                        <x-forms.secondary-button
+                        name="Cancel"
+                        id="addLesson_cancel"/>
                     </div>
                 </div>          
                 
-                <div class="w-full text-right">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium bg-red-600 rounded cursor-pointer" id="returnTo_first">
-                        Return
-                    </button>
-                    <button type="submit" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">
-                        Add New Course
-                    </button>
+                <div class="flex justify-end w-full my-10">
+                    <x-forms.primary-button
+                    color="red"
+                    name="Return"
+                    id="returnTo_first"/>
+                    
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Add New Course"/>
                 </div>
                 
             </div>

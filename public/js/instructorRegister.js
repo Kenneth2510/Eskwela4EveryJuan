@@ -8,7 +8,7 @@ $(document).ready(function () {
     const secondForm = $("#resumeForm");
     const thirdForm = $("#security_code");
     const header = $("#ins-head");
-    const footer = $('#ins-foot')
+    const footer = $("#ins-foot");
 
     nextBtn.on("click", function (event) {
         event.preventDefault();

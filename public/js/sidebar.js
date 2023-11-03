@@ -5,6 +5,10 @@
 // hamb.addEventListener("click", () => {
 
 // });
+$('#instructor_profile').on('click', (e)=> {
+    e.preventDefault();
+    $("#profile").toggleClass("hidden");
+})
 
 $("#hamb-but").click(function () {
     $("#max-sidebar").toggleClass("hidden");
@@ -25,3 +29,4 @@ $("#prof-btn").click(function () {
 $("#prof-open-btn").click(function () {
     $("#profile").toggleClass("hidden");
 });
+
