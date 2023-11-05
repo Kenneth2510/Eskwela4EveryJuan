@@ -40,10 +40,11 @@
                 </div>
             </div>
             <div class="w-full">
-                <button class="w-32 h-10 m-2 rounded-full bg-seagreen">
+                <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="w-32 h-10 m-2 rounded-full bg-seagreen text-white text-center flex items-center justify-center">
                     <h1>View Course</h1>
-                </button>
+                </a>
             </div>
+            
         </div>
 
        
@@ -57,10 +58,10 @@
                     <h1>Manage Course</h1>
                     <svg class="absolute bottom-0 right-0 hidden mx-2 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                 </button>
-                <button class="relative w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
+                <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="relative w-1/2 h-16 p-2 ml-2 flex justify-center text-center items-center rounded-lg bg-seagreen">
                     <h1>View Course</h1>
                     <svg class="absolute bottom-0 right-0 hidden mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
-                </button>
+                </a>
             </div>
             {{-- course right --}}
             <div class="flex flex-col pt-4">
@@ -171,7 +172,7 @@
                         <div id="course_summary" class="overflow-y-auto hidden mx-5 w-full">
                             
     
-                            <div class="justify-end flex">
+                            {{-- <div class="justify-end flex">
                                 <button id="showDeleteModal" class="px-5 py-5 text-xl rounded-xl bg-red-600 hover:bg-red-700">Delete Course</button>
                             </div>
                             
@@ -185,7 +186,7 @@
                                     </div>
                                 </form>
                                 
-                            </div>
+                            </div> --}}
                             
                         </div>
 

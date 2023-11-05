@@ -92,7 +92,7 @@
     </section>
     
     
-    <div class="fixed z-50 flex items-center w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
+    {{-- <div class="hidden fixed z-50 flex items-center w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
         <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
             <h1 class="text-xl font-medium text-center text-white">Lesson</h1>
             <div class="flex flex-col m-4">
@@ -112,6 +112,6 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
 </section>
 @include('partials.footer')
