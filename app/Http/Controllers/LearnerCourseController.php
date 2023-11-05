@@ -61,18 +61,7 @@ class LearnerCourseController extends Controller
     }
 
     public function overview(Course $course) {
-        // if (auth('learner')->check()) {
-        //     $learner = session('learner');
-        //     // dd($instructor);
-
-        // } else {
-        //     return redirect('/learner');
-        // }
-
-        // // return view('instructor_course.courses' , compact('instructor'))->with('title', 'Instructor Courses');
-        // return view('learner_course.courseOverview', compact('learner'))->with('title', 'My Courses');
-    
-    
+ 
         if (auth('learner')->check()) {
             $learner = session('learner');
             // dd($instructor);
@@ -101,7 +90,11 @@ class LearnerCourseController extends Controller
             return redirect('/learner');
         }
 
-        return view('learner_course.courseOverview', compact('course', 'learner', 'isEnrolled'))->with('title', 'Course Overview');
+        return view('learner_course.courseOverview', compact('course', 'learner', 'isEnrolled'))
+        ->with([
+            'title' => 'Course Overview',
+            'scripts' => ['L_course_manage.js']
+        ]);
     
     }
 
@@ -164,11 +157,11 @@ class LearnerCourseController extends Controller
 
             try {
 
-                $search_by = request('searchBy');
-                $search_val = request('searchVal');
-        
-                $filter_date = request('filterDate');
-                $filter_status = request('filterStatus');
+                $search_by = $request->input('searchBy');
+                $search_val = $request->input('searchVal');
+
+                $filter_date = $request->input('filterDate');
+                $filter_status = $request->input('filterStatus');
 
       
                 $course = DB::table('course')
@@ -214,23 +207,6 @@ class LearnerCourseController extends Controller
             ->orderBy('learner_course.created_at','DESC')
             ->where('learner_course.course_id', '=', $course->course_id);
 
-            // $enrolleeData = DB::table('learner_course')
-            // ->select(
-            //     'learner_course.learner_course_id',
-            //     'learner_course.learner_id',
-            //     'learner_course.course_id',
-            //     'learner_course.status',
-            //     'learner_course.created_at',
-            //     'course.created_at',
-            //     'course.updated_at',
-            //     'course.course_id',
-            //     'course.instructor_id',
-            //     'instructor.instructor_fname',
-            //     'instructor.instructor_lname'
-            // )
-            // ->join('course', 'learner_course.course_id', '=', 'course.course_id')
-            // ->join('instructor', 'course.instructor_id', '=', 'instructor_id')
-
             if(!empty($filter_date) || !empty($filter_status)) {
                 if(!empty($filter_date) && empty($filter_date)) {
                     $enrolleesQuery->where('learner_course.created_at', 'LIKE', $filter_date.'%');
@@ -266,11 +242,17 @@ class LearnerCourseController extends Controller
             return redirect('/learner');
         }
 
-        return view('learner_course.courseManage', compact('course', 'enrollees', 'isEnrolled'))
-        ->with([
-            'title' => 'Manage Course',
-            'scripts' => ['L_course_manage.js'],
-        ]);
+        $response = [
+            'course' => $course,
+            'enrollees' => $enrollees,
+            'isEnrolled' => $isEnrolled,
+            'filterDate' => $filter_date,
+            'filterStatus' => $filter_status,
+            'searchBy' => $search_by,
+            'searchVal' => $search_val,
+        ];
+
+        return response()->json($response);
     }
 
 }

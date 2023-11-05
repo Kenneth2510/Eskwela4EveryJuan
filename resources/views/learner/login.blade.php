@@ -56,11 +56,11 @@
                         
                         <div class="flex items-center justify-between px-4 my-4 md:text-base" id="button">
                             <div class="flex items-center" id="remember">
-                                <input class="w-4 h-4 mx-1 accent-darthmouthgreen" type="checkbox" name="rememberMe" id="">
+                                <input class="w-4 h-4 mx-1 accent-darthmouthgreen" type="checkbox" name="rememberMe">
                                 <label for="">Remember me</label>
                             </div>
                             
-                            <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500 md:h-10 md:w-24 lg:rounded-lg" type="submit" id="">
+                            <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500 md:h-10 md:w-24 lg:rounded-lg" type="submit">
                                 Log in
                             </button>
                         </div>
@@ -87,7 +87,7 @@
             {{-- IMAGE HOLDER --}}
             <div class="relative w-full h-full overflow-hidden rounded-lg">
                 {{-- img-1 --}}
-                <div class="hidden slides" id="slide1">
+                <div class=" slides" id="slide1">
                     <img src="{{asset('/images/ins-login-img1.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/3 left-1/2" alt="image-1">
                     <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
                         <h1 class="text-2xl font-bold">Maintain your Business</h1>

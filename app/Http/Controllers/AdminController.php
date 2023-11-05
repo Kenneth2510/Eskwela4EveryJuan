@@ -169,7 +169,10 @@ class AdminController extends Controller
     
             $learners = $query->paginate(10);
     
-            return view('admin.learners', compact('learners'))->with(['title' => 'Learner Management', 'adminCodeName' => $admin_codename]);
+            return view('admin.learners', compact('learners'))
+            ->with(['title' => 'Learner Management', 
+                'adminCodeName' => $admin_codename,
+                'scripts' => ['AD_learners.js']]);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }

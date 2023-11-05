@@ -64,7 +64,7 @@
                 <th class="w-1/12 text-xl text-left">Status</th>
                 <th class="w-1/12"></th>
             </thead>
-            <tbody class="">
+            <tbody id="AD_learners" class="">
                 @forelse ($learners as $learner)
                 <tr class="">
                     <td>{{$learner->learner_id}}</td>
