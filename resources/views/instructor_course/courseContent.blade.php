@@ -3,8 +3,8 @@
     @include('partials.instructorNav')
     @include('partials.instructorSidebar')
     {{-- MAIN --}}
-    <section class="w-full px-2 mt-2 mx-2 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
-        <div  class="p-3 shadow-lg pb-4 rounded-lg bg-white overscroll-auto md:overflow-auto">
+    <section class="w-full px-2 mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
+        <div  class="p-3 pb-4 bg-white rounded-lg shadow-lg overscroll-auto md:overflow-auto">
             {{-- header --}}
             {{-- <div class="relative px-2 rounded-t-lg bg-seagreen text-mainwhitebg">
                 <button class="my-2 bg-gray-400 rounded-full ">
@@ -13,14 +13,7 @@
                 <h1 class="w-1/2 text-xl font-semibold">Business Administration</h1>
                 <p>Instructor 1</p>
                 <p class="opacity-50">000000</p>
-                <div class="flex justify-end w-full">
-                    <x-forms.primary-button
-                    color="white"
-                    name="Edit"
-                    id=""/>          
-                </div>
-                      
-                {{-- <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
+                <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
                     <h1>Edit</h1>
                 </button>
             </div> --}}
@@ -47,7 +40,7 @@
 
    
             
-            <div style="background-color:{{$mainBackgroundCol}};" class="rounded-xl z-50 p-2  text-white">
+            <div style="background-color:{{$mainBackgroundCol}};" class="z-50 p-2 text-white rounded-xl">
                 <a href="{{ url("/instructor/course/$course->course_id") }}" class="my-2 bg-gray-400 rounded-full ">
                     <svg  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                 </a>
@@ -99,7 +92,7 @@
 
             {{-- main content --}}
             <div class="px-2">
-                <div class="text-l mt-1 text-gray-600">
+                <div class="mt-1 text-gray-600 text-l">
                     <a href="{{ url('/instructor/courses') }}" class="">course></a>
                     <a href="{{ url("/instructor/course/$course->course_id") }}">{{$course->course_name}}></a>
                     <a href="{{ url("/instructor/course/content/$course->course_id") }}">content</a>
@@ -129,8 +122,7 @@
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                     </button>
-                    <h1 class="my-5 font-bold px-3 text-2xl text-black
-                    border-black border-b-2">Course Content</h1>
+                    <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">Course Content</h1>
                     @forelse ($syllabus as $topic)
                         @if ($topic->category == 'LESSON') 
                         {{-- /instructor/course/content/$course->course_id/lesson/?mainBackgroundCol=$mainBackgroundCol --}}
@@ -149,7 +141,7 @@
                                     </defs>
                                     </svg>
                                     
-                                <h1 class="mx-5 text-l font-medium">{{ $topic->topic_title }}</h1>
+                                <h1 class="mx-5 font-medium text-l">{{ $topic->topic_title }}</h1>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </a>
@@ -162,7 +154,7 @@
                                     </svg>
                                     
                                     
-                                <h1 class="mx-5 text-l font-medium">{{ $topic->topic_title }}</h1>
+                                <h1 class="mx-5 font-medium text-l">{{ $topic->topic_title }}</h1>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </a>
@@ -175,7 +167,7 @@
                                     </svg>
                                     
                                     
-                                <h1 class="mx-5 text-l font-medium">{{ $topic->topic_title }}</h1>
+                                <h1 class="mx-5 font-medium text-l">{{ $topic->topic_title }}</h1>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </a>
@@ -207,16 +199,6 @@
                             <h1>Assignments</h1>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
-                    </button>
-                    
-                    <div class="flex justify-center w-full">
-                        <x-forms.primary-button
-                        color="seagreen"
-                        name="Add Content"
-                        class="text-white"
-                        id=""/>
-                    </div>
-                    
                     </button> --}}
 {{--                     
                     <button style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
@@ -227,16 +209,16 @@
             </div>
             
         </div>
-        <div id="syllabusModal" class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-200 bg-opacity-75">
+        <div id="syllabusModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px]">
-                <div class="w-full flex justify-end">
+                <div class="flex justify-end w-full">
                     <button id="removeModalBtn">
-                        <i class="fa-solid fa-xmark text-xl" style="color: #949494;"></i>
+                        <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
                     </button>
                 </div>
-                <span class="close absolute top-0 right-0 mt-2 mr-4 text-gray-600 cursor-pointer text-2xl">&times;</span>
-                <h2 class="text-2xl font-semibold mb-2">Course Syllabus</h2>
-                <table class="w-full border-collapse  mt-5 rounded-xl">
+                <span class="absolute top-0 right-0 mt-2 mr-4 text-2xl text-gray-600 cursor-pointer close">&times;</span>
+                <h2 class="mb-2 text-2xl font-semibold">Course Syllabus</h2>
+                <table class="w-full mt-5 border-collapse rounded-xl">
                     <thead>
                         <tr class="text-white bg-seagreen border-seagreen">
                             <th class="p-2 border">Topic ID</th>
@@ -249,11 +231,11 @@
                         <!-- You can populate this with your syllabus data dynamically -->
                     </tbody>
                 </table>
-                <div class="w-full mt-5 flex justify-center">
-                    <button id="editSyllabusBtn" class="mx-2 mt-4 px-4 py-2 bg-seagreen text-white rounded hover:bg-darkenedColor">Edit</button>
-                    <button id="addChangesBtn"  class="hidden mx-2 mt-4 px-4 py-2 bg-seagreen text-white rounded">Add</button>
-                    <button id="saveChangesBtn" data-course-id="{{$course->course_id}}" class="hidden mx-2 mt-4 px-4 py-2 bg-seagreen text-white rounded">Save Now</button>
-                    <button id="cancelChangesBtn"  class="hidden mx-2 mt-4 px-4 py-2 bg-red-500 text-white rounded">Cancel</button>
+                <div class="flex justify-center w-full mt-5">
+                    <button id="editSyllabusBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Edit</button>
+                    <button id="addChangesBtn"  class="hidden px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen">Add</button>
+                    <button id="saveChangesBtn" data-course-id="{{$course->course_id}}" class="hidden px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen">Save Now</button>
+                    <button id="cancelChangesBtn"  class="hidden px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
                 </div>
    
             </div>
@@ -261,21 +243,21 @@
         </div>
 
 
-        <div id="addTopicModal" class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-200 bg-opacity-75">
+        <div id="addTopicModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-                <div class="w-full flex justify-end">
+                <div class="flex justify-end w-full">
                     <button id="closeAddTopicModal">
-                        <i class="fa-solid fa-xmark text-xl" style="color: #949494;"></i>
+                        <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
                     </button>
                 </div>
-                <h2 class="text-2xl font-semibold mb-2">Add Topic</h2>
+                <h2 class="mb-2 text-2xl font-semibold">Add Topic</h2>
                 <div class="mt-4">
                     <label for="topicName" class="text-lg font-semibold">Enter Topic Title:</label>
-                    <input type="text" id="topicName" class="block w-full px-4 py-2 mt-2 rounded-md border border-gray-300 focus:ring focus:ring-seagreen focus:ring-opacity-50">
+                    <input type="text" id="topicName" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
                 </div>
                 <div class="mt-4">
                     <label for="topicType" class="text-lg font-semibold">Select Topic Type:</label>
-                    <select id="topicType" class="block w-full px-4 py-2 mt-2 rounded-md border border-gray-300 focus:ring focus:ring-seagreen focus:ring-opacity-50">
+                    <select id="topicType" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
                         <option value="LESSON">LESSON</option>
                         <option value="ACTIVITY">ACTIVITY</option>
                         <option value="QUIZ">QUIZ</option>
@@ -283,7 +265,7 @@
                 </div>
                 <div class="mt-4">
                     <label for="insertLocation" class="text-lg font-semibold">Insert Location:</label>
-                    <select id="insertLocation" class="block w-full px-4 py-2 mt-2 rounded-md border border-gray-300 focus:ring focus:ring-seagreen focus:ring-opacity-50">
+                    <select id="insertLocation" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
                             <option value="START">At the Beginning</option>
                         @forelse ($syllabus as $topic)
                             <option value="{{ $topic->topic_title }}">AFTER {{ $topic->topic_title }}</option>
@@ -293,20 +275,20 @@
                             <option value="END">In the End</option>
                     </select>
                 </div>
-                <div class="w-full mt-5 flex justify-center">
-                    <button id="confirmAddTopicBtn" class="mx-2 mt-4 px-4 py-2 bg-seagreen text-white rounded hover:bg-darkenedColor">Confirm</button>
-                    <button id="cancelAddTopicBtn" class="mx-2 mt-4 px-4 py-2 bg-red-500 text-white rounded">Cancel</button>
+                <div class="flex justify-center w-full mt-5">
+                    <button id="confirmAddTopicBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                    <button id="cancelAddTopicBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
                 </div>
             </div>
         </div>
 
-        <div id="deleteCourseModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+        <div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
             {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
                 {{-- @csrf --}}
-                <div class="bg-white p-5 rounded-lg text-center">
+                <div class="p-5 text-center bg-white rounded-lg">
                     <p>Are you sure you want to delete this course?</p>
-                    <button type="button" id="confirmDelete" data-course-id="{{$course->course_id}}" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">Confirm</button>
-                    <button type="button" id="cancelDelete" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                    <button type="button" id="confirmDelete" data-course-id="{{$course->course_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+                    <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
                 </div>
             {{-- </form> --}}
             
