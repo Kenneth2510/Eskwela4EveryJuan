@@ -1,34 +1,38 @@
 $(document).ready(function () {
     var lessons = [];
 
-
     function displayLessons() {
-
         var newRow = ``;
-        $('#lesson_body').empty();
+        $("#lesson_body").empty();
 
-         // Add id to the array 
-    for (var i = 0; i < lessons.length; i++) {
-        if (!lessons[i]) {
-            lessons[i] = {};
+        // Add id to the array
+        for (var i = 0; i < lessons.length; i++) {
+            if (!lessons[i]) {
+                lessons[i] = {};
+            }
+            lessons[i]["id"] = i + 1;
         }
-        lessons[i]['id'] = i + 1;
-    }
-    
+
         for (let i = 0; i < lessons.length; i++) {
             var id = lessons[i]["id"];
             var lesson_name = lessons[i]["title_name"];
             var lesson_category = lessons[i]["category"];
-    
+
             newRow += `
             <tr class="px-5 h-16 text-center text-l border-b-2 border-black">
                 <td>${id}</td>
                 <td><input class="item_lessonName" value="${lesson_name}" disabled></td>
                 <td>
                     <select disabled name="add_category" class="item_category border-2 border-black text-l px-3 py-1 rounded-l">
-                        <option value="LESSON" ${lesson_category === 'LESSON' ? 'selected' : ''}>LESSON</option>
-                        <option value="QUIZ" ${lesson_category === 'QUIZ' ? 'selected' : ''}>QUIZ</option>
-                        <option value="ACTIVITY" ${lesson_category === 'ACTIVITY' ? 'selected' : ''}>ACTIVITY</option>
+                        <option value="LESSON" ${
+                            lesson_category === "LESSON" ? "selected" : ""
+                        }>LESSON</option>
+                        <option value="QUIZ" ${
+                            lesson_category === "QUIZ" ? "selected" : ""
+                        }>QUIZ</option>
+                        <option value="ACTIVITY" ${
+                            lesson_category === "ACTIVITY" ? "selected" : ""
+                        }>ACTIVITY</option>
                     </select>
                 </td>
                 <td>
@@ -42,121 +46,96 @@ $(document).ready(function () {
             </tr>
             `;
         }
-    
+
         $("#lesson_body").append(newRow);
-    
+
         // Edit button click handler
-        $(".editBtn").click(function() {
-            $(this).closest("tr").find(".item_lessonName, .item_category").prop("disabled", false);
+        $(".editBtn").click(function () {
+            $(this)
+                .closest("tr")
+                .find(".item_lessonName, .item_category")
+                .prop("disabled", false);
             $(this).closest("tr").find(".editButtons").removeClass("hidden");
             $(this).closest("tr").find(".editBtn").prop("disabled", true);
-            $(this).closest("tr").find(".editBtn").addClass('hidden');
+            $(this).closest("tr").find(".editBtn").addClass("hidden");
         });
-    
+
         // Save button click handler
-        $(".editBtn_save").click(function() {
+        $(".editBtn_save").click(function () {
             var row = $(this).closest("tr");
             var lessonIndex = row.index();
-    
+
             var updatedLesson = {
                 id: row.find("td:nth-child(1)").text(),
                 lesson_name: row.find(".item_lessonName").val(),
-                category: row.find(".item_category").val()
+                category: row.find(".item_category").val(),
             };
-    
+
             lessons[lessonIndex] = updatedLesson;
             // You can save the updated lessons array here if needed.
-    
+
             row.find(".item_lessonName, .item_category").prop("disabled", true);
             row.find(".editButtons").addClass("hidden");
             row.find(".editBtn").prop("disabled", false);
-            row.find(".editBtn").removeClass('hidden');
+            row.find(".editBtn").removeClass("hidden");
         });
-    
+
         // Cancel button click handler
-        $(".editBtn_cancel").click(function() {
+        $(".editBtn_cancel").click(function () {
             var row = $(this).closest("tr");
             row.find(".item_lessonName, .item_category").prop("disabled", true);
             row.find(".editButtons").addClass("hidden");
             row.find(".editBtn").prop("disabled", false);
-            row.find(".editBtn").removeClass('hidden');
+            row.find(".editBtn").removeClass("hidden");
         });
-    
+
         // Delete button click handler
-        $(".deleteBtn").click(function() {
+        $(".deleteBtn").click(function () {
             var row = $(this).closest("tr");
             var lessonIndex = row.index();
             lessons.splice(lessonIndex, 1); // Remove the lesson from the array
-    
+
             // Remove the row from the table
             row.remove();
             // You can save the updated lessons array here if needed.
         });
     }
-    
 
     $("#addLesson_start").on("click", function (e) {
         e.preventDefault();
-        $("#addLesson_form").removeClass("hidden");
-        $("#lesson_name").focus();
-        $("#addLesson_start").addClass("hidden");
-        $("#addLesson_button").removeClass("hidden");
-        $("#addLesson_type").removeClass("hidden");
 
-        $("#selectTypeParent").addClass("hidden");
-
-        // $("#selectTypeParent").removeClass("hidden");
+        $("#selectTypeParent").removeClass("hidden");
     });
 
-    // $("#selectTypeCloseBtn").on("click", (e) => {
-    //     e.preventDefault();
-
-    //     $("#selectTypeParent").addClass("hidden");
-    // });
-
-    // $("#selectTypeParent").on("click", (e) => {
-    //     if (!$(e.target).is("#selectTypeChild")) {
-    //         $("#selectTypeParent").toggleClass("hidden");
-    //     }
-    // });
-
-    // $("#selectTypeChild").on("click", (e) => {
-    //     e.stopPropagation();
-    // });
-
-    // $("#selectTypeConfirmBtn").on("click", (e) => {
-    //     e.preventDefault();
-
-    //     $("#addLesson_form").removeClass("hidden");
-    //     $("#lesson_name").focus();
-    //     $("#addLesson_start").addClass("hidden");
-    //     $("#addLesson_button").removeClass("hidden");
-
-    //     $("#selectTypeParent").addClass("hidden");
-    // });
-
-    $("#addLesson_cancel").on("click", function (e) {
+    $("#selectTypeCloseBtn").on("click", (e) => {
         e.preventDefault();
 
-        $("#addLesson_form").addClass("hidden");
-        $("#addLesson_start").removeClass("hidden");
-        $("#addLesson_button").addClass("hidden");
-        $("#addLesson_type").addClass("hidden");
+        $("#selectTypeParent").addClass("hidden");
+    });
+
+    $("#selectTypeParent").on("click", (e) => {
+        if (!$(e.target).is("#selectTypeChild")) {
+            $("#selectTypeParent").toggleClass("hidden");
+        }
+    });
+
+    $("#selectTypeChild").on("click", (e) => {
+        e.stopPropagation();
     });
 
     $("#selectTypeConfirmBtn").on("click", function (e) {
         e.preventDefault();
         var add_new_form = ``;
-        var chosen_category = '';
+        var chosen_category = "";
 
         // console.log(category);
-        $("#addLesson_start").addClass('hidden');
+        $("#addLesson_start").addClass("hidden");
         chosen_category = $("#modal_add_category").val();
 
         // console.log(category);
         if (chosen_category !== null) {
             $("#selectTypeParent").addClass("hidden");
-    
+
             add_new_form = `<tr id="add_newInput" class="hidden px-5 h-16 text-center text-l border-b-2 border-black">
             <td></td>
             <td>
@@ -178,40 +157,29 @@ $(document).ready(function () {
                 </button>
             </td>
         </tr>`;
-        $('#lesson_body').append(add_new_form);
+            $("#lesson_body").append(add_new_form);
 
-            
-        // Get the selected category
+            // Get the selected category
 
             $("#add_categoryInput").val(chosen_category);
-           
+
             $("#add_newInput").removeClass("hidden");
-            $('#add_title').focus();
-
+            $("#add_title").focus();
         }
-
-        $("#addLesson_form").addClass("hidden");
-        $("#addLesson_start").removeClass("hidden");
-        $("#addLesson_button").addClass("hidden");
-        $("#addLesson_type").addClass("hidden");
-
-        displayLessons();
 
         $("#add_newInputConfirm").on("click", function (e) {
             e.preventDefault();
-    
-            var titleName = $("#add_title").val();
-            var toAdd_category = $('#add_categoryInput').val();
 
-    
+            var titleName = $("#add_title").val();
+            var toAdd_category = $("#add_categoryInput").val();
+
             // console.log(toAdd_category);
             if (titleName.trim() !== "" && toAdd_category !== null) {
-    
                 var newLesson = {
                     title_name: titleName,
-                    category: toAdd_category
+                    category: toAdd_category,
                 };
-    
+
                 lessons.push(newLesson);
                 // console.log(lessons);
                 titleName = "";
@@ -219,95 +187,67 @@ $(document).ready(function () {
                 $("#add_category").val("");
 
                 $("#addLesson_start").removeClass("hidden");
-                $('#add_newInput').addClass('hidden');
-                $("#addLesson_start").removeClass('hidden');
+                $("#add_newInput").addClass("hidden");
+                $("#addLesson_start").removeClass("hidden");
 
                 displayLessons();
-
-                
             } else {
-                alert('Please enter a Title');
+                alert("Please enter a Title");
             }
-            
-        });        
+        });
     });
 
-    //     $('#nextAddCourse').on('click', function(e) {
-    //         e.preventDefault();
-
-    //         $('#secondCreateCourse').removeClass('hidden');
-    //         $('#firstCreateCourse').addClass('hidden');
-    //     })
-
-    //     $('#returnTo_first').on('click', function(e) {
-    //         $('#secondCreateCourse').addClass('hidden');
-    //         $('#firstCreateCourse').removeClass('hidden');
-    //     })
-
-    // $('#edit-lesson[data-id="' + lesson.id + '"]').on('click', function(e) {
-    //     e.preventDefault(); // Prevent the default form submission
-    //     alert('Edit lesson with ID ' + lesson.id);
-    // });
-
-    
-
-    $('#nextAddCourse').on('click', function(e) {
+    $("#nextAddCourse").on("click", function (e) {
         e.preventDefault();
-        
-        $('#secondCreateCourse').removeClass('hidden');
-        $('#firstCreateCourse').addClass('hidden');
-    })
 
-    $('#returnTo_first').on('click', function(e) {
-        $('#secondCreateCourse').addClass('hidden');
-        $('#firstCreateCourse').removeClass('hidden');
-    })
+        $("#secondCreateCourse").removeClass("hidden");
+        $("#firstCreateCourse").addClass("hidden");
+    });
 
+    $("#returnTo_first").on("click", function (e) {
+        $("#secondCreateCourse").addClass("hidden");
+        $("#firstCreateCourse").removeClass("hidden");
+    });
 
     function addSyllabus(course) {
         // will need response from the create course and should return course id, and syllabus id to do
         var course_id = course;
-        
+
         if (lessons.length > 0) {
             for (let i = 0; i < lessons.length; i++) {
-                
                 var syllabus_container = {
                     course_id: course_id,
-                    topic_id: lessons[i]['id'],
-                    topic_title: lessons[i]['title_name'],
-                    category: lessons[i]['category'],
-                }
-                console.log(syllabus_container)
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                $.ajax ({
-                    type: 'POST',
+                    topic_id: lessons[i]["id"],
+                    topic_title: lessons[i]["title_name"],
+                    category: lessons[i]["category"],
+                };
+                console.log(syllabus_container);
+                var csrfToken = $('meta[name="csrf-token"]').attr("content");
+                $.ajax({
+                    type: "POST",
                     url: "/instructor/course/create/syllabus/" + course_id,
                     data: syllabus_container,
                     async: false,
                     // contentType: false,
                     // processData: false,
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken
+                        "X-CSRF-TOKEN": csrfToken,
                     },
-                    success: function (response) {
-                    },
-                })
+                    success: function (response) {},
+                });
             }
         }
-
     }
 
-    
     $("#addCourse").submit(function (e) {
         e.preventDefault();
-        
+
         var course_name = $("#course_name").val();
         var course_description = $("#course_description").val();
         var course_difficulty = $("#course_difficulty").val();
 
         // console.log(course_name, course_description, course_difficulty);
         // addSyllabus();
-
 
         if (
             course_name === "" ||
@@ -348,13 +288,16 @@ $(document).ready(function () {
                 processData: false,
                 async: false,
                 success: function (response) {
-                    if (response && response.course_id && response.redirect_url ) {
+                    if (
+                        response &&
+                        response.course_id &&
+                        response.redirect_url
+                    ) {
                         addSyllabus(response.course_id);
                         window.location.href = response.redirect_url;
                     }
                 },
             });
         }
-    })
-
+    });
 });
