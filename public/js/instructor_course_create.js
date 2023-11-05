@@ -97,24 +97,51 @@ $(document).ready(function () {
 
     $("#addLesson_start").on("click", function (e) {
         e.preventDefault();
-
-        $("#selectTypeParent").removeClass("hidden");
-    });
-
-    $("#selectTypeCloseBtn").on("click", (e) => {
-        e.preventDefault();
+        $("#addLesson_form").removeClass("hidden");
+        $("#lesson_name").focus();
+        $("#addLesson_start").addClass("hidden");
+        $("#addLesson_button").removeClass("hidden");
+        $("#addLesson_type").removeClass("hidden");
 
         $("#selectTypeParent").addClass("hidden");
+
+        // $("#selectTypeParent").removeClass("hidden");
     });
 
-    $("#selectTypeParent").on("click", (e) => {
-        if (!$(e.target).is("#selectTypeChild")) {
-            $("#selectTypeParent").toggleClass("hidden");
-        }
-    });
+    // $("#selectTypeCloseBtn").on("click", (e) => {
+    //     e.preventDefault();
 
-    $("#selectTypeChild").on("click", (e) => {
-        e.stopPropagation();
+    //     $("#selectTypeParent").addClass("hidden");
+    // });
+
+    // $("#selectTypeParent").on("click", (e) => {
+    //     if (!$(e.target).is("#selectTypeChild")) {
+    //         $("#selectTypeParent").toggleClass("hidden");
+    //     }
+    // });
+
+    // $("#selectTypeChild").on("click", (e) => {
+    //     e.stopPropagation();
+    // });
+
+    // $("#selectTypeConfirmBtn").on("click", (e) => {
+    //     e.preventDefault();
+
+    //     $("#addLesson_form").removeClass("hidden");
+    //     $("#lesson_name").focus();
+    //     $("#addLesson_start").addClass("hidden");
+    //     $("#addLesson_button").removeClass("hidden");
+
+    //     $("#selectTypeParent").addClass("hidden");
+    // });
+
+    $("#addLesson_cancel").on("click", function (e) {
+        e.preventDefault();
+
+        $("#addLesson_form").addClass("hidden");
+        $("#addLesson_start").removeClass("hidden");
+        $("#addLesson_button").addClass("hidden");
+        $("#addLesson_type").addClass("hidden");
     });
 
     $("#selectTypeConfirmBtn").on("click", function (e) {
@@ -163,6 +190,12 @@ $(document).ready(function () {
 
         }
 
+        $("#addLesson_form").addClass("hidden");
+        $("#addLesson_start").removeClass("hidden");
+        $("#addLesson_button").addClass("hidden");
+        $("#addLesson_type").addClass("hidden");
+
+        displayLessons();
 
         $("#add_newInputConfirm").on("click", function (e) {
             e.preventDefault();
@@ -198,6 +231,23 @@ $(document).ready(function () {
             
         });        
     });
+
+    //     $('#nextAddCourse').on('click', function(e) {
+    //         e.preventDefault();
+
+    //         $('#secondCreateCourse').removeClass('hidden');
+    //         $('#firstCreateCourse').addClass('hidden');
+    //     })
+
+    //     $('#returnTo_first').on('click', function(e) {
+    //         $('#secondCreateCourse').addClass('hidden');
+    //         $('#firstCreateCourse').removeClass('hidden');
+    //     })
+
+    // $('#edit-lesson[data-id="' + lesson.id + '"]').on('click', function(e) {
+    //     e.preventDefault(); // Prevent the default form submission
+    //     alert('Edit lesson with ID ' + lesson.id);
+    // });
 
     
 

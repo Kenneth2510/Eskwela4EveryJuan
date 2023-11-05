@@ -13,7 +13,14 @@
                 <h1 class="w-1/2 text-xl font-semibold">Business Administration</h1>
                 <p>Instructor 1</p>
                 <p class="opacity-50">000000</p>
-                <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
+                <div class="flex justify-end w-full">
+                    <x-forms.primary-button
+                    color="white"
+                    name="Edit"
+                    id=""/>          
+                </div>
+                      
+                {{-- <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
                     <h1>Edit</h1>
                 </button>
             </div> --}}
@@ -200,6 +207,16 @@
                             <h1>Assignments</h1>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+                    </button>
+                    
+                    <div class="flex justify-center w-full">
+                        <x-forms.primary-button
+                        color="seagreen"
+                        name="Add Content"
+                        class="text-white"
+                        id=""/>
+                    </div>
+                    
                     </button> --}}
 {{--                     
                     <button style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"

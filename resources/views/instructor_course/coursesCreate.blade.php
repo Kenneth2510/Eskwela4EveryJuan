@@ -39,10 +39,8 @@
                     <ul class="px-2 py-2" id="uploadedFileName">
                     </ul>
                 </div> --}}
-                <div class="w-full mt-8 text-right">
-                    <button class="w-24 h-8 bg-amber-400 hover:bg-amber-600" id="nextAddCourse">
-                        Next
-                    </button>
+                <div class="flex justify-end w-full mt-8">
+                    <x-forms.primary-button color="amber" name="Next" id="nextAddCourse"/>
                 </div>
                 
             </div>
@@ -79,11 +77,36 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="flex items-center justify-center">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_start">
-                        Add New
-                    </button>
+                <div class="flex items-center justify-around my-4">
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Add New"
+                    class="my-10"
+                    id="addLesson_start"/>
 
+                    <div id="addLesson_form" class="hidden">
+                        <label for="lesson_name">Name:</label><br>
+                        <input type="text" id="lesson_name" name="lesson_name">
+                    </div>
+                    <div id="addLesson_type" class="hidden">
+                        <label for="lesson_type">Type:</label>
+                        <select name="lesson_type" id="">
+                            <option value="" disabled>--select type--</option>
+                            <option value="">Lesson</option>
+                            <option value="">Quiz</option>
+                            <option value="">Assignment</option>
+                        </select>
+                    </div>
+                    <div id="addLesson_button" class="flex hidden">
+                        <x-forms.primary-button
+                        color="amber"
+                        name="Add Lesson Now"
+                        id="addLesson_now"/>
+                        
+                        <x-forms.secondary-button
+                        name="Cancel"
+                        id="addLesson_cancel"/>
+                    </div>
                     {{-- <div id="addLesson_form" class="hidden">
                         <label for="lesson_name">Lesson Name:</label><br>
                         <input type="text" id="lesson_name" name="lesson_name">
@@ -98,20 +121,22 @@
                     </div> --}}
                 </div>          
                 
-                <div class="w-full text-right">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-red-600" id="returnTo_first">
-                        Return
-                    </button>
-                    <button type="submit" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">
-                        Add New Course
-                    </button>
+                <div class="flex justify-end w-full my-10">
+                    <x-forms.primary-button
+                    color="red"
+                    name="Return"
+                    id="returnTo_first"/>
+                    
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Add New Course"/>
                 </div>
                 
             </div>
         </form>
     </section>
 
-                <div id="selectTypeParent" class="fixed z-50 flex items-center top-0 left-0 w-screen justify-center hidden h-screen bg-grey-400 rounded shadow-lg backdrop-blur-sm" aria-hidden="true" >
+             {{-- <div id="selectTypeParent" class="fixed z-50 flex items-center top-0 left-0 w-screen justify-center hidden h-screen bg-grey-400 rounded shadow-lg backdrop-blur-sm" aria-hidden="true" >
                     <div id="selectTypeChild" class="relative p-10 h-auto pt-8 m-auto mx-4 rounded-xl shadow-lg bg-seagreen" >
                         <div class="flex flex-col items-center">
                             <label class="my-2 text-white" for="">Select one</label>
@@ -133,7 +158,7 @@
                         </div>
                         
                     </div>
-                </div>      
+                </div>       --}}
     
     @include('partials.instructorProfile')
 </section>

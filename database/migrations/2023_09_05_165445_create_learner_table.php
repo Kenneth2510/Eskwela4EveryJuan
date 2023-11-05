@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('learner', function (Blueprint $table) {
             $table->id('learner_id');
+            $table->string('status');
             $table->string('learner_username');
-            $table->string('learner_password');
+            $table->string('password');
+            $table->string('learner_security_code');
             $table->string('learner_fname');
             $table->string('learner_lname');
             $table->date('learner_bday');

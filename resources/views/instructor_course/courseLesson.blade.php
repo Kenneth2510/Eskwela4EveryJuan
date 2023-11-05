@@ -4,6 +4,7 @@
     @include('partials.instructorSidebar')
     
     {{-- MAIN --}}
+
     <section class="w-full px-2 mt-2 mx-2 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
         @php
         if (!function_exists('getRandomColor')) {
@@ -204,8 +205,6 @@
                         <h1>Add New Content</h1>
                     </button>
 
-                    
-                    
                     <div class="flex justify-center w-full">
                         <button id="editLessonBtn" data-course-id="{{$lessonInfo->course_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" data-topic_id="{{$lessonInfo->topic_id}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
                         onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="w-1/2 py-5 mx-1 mt-4 text-white text-xl rounded-lg shadow-lg bg-seagreen hover:bg-green-800 hover:text-white">
@@ -221,7 +220,7 @@
                                 <h1>Apply All Changes</h1>
                             </button>
                         </div>
-            
+
                     </div>             
                 </div>
             </div>
@@ -242,6 +241,14 @@
 
     {{-- <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
         <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
+            <div class="flex flex-col m-4">
+                <select name="" id="">
+                    <option value="" selected disabled>--select lesson/quiz/assignment</option>
+                    <option value="">Lesson 1</option>
+                    <option value="">Quiz 1</option>
+                    <option value="">Assignment 1</option>
+                </select>
+            </div>
             <div class="flex flex-col m-4">
                 <input class="h-8 px-2 rounded" type="text" placeholder="Enter Title">
             </div>
