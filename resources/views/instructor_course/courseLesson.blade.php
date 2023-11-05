@@ -108,9 +108,14 @@
                 
                 {{-- course --}}
                 <div class="mt-5">
-                    <div id="lesson_img" class="h-[200px] my-4 bg-gray-200 rounded-lg shadow">
-                        @if ($lessonInfo->picture !== null)
-                        <img src="{{asset("storage/$lessonInfo->picture")}}" class="h-[200px] my-4 bg-gray-200 rounded-lg shadow" alt="">
+                    @if ($lessonInfo->picture !== null)
+                    <div id="lesson_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+                        <div class="w-full h-[400px] overflow-hidden rounded-lg">
+                            <img src="{{ asset("storage/$lessonInfo->picture") }}" class="object-contain w-full h-full" alt="">
+                        </div>
+                    </div>
+                    
+                    
                         <div id="edit_lesson_picture_btns" style="position: relative; top: 75%;" class="hidden flex justify-end">
                             <button id="" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" class=" add_lesson_picture_btn mr-3 flex text-white rounded-xl py-3 px-5" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
                                 Change Photo
@@ -124,7 +129,7 @@
                             </button>
                         </div>
                         @endif
-                    </div>
+                    
 
                     <div id="pictureModal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
                         <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
@@ -141,8 +146,9 @@
                                 <!-- Modal body -->
                                 <div class="mb-4">
                                     <!-- Your form for uploading pictures goes here -->
-                                    <form id="pictureUploadForm" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" enctype="multipart/form-data">
-                                        <input type="file" name="lesson_title_picture" id="lesson_title_picture" accept="image/*">
+                                    <form id="pictureUploadForm" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" enctype="multipart/form-data" method="POST">
+                                        <input type="file" name="picture" id="lesson_title_picture" accept=".jpeg, .png, .jpg, .gif" />
+
                                         <div class="flex justify-between mt-4">
                                             <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-900">Confirm</button>
                                             <button id="cancelUpload" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400">Cancel</button>

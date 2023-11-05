@@ -862,7 +862,32 @@ class InstructorCourseController extends Controller
     }
 
     public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, $lesson_id) {
+        try {
 
+            $pictureData = $request->validate([
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            $folderName = "{$course->course_id} {$course->course_name}";
+
+            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+            $folderPath = "courses/" .$folderName;
+
+            $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
+
+            Lessons::where('lesson_id' , $lesson_id)
+            ->update(['picture' => $filePath]);
+
+            if(!Storage::exists($folderPath)) { 
+            Storage::makeDirectory($folderPath);
+        }
+
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
     public function update_lesson_content(Lessons $lesson, LessonContents $lesson_content, Request $request) {
