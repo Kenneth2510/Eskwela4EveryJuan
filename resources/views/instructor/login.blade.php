@@ -11,7 +11,7 @@
         </header>
         
         {{-- MAIN --}}
-        <div class="relative w-full h-screen bg-mainwhitebg text-darthmouthgreen md:flex md:justify-center md:items-center md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
+        <div class="relative w-full h-screen lg:overflow-auto text-darthmouthgreen md:flex md:justify-center md:items-center md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent">
                 <x-header title="Instructor Login">
                     <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
