@@ -77,10 +77,32 @@ $(document).ready(function() {
                     
                     <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
                     
-                    ${picture !== null ? `<img src="${picture}" alt="">` : ""}
                     <p class="lesson_content_input_disp text-xl w-full min-w-full max-w-full" style="white-space: pre;">${lesson_content}</p>
                     <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-full min-w-full max-w-full h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
 
+                    ${picture !== null ? `
+                    <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+                        <div class="w-full h-[400px] overflow-hidden rounded-lg">
+                            <img src="{{ asset("storage/${picture}") }}" class="object-contain w-full h-full" alt="">
+                        </div>
+                    </div>
+                    
+                    
+                    <div id="edit_lesson_content_picture_btns" style="position: relative; top: 75%;" class="hidden flex justify-end">
+                        <button id="" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
+                            Change Photo
+                        </button>
+                    </div>
+                    ` 
+                        
+                    : `
+                    <div id="edit_lesson_content_picture_btns" style="position: relative; top: 75%;" class="hidden flex justify-end">
+                        <button id="" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
+                            Add Photo
+                        </button>
+                    </div>
+                    `}
+                    
                     <div class="edit_lesson_content_btns hidden flex w-full justify-end">
                         <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="save_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900" >
                             Save
@@ -106,6 +128,8 @@ $(document).ready(function() {
             $('.edit_lesson_content').removeClass('hidden');
 
             $('#lessonAddContent').removeClass('hidden');
+
+            $('#edit_lesson_content_picture_btns').removeClass('hidden');
         console.log(lessonData)
 
 
@@ -494,29 +518,29 @@ $(document).ready(function() {
 
         }
 
-        if(loopCounter + 1 == lessonData.length) {
-            const url = "/instructor/course/content/"+courseID+"/"+syllabusID+"/lesson/"+topicID+"/title/"+ lessonID +"/store_file";
+        // if(loopCounter + 1 == lessonData.length) {
+        //     const url = "/instructor/course/content/"+courseID+"/"+syllabusID+"/lesson/"+topicID+"/title/"+ lessonID +"/store_file";
 
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: row_lesson_content_data,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function(response) {
-                        // Handle success if needed
-                        if(i + 1 == lessonData.length){
-                            if (response && response.redirect_url ) {
-                                window.location.href = response.redirect_url;
-                            }
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-        }
+        //         $.ajax({
+        //             type: "POST",
+        //             url: url,
+        //             data: row_lesson_content_data,
+        //             headers: {
+        //                 'X-CSRF-TOKEN': csrfToken
+        //             },
+        //             success: function(response) {
+        //                 // Handle success if needed
+        //                 if(i + 1 == lessonData.length){
+        //                     if (response && response.redirect_url ) {
+        //                         window.location.href = response.redirect_url;
+        //                     }
+        //                 }
+        //             },
+        //             error: function(error) {
+        //                 console.log(error);
+        //             }
+        //         });
+        // }
 
 
     })
@@ -548,17 +572,23 @@ $(document).ready(function() {
         const topicID = $(this).data('topic_id');
         const lessonID = $(this).data('lesson-id');
 
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
         var formData = new FormData(this);
         const url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/title/"+ lessonID +"/picture"
 
         $.ajax({
+            type: "POST",
             url: url,
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
             contentType: false,
             processData: false,
             success: function(response) {
-         
-                alert('Upload successful!');
+                // alert('Upload successful!');
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.log('Error:', error);
