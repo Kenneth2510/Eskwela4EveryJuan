@@ -1,13 +1,13 @@
 @include('partials.header')
 
-    <section class="relative w-full h-auto text-sm bg-mainwhitebg">
-        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
+    <section class="relative flex flex-row w-full h-screen text-sm bg-mainwhitebg">
+        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-transparent">
             <a href="#">
-                <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
+                <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
                     Eskwela4EveryJuan
                 </span>
             </a>
-        </header>        
+        </header>   
 
         {{-- MAIN --}}
         <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto text-darthmouthgreen md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
@@ -277,6 +277,63 @@
             </div>
             
             
+        </div>
+
+        {{-- MAIN LEFT --}}
+        <div class="relative hidden h-screen bg-ashgray md:w-1/2 lg:block">
+            {{-- IMAGE HOLDER --}}
+            <div class="relative w-full h-full overflow-hidden rounded-lg">
+                {{-- img-1 --}}
+                <div class="hidden slides" id="slide1">
+                    <img src="{{asset('/images/ins-login-img1.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/3 left-1/2" alt="image-1">
+                    <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
+                        <h1 class="text-2xl font-bold">Maintain your Business</h1>
+                        <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
+                    </div>
+                    
+                </div>
+                {{-- img-2 --}}
+                <div class="hidden slides" id="slide2">
+                    <img src="{{asset('/images/ins-login-img2.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="image-2">
+                    <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
+                        <h1 class="text-2xl font-bold">Maintain your Business</h1>
+                        <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
+                    </div>
+                </div>
+                {{-- img-3 --}}
+                <div class="hidden slides" id="slide3">
+                    <img src="{{asset('/images/ins-login-img3.png')}}" class="absolute block -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="image-3">
+                    <div class="absolute block text-center -translate-x-1/2 top-3/4 left-1/2">
+                        <h1 class="text-2xl font-bold">Maintain your Business</h1>
+                        <p class="text-base">Lorem ipsum dolor sit amet consectetur. Tellus ultrices in nibh malesuada sit justo fermentum. Elit id in pulvinar eget amet.</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- BOTTOM BUTTONS --}}
+            <div class="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2" id="carouselBtn">
+                <button type="button" class="w-2 h-2 rounded-full bg-slate-200" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" class="w-2 h-2 rounded-full bg-slate-200" aria-current="true" aria-label="Slide 2"></button>
+                <button type="button" class="w-2 h-2 rounded-full bg-slate-200" aria-current="true" aria-label="Slide 3"></button>
+            </div>
+            
+            <button type="button" class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" id="l-prevBtn">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    </svg>
+                    <span class="sr-only">Previous</span>
+                </span>
+            </button>
+
+            <button type="button" class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" id="l-nextBtn">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <span class="sr-only">Next</span>
+                </span>
+            </button>
         </div>
         
     </section>
