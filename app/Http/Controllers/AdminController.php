@@ -221,8 +221,11 @@ class AdminController extends Controller
 
         $LearnerData = array_merge($LearnerPersonalData , $LearnerLoginData);
         $LearnerData['password'] = bcrypt($LearnerData['password']);
+
+        // $folderName = Str::slug($course->course_name, '_');
         
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         $folderPath = 'learners/' . $folderName;
 
         // Copy the default photo to the same directory
@@ -248,6 +251,7 @@ class AdminController extends Controller
         Business::create($businessData);
 
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         
         // $fileName = time() . '-' . $file->getClientOriginalName();
         $folderPath = '/public/learners/' . $folderName;
@@ -522,7 +526,7 @@ class AdminController extends Controller
             $instructorData['password'] = bcrypt($instructorData['password']);
         
             $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
-
+            $folderName = Str::slug($folderName, '_');
 
             if($request->hasFile('instructor_credentials')) {
                 
@@ -642,7 +646,7 @@ class AdminController extends Controller
         ]);
 
         $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
-
+        $folderName = Str::slug($folderName, '_');
         if($request->hasFile('instructor_credentials')) {
             
             $file = $request->file('instructor_credentials');
@@ -808,6 +812,7 @@ class AdminController extends Controller
 
             
             $folderName = $courseData['course_name'];
+            $folderName = Str::slug($folderName, '_');
             $folderPath = 'public/courses/' . $folderName;
 
             if(!Storage::exists($folderPath)) {

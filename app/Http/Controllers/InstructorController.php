@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Profiler\Profile;
+use Illuminate\Support\Str;
 
 
 class InstructorController extends Controller
@@ -165,7 +166,7 @@ class InstructorController extends Controller
         $instructorData['password'] = bcrypt($instructorData['password']);
     
         $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
-
+        $folderName = Str::slug($folderName, '_');
         if($request->hasFile('instructor_credentials')) {
             
             $file = $request->file('instructor_credentials');
@@ -317,7 +318,7 @@ class InstructorController extends Controller
         ]);
     
         $folderName = "{$instructor['instructor_lname']} {$instructor['instructor_fname']}";
-    
+        $folderName = Str::slug($folderName, '_');
         $fileName = time() . '-' . $instructorData['profile_picture']->getClientOriginalName();
         $folderPath = 'instructors/' . $folderName; // Specify the public directory
         $filePath = $instructorData['profile_picture']->storeAs($folderPath, $fileName, 'public');

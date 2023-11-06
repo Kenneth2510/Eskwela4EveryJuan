@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\URL;
+use Dompdf\Dompdf;
 
 class InstructorCourseController extends Controller
 {
@@ -743,6 +746,15 @@ class InstructorCourseController extends Controller
                                 // dd($lessonContent);
 
                     $response = $this->course_content($course);
+
+                    session(['lesson_data' => [
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
                     return view('instructor_course.courseLesson', compact('instructor'))->with([
                         'title' => 'Course Lesson',
                         'scripts' => ['instructor_lesson_manage.js'],
@@ -861,8 +873,58 @@ class InstructorCourseController extends Controller
         }
     }
 
-    public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, $lesson_id) {
+    public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, Lessons $lesson) {
+        try {
 
+            $lessonData = DB::table('lessons')
+            ->select(
+                'picture'
+            )
+            ->where('lesson_id' , $lesson->lesson_id)
+            ->first();
+
+            if($lessonData->picture !== null) {
+                $relativeFilePath = str_replace('public/', '', $lesson->picture);
+                
+                if (Storage::disk('public')->exists($relativeFilePath)) {
+                    // Storage::disk('public')->delete($relativeFilePath);
+                    $specifiedDir = explode('/', $relativeFilePath);
+                    array_pop($specifiedDir);
+
+                    $dirPath = implode('/', $specifiedDir);
+
+                    // dd($dirPath);
+                    if (Storage::disk('public')->exists($relativeFilePath)) {
+                        Storage::disk('public')->delete($relativeFilePath);
+                    }
+                }
+            }
+                
+
+            $pictureData = $request->validate([
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            $folderName = "{$course->course_id} {$course->course_name}";
+
+            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+            $folderPath = "courses/" .$folderName;
+
+            $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
+
+            Lessons::where('lesson_id' , $lesson->lesson_id)
+            ->update(['picture' => $filePath]);
+
+            if(!Storage::exists($folderPath)) { 
+            Storage::makeDirectory($folderPath);
+        }
+
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
     public function update_lesson_content(Lessons $lesson, LessonContents $lesson_content, Request $request) {
@@ -952,20 +1014,195 @@ class InstructorCourseController extends Controller
         }
     }
 
-    public function lesson_content_store_file() {
+    public function lesson_content_store_file(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson, LessonContents $lesson_content, Request $request) {
+        try {
 
+
+            $lessonContentData = DB::table('lesson_content')
+            ->select(
+                'picture'
+            )
+            ->where('lesson_content_id' , $lesson_content->lesson_content_id)
+            ->first();
+
+            if($lessonContentData->picture !== null) {
+                $relativeFilePath = str_replace('public/', '', $lesson_content->picture);
+                
+                if (Storage::disk('public')->exists($relativeFilePath)) {
+                    // Storage::disk('public')->delete($relativeFilePath);
+                    $specifiedDir = explode('/', $relativeFilePath);
+                    array_pop($specifiedDir);
+
+                    $dirPath = implode('/', $specifiedDir);
+
+                    // dd($dirPath);
+                    if (Storage::disk('public')->exists($relativeFilePath)) {
+                        Storage::disk('public')->delete($relativeFilePath);
+                    }
+                }
+
+            }
+
+            $pictureData = $request->validate([
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            $folderName = "{$course->course_id} {$course->course_name}";
+
+            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+            $folderPath = "courses/" .$folderName;
+
+            $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
+
+            LessonContents::where('lesson_content_id' , $lesson_content['lesson_content_id'])
+            ->update(['picture' => $filePath]);
+
+            if(!Storage::exists($folderPath)) { 
+            Storage::makeDirectory($folderPath);
+        }
+
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+    public function lesson_content_delete_file(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson, LessonContents $lesson_content) {
+        try {
+
+            $relativeFilePath = str_replace('public/', '', $lesson_content->picture);
+            if (Storage::disk('public')->exists($relativeFilePath)) {
+                // Storage::disk('public')->delete($relativeFilePath);
+                $specifiedDir = explode('/', $relativeFilePath);
+                array_pop($specifiedDir);
+
+                $dirPath = implode('/', $specifiedDir);
+
+                // dd($dirPath);
+                if (Storage::disk('public')->exists($relativeFilePath)) {
+                    Storage::disk('public')->delete($relativeFilePath);
+                }
+            }
+
+            $updatedRow = [
+                'picture' => null
+            ];
+                
+            DB::table('lesson_content')
+                ->where('lesson_id', $lesson->lesson_id)
+                ->where('lesson_content_id', $lesson_content->lesson_content_id)
+                ->update($updatedRow);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
 
-    public function content(){
-        return view('instructor_course.courseContent')->with('title', 'Course Content');
-    }
-    public function syllabus(){
-        return view('instructor_course.courseSyllabus')->with('title', 'Course Content');
-    }
-    public function lesson(){
-        return view('instructor_course.courseLesson')->with('title', 'Course Content');
-    }
+    public function lesson_generate_pdf(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson)
+{
+    if (auth('instructor')->check()) {
+        $instructor = session('instructor');
+        
+        // Retrieve the data from the session
+        $lessonData = session('lesson_data');
+    
+        if (!$lessonData) {
+            // Handle the case where the session data is not found
+            return response('Session data not found', 500);
+        }
+    
+        // Extract the data you need from the session
+        $lessonInfo = $lessonData['lessonInfo'];
+        $lessonContent = $lessonData['lessonContent'];
+        $title = 'Course Lesson';
+        $scripts = ['instructor_lesson_manage.js'];
+        $courseData = $lessonData['courseData'];
+
+        $course = $courseData['course'];
+        $syllabus = $courseData['syllabus'];
+        $lessonCount = $courseData['lessonCount'];
+        $activityCount = $courseData['activityCount'];
+        $quizCount = $courseData['quizCount'];
+
+        // You can now use $lessonInfo and $lessonContent to generate your PDF
+        // ...
+
+        // Render the view with the Blade template
+        $html = view('instructor_course.courseLesson', compact('instructor'))
+            ->with([
+                'title' => $title,
+                'scripts' => $scripts,
+                'lessonCount' => $lessonCount,
+                'activityCount' => $activityCount,
+                'quizCount' => $quizCount,
+                'course' => $course,
+                'syllabus' => $syllabus,
+                'lessonInfo' => $lessonInfo,
+                'lessonContent' => $lessonContent,
+            ])
+            ->render();
+
+        // Find the markers in your HTML
+        $startMarker = '<!-- start-generate-pdf -->';
+        $endMarker = '<!-- end-generate-pdf -->';
+    
+        // Find the positions of the markers
+        $startPos = strpos($html, $startMarker);
+        $endPos = strpos($html, $endMarker);
+
+        $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
 
 
+        // Configure Dompdf
+        $dompdf = new Dompdf();
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+        $dompdf->set_option('isPhpEnabled', true);
+        $dompdf->set_option('isCssEnabled', true);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($extractedHtml);
+
+        // (Optional) Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Generate the PDF
+        $pdf = $dompdf->output();
+
+
+
+
+
+
+
+        // Generate a unique filename for the PDF (you can customize this)
+        $filename = 'lesson_' . $lessonInfo->lesson_id . '.pdf';
+
+        // Define the folder path based on the course name
+        $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
+        $folderPath = 'courses/' . $folderName;
+
+        // Store the PDF in the public directory within the course-specific folder
+        Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
+
+        // Generate the URL to the stored PDF
+        $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
+
+        // Provide a download link to the user
+        return response()->json(['pdf_url' => $pdfUrl]);
+    } else {
+        // Handle authentication failure
+        return response('Unauthorized', 401);
+    }
+}
+
+    
+    
 }

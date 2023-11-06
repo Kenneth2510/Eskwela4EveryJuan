@@ -134,14 +134,20 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/json', 'InstructorCourseController@lesson_content_json');
 
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson_id}', 'InstructorCourseController@update_lesson_title');
-    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson_id}/picture', 'InstructorCourseController@update_lesson_picture');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/picture', 'InstructorCourseController@update_lesson_picture');
     Route::post('/instructor/course/content/lesson/{lesson}/title/{lesson_content}', 'InstructorCourseController@update_lesson_content');
-
-    
     Route::post('/instructor/course/content/lesson/{lesson}/title/{lesson_content}/delete', 'InstructorCourseController@delete_lesson_content');
+
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save', 'InstructorCourseController@save_lesson_content');
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save_add', 'InstructorCourseController@save_add_lesson_content');
-    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_file', 'InstructorCourseController@lesson_content_store_file');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_file/{lesson_content}', 'InstructorCourseController@lesson_content_store_file');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/delete_file/{lesson_content}', 'InstructorCourseController@lesson_content_delete_file');
+
+
+    Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/generate_pdf', 'InstructorCourseController@lesson_generate_pdf');
+    
+
+    
 // // })->middleware('web');
 });
 
