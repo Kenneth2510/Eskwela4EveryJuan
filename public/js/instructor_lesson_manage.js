@@ -86,36 +86,6 @@ $(document).ready(function() {
                     <p class="lesson_content_input_disp text-xl w-full min-w-full max-w-full" style="white-space: pre;">${lesson_content}</p>
                     <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-full min-w-full max-w-full h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
 
-                    
-                    ${picture !== null ? `
-                    <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
-                        <div class="w-full h-[400px] overflow-hidden rounded-lg">
-                            <img src="${pic_url}" class="object-contain w-full h-full" alt="">
-                        </div>
-                    </div>
-                    
-                    
-                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
-                            Change Photo
-                        </button>
-
-
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
-                            Delete Photo
-                        </button>
-                    </div>
-                    ` 
-                    
-                    : `
-                    
-                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
-                            Add Photo
-                        </button>
-                    </div>
-                    `}
-                    
                     <div class="edit_lesson_content_btns hidden flex w-full justify-end">
                         <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="save_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900" >
                             Save
@@ -141,7 +111,6 @@ $(document).ready(function() {
             $('.edit_lesson_content').removeClass('hidden');
 
             $('#lessonAddContent').removeClass('hidden');
-
         console.log(lessonData)
 
 
@@ -651,19 +620,24 @@ $(document).ready(function() {
             }
 
         }
-        console.log(loopCounter);
-        if(loopCounter == lessonData.length) {
-            const url = "/instructor/course/content/"+courseID+"/"+syllabusID+"/lesson/"+topicID+"/title/"+ lessonID +"/generate_pdf";
+
+        if(loopCounter + 1 == lessonData.length) {
+            const url = "/instructor/course/content/"+courseID+"/"+syllabusID+"/lesson/"+topicID+"/title/"+ lessonID +"/store_file";
 
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: url,
+                    data: row_lesson_content_data,
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
                     success: function(response) {
                         // Handle success if needed
-                        console.log(response);
+                        if(i + 1 == lessonData.length){
+                            if (response && response.redirect_url ) {
+                                window.location.href = response.redirect_url;
+                            }
+                        }
                     },
                     error: function(error) {
                         console.log(error);

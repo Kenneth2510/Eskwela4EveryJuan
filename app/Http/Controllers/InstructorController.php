@@ -338,6 +338,9 @@ class InstructorController extends Controller
         return redirect('/instructor/settings')->with('message', 'Profile picture updated successfully');
     }
 
+    public function activity() {
+        return view('instructor_course.courseActivity')->with(['title'=>'Activities', 'scripts'=>['instructorActivities.js']]);
+    }
    
 
     

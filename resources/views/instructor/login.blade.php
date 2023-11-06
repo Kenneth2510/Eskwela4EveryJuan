@@ -11,13 +11,11 @@
         </header>
         
         {{-- MAIN --}}
-        <div class="relative w-full h-screen bg-mainwhitebg text-darthmouthgreen md:flex md:justify-center md:items-center md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
+        <div class="relative w-full h-screen lg:overflow-auto text-darthmouthgreen md:flex md:justify-center md:items-center md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent">
-                <div class="px-4 pt-4 mt-16 md:mx-auto md:w-3/4 md:pt-8 lg:w-full lg:p-0 lg:m-0">
-                    <h1 class="my-2 text-3xl font-bold md:text-4xl">Instructor Login</h1>
+                <x-header title="Instructor Login">
                     <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-                </div>
-
+                </x-header>
 
                 <form class="flex flex-col justify-center text-black rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full lg:text-mainwhitebg" action="{{ url('/instructor/login') }}" method="POST">
                     @csrf
@@ -54,9 +52,7 @@
                                 <label for="">Remember me</label>
                             </div>
                             
-                            <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500 md:h-10 md:w-24 lg:rounded-lg" type="submit" id="">
-                                Log in
-                            </button>
+                            <x-forms.primary-button color="amber" name="Log in" />
                         </div>
                     </div>
                 </form>

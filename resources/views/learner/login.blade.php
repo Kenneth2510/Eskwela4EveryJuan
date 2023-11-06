@@ -60,9 +60,10 @@
                                 <label for="">Remember me</label>
                             </div>
                             
-                            <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500 md:h-10 md:w-24 lg:rounded-lg" type="submit">
+                            <x-forms.primary-button color="amber" name="Log in" class="text-black" />
+                            {{-- <button class="w-20 h-8 font-semibold text-black rounded bg-amber-400 hover:bg-amber-500 md:h-10 md:w-24 lg:rounded-lg" type="submit">
                                 Log in
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
                 </form>

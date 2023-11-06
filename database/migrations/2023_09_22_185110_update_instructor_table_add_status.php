@@ -9,21 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('instructor', function (Blueprint $table) {
-            $table->string('status')->after('instructor_id');
-        });
-    }
+    // public function up(): void
+    // {
+    //     Schema::table('instructor', function (Blueprint $table) {
+    //         $table->string('status')->after('instructor_id');
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('instructor', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down(): void
+    // {
+    //     Schema::table('instructor', function (Blueprint $table) {
+    //         $table->dropColumn('status');
+    //     });
         
-    }
+    // }
 };
