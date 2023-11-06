@@ -24,6 +24,6 @@
     }
 
     .main-container {
-        @apply flex flex-row w-full h-auto text-sm bg-mainwhitebg md:text-base;
+        @apply flex flex-row w-full h-auto text-sm bg-mainwhitebg md:text-base lg:h-screen;
     }
 }

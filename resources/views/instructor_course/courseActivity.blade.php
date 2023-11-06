@@ -5,7 +5,7 @@
     @include('partials.instructorSidebar')
 
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12">
+    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
         <div class="p-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
             <div class="p-2 text-white bg-purple-500 fill-white rounded-xl">
                 <a href="">
@@ -53,7 +53,15 @@
                 </div>
                 
                 {{-- body --}}
-                <div class="py-4 " id="defaultView">
+                <div id="emptyActivity">
+                    <x-forms.primary-button 
+                    color="seagreen" 
+                    name="Add Instructions" 
+                    type="button" 
+                    class="text-white" 
+                    id="addInstructions"/>
+                </div>
+                <div class="hidden py-4" id="defaultView">
                     <div class="flex flex-row items-center">
                         <h3 class="my-2 text-xl font-medium">Instructions:</h3>
                         <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
