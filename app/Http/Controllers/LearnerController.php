@@ -177,6 +177,7 @@ class LearnerController extends Controller
         $LearnerData['learner_security_code'] = $securityCodeNumber;
 
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         $folderPath = 'learners/' . $folderName;
 
         // Copy the default photo to the same directory

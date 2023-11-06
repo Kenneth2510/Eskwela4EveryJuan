@@ -102,6 +102,7 @@ class InstructorCourseController extends Controller
                 $course = Course::create($courseData);
                 
                 $folderName = $course->course_id . ' ' . $courseData['course_name'];
+                $folderName = Str::slug($folderName, '_');
                 $folderPath = 'public/courses/' . $folderName;
     
                 if(!Storage::exists($folderPath)) {
@@ -934,7 +935,7 @@ class InstructorCourseController extends Controller
             ]);
 
             $folderName = "{$course->course_id} {$course->course_name}";
-
+            $folderName = Str::slug($folderName, '_');
             $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
             $folderPath = "courses/" .$folderName;
 
@@ -1076,7 +1077,7 @@ class InstructorCourseController extends Controller
             ]);
 
             $folderName = "{$course->course_id} {$course->course_name}";
-
+            $folderName = Str::slug($folderName, '_');
             $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
             $folderPath = "courses/" .$folderName;
 
@@ -1185,6 +1186,18 @@ class InstructorCourseController extends Controller
 
         $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
 
+        // Generate a unique filename for the PDF (you can customize this)
+        $filename = 'lesson_' . $lessonInfo->lesson_id . '.pdf';
+
+        // Define the folder path based on the course name
+        $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
+        $folderPath = 'courses/' . $folderName;
+
+        // Check if the file already exists
+        if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
+            // If it exists, delete the old file
+            Storage::disk('public')->delete($folderPath . '/' . $filename);
+        }
 
         // Configure Dompdf
         $dompdf = new Dompdf();
@@ -1204,20 +1217,7 @@ class InstructorCourseController extends Controller
         // Generate the PDF
         $pdf = $dompdf->output();
 
-
-
-
-
-
-
-        // Generate a unique filename for the PDF (you can customize this)
-        $filename = 'lesson_' . $lessonInfo->lesson_id . '.pdf';
-
-        // Define the folder path based on the course name
-        $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
-        $folderPath = 'courses/' . $folderName;
-
-        // Store the PDF in the public directory within the course-specific folder
+        // Store the new PDF in the public directory within the course-specific folder
         Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
 
         // Generate the URL to the stored PDF
@@ -1230,6 +1230,7 @@ class InstructorCourseController extends Controller
         return response('Unauthorized', 401);
     }
 }
+
 
     
     
