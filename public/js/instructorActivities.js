@@ -80,12 +80,9 @@ $(document).ready(() => {
         $("#selectTypeParent").addClass("hidden");
     });
 
-    $("#emptyActivity").on("click", function () {
-        const btn = $(this).find("#addInstructions"); // `this` will correctly refer to the clicked button element
-        console.log(btn);
-
-        const btnName = btn.text();
-        console.log(`button name: ${btnName}`);
+    $("#emptyActivity").on("click", "button", function () {
+        $("#defaultView").toggleClass("hidden");
+        $(this).remove();
     });
 
     window.handleModal();
