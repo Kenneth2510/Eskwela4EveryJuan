@@ -18,9 +18,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
-    {{-- <script src="{{asset('js/sidebar.js')}}" defer></script>
+    <script src="{{asset('js/sidebar.js')}}" defer></script>
     <script src="{{ asset('js/script.js')}}" defer></script>
-    <script src="{{asset('js/instructorLogin.js')}}" defer></script>
+    {{-- <script src="{{asset('js/instructorLogin.js')}}" defer></script>
     <script src="{{asset('js/instructorRegister.js')}}" defer></script>
     <script src="{{asset('js/AD_SB.js')}}" defer></script>
     <script src="{{asset('js/instructorCreateCourse.js')}}" defer></script>
@@ -33,8 +33,8 @@
     <script src="{{asset('js/AD_course_manage.js')}}" defer></script>
     <script src="{{asset('js/AD_instructor_manage.js')}}" defer></script>
     <script src="{{asset('js/AD_learner_manage.js')}}" defer></script>
-    <script src="{{asset('js/L_course_manage.js')}}" defer></script> --}}
-    <script src="{{ asset('js/script.js')}}" defer></script>
+    <script src="{{asset('js/L_course_manage.js')}}" defer></script>
+    <script src="{{ asset('js/script.js')}}" defer></script> --}}
     @if (isset($scripts))
         @forelse ($scripts as $script)
             

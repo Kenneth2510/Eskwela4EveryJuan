@@ -39,10 +39,12 @@
                     <ul class="px-2 py-2" id="uploadedFileName">
                     </ul>
                 </div> --}}
-                <div class="w-full mt-8 text-right">
-                    <button class="w-24 h-8 bg-amber-400 hover:bg-amber-600" id="nextAddCourse">
-                        Next
-                    </button>
+                <div class="flex justify-end w-full mt-8">
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Next"
+                    type="button"
+                    id="nextAddCourse"/>
                 </div>
                 
             </div>
@@ -80,9 +82,12 @@
                     </table>
                 </div>
                 <div class="flex items-center justify-center">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400" id="addLesson_start">
-                        Add New
-                    </button>
+                    
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Add New"
+                    type="button"
+                    id="addLesson_start"/>
 
                     {{-- <div id="addLesson_form" class="hidden">
                         <label for="lesson_name">Lesson Name:</label><br>
@@ -98,24 +103,30 @@
                     </div> --}}
                 </div>          
                 
-                <div class="w-full text-right">
-                    <button type="button" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-red-600" id="returnTo_first">
+                <div class="flex justify-end w-full">
+                    <x-forms.secondary-button
+                    name="Return"
+                    id="returnTo_first"/>
+                    <x-forms.primary-button
+                    color="amber"
+                    name="Add New Course"/>
+                    {{-- <button type="button" class="h-10 px-2 mx-2 my-10 font-medium bg-red-600 rounded cursor-pointer" id="returnTo_first">
                         Return
                     </button>
                     <button type="submit" class="h-10 px-2 mx-2 my-10 font-medium rounded cursor-pointer bg-amber-400 hover:bg-amber-500">
                         Add New Course
-                    </button>
+                    </button> --}}
                 </div>
                 
             </div>
         </form>
     </section>
 
-                <div id="selectTypeParent" class="fixed z-50 flex items-center top-0 left-0 w-screen justify-center hidden h-screen bg-grey-400 rounded shadow-lg backdrop-blur-sm" aria-hidden="true" >
-                    <div id="selectTypeChild" class="relative p-10 h-auto pt-8 m-auto mx-4 rounded-xl shadow-lg bg-seagreen" >
+                <div id="selectTypeParent" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-screen h-screen rounded shadow-lg bg-grey-400 backdrop-blur-sm" aria-hidden="true" >
+                    <div id="selectTypeChild" class="relative h-auto p-10 pt-8 m-auto mx-4 shadow-lg rounded-xl bg-seagreen" >
                         <div class="flex flex-col items-center">
                             <label class="my-2 text-white" for="">Select one</label>
-                            <select class=" max-w-xs select select-bordered IN-V-INP" name="add_category" id="modal_add_category">
+                            <select class="max-w-xs select select-bordered IN-V-INP" name="add_category" id="modal_add_category">
                                 <option value="" disabled selected>--Select here--</option>
                                 <option value="LESSON">Lesson</option>
                                 <option value="QUIZ">Quiz</option>
@@ -123,13 +134,20 @@
                             </select>
                         </div>
                         
-                        <div class="flex flex-row items-center justify-center m-4">
-                            <button class="px-4 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg " id="selectTypeCloseBtn">
+                        <div class="flex flex-row items-center justify-center m-4 text-white">
+                            <x-forms.secondary-button
+                            name="Close"
+                            id="selectTypeCloseBtn"/>
+                            <x-forms.primary-button
+                            color="darthmouthgreen"
+                            name="Confirm"
+                            id="selectTypeConfirmBtn"/>
+                            {{-- <button class="px-4 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg " id="selectTypeCloseBtn">
                                 <h1>Close</h1>
                             </button>
                             <button class="px-4 py-2 mx-1 text-white rounded-lg shadow-lg bg-darthmouthgreen" id="selectTypeConfirmBtn">
                                 <h1>Confirm</h1>
-                            </button>
+                            </button> --}}
                         </div>
                         
                     </div>
@@ -139,5 +157,3 @@
 </section>
 
 @include('partials.footer')
-
-
