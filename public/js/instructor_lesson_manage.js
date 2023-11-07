@@ -83,8 +83,8 @@ $(document).ready(function() {
                     
                     <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
                     
-                    <p class="lesson_content_input_disp text-xl w-full min-w-full max-w-full" style="white-space: pre;">${lesson_content}</p>
-                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-full min-w-full max-w-full h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
+                    <p class="lesson_content_input_disp text-xl w-[90%] min-w-[90%] max-w-[90%]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};">${lesson_content}</p>
+                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[90%] min-w-[90%] max-w-[90%] h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
 
                     
                     ${picture !== null ? `

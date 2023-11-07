@@ -10,6 +10,8 @@ use App\Models\Admin;
 use App\Models\Course;
 use App\Models\LearnerCourse;
 use App\Models\LessonContents;
+use App\Models\ActivityContents;
+use App\Models\ActivityContentCriterias;
 use App\Models\Syllabus;
 use App\Models\Lessons;
 use App\Models\Activities;
@@ -730,8 +732,19 @@ class InstructorCourseController extends Controller
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('topic_id', $topic_id)
                         ->first();
+                            // dd($lessonInfo);
 
-                    $lessonContent = DB::table('lesson_content')
+                            if ($lessonInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $lessonContent = null; // or $activityContent = [];
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
+
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $lessonContent = DB::table('lesson_content')
                             ->select(
                                 'lesson_content_id',
                                 'lesson_id',
@@ -743,6 +756,10 @@ class InstructorCourseController extends Controller
                             ->where('lesson_id', $lessonInfo->lesson_id)
                             ->orderBy('lesson_content_order', 'ASC')
                             ->get();
+                            }
+
+
+                    
 
                                 // dd($lessonContent);
 
@@ -1233,5 +1250,259 @@ class InstructorCourseController extends Controller
 
 
     
+    // for course activity
+    public function view_activity(Course $course, Syllabus $syllabus, $topic_id) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor['status'] !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {
+
+                    $activityInfo = DB::table('activities')
+                        ->select(
+                            'activity_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id',
+                            'activity_title',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('topic_id', $topic_id)
+                        ->first();
+
+                            if ($activityInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $activityContent = null; // or $activityContent = [];
+                                $activityContentCriteria = null;
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
+
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $activityContent = DB::table('activity_content')
+                                    ->select(
+                                        'activity_content_id',
+                                        'activity_id',
+                                        'activity_instructions',
+                                        'total_score',
+                                    )
+                                    ->where('activity_id', $activityInfo->activity_id)
+                                    ->get();
+
+                                    if($activityContent === null) {
+                                        $activityContentCriteria = null;
+                                    } else {
+                                        $activityContentCriteria = DB::table('activity_content_criteria')
+                                        ->select(
+                                            'activity_content_criteria_id',
+                                            'activity_content_id',
+                                            'criteria_title',
+                                            'score'
+                                        )
+                                        ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray()) // Use pluck to get an array of activity_content_id values
+                                        ->get();
+                                    }
+                               
+                            }
+
+                                // dd($lessonContent);
+
+                    $response = $this->course_content($course);
+
+                    session(['activity_data' => [
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
+                    return view('instructor_course.courseActivity', compact('instructor'))->with([
+                        'title' => 'Course Lesson',
+                        'scripts' => ['instructorActivities.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        // 'instructor' => $response['instructor'],
+                    ]);
+
+                } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+            
+                    return response()->json(['errors' => $errors], 422);
+                }
+            }
+        } else {
+            return redirect('/instructor');
+        }
+
+        return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
     
+    }
+
+    public function activity_content_json(Course $course, Syllabus $syllabus, $topic_id) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor['status'] !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {
+
+                    $activityInfo = DB::table('activities')
+                        ->select(
+                            'activity_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id',
+                            'activity_title',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('topic_id', $topic_id)
+                        ->first();
+
+                            if ($activityInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $activityContent = null; // or $activityContent = [];
+                                $activityContentCriteria = null;
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
+
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $activityContent = DB::table('activity_content')
+                                    ->select(
+                                        'activity_content_id',
+                                        'activity_id',
+                                        'activity_instructions',
+                                        'total_score',
+                                    )
+                                    ->where('activity_id', $activityInfo->activity_id)
+                                    ->get();
+
+                                    if($activityContent === null) {
+                                        $activityContentCriteria = null;
+                                    } else {
+                                        $activityContentCriteria = DB::table('activity_content_criteria')
+                                        ->select(
+                                            'activity_content_criteria_id',
+                                            'activity_content_id',
+                                            'criteria_title',
+                                            'score'
+                                        )
+                                        ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray()) // Use pluck to get an array of activity_content_id values
+                                        ->get();
+                                    }
+                               
+                            }
+
+                                // dd($lessonContent);
+
+                    $response = $this->course_content($course);
+
+                    session(['activity_data' => [
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
+                      $data = [    
+                        'title' => 'Course Lesson',
+                        'scripts' => ['instructorActivities.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        ];
+
+                    return response()->json($data);
+
+                    // return view('instructor_course.courseActivity', compact('instructor'))->with([
+                    //     'title' => 'Course Lesson',
+                    //     'scripts' => ['instructorActivities.js'],
+                    //     'lessonCount' => $response['lessonCount'],
+                    //     'activityCount' => $response['activityCount'],
+                    //     'quizCount' => $response['quizCount'],
+                    //     'course' => $response['course'],
+                    //     'syllabus' => $response['syllabus'],
+                    //     'activityInfo' => $activityInfo,
+                    //     'activityContent' => $activityContent,
+                    //     'activityContentCriteria' => $activityContentCriteria,
+                    //     // 'instructor' => $response['instructor'],
+                    // ]);
+
+                } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+            
+                    return response()->json(['errors' => $errors], 422);
+                }
+            }
+        } else {
+            return redirect('/instructor');
+        }
+
+        return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
+    
+    }
+
+    public function update_activity_instructions(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_values = $request->validate([
+                'activity_instructions' => ['required'],
+            ]);
+
+            DB::table('activity_content')
+                ->where('activity_id', $activity->activity_id)
+                ->where('activity_content_id', $activity_content->activity_content_id)
+                ->update($updated_values);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+    public function update_activity_score(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_values = $request->validate([
+                'total_score' => ['required'],
+            ]);
+
+            DB::table('activity_content')
+                ->where('activity_id', $activity->activity_id)
+                ->where('activity_content_id', $activity_content->activity_content_id)
+                ->update($updated_values);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
 }

@@ -193,8 +193,8 @@
                                 
                             @endif
                             
-                            <p class="w-full max-w-full min-w-full text-xl lesson_content_input_disp">{{$lesson->lesson_content}}</p>
-                            <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[200px] min-w-[200px] max-w-full"  disabled>{{ $lesson->lesson_content }}</textarea>
+                            <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp">{{$lesson->lesson_content}}</p>
+                            <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%]"  disabled>{{ $lesson->lesson_content }}</textarea>
                             
                             <div class="flex justify-end hidden w-full edit_lesson_content_btns">
                                 <button id="" class="px-5 py-3 mx-1 text-white save_lesson_content_btn rounded-xl" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">

@@ -144,12 +144,13 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save_add', 'InstructorCourseController@save_add_lesson_content');
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_file/{lesson_content}', 'InstructorCourseController@lesson_content_store_file');
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/delete_file/{lesson_content}', 'InstructorCourseController@lesson_content_delete_file');
-
-
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/generate_pdf', 'InstructorCourseController@lesson_generate_pdf');
     
-
     
+    Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}', 'InstructorCourseController@view_activity');
+    Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/json', 'InstructorCourseController@activity_content_json');
+    Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/instructions', 'InstructorCourseController@update_activity_instructions');
+    Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/score', 'InstructorCourseController@update_activity_score');
 // // })->middleware('web');
 });
 
