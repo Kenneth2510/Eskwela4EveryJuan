@@ -146,7 +146,7 @@ $(document).ready(function () {
         } else {
             $("#addNewQBtn").remove();
             $("#addQuestionBtn").show();
-            $("#containersss").empty();
+            specificId.remove();
         }
     });
 });
