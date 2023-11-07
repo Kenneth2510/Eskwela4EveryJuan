@@ -65,15 +65,6 @@ $(document).ready(() => {
             $("#studentsList").append(studentsList);
 
             isAppended = true;
-            console.log(isAppended);
-        }
-        $("#backToDefault").on("click", () => {
-            $("#defaultView").removeClass("hidden");
-            $("#studentsList").toggleClass("hidden");
-            $("#viewResponseActivity").removeClass('hidden');
-            isAppended = false;
-            console.log(isAppended);
-        });
 
             $(document).on("click", "#backToDefault", () => {
                 $("#defaultView").removeClass("hidden");
@@ -87,7 +78,6 @@ $(document).ready(() => {
         appendStudentsList();
         $("#defaultView").addClass("hidden");
         $("#selectTypeParent").addClass("hidden");
-        $("#viewResponseActivity").addClass('hidden');
     });
 
     $("#emptyActivity").on("click", "button", function () {
