@@ -140,7 +140,6 @@ $(document).ready(() => {
             const activity_instructions = activityData[i]['activity_instructions'];
             const total_score = activityData[i]['total_score'];
 
-
             
             if(activityData !== null) {
                 activityContent_disp += `
@@ -174,6 +173,7 @@ $(document).ready(() => {
                         </thead>
                         <tbody>`;
                         if(activityCriteriaData !== null) {
+          
                             for (let x = 0; x < activityCriteriaData.length; x++) {
                                 const activity_content_criteria_id = activityCriteriaData[x]['activity_content_criteria_id'];
                                 const activity_content_id = activityCriteriaData[x]['activity_content_id'];
@@ -192,6 +192,8 @@ $(document).ready(() => {
                                             <button class="hidden px-3 py-1 mx-2 font-semibold text-white bg-green-600 rounded-xl editRowCriteriaBtn hover:bg-green-900">Edit</button>
                                             <div class="hidden flex edit_btns">
                                             
+                                                <button data-activity-content-criteria-id="${activity_content_criteria_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl saveRowCriteriaBtn hover:bg-green-900">Save</button>
+
                                                 <button data-activity-content-criteria-id="${activity_content_criteria_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-1 mx-2 font-semibold text-white bg-red-600 rounded-xl deleteRowCriteriaBtn hover:bg-red-900">Delete</button>
 
                                                 <button class=" px-3 py-1 mx-2 font-semibold text-white bg-red-600 rounded-xl cancelRowCriteriaBtn hover:bg-red-900">Cancel</button>
@@ -214,7 +216,7 @@ $(document).ready(() => {
                     </table>
                     <button id="" data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="addNewCriteria hidden px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl hover:bg-green-900">Add Criteria</button>
                     <div class="editCriteria_clickedBtn hidden mt-3" id=""> 
-                        <button id="" class="saveCriteriaBtn text-2xl px-7 py-5 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
+                        <button id="" data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="saveCriteriaBtn text-2xl px-7 py-5 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
                         <button id="" class="cancelCriteriaBtn text-2xl px-7 py-5 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
                     </div>
                     <br>
@@ -349,6 +351,19 @@ $(document).ready(() => {
         $('.editRowCriteriaBtn').on('click', function(e) {
             e.preventDefault();
             var tr = $(this).closest('tr');
+
+            const criteriaTitle = tr.find('.criteriaTitle_input').val().trim();
+            const criteriaScore = tr.find('.criteriaScore_input').val().trim();
+
+            console.log('criteriaTitle:', criteriaTitle);
+            console.log('criteriaScore:', criteriaScore);
+
+            // Find the index of the object in activityCriteriaData
+            const indexToSave = activityCriteriaData.findIndex(item => item.criteria_title === criteriaTitle && item.score == criteriaScore);
+
+            tr.find('.deleteRowCriteriaBtn').data('array-criteria-index', indexToSave);
+            tr.find('.saveRowCriteriaBtn').data('array-criteria-index', indexToSave);
+
             tr.find('.edit_btns').removeClass('hidden');
             $(this).addClass('hidden');
 
@@ -369,18 +384,67 @@ $(document).ready(() => {
 
         $('.deleteRowCriteriaBtn').on('click', function(e) {
             e.preventDefault();
+            // alert('test')
 
             var tr = $(this).closest('tr');
-            // tr.find('.editRowCriteriaBtn').removeClass('hidden');
-            // tr.find('.edit_btns').addClass('hidden');
+            const criteriaTitle = tr.find('.criteriaTitle_input').val().trim();
+            const criteriaScore = tr.find('.criteriaScore_input').val().trim();
 
-            const criteriaTitle = tr.find('.criteriaTitle_input').val();
-            const criteriaScore = tr.find('.criteriaScore_input').val();
+            console.log('criteriaTitle:', criteriaTitle);
+            console.log('criteriaScore:', criteriaScore);
 
-            const insertIndex = activityCriteriaData.findIndex(item => item.criteria_title === criteriaTitle && item.score === criteriaScore);
+            // Find the index of the object in activityCriteriaData
+            // const indexToRemove = activityCriteriaData.findIndex(item => item.criteria_title === criteriaTitle && item.score == criteriaScore);
 
-            console.log(insertIndex);
+            // console.log('indexToRemove:', indexToRemove);
 
+            const criteria_id = $(this).data('array-criteria-index')
+
+            console.log(criteria_id)
+
+          
+            if (criteria_id !== -1) {
+                // Remove the object from the array
+                activityCriteriaData.splice(criteria_id, 1);
+                console.log(activityCriteriaData);
+        
+                // Update the display or perform any other necessary actions
+                reDisplayActivity(activityData, activityCriteriaData);
+                $('.addNewCriteria').removeClass('hidden');
+                $('.editCriteria_clickedBtn').removeClass('hidden');
+                $('.editRowCriteriaBtn').removeClass('hidden');
+            }
+
+        })
+
+        $('.saveRowCriteriaBtn').on('click', function(e) {
+            e.preventDefault();
+
+            var tr = $(this).closest('tr');
+            const criteriaTitle = tr.find('.criteriaTitle_input').val().trim();
+            const criteriaScore = tr.find('.criteriaScore_input').val().trim();
+
+            console.log('criteriaTitle:', criteriaTitle);
+            console.log('criteriaScore:', criteriaScore);
+
+            // // Find the index of the object in activityCriteriaData
+            // const indexToSave = activityCriteriaData.findIndex(item => item.criteria_title === criteriaTitle && item.score == criteriaScore);
+        
+            const criteria_id = $(this).data('array-criteria-index')
+            console.log(criteria_id);
+            console.log(activityCriteriaData[criteria_id])
+
+
+            if (criteria_id !== -1) {
+                activityCriteriaData[criteria_id]['criteria_title'] = criteriaTitle;
+                activityCriteriaData[criteria_id]['score'] = criteriaScore;
+                // Update the display or perform any other necessary actions
+                reDisplayActivity(activityData, activityCriteriaData);
+                $('.addNewCriteria').removeClass('hidden');
+                $('.editCriteria_clickedBtn').removeClass('hidden');
+                $('.editRowCriteriaBtn').removeClass('hidden');
+            }
+                
         })
 
 
@@ -394,7 +458,99 @@ $(document).ready(() => {
     })
 
     $('.saveCriteriaBtn').on('click', function(e) {
+
         e.preventDefault();
+        
+        var criteriaCounter = 0;
+
+        const activityContentID = $(this).data('activity-content-id');
+        const activityID = $(this).data('activity-id');
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        
+        var baseUrl = window.location.href;
+
+
+       
+        var totalCriteriaScore = 0;
+        for (let i = 0; i < activityCriteriaData.length; i++) {
+            const activity_content_id = activityCriteriaData[i]['activity_content_id'];
+            const criteria_title = activityCriteriaData[i]['criteria_title'];
+            const score = activityCriteriaData[i]['score'];
+
+            totalCriteriaScore += parseInt(score, 10);
+            const rowCriteria = {
+                'activity_content_id': activity_content_id,
+                'criteria_title' : criteria_title,
+                'score' : parseInt(score, 10)
+            }
+            console.log(rowCriteria);
+
+            if (criteriaCounter === 0) {
+                
+            var url = baseUrl + "/title/"+ activityID +"/" + activityContentID+"/criteria";
+                // alert('1')
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: rowCriteria,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        if(activityCriteriaData.length === criteriaCounter++) {
+                            window.location.reload();
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+                criteriaCounter++;
+            }else {
+                var url = baseUrl + "/title/"+ activityID +"/" + activityContentID+"/criteria_add";
+                // alert('2')
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: rowCriteria,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+        } 
+        }
+        // console.log(totalCriteriaScore);
+
+        var url2 = baseUrl + "/title/"+ activityID +"/" + activityContentID+"/score";
+        // console.log(url)
+
+        const udpatedActivityTotalScore = {
+            'total_score': totalCriteriaScore,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: url2,
+            data: udpatedActivityTotalScore,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                window.location.reload();
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
 
     })
 
@@ -536,5 +692,12 @@ $(document).ready(() => {
 
     $('#saveActivityBtn').on('click', function(e) {
         e.preventDefault();
+
+        $('.editInstructionsBtn').addClass('hidden');
+        $('.editCriteriaBtn').addClass('hidden');
+        $('.editTotalScore').addClass('hidden');
+
+        $('#editActivity_clickedBtns').addClass('hidden');
+        $('#editActivityBtn').removeClass('hidden'); 
     })
 });

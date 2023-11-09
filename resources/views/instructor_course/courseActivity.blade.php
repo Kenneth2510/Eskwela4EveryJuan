@@ -128,7 +128,7 @@
                     </table>
                     <button id="addNewCriteria" class="hidden px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl hover:bg-green-900">Add Criteria</button>
                     <div class="hidden mt-3" id="editCriteria_clickedBtn"> 
-                        <button id="saveCriteriaBtn" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
+                        <button id="saveCriteriaBtn" data-activity-content-id="{{$activity->activity_content_id}}" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
                         <button id="cancelCriteriaBtn" class="px-5 py-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
                     </div>
                     <br>
@@ -163,8 +163,8 @@
 
             <button id="editActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$activityInfo->syllabus_id}}" data-topic_id="{{$activityInfo->topic_id}}">Edit</button>
             <div class="hidden" id="editActivity_clickedBtns">
-                <button id="saveActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Save Changes</button>
-                <button id="cancelActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
+                <button id="saveActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
+                {{-- <button id="cancelActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button> --}}
             </div>
             <x-forms.primary-button 
             color="darthmouthgreen" 

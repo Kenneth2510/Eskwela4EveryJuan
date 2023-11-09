@@ -1505,4 +1505,45 @@ class InstructorCourseController extends Controller
             return response()->json(['errors' => $errors], 422);
         }
     }
+
+
+    public function update_activity_criteria(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_criterias = $request->validate([
+                'activity_content_id' => ['required'],
+                'criteria_title' => ['required'],
+                'score' => ['required'],
+            ]);
+
+            ActivityContentCriterias::where('activity_content_id', $activity_content->activity_content_id)
+            ->delete();
+
+            $activityContentCriteria = ActivityContentCriterias::create($updated_criterias);
+
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+
+    public function add_activity_criteria(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_criterias = $request->validate([
+                'activity_content_id' => ['required'],
+                'criteria_title' => ['required'],
+                'score' => ['required'],
+            ]);
+
+            $activityContentCriteria = ActivityContentCriterias::create($updated_criterias);
+
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
 }
