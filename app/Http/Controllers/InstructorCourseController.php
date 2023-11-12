@@ -159,6 +159,7 @@ class InstructorCourseController extends Controller
         ->with([
             'title' => 'Course Overview',
             'scripts' => ['instructor_course_manage.js'],
+            'instructor' => $instructor,
         ]
         );
     }
@@ -1546,4 +1547,6 @@ class InstructorCourseController extends Controller
             return response()->json(['errors' => $errors], 422);
         }
     }
+
+   
 }

@@ -162,5 +162,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/learner/course/enroll/{course}', 'LearnerCourseController@enroll_course');
     Route::post('/learner/course/unEnroll/{learnerCourse}', 'LearnerCourseController@unEnroll_course');
     Route::get('/learner/course/manage/{course}', 'LearnerCourseController@manage_course');
+    Route::get('/learner/course/manage/{course}/overview', 'LearnerCourseController@course_overview');
+    Route::get('/learner/course/manage/{course}/view_syllabus', 'LearnerCourseController@view_syllabus');
+
+    Route::get('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}', 'LearnerCourseController@view_lesson');
+    Route::post('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}/finish', 'LearnerCourseController@finish_lesson');
     // // })->middleware('web');
 });

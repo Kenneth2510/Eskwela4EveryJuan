@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
+    <div id="maincontainer" class="relative max-h-full px-5 py-5 bg-white shadow-2xl mt-7 rounded-2xl">
         <div class="mb-5">
             <a href="/admin/view_course/{{$course->course_id}}" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
@@ -20,31 +20,31 @@
 
 
         <div class="flex">
-            <div id="courseSidebar" class="py-10 w-1/5 bg-seagreen">
-                <ul class="px-5 py-5 text-white text-xl font-medium">
+            <div id="courseSidebar" class="w-1/5 py-10 bg-seagreen">
+                <ul class="px-5 py-5 text-xl font-medium text-white">
                     <a href="/admin/manage_course/course_overview/{{ $course->course_id }}">
-                        <li id="courseOverviewBtn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-book-open text-3xl pr-2"></i>
+                        <li id="courseOverviewBtn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-book-open"></i>
                             Course Overview
                     </li>
                     </a>
                     <a href="/admin/manage_course/enrollees/{{ $course->course_id }}">
-                        <li id="enrolledLearnersBtn" class="selected w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-users text-3xl pr-2"></i>
+                        <li id="enrolledLearnersBtn" class="w-full px-2 py-5 mt-2 selected rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-users"></i>
                             Enrolled Learners
                     </li>
                     </a>
                     <a href="/admin/manage_course/content/{{ $course->course_id }}">
-                        <li id="courseContentBtn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-book text-3xl pr-2"></i>
+                        <li id="courseContentBtn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-book"></i>
                             Course Content
                     </li>
                     </a>
                     
-                    <li class="w-full py-3 rounded-xl px-2 mt-2">
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl">
                       
                     </li>
-                    <li class="w-full py-3 rounded-xl px-2 mt-2">
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl">
                       
                     </li>
                 </ul>
@@ -54,7 +54,7 @@
 
                 
                 <div id="enrolled_learners" class="">
-                    <h1 class="text-2xl font-semibold border-black border-b-2">Enrolled Learner</h1>
+                    <h1 class="text-2xl font-semibold border-b-2 border-black">Enrolled Learner</h1>
 
                     <form id="enrolleeForm" data-course-id="{{$course->course_id}}" action="/admin/manage_course/enrollees/{{$course->course_id}}" method="GET">
                         <div class="flex items-center">
@@ -113,21 +113,21 @@
                                     <td>{{$enrollee->created_at}}</td>
                                     <td>{{$enrollee->status}}</td>
                                     <td class="flex">
-                                        {{-- <button class="px-5 py-2 rounded-2xl bg-green-500 hover:bg-green-700">
+                                        {{-- <button class="px-5 py-2 bg-green-500 rounded-2xl hover:bg-green-700">
                                             view
                                         </button> --}}
                                         @if ($enrollee->status == 'Pending')
                                         <form action="/admin/manage_course/enrollee/approve/{{$enrollee->learner_course_id}}" method="POST">
                                             @method('PUT')
                                             @csrf
-                                            <button class="py-1 px-3 mx-2 rounded-xl bg-green-500  hover:bg-green-700 hover:text-white">
+                                            <button class="px-3 py-1 mx-2 bg-green-500 rounded-xl hover:bg-green-700 hover:text-white">
                                                 Approve
                                             </button>
                                         </form>
                                         <form action="/admin/manage_course/enrollee/reject/{{$enrollee->learner_course_id}}" method="POST">
                                             @method('PUT')
                                             @csrf
-                                            <button class="py-1 px-3 mx-2 rounded-xl bg-red-500 hover:bg-red-700 hover:text-white">
+                                            <button class="px-3 py-1 mx-2 bg-red-500 rounded-xl hover:bg-red-700 hover:text-white">
                                                 Reject
                                             </button>
                                         </form>
@@ -136,7 +136,7 @@
                                         <form action="/admin/manage_course/enrollee/pending/{{$enrollee->learner_course_id}}" method="POST">
                                             @method('PUT')
                                             @csrf
-                                            <button class="py-1 px-3 mx-2 rounded-xl bg-yellow-500  hover:bg-yellow-700 hover:text-white">
+                                            <button class="px-3 py-1 mx-2 bg-yellow-500 rounded-xl hover:bg-yellow-700 hover:text-white">
                                                 Pending
                                             </button>
                                         </form>
@@ -144,12 +144,14 @@
                                         <form action="/admin/manage_course/enrollee/pending/{{$enrollee->learner_course_id}}" method="POST">
                                             @method('PUT')
                                             @csrf
-                                            <button class="py-1 px-3 mx-2 rounded-xl bg-yellow-500  hover:bg-yellow-700 hover:text-white">
+                                            <button class="px-3 py-1 mx-2 bg-yellow-500 rounded-xl hover:bg-yellow-700 hover:text-white">
                                                 Pending
                                             </button>
                                         </form>
                                         <form action="/admin/manage_course/enrollee/reject/{{$enrollee->learner_course_id}}" method="POST">
-                                            <button class="py-1 px-3 mx-2 rounded-xl bg-red-500 hover:bg-red-700 hover:text-white">
+                                            @method('PUT')
+                                            @csrf
+                                            <button class="px-3 py-1 mx-2 bg-red-500 rounded-xl hover:bg-red-700 hover:text-white">
                                                 Reject
                                             </button>
                                         </form>
