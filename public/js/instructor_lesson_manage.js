@@ -34,6 +34,8 @@ $(document).ready(function() {
         const syllabusID = $(this).data('syllabus-id');
         const topicID = $(this).data('topic_id');
 
+        $('#lesson_content_pictureUploadForm').data('course-id', courseID)
+
         var url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/json";
 
         console.log(url)
@@ -57,6 +59,9 @@ $(document).ready(function() {
     function reDisplayLesson(lessonData) {
         var displayLesson = ``;
 
+        const baseUrl = window.location.protocol + '//' + window.location.host;
+
+
         for (let i = 0; i < lessonData.length; i++) {
             
             lessonData[i]['lesson_content_order'] = i + 1;
@@ -68,6 +73,7 @@ $(document).ready(function() {
             const lesson_content_order = lessonData[i]['lesson_content_order'];
             const picture = lessonData[i]['picture'];
             
+            const pic_url = baseUrl + '/storage/' + picture;
 
             displayLesson += `
                 <div data-content-order="${lesson_content_order}" class="px-10 lesson_content_area my-2 mb-8 w-full">
@@ -77,27 +83,34 @@ $(document).ready(function() {
                     
                     <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
                     
-                    <p class="lesson_content_input_disp text-xl w-full min-w-full max-w-full" style="white-space: pre;">${lesson_content}</p>
-                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-full min-w-full max-w-full h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
+                    <p class="lesson_content_input_disp text-xl w-[90%] min-w-[90%] max-w-[90%]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};">${lesson_content}</p>
+                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[90%] min-w-[90%] max-w-[90%] h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
 
+                    
                     ${picture !== null ? `
                     <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
                         <div class="w-full h-[400px] overflow-hidden rounded-lg">
-                            <img src="{{ asset("storage/${picture}") }}" class="object-contain w-full h-full" alt="">
+                            <img src="${pic_url}" class="object-contain w-full h-full" alt="">
                         </div>
                     </div>
                     
                     
-                    <div id="edit_lesson_content_picture_btns" style="position: relative; top: 75%;" class="hidden flex justify-end">
-                        <button id="" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
+                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
+                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
                             Change Photo
+                        </button>
+
+
+                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
+                            Delete Photo
                         </button>
                     </div>
                     ` 
-                        
+                    
                     : `
-                    <div id="edit_lesson_content_picture_btns" style="position: relative; top: 75%;" class="hidden flex justify-end">
-                        <button id="" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
+                    
+                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
+                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
                             Add Photo
                         </button>
                     </div>
@@ -129,7 +142,9 @@ $(document).ready(function() {
 
             $('#lessonAddContent').removeClass('hidden');
 
-            $('#edit_lesson_content_picture_btns').removeClass('hidden');
+
+            // $('#edit_lesson_content_picture_btns').removeClass('hidden');
+
         console.log(lessonData)
 
 
@@ -140,6 +155,120 @@ $(document).ready(function() {
         //     pElement.css('white-space', 'pre');
         // }
 
+        $('.add_lesson_content_picture_btn').on('click', function(e) {
+            e.preventDefault()
+
+            const lesson_contentID = $(this).data('lesson-content-id')
+            const lessonID = $(this).data('lesson-id');
+
+
+
+            // alert(lesson_contentID)
+            $('#lesson_content_pictureUploadForm').data('lesson-id', lessonID)
+            $('#lesson_content_pictureUploadForm').data('lesson-content-id', lesson_contentID)
+            $('#lesson_content_pictureModal').removeClass('hidden');
+        })
+
+        $('#closeModal_lesson_content_picture').on('click', function(e) {
+            e.preventDefault();
+
+            $('#lesson_content_pictureModal').addClass('hidden');
+        })
+
+        $('#cancelUpload_lesson_content_picture').on('click', function(e) {
+            e.preventDefault();
+            // alert(lesson_contentID)
+            $('#lesson_content_pictureModal').addClass('hidden');
+        })
+
+      
+        $('#lesson_content_pictureUploadForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const lesson_contentID = $(this).data('lesson-content-id');
+            const lessonID = $(this).data('lesson-id');
+            const courseID = $(this).data('course-id');
+            const syllabusID = $(this).data('syllabus-id');
+            const topicID = $(this).data('topic_id');
+
+            console.log(lesson_contentID, lessonID)
+
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        var formData = new FormData(this);
+        const url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/title/"+ lessonID +"/store_file/"+ lesson_contentID;
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                // alert('Upload successful!');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                alert('error uploading file')
+                console.log('Error:', error);
+            }
+        });
+        })
+
+        
+        $('.delete_lesson_content_picture_btn').on('click', function(e) {   
+            e.preventDefault();
+
+            const lessonID = $(this).data('lesson-id');
+            const lesson_contentID = $(this).data('lesson-content-id');
+
+            $('#confirmDelete_lessonContentPicture').data('lesson-id', lessonID);
+            $('#confirmDelete_lessonContentPicture').data('lesson-content-id', lesson_contentID);            
+
+            $('#deleteLessonContentPictureModal').removeClass('hidden');
+        })
+
+        $('#cancelDelete_lessonContentPicture').on('click', function(e) {
+
+            $('#deleteLessonContentPictureModal').addClass('hidden');
+        })
+
+        $('#confirmDelete_lessonContentPicture').on('click', function(e) {
+            e.preventDefault();
+
+            const lessonID = $(this).data('lesson-id');
+            const lesson_contentID = $(this).data('lesson-content-id');
+            const courseID = $(this).data('course-id');
+            const syllabusID = $(this).data('syllabus-id');
+            const topicID = $(this).data('topic_id');
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            const url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/title/"+ lessonID +"/delete_file/"+ lesson_contentID;
+            // console.log(url)
+            $.ajax({
+                type: "POST",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    // Handle success if needed
+                    // console.log(response);
+                    // $('#deleteLessonContentModal').addClass('hidden');
+                    // reDisplayLesson(lessonData)
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        })
+
         // edit existing lesson content
     $('.edit_lesson_content').on('click', function(e) {
         e.preventDefault();
@@ -147,11 +276,13 @@ $(document).ready(function() {
         const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');
         const lesson_content = lesson_content_area.find('.lesson_content_input');
         const lesson_content_disp = lesson_content_area.find('.lesson_content_input_disp');
+        const lesson_content_picture = lesson_content_area.find('.edit_lesson_content_picture_btns')
 
         lesson_content_disp.addClass('hidden');
         lesson_content.removeClass('hidden');
         lesson_content_title.prop('disabled', false).focus;
         lesson_content.prop('disabled', false);
+        lesson_content_picture.removeClass('hidden');
 
         lesson_content_area.find('.edit_lesson_content_btns').removeClass('hidden');
         lesson_content_area.find('.edit_lesson_content').addClass('hidden');
@@ -162,12 +293,14 @@ $(document).ready(function() {
         const lesson_content_area = $(this).closest('.lesson_content_area')
         const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');
         const lesson_content = lesson_content_area.find('.lesson_content_input');
+        const lesson_content_picture = lesson_content_area.find('.edit_lesson_content_picture_btns')
 
         lesson_content_title.prop('disabled', true);
         lesson_content.prop('disabled', true);
 
         lesson_content_area.find('.edit_lesson_content_btns').addClass('hidden');
         lesson_content_area.find('.edit_lesson_content').removeClass('hidden');
+        lesson_content_picture.addClass('hidden');
     })
 
     $('.save_lesson_content_btn').on('click',function(e){
@@ -337,6 +470,8 @@ $(document).ready(function() {
             },
             success: function(response) {
                 // Handle success if needed
+                console.log("success");
+                location.reload();
                 console.log(response);
             },
             error: function(error) {
@@ -380,6 +515,7 @@ $(document).ready(function() {
             lesson_id: lessonID,
             lesson_content_title: lessonContentTitle,
             lesson_content: lessonContent,
+            picture: null
         }
 
         if(lessonData.length > 0) {
@@ -454,16 +590,17 @@ $(document).ready(function() {
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         
-        // const loopCounter = 0;
+        var loopCounter = 0
         for (let i = 0; i < lessonData.length; i++) {
             // console.log(lessonData[i])
-            // loopCounter++;
+            loopCounter++;
             const row_lesson_content_data = {
                 'lesson_content_id': lessonData[i]['lesson_content_id'],
                 'lesson_id': lessonData[i]['lesson_id'],
                 'lesson_content_title': lessonData[i]['lesson_content_title'],
                 'lesson_content': lessonData[i]['lesson_content'],
                 'lesson_content_order': lessonData[i]['lesson_content_order'],
+                'picture': lessonData[i]['picture'],
             }
 
             if (!/^none\d+$/.test(row_lesson_content_data['lesson_content_id'])) {
@@ -483,7 +620,7 @@ $(document).ready(function() {
                         // Handle success if needed
                         if(i + 1 == lessonData.length){
                             if (response && response.redirect_url ) {
-                                window.location.href = response.redirect_url;
+                                // window.location.href = response.redirect_url;
                             }
                         }
                     },
@@ -506,7 +643,7 @@ $(document).ready(function() {
                         // Handle success if needed
                         if(i + 1 == lessonData.length){
                             if (response && response.redirect_url ) {
-                                window.location.href = response.redirect_url;
+                                // window.location.href = response.redirect_url;
                             }
                         }
                     },
@@ -518,29 +655,26 @@ $(document).ready(function() {
 
         }
 
-        // if(loopCounter + 1 == lessonData.length) {
-        //     const url = "/instructor/course/content/"+courseID+"/"+syllabusID+"/lesson/"+topicID+"/title/"+ lessonID +"/store_file";
+        console.log(loopCounter);
+        if(loopCounter == lessonData.length) {
+            const url = "/instructor/course/content/"+courseID+"/"+syllabusID+"/lesson/"+topicID+"/title/"+ lessonID +"/generate_pdf";
 
-        //         $.ajax({
-        //             type: "POST",
-        //             url: url,
-        //             data: row_lesson_content_data,
-        //             headers: {
-        //                 'X-CSRF-TOKEN': csrfToken
-        //             },
-        //             success: function(response) {
-        //                 // Handle success if needed
-        //                 if(i + 1 == lessonData.length){
-        //                     if (response && response.redirect_url ) {
-        //                         window.location.href = response.redirect_url;
-        //                     }
-        //                 }
-        //             },
-        //             error: function(error) {
-        //                 console.log(error);
-        //             }
-        //         });
-        // }
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        // Handle success if needed
+                        location.reload();
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+        }
 
 
     })
@@ -591,6 +725,7 @@ $(document).ready(function() {
                 location.reload();
             },
             error: function(xhr, status, error) {
+                alert('error uploading file')
                 console.log('Error:', error);
             }
         });

@@ -1,10 +1,10 @@
 @include('partials.header')
-<section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base">
+<section class="flex flex-row w-full text-sm lg:h-screen bg-mainwhitebg md:text-base">
     @include('partials.instructorNav')
     @include('partials.instructorSidebar')
     {{-- MAIN --}}
-    <section class="w-full px-2 mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
-        <div  class="p-3 pb-4 bg-white rounded-lg shadow-lg overscroll-auto md:overflow-auto">
+    <section class="w-full px-2 pt-[100px] mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12">
+        <div  class="p-3 pb-4 overflow-auto bg-white rounded-lg shadow-lg overscroll-auto">
             {{-- header --}}
             {{-- <div class="relative px-2 rounded-t-lg bg-seagreen text-mainwhitebg">
                 <button class="my-2 bg-gray-400 rounded-full ">
@@ -42,7 +42,7 @@
             
             <div style="background-color:{{$mainBackgroundCol}};" class="z-50 p-2 text-white rounded-xl">
                 <a href="{{ url("/instructor/course/$course->course_id") }}" class="my-2 bg-gray-400 rounded-full ">
-                    <svg  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+                    <svg class="fill-white"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                 </a>
                 <h1 class="w-1/2 py-4 text-5xl font-semibold"><span class="">{{ $course->course_name }}</span></h1>
                 {{-- subheaders --}}
@@ -128,7 +128,7 @@
                         {{-- /instructor/course/content/$course->course_id/lesson/?mainBackgroundCol=$mainBackgroundCol --}}
                         <a href="{{url("/instructor/course/content/$course->course_id/$topic->syllabus_id/lesson/$topic->topic_id")}}" 
                             style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
-                    onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
+                    onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 text-white rounded-lg shadow-lg bg-seagreen">
                             <div class="flex items-center">
                                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_75_1498)">
@@ -146,7 +146,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </a>
                         @elseif ($topic->category == 'ACTIVITY')
-                        <a style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        <a href="{{url("/instructor/course/content/$course->course_id/$topic->syllabus_id/activity/$topic->topic_id")}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
                     onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
                             <div class="flex items-center">
                                 <svg width="40" height="40" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">

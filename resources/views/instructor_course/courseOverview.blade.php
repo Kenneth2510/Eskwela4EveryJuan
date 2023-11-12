@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="w-full">
-                <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="w-32 h-10 m-2 rounded-full bg-seagreen text-white text-center flex items-center justify-center">
+                <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="flex items-center justify-center w-32 h-10 m-2 text-center text-white rounded-full bg-seagreen">
                     <h1>View Course</h1>
                 </a>
             </div>
@@ -53,12 +53,12 @@
         <div class="relative w-full mt-5">
             {{-- course left --}}
             <div class="flex justify-between text-mainwhitebg fill-mainwhitebg">
-                {{-- <a href="{{ url("/instructor/course/manage/$course->course_id") }}" class="relative w-1/2 h-16 p-2 mr-2 items-center text-center rounded-lg bg-darthmouthgreen"> --}}
-                    <button data-course-id="{{$course->course_id}}" id="showCourseManageModal" class="relative w-1/2 h-16 p-2 mr-2 items-center text-center rounded-lg bg-darthmouthgreen">
+                {{-- <a href="{{ url("/instructor/course/manage/$course->course_id") }}" class="relative items-center w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen"> --}}
+                    <button data-course-id="{{$course->course_id}}" id="showCourseManageModal" class="relative items-center w-1/2 h-16 p-2 mr-2 text-center rounded-lg bg-darthmouthgreen">
                     <h1>Manage Course</h1>
                     <svg class="absolute bottom-0 right-0 hidden mx-2 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                 </button>
-                <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="relative w-1/2 h-16 p-2 ml-2 flex justify-center text-center items-center rounded-lg bg-seagreen">
+                <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="relative flex items-center justify-center w-1/2 h-16 p-2 ml-2 text-center rounded-lg bg-seagreen">
                     <h1>View Course</h1>
                     <svg class="absolute bottom-0 right-0 hidden mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                 </a>
@@ -83,41 +83,41 @@
             </div>
         </div>
 
-        <div id="courseManageModal"  class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
-            <div id="courseManage" style="margin-left:15%;" class="w-full  mx-5 overscroll-auto md:overflow-auto bg-white p-5 rounded-lg">
+        <div id="courseManageModal"  class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+            <div id="courseManage" style="margin-left:15%;" class="w-full p-5 mx-5 bg-white rounded-lg overscroll-auto md:overflow-auto">
                 <a href="" class="w-8 h-8 m-2">
                     <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24">
                         <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
                     </svg>
                 </a>
-                <div id="course_mainBody" class="mt-5 rounded-lg flex">
-                    <div id="side_items" class="w-1/6 h-full rounded-lg bg-green-700 h-">
-                        <ul class="px-5 py-5 text-white text-xl font-medium">
-                            <li id="edit_info_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                                <i class="fa-solid fa-book-open text-3xl pr-2"></i>
+                <div id="course_mainBody" class="flex mt-5 rounded-lg">
+                    <div id="side_items" class="w-1/6 h-full bg-green-700 rounded-lg h-">
+                        <ul class="px-5 py-5 text-xl font-medium text-white">
+                            <li id="edit_info_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                                <i class="pr-2 text-3xl fa-solid fa-book-open"></i>
                                 Edit Info
                             </li>
-                            <li id="enrolled_learners_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                                <i class="fa-solid fa-users text-3xl pr-2"></i>
+                            <li id="enrolled_learners_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                                <i class="pr-2 text-3xl fa-solid fa-users"></i>
                                 Enrolled Learners
                             </li>
-                            <li id="course_summary_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover-bg-green-900">
-                                <i class="fa-solid fa-book text-3xl pr-2"></i>
+                            <li id="course_summary_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover-bg-green-900">
+                                <i class="pr-2 text-3xl fa-solid fa-book"></i>
                                 Course Summary
                             </li>
-                            <li class="w-full py-3 rounded-xl px-2 mt-2"></li>
-                            <li class="w-full py-3 rounded-xl px-2 mt-2"></li>
+                            <li class="w-full px-2 py-3 mt-2 rounded-xl"></li>
+                            <li class="w-full px-2 py-3 mt-2 rounded-xl"></li>
                         </ul>
                     </div>
     
     
-                    <div id="course_info" class="mx-5 w-full">
+                    <div id="course_info" class="w-full mx-5">
                             
                         {{-- ajax add info in here --}}
                     </div>
     
-                    <div id="enrolled_learners" class="hidden mx-5 w-full">
-                            <h1 class="text-2xl font-semibold border-black border-b-2">Enrolled Learner</h1>
+                    <div id="enrolled_learners" class="hidden w-full mx-5">
+                            <h1 class="text-2xl font-semibold border-b-2 border-black">Enrolled Learner</h1>
     
                             <form id="enrolleeForm"  method="GET">
                                 <div class="flex items-center">
@@ -169,20 +169,20 @@
                             </div>
                         </div>
 
-                        <div id="course_summary" class="overflow-y-auto hidden mx-5 w-full">
+                        <div id="course_summary" class="hidden w-full mx-5 overflow-y-auto">
                             
     
-                            {{-- <div class="justify-end flex">
-                                <button id="showDeleteModal" class="px-5 py-5 text-xl rounded-xl bg-red-600 hover:bg-red-700">Delete Course</button>
+                            {{-- <div class="flex justify-end">
+                                <button id="showDeleteModal" class="px-5 py-5 text-xl bg-red-600 rounded-xl hover:bg-red-700">Delete Course</button>
                             </div>
                             
-                            <div id="deleteCourseModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                            <div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
                                 <form id="deleteCourse" action="GET">
                                     @csrf
-                                    <div class="bg-white p-5 rounded-lg text-center">
+                                    <div class="p-5 text-center bg-white rounded-lg">
                                         <p>Are you sure you want to delete this course?</p>
-                                        <button type="submit" id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">Confirm</button>
-                                        <button type="button" id="cancelDelete" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                                        <button type="submit" id="confirmDelete" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+                                        <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
                                     </div>
                                 </form>
                                 
@@ -195,5 +195,6 @@
             {{-- @include('instructor_course.courseManage'); --}}
         </div>
     </section>
+    @include('partials.instructorProfile')
 </section>
 @include('partials.footer')

@@ -22,4 +22,8 @@
     .FORM-CTNR {
         @apply flex flex-col my-2 font-medium;
     }
+
+    .main-container {
+        @apply flex flex-row w-full h-auto text-sm bg-mainwhitebg md:text-base lg:h-screen;
+    }
 }

@@ -59,6 +59,8 @@ Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor/settings', 'settings');
     Route::put('/instructor/settings', 'update_info');
     Route::put('/instructor/update_profile', 'update_profile');
+
+    Route::get('/instructor/activities', 'activity');
 });
 
 
@@ -134,14 +136,23 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/json', 'InstructorCourseController@lesson_content_json');
 
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson_id}', 'InstructorCourseController@update_lesson_title');
-    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson_id}/picture', 'InstructorCourseController@update_lesson_picture');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/picture', 'InstructorCourseController@update_lesson_picture');
     Route::post('/instructor/course/content/lesson/{lesson}/title/{lesson_content}', 'InstructorCourseController@update_lesson_content');
-
-    
     Route::post('/instructor/course/content/lesson/{lesson}/title/{lesson_content}/delete', 'InstructorCourseController@delete_lesson_content');
+
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save', 'InstructorCourseController@save_lesson_content');
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save_add', 'InstructorCourseController@save_add_lesson_content');
-    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_file', 'InstructorCourseController@lesson_content_store_file');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_file/{lesson_content}', 'InstructorCourseController@lesson_content_store_file');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/delete_file/{lesson_content}', 'InstructorCourseController@lesson_content_delete_file');
+    Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/generate_pdf', 'InstructorCourseController@lesson_generate_pdf');
+    
+    
+    Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}', 'InstructorCourseController@view_activity');
+    Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/json', 'InstructorCourseController@activity_content_json');
+    Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/instructions', 'InstructorCourseController@update_activity_instructions');
+    Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/score', 'InstructorCourseController@update_activity_score');
+    Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/criteria', 'InstructorCourseController@update_activity_criteria');
+    Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/criteria_add', 'InstructorCourseController@add_activity_criteria');
 // // })->middleware('web');
 });
 
@@ -151,5 +162,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/learner/course/enroll/{course}', 'LearnerCourseController@enroll_course');
     Route::post('/learner/course/unEnroll/{learnerCourse}', 'LearnerCourseController@unEnroll_course');
     Route::get('/learner/course/manage/{course}', 'LearnerCourseController@manage_course');
+    Route::get('/learner/course/manage/{course}/overview', 'LearnerCourseController@course_overview');
+    Route::get('/learner/course/manage/{course}/view_syllabus', 'LearnerCourseController@view_syllabus');
+
+    Route::get('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}', 'LearnerCourseController@view_lesson');
+    Route::post('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}/finish', 'LearnerCourseController@finish_lesson');
     // // })->middleware('web');
 });

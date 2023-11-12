@@ -10,6 +10,8 @@ use App\Models\Admin;
 use App\Models\Course;
 use App\Models\LearnerCourse;
 use App\Models\LessonContents;
+use App\Models\ActivityContents;
+use App\Models\ActivityContentCriterias;
 use App\Models\Syllabus;
 use App\Models\Lessons;
 use App\Models\Activities;
@@ -25,6 +27,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\URL;
+use Dompdf\Dompdf;
 
 class InstructorCourseController extends Controller
 {
@@ -99,6 +104,7 @@ class InstructorCourseController extends Controller
                 $course = Course::create($courseData);
                 
                 $folderName = $course->course_id . ' ' . $courseData['course_name'];
+                $folderName = Str::slug($folderName, '_');
                 $folderPath = 'public/courses/' . $folderName;
     
                 if(!Storage::exists($folderPath)) {
@@ -153,6 +159,7 @@ class InstructorCourseController extends Controller
         ->with([
             'title' => 'Course Overview',
             'scripts' => ['instructor_course_manage.js'],
+            'instructor' => $instructor,
         ]
         );
     }
@@ -726,8 +733,19 @@ class InstructorCourseController extends Controller
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('topic_id', $topic_id)
                         ->first();
+                            // dd($lessonInfo);
 
-                    $lessonContent = DB::table('lesson_content')
+                            if ($lessonInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $lessonContent = null; // or $activityContent = [];
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
+
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $lessonContent = DB::table('lesson_content')
                             ->select(
                                 'lesson_content_id',
                                 'lesson_id',
@@ -739,10 +757,23 @@ class InstructorCourseController extends Controller
                             ->where('lesson_id', $lessonInfo->lesson_id)
                             ->orderBy('lesson_content_order', 'ASC')
                             ->get();
+                            }
+
+
+                    
 
                                 // dd($lessonContent);
 
                     $response = $this->course_content($course);
+
+                    session(['lesson_data' => [
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
                     return view('instructor_course.courseLesson', compact('instructor'))->with([
                         'title' => 'Course Lesson',
                         'scripts' => ['instructor_lesson_manage.js'],
@@ -861,21 +892,74 @@ class InstructorCourseController extends Controller
         }
     }
 
-    public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, $lesson_id) {
+    // public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, $lesson_id) {
+    //     try {
+
+    //         $pictureData = $request->validate([
+    //             'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
+    //         ]);
+
+    //         $folderName = "{$course->course_id} {$course->course_name}";
+
+    //         $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+    //         $folderPath = "courses/" .$folderName;
+
+    //         $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
+
+    //         Lessons::where('lesson_id' , $lesson_id)
+    //         ->update(['picture' => $filePath]);
+
+    //         if(!Storage::exists($folderPath)) { 
+    //         Storage::makeDirectory($folderPath);
+    //     }
+
+
+    //     } catch (ValidationException $e) {
+    //         $errors = $e->validator->errors();
+        
+    //         return response()->json(['errors' => $errors], 422);
+    //     }
+    // }
+    public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, Lessons $lesson) {
         try {
+
+            $lessonData = DB::table('lessons')
+            ->select(
+                'picture'
+            )
+            ->where('lesson_id' , $lesson->lesson_id)
+            ->first();
+
+            if($lessonData->picture !== null) {
+                $relativeFilePath = str_replace('public/', '', $lesson->picture);
+                
+                if (Storage::disk('public')->exists($relativeFilePath)) {
+                    // Storage::disk('public')->delete($relativeFilePath);
+                    $specifiedDir = explode('/', $relativeFilePath);
+                    array_pop($specifiedDir);
+
+                    $dirPath = implode('/', $specifiedDir);
+
+                    // dd($dirPath);
+                    if (Storage::disk('public')->exists($relativeFilePath)) {
+                        Storage::disk('public')->delete($relativeFilePath);
+                    }
+                }
+            }
+                
 
             $pictureData = $request->validate([
                 'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
             ]);
 
             $folderName = "{$course->course_id} {$course->course_name}";
-
+            $folderName = Str::slug($folderName, '_');
             $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
             $folderPath = "courses/" .$folderName;
 
             $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
 
-            Lessons::where('lesson_id' , $lesson_id)
+            Lessons::where('lesson_id' , $lesson->lesson_id)
             ->update(['picture' => $filePath]);
 
             if(!Storage::exists($folderPath)) { 
@@ -977,20 +1061,492 @@ class InstructorCourseController extends Controller
         }
     }
 
-    public function lesson_content_store_file() {
+    public function lesson_content_store_file(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson, LessonContents $lesson_content, Request $request) {
+        try {
 
+
+            $lessonContentData = DB::table('lesson_content')
+            ->select(
+                'picture'
+            )
+            ->where('lesson_content_id' , $lesson_content->lesson_content_id)
+            ->first();
+
+            if($lessonContentData->picture !== null) {
+                $relativeFilePath = str_replace('public/', '', $lesson_content->picture);
+                
+                if (Storage::disk('public')->exists($relativeFilePath)) {
+                    // Storage::disk('public')->delete($relativeFilePath);
+                    $specifiedDir = explode('/', $relativeFilePath);
+                    array_pop($specifiedDir);
+
+                    $dirPath = implode('/', $specifiedDir);
+
+                    // dd($dirPath);
+                    if (Storage::disk('public')->exists($relativeFilePath)) {
+                        Storage::disk('public')->delete($relativeFilePath);
+                    }
+                }
+
+            }
+
+            $pictureData = $request->validate([
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            $folderName = "{$course->course_id} {$course->course_name}";
+            $folderName = Str::slug($folderName, '_');
+            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+            $folderPath = "courses/" .$folderName;
+
+            $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
+
+            LessonContents::where('lesson_content_id' , $lesson_content['lesson_content_id'])
+            ->update(['picture' => $filePath]);
+
+            if(!Storage::exists($folderPath)) { 
+            Storage::makeDirectory($folderPath);
+        }
+
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+    public function lesson_content_delete_file(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson, LessonContents $lesson_content) {
+        try {
+
+            $relativeFilePath = str_replace('public/', '', $lesson_content->picture);
+            if (Storage::disk('public')->exists($relativeFilePath)) {
+                // Storage::disk('public')->delete($relativeFilePath);
+                $specifiedDir = explode('/', $relativeFilePath);
+                array_pop($specifiedDir);
+
+                $dirPath = implode('/', $specifiedDir);
+
+                // dd($dirPath);
+                if (Storage::disk('public')->exists($relativeFilePath)) {
+                    Storage::disk('public')->delete($relativeFilePath);
+                }
+            }
+
+            $updatedRow = [
+                'picture' => null
+            ];
+                
+            DB::table('lesson_content')
+                ->where('lesson_id', $lesson->lesson_id)
+                ->where('lesson_content_id', $lesson_content->lesson_content_id)
+                ->update($updatedRow);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
 
-    public function content(){
-        return view('instructor_course.courseContent')->with('title', 'Course Content');
+    public function lesson_generate_pdf(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson)
+{
+    if (auth('instructor')->check()) {
+        $instructor = session('instructor');
+        
+        // Retrieve the data from the session
+        $lessonData = session('lesson_data');
+    
+        if (!$lessonData) {
+            // Handle the case where the session data is not found
+            return response('Session data not found', 500);
+        }
+    
+        // Extract the data you need from the session
+        $lessonInfo = $lessonData['lessonInfo'];
+        $lessonContent = $lessonData['lessonContent'];
+        $title = 'Course Lesson';
+        $scripts = ['instructor_lesson_manage.js'];
+        $courseData = $lessonData['courseData'];
+
+        $course = $courseData['course'];
+        $syllabus = $courseData['syllabus'];
+        $lessonCount = $courseData['lessonCount'];
+        $activityCount = $courseData['activityCount'];
+        $quizCount = $courseData['quizCount'];
+
+        // You can now use $lessonInfo and $lessonContent to generate your PDF
+        // ...
+
+        // Render the view with the Blade template
+        $html = view('instructor_course.courseLesson', compact('instructor'))
+            ->with([
+                'title' => $title,
+                'scripts' => $scripts,
+                'lessonCount' => $lessonCount,
+                'activityCount' => $activityCount,
+                'quizCount' => $quizCount,
+                'course' => $course,
+                'syllabus' => $syllabus,
+                'lessonInfo' => $lessonInfo,
+                'lessonContent' => $lessonContent,
+            ])
+            ->render();
+
+        // Find the markers in your HTML
+        $startMarker = '<!-- start-generate-pdf -->';
+        $endMarker = '<!-- end-generate-pdf -->';
+    
+        // Find the positions of the markers
+        $startPos = strpos($html, $startMarker);
+        $endPos = strpos($html, $endMarker);
+
+        $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
+
+        // Generate a unique filename for the PDF (you can customize this)
+        $filename = 'lesson_' . $lessonInfo->lesson_id . '.pdf';
+
+        // Define the folder path based on the course name
+        $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
+        $folderPath = 'courses/' . $folderName;
+
+        // Check if the file already exists
+        if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
+            // If it exists, delete the old file
+            Storage::disk('public')->delete($folderPath . '/' . $filename);
+        }
+
+        // Configure Dompdf
+        $dompdf = new Dompdf();
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+        $dompdf->set_option('isPhpEnabled', true);
+        $dompdf->set_option('isCssEnabled', true);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($extractedHtml);
+
+        // (Optional) Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Generate the PDF
+        $pdf = $dompdf->output();
+
+        // Store the new PDF in the public directory within the course-specific folder
+        Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
+
+        // Generate the URL to the stored PDF
+        $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
+
+        // Provide a download link to the user
+        return response()->json(['pdf_url' => $pdfUrl]);
+    } else {
+        // Handle authentication failure
+        return response('Unauthorized', 401);
     }
-    public function syllabus(){
-        return view('instructor_course.courseSyllabus')->with('title', 'Course Content');
+}
+
+
+    
+    // for course activity
+    public function view_activity(Course $course, Syllabus $syllabus, $topic_id) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor['status'] !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {
+
+                    $activityInfo = DB::table('activities')
+                        ->select(
+                            'activity_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id',
+                            'activity_title',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('topic_id', $topic_id)
+                        ->first();
+
+                            if ($activityInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $activityContent = null; // or $activityContent = [];
+                                $activityContentCriteria = null;
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
+
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $activityContent = DB::table('activity_content')
+                                    ->select(
+                                        'activity_content_id',
+                                        'activity_id',
+                                        'activity_instructions',
+                                        'total_score',
+                                    )
+                                    ->where('activity_id', $activityInfo->activity_id)
+                                    ->get();
+
+                                    if($activityContent === null) {
+                                        $activityContentCriteria = null;
+                                    } else {
+                                        $activityContentCriteria = DB::table('activity_content_criteria')
+                                        ->select(
+                                            'activity_content_criteria_id',
+                                            'activity_content_id',
+                                            'criteria_title',
+                                            'score'
+                                        )
+                                        ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray()) // Use pluck to get an array of activity_content_id values
+                                        ->get();
+                                    }
+                               
+                            }
+
+                                // dd($lessonContent);
+
+                    $response = $this->course_content($course);
+
+                    session(['activity_data' => [
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
+                    return view('instructor_course.courseActivity', compact('instructor'))->with([
+                        'title' => 'Course Lesson',
+                        'scripts' => ['instructorActivities.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        // 'instructor' => $response['instructor'],
+                    ]);
+
+                } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+            
+                    return response()->json(['errors' => $errors], 422);
+                }
+            }
+        } else {
+            return redirect('/instructor');
+        }
+
+        return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
+    
     }
-    public function lesson(){
-        return view('instructor_course.courseLesson')->with('title', 'Course Content');
+
+    public function activity_content_json(Course $course, Syllabus $syllabus, $topic_id) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor['status'] !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {
+
+                    $activityInfo = DB::table('activities')
+                        ->select(
+                            'activity_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id',
+                            'activity_title',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('topic_id', $topic_id)
+                        ->first();
+
+                            if ($activityInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $activityContent = null; // or $activityContent = [];
+                                $activityContentCriteria = null;
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
+
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $activityContent = DB::table('activity_content')
+                                    ->select(
+                                        'activity_content_id',
+                                        'activity_id',
+                                        'activity_instructions',
+                                        'total_score',
+                                    )
+                                    ->where('activity_id', $activityInfo->activity_id)
+                                    ->get();
+
+                                    if($activityContent === null) {
+                                        $activityContentCriteria = null;
+                                    } else {
+                                        $activityContentCriteria = DB::table('activity_content_criteria')
+                                        ->select(
+                                            'activity_content_criteria_id',
+                                            'activity_content_id',
+                                            'criteria_title',
+                                            'score'
+                                        )
+                                        ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray()) // Use pluck to get an array of activity_content_id values
+                                        ->get();
+                                    }
+                               
+                            }
+
+                                // dd($lessonContent);
+
+                    $response = $this->course_content($course);
+
+                    session(['activity_data' => [
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
+                      $data = [    
+                        'title' => 'Course Lesson',
+                        'scripts' => ['instructorActivities.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'activityInfo' => $activityInfo,
+                        'activityContent' => $activityContent,
+                        'activityContentCriteria' => $activityContentCriteria,
+                        ];
+
+                    return response()->json($data);
+
+                    // return view('instructor_course.courseActivity', compact('instructor'))->with([
+                    //     'title' => 'Course Lesson',
+                    //     'scripts' => ['instructorActivities.js'],
+                    //     'lessonCount' => $response['lessonCount'],
+                    //     'activityCount' => $response['activityCount'],
+                    //     'quizCount' => $response['quizCount'],
+                    //     'course' => $response['course'],
+                    //     'syllabus' => $response['syllabus'],
+                    //     'activityInfo' => $activityInfo,
+                    //     'activityContent' => $activityContent,
+                    //     'activityContentCriteria' => $activityContentCriteria,
+                    //     // 'instructor' => $response['instructor'],
+                    // ]);
+
+                } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+            
+                    return response()->json(['errors' => $errors], 422);
+                }
+            }
+        } else {
+            return redirect('/instructor');
+        }
+
+        return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
+    
+    }
+
+    public function update_activity_instructions(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_values = $request->validate([
+                'activity_instructions' => ['required'],
+            ]);
+
+            DB::table('activity_content')
+                ->where('activity_id', $activity->activity_id)
+                ->where('activity_content_id', $activity_content->activity_content_id)
+                ->update($updated_values);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+    public function update_activity_score(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_values = $request->validate([
+                'total_score' => ['required'],
+            ]);
+
+            DB::table('activity_content')
+                ->where('activity_id', $activity->activity_id)
+                ->where('activity_content_id', $activity_content->activity_content_id)
+                ->update($updated_values);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
 
+    public function update_activity_criteria(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_criterias = $request->validate([
+                'activity_content_id' => ['required'],
+                'criteria_title' => ['required'],
+                'score' => ['required'],
+            ]);
+
+            ActivityContentCriterias::where('activity_content_id', $activity_content->activity_content_id)
+            ->delete();
+
+            $activityContentCriteria = ActivityContentCriterias::create($updated_criterias);
+
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+
+    public function add_activity_criteria(Course $course, Syllabus $syllabus, $topic_id, Activities $activity, ActivityContents $activity_content, Request $request) {
+        try {
+            $updated_criterias = $request->validate([
+                'activity_content_id' => ['required'],
+                'criteria_title' => ['required'],
+                'score' => ['required'],
+            ]);
+
+            $activityContentCriteria = ActivityContentCriterias::create($updated_criterias);
+
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+   
 }

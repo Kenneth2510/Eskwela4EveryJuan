@@ -11,13 +11,13 @@
     
     {{-- MAIN --}}
     <section class="w-full overflow-auto pt-14 md:bg-seagreen md:flex md:flex-col md:justify-center md:items-center lg:block lg:w-1/2 lg:text-mainwhitebg">
-        <div class="md:shadow-lg md:w-3/4 md:mt-10 rounded-xl md:bg-mainwhitebg lg:w-full lg:bg-transparent lg:shadow-none" id="learnerPersonalInfo">
+        <div class="md:shadow-lg md:w-3/4 md:mt-10 rounded-xl md:bg-mainwhitebg lg:w-full lg:bg-transparent lg:shadow-none" id="personinfo">
             <div class="px-4 pt-4 md:mx-auto md:w-3/4 md:pt-8 lg:w-full lg:pt-0" id="ins-head">
                 <h1 class="my-2 text-3xl font-bold md:text-4xl">Create an Instructor account</h1>
                 <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
             </div>
 
-            <form class="pb-4 mx-4 mt-10 lg:px-8" action="">
+            <form class="pb-4 mx-4 mt-10 lg:px-8" action="{{ url('/learner/register') }}" method="POST">
                 @csrf
                 <div class="flex flex-col flex-wrap lg:flex-row">
                     <div class="lg:w-1/2 lg:pr-4 FORM-CTNR">
@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="grid h-auto my-4 text-black place-items-end lg:pr-4" >
-                    <button class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500 lg:h-12 lg:w-32" id="learnerNextBtn">
+                    <button class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500 lg:h-12 lg:w-32" id="nextBtn">
                         <h1>Next</h1>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                     </button>
