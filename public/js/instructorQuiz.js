@@ -134,7 +134,12 @@ $(document).ready(function () {
         identificationForm.appendTo(myParentDiv);
 
         $("#addQuestionBtn").hide();
-        newQuestionBtn().appendTo("#quizMainContainer");
+        // newQuestionBtn().find("#quizMainContainer").before();
+
+        $("#quizMainContainer")
+            .find($("#publishQuiz"))
+            .before(newQuestionBtn());
+        $("#publishQuiz").removeClass("hidden");
     });
 
     $(document).on("click", "#addNewQBtn", function () {
