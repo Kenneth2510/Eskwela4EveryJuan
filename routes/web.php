@@ -153,6 +153,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/score', 'InstructorCourseController@update_activity_score');
     Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/criteria', 'InstructorCourseController@update_activity_criteria');
     Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/criteria_add', 'InstructorCourseController@add_activity_criteria');
+
+    Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/{learner_course}', 'InstructorCourseController@view_learner_activity_response');
+    Route::post('/instructor/course/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}', 'InstructorCourseController@learnerResponse_overallScore');
+    Route::post('/instructor/course/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}/criteria', 'InstructorCourseController@learnerResponse_criteriaScore');
 // // })->middleware('web');
 });
 
@@ -167,5 +171,16 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     Route::get('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}', 'LearnerCourseController@view_lesson');
     Route::post('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}/finish', 'LearnerCourseController@finish_lesson');
+
+    Route::get('/learner/course/content/{course}/{learner_course}/activity/{syllabus}', 'LearnerCourseController@view_activity');
+    Route::get('/learner/course/content/{course}/{learner_course}/activity/{syllabus}/answer', 'LearnerCourseController@answer_activity');
+    Route::post('/learner/course/content/{course}/{learner_course}/activity/{syllabus}/answer/{activity}/{activity_content}', 'LearnerCourseController@submit_answer');
+
+
+
+
+    Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}', 'LearnerCourseController@view_quiz');
+
+    
     // // })->middleware('web');
 });

@@ -16,6 +16,13 @@ use App\Models\Syllabus;
 use App\Models\Lessons;
 use App\Models\Activities;
 use App\Models\Quizzes;
+use App\Models\LearnerCourseProgress;
+use App\Models\LearnerSyllabusProgress;
+use App\Models\LearnerLessonProgress;
+use App\Models\LearnerActivityProgress;
+use App\Models\LearnerQuizProgress;
+use App\Models\LearnerActivityOutput;
+use App\Models\LearnerActivityCriteriaScore;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -1263,6 +1270,24 @@ class InstructorCourseController extends Controller
             } else {
                 try {
 
+                    if (!function_exists('getRandomColor')) {
+                        function getRandomColor() {
+                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                        }
+                    }
+                    
+                    // Generate a random color for mainBackgroundCol
+                    $mainBackgroundCol = getRandomColor();
+        
+                    // Darken the mainBackgroundCol
+                    $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                    $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+        
+                    // Darken the mainBackgroundCol further for darkenedColor
+                    $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+    
+    
+
                     $activityInfo = DB::table('activities')
                         ->select(
                             'activity_id',
@@ -1328,6 +1353,7 @@ class InstructorCourseController extends Controller
 
                     return view('instructor_course.courseActivity', compact('instructor'))->with([
                         'title' => 'Course Lesson',
+                        'mainBackgroundCol' => $mainBackgroundCol,
                         'scripts' => ['instructorActivities.js'],
                         'lessonCount' => $response['lessonCount'],
                         'activityCount' => $response['activityCount'],
@@ -1350,7 +1376,6 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
     
     }
 
@@ -1358,7 +1383,6 @@ class InstructorCourseController extends Controller
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
             
-            $instructor = session('instructor');
             if($instructor['status'] !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
@@ -1428,6 +1452,35 @@ class InstructorCourseController extends Controller
                         'title' => 'Course Lesson',
                     ]]);
 
+                    
+                    $learnerActivityOutput = DB::table('learner_activity_progress')
+                    ->select(
+                        'learner_activity_progress.learner_activity_progress_id',
+                        'learner_activity_progress.learner_course_id',
+                        'learner_activity_progress.learner_id',
+                        'learner_activity_progress.course_id',
+                        'learner_activity_progress.syllabus_id',
+                        'learner_activity_progress.activity_id',
+                        'learner_activity_progress.status',
+                        'learner_activity_progress.created_at',
+
+                        'learner.learner_fname',
+                        'learner.learner_lname',
+
+                        'learner_activity_output.total_score'
+                    )
+                    ->join('learner', 'learner.learner_id', '=', 'learner_activity_progress.learner_id')
+                    ->join('learner_activity_output', function ($join) {
+                        $join->on('learner_activity_output.learner_course_id', '=', 'learner_activity_progress.learner_course_id')
+                            ->on('learner_activity_output.syllabus_id', '=', 'learner_activity_progress.syllabus_id')
+                            ->on('learner_activity_output.course_id', '=', 'learner_activity_progress.course_id')
+                            ->on('learner_activity_output.activity_id', '=', 'learner_activity_progress.activity_id');
+                    })
+                    ->where('learner_activity_progress.course_id', $course->course_id)
+                    ->where('learner_activity_progress.syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_activity_progress.activity_id', $activityInfo->activity_id)
+                    ->get();
+
                       $data = [    
                         'title' => 'Course Lesson',
                         'scripts' => ['instructorActivities.js'],
@@ -1439,23 +1492,11 @@ class InstructorCourseController extends Controller
                         'activityInfo' => $activityInfo,
                         'activityContent' => $activityContent,
                         'activityContentCriteria' => $activityContentCriteria,
+                        'learnerActivityContent' => $learnerActivityOutput,
                         ];
 
-                    return response()->json($data);
 
-                    // return view('instructor_course.courseActivity', compact('instructor'))->with([
-                    //     'title' => 'Course Lesson',
-                    //     'scripts' => ['instructorActivities.js'],
-                    //     'lessonCount' => $response['lessonCount'],
-                    //     'activityCount' => $response['activityCount'],
-                    //     'quizCount' => $response['quizCount'],
-                    //     'course' => $response['course'],
-                    //     'syllabus' => $response['syllabus'],
-                    //     'activityInfo' => $activityInfo,
-                    //     'activityContent' => $activityContent,
-                    //     'activityContentCriteria' => $activityContentCriteria,
-                    //     // 'instructor' => $response['instructor'],
-                    // ]);
+                    return response()->json($data);
 
                 } catch (ValidationException $e) {
                     $errors = $e->validator->errors();
@@ -1467,7 +1508,6 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
     
     }
 
@@ -1546,6 +1586,227 @@ class InstructorCourseController extends Controller
         
             return response()->json(['errors' => $errors], 422);
         }
+    }
+
+    public function view_learner_activity_response(Course $course, Syllabus $syllabus, $topic_id, LearnerCourse $learner_course) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+
+            try {
+
+                if (!function_exists('getRandomColor')) {
+                        function getRandomColor() {
+                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                        }
+                    }
+                    
+                    // Generate a random color for mainBackgroundCol
+                    $mainBackgroundCol = getRandomColor();
+        
+                    // Darken the mainBackgroundCol
+                    $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                    $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+        
+                    // Darken the mainBackgroundCol further for darkenedColor
+                    $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+    
+    
+
+                $activityData = DB::table('activities')
+                ->select(
+                    'activities.activity_id',
+                    'activities.course_id',
+                    'activities.syllabus_id',
+                    'activities.topic_id',
+                    'activities.activity_title',
+
+                    'activity_content.activity_content_id',
+                    'activity_content.activity_instructions',
+                    'activity_content.total_score'
+                )
+                ->join('activity_content', 'activity_content.activity_id', '=', 'activities.activity_id')
+                ->where('activities.course_id', $course->course_id)
+                ->where('activities.syllabus_id', $syllabus->syllabus_id)
+                ->where('activities.topic_id', $topic_id)
+                ->first();
+
+
+                $learnerActivityData = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output.learner_activity_output_id',
+                    'learner_activity_output.learner_course_id',
+                    'learner_activity_output.syllabus_id',
+                    'learner_activity_output.activity_id',
+                    'learner_activity_output.activity_content_id',
+                    'learner_activity_output.course_id',
+                    'learner_activity_output.answer',
+                    'learner_activity_output.total_score',
+                    'learner_activity_output.remarks',
+                    'learner_activity_output.created_at',
+
+                    'learner_course.learner_id',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname'
+                )
+                ->join('learner_course', 'learner_course.learner_course_id', '=', 'learner_activity_output.learner_course_id')
+                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                ->where('learner_activity_output.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_activity_output.course_id', $course->course_id)
+                ->where('learner_activity_output.syllabus_id', $syllabus->syllabus_id)
+                ->where('learner_activity_output.activity_id', $activityData->activity_id)
+                ->where('learner_activity_output.activity_content_id', $activityData->activity_content_id)
+                ->first();
+
+                $learnerActivityScoreData = DB::table('learner_activity_criteria_score')
+                ->select(
+                    'learner_activity_criteria_score.learner_activity_criteria_score_id',
+                    'learner_activity_criteria_score.learner_activity_output_id',
+                    'learner_activity_criteria_score.activity_content_criteria_id',
+                    'learner_activity_criteria_score.activity_content_id',
+                    'learner_activity_criteria_score.score',
+
+                    'activity_content_criteria.criteria_title',
+                    'activity_content_criteria.score as criteria_score'
+                )
+                ->join('activity_content_criteria', 'activity_content_criteria.activity_content_criteria_id', '=', 'learner_activity_criteria_score.activity_content_criteria_id')
+                ->where('learner_activity_criteria_score.learner_activity_output_id', $learnerActivityData->learner_activity_output_id)
+                ->where('learner_activity_criteria_score.activity_content_id', $learnerActivityData->activity_content_id)
+                ->orderBy('learner_activity_criteria_score.activity_content_criteria_id', 'ASC')
+                ->get();
+
+                $response = $this->course_content($course);
+
+               $data = [
+                'title' => 'Activity Output',
+                'scripts' => ['instructorActivities_learnerResponse.js'],
+                'mainBackgroundCol' => $mainBackgroundCol,
+                'activity' => $activityData,
+                'learnerActivityOutput' => $learnerActivityData,
+                'learnerActivityScore' => $learnerActivityScoreData,
+                'course' => $response['course'],
+               ];
+                // dd($data);
+
+                return view('instructor_course.courseActivity_viewLearnerResponse', compact('instructor'))->with($data);
+
+            } catch(\Exception $e) {
+                dd($e->getMessage());
+            }
+
+
+        } else {
+            return redirect('/instructor');
+        }
+            
+    }
+
+    public function learnerResponse_overallScore ($learner_activity_output, $learner_course, $activity, $activity_content, Request $request) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+    
+            try {
+                $remarks = $request->input('remarks');
+                $totalScore = $request->input('total_score');
+    
+                DB::table('learner_activity_output')
+                    ->where('learner_activity_output_id', $learner_activity_output)
+                    ->where('learner_course_id', $learner_course)
+                    ->where('activity_id', $activity)
+                    ->where('activity_content_id', $activity_content)
+                    ->update([
+                        'remarks' => $remarks,
+                        'total_score' => $totalScore,
+                    ]);
+
+                $learnerActivityOutputData = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id',
+                    'learner_course_id',
+                    'activity_id',
+                    'syllabus_id',
+                    'activity_content_id',
+                    'course_id'
+                )
+                ->where('learner_activity_output_id', $learner_activity_output)
+                ->where('learner_course_id', $learner_course)
+                ->where('activity_id', $activity)
+                ->where('activity_content_id', $activity_content)
+                ->first();
+
+                DB::table('learner_syllabus_progress')
+                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                ->where('course_id', $learnerActivityOutputData->course_id)
+                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                ->update([
+                    'status' => "COMPLETED",
+                ]);
+
+                DB::table('learner_activity_progress')
+                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                ->where('course_id', $learnerActivityOutputData->course_id)
+                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                ->where('activity_id', $learnerActivityOutputData->activity_id)
+                ->update([
+                    'status' => "COMPLETED",
+                ]);
+
+                DB::table('learner_syllabus_progress')
+                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                ->where('course_id', $learnerActivityOutputData->course_id)
+                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                ->where('status', "LOCKED")
+                ->orderBy('learner_syllabus_progress_id', 'ASC')
+                ->limit(1)
+                ->update([
+                    'status' => "NOT YET STARTED",
+                ]);
+                
+    
+            } catch(\Exception $e) {
+                dd($e->getMessage());
+            }
+    
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+    public function learnerResponse_criteriaScore ($learner_activity_output, $learner_course,  $activity, $activity_content, Request $request) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+    
+            try {
+                $activity_content_criteria_id = $request->input('activity_content_criteria_id');
+                $learner_activity_criteria_score_id = $request->input('learner_activity_criteria_score_id');
+                $score = $request->input('score');
+                $currentUrl = $request->input('currentUrl');
+    
+                DB::table('learner_activity_criteria_score')
+                    ->where('activity_content_criteria_id', $activity_content_criteria_id)
+                    ->where('learner_activity_criteria_score_id', $learner_activity_criteria_score_id)
+             
+                    ->update([
+                        'score' => $score,
+                    ]);
+
+                    session()->flash('message', 'Output Scored Successfully');
+
+                $response = [
+                    'message' => 'Output Scored Successfully',
+                    'redirect_url' => $currentUrl,
+                ];
+        
+                return response()->json($response);
+    
+            } catch(\Exception $e) {
+                dd($e->getMessage());
+            }
+    
+        } else {
+            return redirect('/instructor');
+        }
+
     }
 
    

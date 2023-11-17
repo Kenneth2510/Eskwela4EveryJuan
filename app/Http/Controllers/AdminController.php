@@ -1246,14 +1246,14 @@ class AdminController extends Controller
                 case "ACTIVITY":
                     DB::table('learner_activity_progress')
                     ->where('learner_course_id', $learnerCourse->learner_course_id)
-                    ->orderBy('learner_lesson_progress_id','ASC')
+                    ->orderBy('learner_activity_progress_id','ASC')
                     ->limit(1)
                     ->update(['status' => 'NOT YET STARTED']);
                     break;
                 case "QUIZ":
                     DB::table('learner_quiz_progress')
                     ->where('learner_course_id', $learnerCourse->learner_course_id)
-                    ->orderBy('learner_lesson_progress_id','ASC')
+                    ->orderBy('learner_quiz_progress_id','ASC')
                     ->limit(1)
                     ->update(['status' => 'NOT YET STARTED']);
                     break;
