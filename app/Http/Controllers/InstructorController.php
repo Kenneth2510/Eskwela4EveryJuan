@@ -341,6 +341,10 @@ class InstructorController extends Controller
     public function activity() {
         return view('instructor_course.courseActivity')->with(['title'=>'Activities', 'scripts'=>['instructorActivities.js']]);
     }
+
+    public function quiz() {
+        return view('instructor_course.courseQuiz')->with(['title'=>'Quiz', 'scripts'=>['instructorQuiz.js']]);
+    }
    
 
     
