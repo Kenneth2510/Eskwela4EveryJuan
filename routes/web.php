@@ -60,7 +60,7 @@ Route::controller(InstructorController::class)->group(function() {
     Route::put('/instructor/settings', 'update_info');
     Route::put('/instructor/update_profile', 'update_profile');
 
-    Route::get('/instructor/activities', 'activity');
+    // Route::get('/instructor/activities', 'activity');
 });
 
 
