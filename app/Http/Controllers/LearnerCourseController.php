@@ -649,7 +649,7 @@ class LearnerCourseController extends Controller
                 ->where('learner_activity_progress.learner_course_id' , $learnerSyllabusProgressData->learner_course_id)
                 ->first();
 
-                // dd($learnerActivityProgressData);
+                // dd($learnerActivity  rogressData);
 
                 $activityContentCriteriaData = DB::table('activity_content_criteria')
                 ->select(

@@ -1751,16 +1751,34 @@ class InstructorCourseController extends Controller
                     'status' => "COMPLETED",
                 ]);
 
-                DB::table('learner_syllabus_progress')
+                // DB::table('learner_syllabus_progress')
+                // ->where('learner_course_id' , $learner_course->learner_course_id)
+                // ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                // ->where('status', 'LOCKED')
+                // ->orderBy('learner_syllabus_progress_id', 'ASC')
+                // ->limit(1)
+                // ->update(['status' => 'NOT YET STARTED']);
+
+                $learnerSyllabusProgress = DB::table('learner_syllabus_progress')
+                ->select('learner_syllabus_progress_id', 'syllabus_id', 'category', 'status', /* add other columns as needed */)
+                // ->where('learner_course_id', $learner_course)
                 ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                ->where('course_id', $learnerActivityOutputData->course_id)
-                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
-                ->where('status', "LOCKED")
+                // ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                // ->where('learner_syllabus_progress_id', '>', $learnerActivityOutputData->learner_syllabus_progress_id)
+                ->where('status', '=' , 'LOCKED')
                 ->orderBy('learner_syllabus_progress_id', 'ASC')
-                ->limit(1)
-                ->update([
-                    'status' => "NOT YET STARTED",
-                ]);
+                ->first();
+                // ->limit(1);
+                // dd($learnerSyllabusProgress);
+
+                if ($learnerSyllabusProgress) {
+                DB::table('learner_syllabus_progress')
+                    ->where('learner_syllabus_progress_id', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                    ->update(['status' => 'NOT YET STARTED']);
+                }
+
+
+
                 
     
             } catch(\Exception $e) {
@@ -1789,6 +1807,25 @@ class InstructorCourseController extends Controller
                     ->update([
                         'score' => $score,
                     ]);
+
+
+                // $learnerActivityOutputData = DB::table('learner_activity_output')
+                // ->select(
+                //     'learner_activity_output_id',
+                //     'learner_course_id',
+                //     'activity_id',
+                //     'syllabus_id',
+                //     'activity_content_id',
+                //     'course_id'
+                // )
+                // ->where('learner_activity_output_id', $learner_activity_output)
+                // ->where('learner_course_id', $learner_course)
+                // ->where('activity_id', $activity)
+                // ->where('activity_content_id', $activity_content)
+                // ->first();
+
+                
+           
 
                     session()->flash('message', 'Output Scored Successfully');
 
