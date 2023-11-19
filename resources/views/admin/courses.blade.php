@@ -1,55 +1,52 @@
 @include('partials.header')
 @include('partials.sidebar')
 
-<section id="maincontent" class="relative w-4/5 h-full left-80">
-    <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">Courses Management</h1>
-        <div id="adminuser" class="flex items-center">
+<section id="maincontent" class="relative w-4/5 h-full mt-10 left-80">
+    <div id="title" class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-semibold">Courses Management</h1>
+        <div id="adminuser" class="flex items-center space-x-3">
             <h3 class="text-lg">{{ $adminCodeName }}</h3>
             <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
         </div>
     </div>
-    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
-        <div id="containertitle" class="flex items-center justify-between pt-1 pb-5 px-auto">
-            <h3 class="text-3xl font-semibold">All Courses</h3>
-            <div class="flex items-center">
-                    <a href="{{ url('/admin/add_course') }}" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">Add New</a>
-                
-                    <form action="{{ url('/admin/courses') }}" method="GET">
-                        <div class="flex items-center">
-                            <div class="flex items-center mx-10">
-                                <div class="mx-2">
-                                    <label for="filterDate" class="">Filter by Date</label><br>
-                                    <input type="date" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl" value="">
-                                </div>
-                                <div class="mx-2">
-                                    <label for="filterStatus" class="">Filter by Status</label><br>
-                                    <select name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
-                                        <option value="">Select Status</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                    </select>
-                                </div>
-                                <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button>
-                            </div>
-                            <div class="">
-                                <select name="searchBy" id="" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
-                                    <option value="" class="">Search By</option>
-                                    <option value="course_id">Course ID</option>
-                                    <option value="course_name">Course Name</option>
-                                    <option value="course_code">Course Code</option>
-                                    <option value="instructor">Instructor</option>
-                             
-                                </select>
-                                <input type="text" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" placeholder="Type to search">
-                                <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>        
-                            </div>
-                        </div>
-                        
-                    </form>
-                </div>
+    <div id="maincontainer" class="p-8 bg-white shadow-md rounded-xl">
+        <div id="containertitle" class="flex items-center justify-between mb-5">
+            <h3 class="text-2xl font-semibold">All Courses</h3>
+        
+            <div class="flex items-center space-x-3">
+                <a href="{{ url('/admin/add_course') }}" class="px-4 py-2 text-lg font-medium text-white bg-green-600 rounded-xl hover:bg-green-700">Add New</a>
+        
+                <form action="{{ url('/admin/courses') }}" method="GET" class="flex items-center space-x-3">
+                    <label for="filterDate" class="text-lg">Filter by Date</label>
+                    <input type="date" name="filterDate" class="w-40 px-2 py-1 text-base border border-black rounded-xl">
+        
+                    <label for="filterStatus" class="text-lg">Filter by Status</label>
+                    <select name="filterStatus" id="filterStatus" class="w-32 px-2 py-1 text-base border border-black rounded-xl">
+                        <option value="">Select Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+        
+                    <button class="px-4 py-2 text-lg font-medium text-white bg-green-600 rounded-xl hover:bg-green-700" type="submit">Filter</button>
+        
+                    <div class="flex items-center space-x-3">
+                        <select name="searchBy" class="w-32 px-2 py-1 text-base border border-black rounded-xl">
+                            <option value="">Search By</option>
+                            <option value="course_id">Course ID</option>
+                            <option value="course_name">Course Name</option>
+                            <option value="course_code">Course Code</option>
+                            <option value="instructor">Instructor</option>
+                        </select>
+        
+                        <input type="text" name="searchVal" class="w-32 px-2 py-1 text-base border border-black rounded-xl" placeholder="Type to search">
+        
+                        <button class="px-4 py-2 text-lg font-medium text-white bg-green-600 rounded-xl hover:bg-green-700" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
         </div>
+        
 
         <div id="contenttable" class="mt-7">
           <table class="">

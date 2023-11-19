@@ -83,118 +83,121 @@
             </div>
         </div>
 
-        <div id="courseManageModal"  class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
-            <div id="courseManage" style="margin-left:15%;" class="w-full p-5 mx-5 bg-white rounded-lg overscroll-auto md:overflow-auto">
-                <a href="" class="w-8 h-8 m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24">
-                        <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
-                    </svg>
-                </a>
-                <div id="course_mainBody" class="flex mt-5 rounded-lg">
-                    <div id="side_items" class="w-1/6 h-full bg-green-700 rounded-lg h-">
-                        <ul class="px-5 py-5 text-xl font-medium text-white">
-                            <li id="edit_info_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
-                                <i class="pr-2 text-3xl fa-solid fa-book-open"></i>
-                                Edit Info
-                            </li>
-                            <li id="enrolled_learners_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
-                                <i class="pr-2 text-3xl fa-solid fa-users"></i>
-                                Enrolled Learners
-                            </li>
-                            <li id="course_summary_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover-bg-green-900">
-                                <i class="pr-2 text-3xl fa-solid fa-book"></i>
-                                Course Summary
-                            </li>
-                            <li class="w-full px-2 py-3 mt-2 rounded-xl"></li>
-                            <li class="w-full px-2 py-3 mt-2 rounded-xl"></li>
-                        </ul>
-                    </div>
-    
-    
-                    <div id="course_info" class="w-full mx-5">
-                            
-                        {{-- ajax add info in here --}}
-                    </div>
-    
-                    <div id="enrolled_learners" class="hidden w-full mx-5">
-                            <h1 class="text-2xl font-semibold border-b-2 border-black">Enrolled Learner</h1>
-    
-                            <form id="enrolleeForm"  method="GET">
-                                <div class="flex items-center">
-                                    <div class="flex items-center mx-10">
-                                        <div class="mx-2">
-                                            <label for="filterDate" class="">Filter by Date</label><br>
-                                            <input id="filterDate" type="date" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl" value="">
-                                        </div>
-                                        <div class="mx-2">
-                                            <label for="filterStatus" class="">Filter by Status</label><br>
-                                            <select data-course-id="" name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
-                                                <option value="">Select Status</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Approved">Approved</option>
-                                                <option value="Rejected">Rejected</option>
-                                            </select>
-                                        </div>
-                                        {{-- <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button> --}}
-                                    </div>
-                                    <div class="">
-                                        <select name="searchBy" id="searchBy" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
-                                            <option value=""class="">Search By</option>
-                                            <option value="learner_course_id">Enrollee ID</option>
-                                            <option value="learner_id">Learner ID</option>
-                                            <option value="name">Name</option>
-                                            <option value="learner_email">Email</option>
-                                            <option value="learner_contactno">Contact No.</option>
-                                            
-                                        </select>
-                                        <input id="searchVal" type="text" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" value="" placeholder="Type to search">
-                                        {{-- <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>         --}}
-                                    </div>
-                                </div>
-                            </form> 
-    
-                            <div id="learner_table" class="mt-5">
-                                <table>
-                                    <thead class="text-left">
-                                        <th class="w-1/5">Enrollee ID</th>
-                                        <th class="w-1/5">Learner ID</th>
-                                        <th class="w-1/5">Enrollee Info</th>
-                                        <th class="w-1/5">Date</th>
-                                        <th class="w-1/5">Status</th>
-                                        <th class="w-1/5"></th>
-                                    </thead>
-                                    <tbody id="enrollees_tableDisp">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div id="course_summary" class="hidden w-full mx-5 overflow-y-auto">
-                            
-    
-                            {{-- <div class="flex justify-end">
-                                <button id="showDeleteModal" class="px-5 py-5 text-xl bg-red-600 rounded-xl hover:bg-red-700">Delete Course</button>
-                            </div>
-                            
-                            <div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
-                                <form id="deleteCourse" action="GET">
-                                    @csrf
-                                    <div class="p-5 text-center bg-white rounded-lg">
-                                        <p>Are you sure you want to delete this course?</p>
-                                        <button type="submit" id="confirmDelete" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
-                                        <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
-                                    </div>
-                                </form>
-                                
-                            </div> --}}
-                            
-                        </div>
-
-                </div>
-            </div>
-            {{-- @include('instructor_course.courseManage'); --}}
-        </div>
+        
     </section>
-    @include('partials.instructorProfile')
+    
+@include('partials.instructorProfile')
+<div id="courseManageModal"  class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+    <div id="courseManage" style="margin-left:15%;" class="w-full p-5 mx-5 bg-white rounded-lg overscroll-auto md:overflow-auto">
+        <a href="" class="w-8 h-8 m-2">
+            <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24">
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+            </svg>
+        </a>
+        <div id="course_mainBody" class="flex mt-5 rounded-lg">
+            <div id="side_items" class="w-1/6 h-full bg-green-700 rounded-lg h-">
+                <ul class="px-5 py-5 text-xl font-medium text-white">
+                    <li id="edit_info_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                        <i class="pr-2 text-3xl fa-solid fa-book-open"></i>
+                        Edit Info
+                    </li>
+                    <li id="enrolled_learners_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                        <i class="pr-2 text-3xl fa-solid fa-users"></i>
+                        Enrolled Learners
+                    </li>
+                    <li id="course_summary_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover-bg-green-900">
+                        <i class="pr-2 text-3xl fa-solid fa-book"></i>
+                        Course Summary
+                    </li>
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl"></li>
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl"></li>
+                </ul>
+            </div>
+
+
+            <div id="course_info" class="w-full mx-5">
+                    
+                {{-- ajax add info in here --}}
+            </div>
+
+            <div id="enrolled_learners" class="hidden w-full mx-5">
+                    <h1 class="text-2xl font-semibold border-b-2 border-black">Enrolled Learner</h1>
+
+                    <form id="enrolleeForm"  method="GET">
+                        <div class="flex items-center">
+                            <div class="flex items-center mx-10">
+                                <div class="mx-2">
+                                    <label for="filterDate" class="">Filter by Date</label><br>
+                                    <input id="filterDate" type="date" name="filterDate" class="w-40 px-2 py-2 text-base border-2 border-black rounded-xl" value="">
+                                </div>
+                                <div class="mx-2">
+                                    <label for="filterStatus" class="">Filter by Status</label><br>
+                                    <select data-course-id="" name="filterStatus" id="filterStatus" class="w-32 px-2 py-2 text-base border-2 border-black rounded-xl">
+                                        <option value="">Select Status</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                {{-- <button class="h-12 px-5 py-1 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Filter</button> --}}
+                            </div>
+                            <div class="">
+                                <select name="searchBy" id="searchBy" class="w-40 px-2 py-2 text-lg border-2 border-black rounded-xl">
+                                    <option value=""class="">Search By</option>
+                                    <option value="learner_course_id">Enrollee ID</option>
+                                    <option value="learner_id">Learner ID</option>
+                                    <option value="name">Name</option>
+                                    <option value="learner_email">Email</option>
+                                    <option value="learner_contactno">Contact No.</option>
+                                    
+                                </select>
+                                <input id="searchVal" type="text" name="searchVal" class="px-2 py-2 ml-3 text-lg border-2 border-black w-80 rounded-xl" value="" placeholder="Type to search">
+                                {{-- <button class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white" type="submit">Search</button>         --}}
+                            </div>
+                        </div>
+                    </form> 
+
+                    <div id="learner_table" class="mt-5">
+                        <table>
+                            <thead class="text-left">
+                                <th class="w-1/5">Enrollee ID</th>
+                                <th class="w-1/5">Learner ID</th>
+                                <th class="w-1/5">Enrollee Info</th>
+                                <th class="w-1/5">Date</th>
+                                <th class="w-1/5">Status</th>
+                                <th class="w-1/5"></th>
+                            </thead>
+                            <tbody id="enrollees_tableDisp">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="course_summary" class="hidden w-full mx-5 overflow-y-auto">
+                    
+
+                    {{-- <div class="flex justify-end">
+                        <button id="showDeleteModal" class="px-5 py-5 text-xl bg-red-600 rounded-xl hover:bg-red-700">Delete Course</button>
+                    </div>
+                    
+                    <div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+                        <form id="deleteCourse" action="GET">
+                            @csrf
+                            <div class="p-5 text-center bg-white rounded-lg">
+                                <p>Are you sure you want to delete this course?</p>
+                                <button type="submit" id="confirmDelete" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+                                <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
+                            </div>
+                        </form>
+                        
+                    </div> --}}
+                    
+                </div>
+
+        </div>
+    </div>
+    {{-- @include('instructor_course.courseManage'); --}}
+</div>
 </section>
+
 @include('partials.footer')

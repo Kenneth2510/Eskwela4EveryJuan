@@ -1,8 +1,9 @@
 $(document).ready(() => {
     $("#viewResponseActivity").on("click", (e) => {
         e.preventDefault();
-
+        
         $("#selectTypeParent").removeClass("hidden");
+        activityOutputData();
     });
 
     $("#closeAct").on("click", () => {
@@ -11,60 +12,120 @@ $(document).ready(() => {
 
     let isAppended = false;
 
-    function appendStudentsList() {
-        console.log(isAppended);
+    function activityOutputData() {
+        var courseID = $('#studentsList').data('course-id')
+        var syllabusID = $('#studentsList').data('syllabus-id')
+        var topicID = $('#studentsList').data('topic-id')
+        
+
+        // console.log(courseID)
+        // console.log(syllabusID);
+        // console.log(topicID);
+
+        var url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/activity/"+ topicID +"/json";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            success: function (response){
+                console.log(response)
+                activityData = response['activityContent']
+                // activityCriteriaData = response['activityContentCriteria']
+                // console.log(activityCriteriaData)
+                // reDisplayActivity(activityData, activityCriteriaData);
+                learnerActivityContent = response['learnerActivityContent'];
+                appendStudentsList(learnerActivityContent, activityData);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        })
+    }
+
+    function appendStudentsList(learnerActivityContent, activityData) {
+        var courseID = $('#studentsList').data('course-id')
+        var syllabusID = $('#studentsList').data('syllabus-id')
+        var topicID = $('#studentsList').data('topic-id')
+        // console.log(isAppended);
         if (!isAppended) {
             const studentsList = $(
                 `<button class="flex flex-row items-center" id="backToDefault">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                         <p>Go back</p>
                     </button>
-                    <h1 class="mt-4 mb-2 text-xl font-medium">Already Answered:</h1>
+                    <h1 class="mt-4 mb-2 text-xl font-medium">Learner Responses</h1>
                             <table class="w-full text-center table-fixed">
                                <thead>
                                    <tr>
+                                       <th>Enrollee ID</th>
+                                       <th>Learner ID</th>
                                        <th>Name</th>
                                        <th>Score</th>
                                        <th>Status</th>
                                    </tr>
                                </thead>
-                               <tbody>
-                                   <tr>
-                                       <td>Kenneth</td>
-                                       <td>10/10</td>
-                                       <td>Already Answered</td>
-                                       <td class="float-right"></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Raven</td>
-                                       <td>-</td>
-                                       <td>Not yet Answered</td>
-                                       <td class="float-right"></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Kenneth</td>
-                                       <td>10/10</td>
-                                       <td>Already Answered</td>
-                                       <td class="float-right"></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Kenneth</td>
-                                       <td>10/10</td>
-                                       <td>Already Answered</td>
-                                       <td class="float-right"></td>
-                                   </tr>
+                               <tbody id="learnerActivityData">
+                                   
                                </tbody>
                            </table>`,
             );
-            studentsList
-                .find('td[class="float-right"]')
-                .html(
-                    '<button class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2" type="button" id=""><h1>visit</h1></button>',
-                );
+            // studentsList
+            //     .find('td[class="float-right"]')
+            //     .html(
+            //         '<button class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2" type="button" id=""><h1>visit</h1></button>',
+            //     );
 
             $("#studentsList").append(studentsList);
 
+            let criteria_total_score = activityData[0]['total_score']
+
             isAppended = true;
+
+            learnerRowData = ``;
+            for (let i = 0; i < learnerActivityContent.length; i++) {
+                const enrollee_id = learnerActivityContent[i]['learner_course_id'];
+                const learner_id = learnerActivityContent[i]['learner_id'];
+                const learner_fname = learnerActivityContent[i]['learner_fname'];
+                const learner_lname = learnerActivityContent[i]['learner_lname'];
+                const total_score = learnerActivityContent[i]['total_score'];
+                const status = learnerActivityContent[i]['status'];
+
+                if(status == "NOT YET STARTED") {
+                    dispStatus = "NOT YET STARTED"
+                } else if (status == "IN PROGRESS") {
+                    dispStatus = "TO BE CHECKED";
+                } else {
+                    dispStatus = "COMPLETED";
+                }
+
+                // if(total_score == null) {
+                //     total_score = "no score yet";
+                // }
+
+                learnerRowData += `
+                    <tr>
+                        <td>${enrollee_id}</td>
+                        <td>${learner_id}</td>
+                        <td>${learner_fname} ${learner_lname}</td>
+                        <td>${total_score}/${criteria_total_score}</td>
+                        <td>${dispStatus}</td>
+                        <td class="float-right">
+                            <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}" 
+                            class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2"  
+                            data-learner-course-id="${enrollee_id}">
+                                <h1>visit</h1>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            $('#learnerActivityData').empty();
+            $('#learnerActivityData').append(learnerRowData);
+
+
+                              
 
             $(document).on("click", "#backToDefault", () => {
                 $("#defaultView").removeClass("hidden");
@@ -117,7 +178,7 @@ $(document).ready(() => {
             url: url,
             dataType: 'json',
             success: function (response){
-                // console.log(response)
+                console.log(response)
                 activityData = response['activityContent']
                 activityCriteriaData = response['activityContentCriteria']
                 // console.log(activityCriteriaData)
