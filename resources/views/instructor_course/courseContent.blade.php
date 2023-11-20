@@ -159,7 +159,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </a>
                         @else
-                        <a style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        <a href="{{url("/instructor/course/content/$course->course_id/$topic->syllabus_id/quiz/$topic->topic_id")}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
                     onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
                             <div class="flex items-center">
                                 <svg width="40" height="40" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">

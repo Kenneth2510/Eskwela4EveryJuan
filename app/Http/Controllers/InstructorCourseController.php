@@ -23,6 +23,11 @@ use App\Models\LearnerActivityProgress;
 use App\Models\LearnerQuizProgress;
 use App\Models\LearnerActivityOutput;
 use App\Models\LearnerActivityCriteriaScore;
+use App\Models\QuizContents;
+use App\Models\QuizReferences;
+use App\Models\Questions;
+use App\Models\QuestionsAnswers;
+use App\Models\LearnerQuizOutputs;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -1289,54 +1294,80 @@ class InstructorCourseController extends Controller
     
 
                     $activityInfo = DB::table('activities')
-                        ->select(
-                            'activity_id',
-                            'course_id',
-                            'syllabus_id',
-                            'topic_id',
-                            'activity_title',
-                        )
-                        ->where('course_id', $course->course_id)
-                        ->where('syllabus_id', $syllabus->syllabus_id)
-                        ->where('topic_id', $topic_id)
-                        ->first();
+    ->select(
+        'activity_id',
+        'course_id',
+        'syllabus_id',
+        'topic_id',
+        'activity_title',
+    )
+    ->where('course_id', $course->course_id)
+    ->where('syllabus_id', $syllabus->syllabus_id)
+    ->where('topic_id', $topic_id)
+    ->first();
 
-                            if ($activityInfo === null) {
-                                // Set $activityContent to null or an empty array if it's appropriate
-                                $activityContent = null; // or $activityContent = [];
-                                $activityContentCriteria = null;
-                            
-                                // You can also provide a message to indicate that no data was found
-                                session()->flash('message', 'Please Save the Syllabus First');
-                                return redirect("/instructor/course/content/$course->course_id");
+if ($activityInfo === null) {
+    // Set $activityContent to null or an empty array if it's appropriate
+    $activityContent = null; // or $activityContent = [];
+    $activityContentCriteria = null;
 
-                            } else {
-                                // Fetch $activityContent as you normally would
-                                $activityContent = DB::table('activity_content')
-                                    ->select(
-                                        'activity_content_id',
-                                        'activity_id',
-                                        'activity_instructions',
-                                        'total_score',
-                                    )
-                                    ->where('activity_id', $activityInfo->activity_id)
-                                    ->get();
+    // You can also provide a message to indicate that no data was found
+    session()->flash('message', 'Please Save the Syllabus First');
+    return redirect("/instructor/course/content/$course->course_id");
+} else {
+    // Fetch $activityContent as you normally would
+    $activityContent = DB::table('activity_content')
+        ->select(
+            'activity_content_id',
+            'activity_id',
+            'activity_instructions',
+            'total_score',
+        )
+        ->where('activity_id', $activityInfo->activity_id)
+        ->get();
 
-                                    if($activityContent === null) {
-                                        $activityContentCriteria = null;
-                                    } else {
-                                        $activityContentCriteria = DB::table('activity_content_criteria')
-                                        ->select(
-                                            'activity_content_criteria_id',
-                                            'activity_content_id',
-                                            'criteria_title',
-                                            'score'
-                                        )
-                                        ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray()) // Use pluck to get an array of activity_content_id values
-                                        ->get();
-                                    }
-                               
-                            }
+    // Check if $activityContent is empty, and if so, create a new row
+    if ($activityContent->isEmpty()) {
+        $newActivityContent = [
+            'activity_id' => $activityInfo->activity_id,
+            'activity_instructions' => 'Default Instructions', // You can set default values here
+            'total_score' => 0, // You can set default values here
+        ];
+        DB::table('activity_content')->insert($newActivityContent);
+
+        // Fetch the newly inserted row
+        $activityContent = DB::table('activity_content')
+            ->where('activity_id', $activityInfo->activity_id)
+            ->get();
+    }
+
+    // Check if $activityContentCriteria is empty, and if so, create a new row
+    if ($activityContent->isNotEmpty()) {
+        $activityContentCriteria = DB::table('activity_content_criteria')
+            ->select(
+                'activity_content_criteria_id',
+                'activity_content_id',
+                'criteria_title',
+                'score'
+            )
+            ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray())
+            ->get();
+
+        if ($activityContentCriteria->isEmpty()) {
+            $newActivityContentCriteria = [
+                'activity_content_id' => $activityContent[0]->activity_content_id,
+                'criteria_title' => 'Default Criteria', // You can set default values here
+                'score' => 0, // You can set default values here
+            ];
+            DB::table('activity_content_criteria')->insert($newActivityContentCriteria);
+
+            // Fetch the newly inserted row
+            $activityContentCriteria = DB::table('activity_content_criteria')
+                ->where('activity_content_id', $activityContent[0]->activity_content_id)
+                ->get();
+        }
+    }
+}
 
                                 // dd($lessonContent);
 
@@ -1846,5 +1877,254 @@ class InstructorCourseController extends Controller
 
     }
 
-   
+    public function view_quiz(Course $course, Syllabus $syllabus, $topic_id) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor['status'] !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {       
+
+                if (!function_exists('getRandomColor')) {
+                    function getRandomColor() {
+                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    }
+                }
+                
+                // Generate a random color for mainBackgroundCol
+                $mainBackgroundCol = getRandomColor();
+    
+                // Darken the mainBackgroundCol
+                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+    
+                // Darken the mainBackgroundCol further for darkenedColor
+                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+
+
+                $quizInfo = DB::table('quizzes')
+                    ->select(
+                        'quiz_id',
+                        'course_id',
+                        'syllabus_id',
+                        'topic_id',
+                        'quiz_title',
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('syllabus_id', $syllabus->syllabus_id)
+                    ->where('topic_id', $topic_id)
+                    ->first();
+
+                    $quizReference = DB::table('quiz_reference')
+                    ->select(
+                        'quiz_reference.quiz_reference_id',
+                        'quiz_reference.quiz_id',
+                        'quiz_reference.course_id',
+                        'quiz_reference.syllabus_id',
+
+                        'syllabus.topic_title'
+                    )
+                    ->join('syllabus', 'syllabus.syllabus_id' , '=', 'quiz_reference.syllabus_id')
+                    ->where('quiz_reference.quiz_id' , $quizInfo->quiz_id)
+                    ->get();
+
+                $response = $this->course_content($course);
+
+                session(['quiz_data' => [
+                    'quizInfo' => $quizInfo,
+                    'quizReference' => $quizReference,
+                    // 'activityContent' => $activityContent,
+                    // 'activityContentCriteria' => $activityContentCriteria,
+                    'courseData' => $response,
+                    'instructor' => $instructor,
+                    'title' => 'Course Quiz',
+                ]]);
+
+                    $data = [
+                        'title' => 'Course Quiz',
+                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'scripts' => ['instructor_quiz_manage.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'quizInfo' => $quizInfo,
+                        'quizReference' => $quizReference,
+                        // 'instructor' => $response['instructor'],
+                    ];
+
+                    // dd($data);
+            
+                return view('instructor_course.courseQuizOverview', compact('instructor'))->with($data);
+
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+        
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+            }
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+    public function quiz_info_json (Course $course, Syllabus $syllabus, $topic_id) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor['status'] !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {       
+
+                if (!function_exists('getRandomColor')) {
+                    function getRandomColor() {
+                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    }
+                }
+                
+                // Generate a random color for mainBackgroundCol
+                $mainBackgroundCol = getRandomColor();
+    
+                // Darken the mainBackgroundCol
+                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+    
+                // Darken the mainBackgroundCol further for darkenedColor
+                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+
+
+                $quizInfo = DB::table('quizzes')
+                    ->select(
+                        'quiz_id',
+                        'course_id',
+                        'syllabus_id',
+                        'topic_id',
+                        'quiz_title',
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('syllabus_id', $syllabus->syllabus_id)
+                    ->where('topic_id', $topic_id)
+                    ->first();
+
+                    $quizReference = DB::table('quiz_reference')
+                    ->select(
+                        'quiz_reference.quiz_reference_id',
+                        'quiz_reference.quiz_id',
+                        'quiz_reference.course_id',
+                        'quiz_reference.syllabus_id',
+
+                        'syllabus.syllabus_id',
+                        'syllabus.topic_title'
+                    )
+                    ->join('syllabus', 'syllabus.syllabus_id' , '=', 'quiz_reference.syllabus_id')
+                    ->where('quiz_reference.quiz_id' , $quizInfo->quiz_id)
+                    ->get();
+
+
+                    $syllabusData = DB::table('syllabus')
+                    ->select(
+                        "syllabus_id",
+                        "topic_id",
+                        "course_id",
+                        "topic_title",
+                        "category"
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'LESSON')
+                    ->orderBy('topic_id', 'ASC')
+                    ->get();
+
+                $response = $this->course_content($course);
+
+                session(['quiz_data' => [
+                    'quizInfo' => $quizInfo,
+                    'quizReference' => $quizReference,
+                    'syllabusData' => $syllabusData,
+                    // 'activityContent' => $activityContent,
+                    // 'activityContentCriteria' => $activityContentCriteria,
+                    'courseData' => $response,
+                    'instructor' => $instructor,
+                    'title' => 'Course Quiz',
+                ]]);
+
+                    $data = [
+                        'title' => 'Course Quiz',
+                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'scripts' => ['instructor_quiz_manage.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'quizInfo' => $quizInfo,
+                        'quizReference' => $quizReference,
+                        'syllabusData' => $syllabusData,
+                        // 'instructor' => $response['instructor'],
+                    ];
+
+                    // dd($data);
+        return response()->json($data);
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+    } else {
+        return redirect('/instructor');
+    }
+ 
+    }
+
+    public function manage_add_reference (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz, Request $request) {
+        try {
+            $newReference = $request->validate([
+                'quiz_id' => ['required'],
+                'course_id' => ['required'],
+                'syllabus_id' => ['required'],
+            ]);
+
+
+            $quizReference = QuizReferences::create($newReference);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+
+    public function manage_update_reference (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz, Request $request) {
+        try {
+            $newReference = $request->validate([
+                'quiz_id' => ['required'],
+                'course_id' => ['required'],
+                'syllabus_id' => ['required'],
+            ]);
+
+            QuizReferences::where('quiz_id', $request->quiz_id)
+            ->delete();
+
+            $quizReference = QuizReferences::create($newReference);
+
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
 }

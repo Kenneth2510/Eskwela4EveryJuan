@@ -298,9 +298,104 @@ $(document).ready(() => {
                     </div>
                 `           
             } else {
+                // activityContent_disp += `
+                // <p>No instructions given</p>
+                // `
+
                 activityContent_disp += `
-                <p>No instructions given</p>
-                `
+                <div class="flex flex-row items-center">
+                        <h3 class="my-2 text-xl font-medium">Instructions:</h3>
+                        <button id="" class="editInstructionsBtn hidden">
+                            <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        </button>
+                        
+                    </div>
+          
+                    
+                    <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions h-[200px]" disabled></textarea>
+                    <div class="hidden mt-3 editInstructions_clickedBtn">
+                        <button data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-3 text-white bg-green-600 saveInstructionsBtn hover:bg-green-900 rounded-xl">Save</button>
+                        <button class="px-3 py-3 text-white bg-red-600 cancelInstructionsBtn hover:bg-red-900 rounded-xl">Cancel</button>
+                    </div>
+
+                    <div class="flex flex-row items-center mt-5">
+                        <h3 class="my-2 text-xl font-medium">Criteria:</h3>
+                        <button id="" class="editCriteriaBtn hidden">
+                            <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        </button>
+                        
+                    </div>
+                    <table class="rounded-xl">
+                        <thead class="text-xl text-white bg-green-700 rounded-xl">
+                            <th class="w-2/5">Criteria</th>
+                            <th class="w-1/5">Score</th>
+                            <th class="w-1/5"></th>
+                        </thead>
+                        <tbody>`;
+                        if(activityCriteriaData !== null) {
+          
+                            for (let x = 0; x < activityCriteriaData.length; x++) {
+                                const activity_content_criteria_id = activityCriteriaData[x]['activity_content_criteria_id'];
+                                const activity_content_id = activityCriteriaData[x]['activity_content_id'];
+                                const criteria_title = activityCriteriaData[x]['criteria_title'];
+                                const score = activityCriteriaData[x]['score'];
+
+                                
+                                    activityContent_disp += `
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="criteriaTitle_input" value="${criteria_title}" disabled>
+                                        </td>
+                                        <td class="flex justify-end">
+                                            <input type="text" class="criteriaScore_input flex text-center" value="${score}" disabled></td>
+                                        <td>
+                                            <button class="hidden px-3 py-1 mx-2 font-semibold text-white bg-green-600 rounded-xl editRowCriteriaBtn hover:bg-green-900">Edit</button>
+                                            <div class="hidden flex edit_btns">
+                                            
+                                                <button data-activity-content-criteria-id="${activity_content_criteria_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl saveRowCriteriaBtn hover:bg-green-900">Save</button>
+
+                                                <button data-activity-content-criteria-id="${activity_content_criteria_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-1 mx-2 font-semibold text-white bg-red-600 rounded-xl deleteRowCriteriaBtn hover:bg-red-900">Delete</button>
+
+                                                <button class=" px-3 py-1 mx-2 font-semibold text-white bg-red-600 rounded-xl cancelRowCriteriaBtn hover:bg-red-900">Cancel</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    `
+                                }
+                            } else {
+                                activityContent_disp += `
+                                <tr>
+                                    <td rowspan="3">No Criterias Found</td>
+                                </tr>
+                                `
+                            }
+                            
+                        
+                activityContent_disp += `
+                </tbody>
+                    </table>
+                    <button id="" data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="addNewCriteria hidden px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl hover:bg-green-900">Add Criteria</button>
+                    <div class="editCriteria_clickedBtn hidden mt-3" id=""> 
+                        <button id="" data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="saveCriteriaBtn text-2xl px-7 py-5 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
+                        <button id="" class="cancelCriteriaBtn text-2xl px-7 py-5 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="">
+                        <button id="" class="hidden editTotalScore">
+                            <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        </button>
+                        <p class="text-2xl font-semibold">Overall Total Score: </p>
+                        <input type="number" id="" class="overallScore_input w-full text-4xl" value="${total_score}" disabled>
+                        
+                        <p class="px-10 text-4xl">/ ${total_score}</p>
+                        <div class="editTotalScore_clickedBtn hidden mt-3" id=""> 
+                            <button data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" id="" class="saveTotalScoreBtn px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Score</button>
+                            <button id="" class="cancelTotalScoreBtn px-5 py-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
+                        </div>
+                    </div>
+                `           
             }
             
             
@@ -586,6 +681,7 @@ $(document).ready(() => {
                         console.log(error);
                     }
                 });
+                criteriaCounter++;
         } 
         }
         // console.log(totalCriteriaScore);

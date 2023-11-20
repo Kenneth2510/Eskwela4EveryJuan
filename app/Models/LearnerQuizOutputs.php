@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LearnerQuizProgress extends Model
+class LearnerQuizOutputs extends Model
 {
     use HasFactory;
     protected $connection = 'mysql';
-    protected $primaryKey = 'learner_quiz_progress_id';
-    protected $table = 'learner_quiz_progress';
+    protected $primaryKey = 'learner_quiz_output_id';
+    protected $table = 'learner_quiz_output';
 
     protected $fillable = [
         'learner_course_id',
@@ -18,11 +18,12 @@ class LearnerQuizProgress extends Model
         'course_id',
         'syllabus_id',
         'quiz_id',
-        'status',
-        'attempt'
+        'quiz_content_id',
+        'answer',
+        'isCorrect'
     ];
 
-    public function learner_course_id()
+    public function learner_course()
     {
         return $this->belongsTo(LearnerCourse::class, 'learner_course_id');
     }
@@ -42,8 +43,13 @@ class LearnerQuizProgress extends Model
         return $this->belongsTo(Syllabus::class, 'syllabus_id');
     }
 
-    public function lesson()
+    public function quiz()
     {
         return $this->belongsTo(Quizzes::class, 'quiz_id');
+    }
+
+    public function quiz_content()
+    {
+        return $this->belongsTo(QuizContents::class, 'quiz_content_id');
     }
 }

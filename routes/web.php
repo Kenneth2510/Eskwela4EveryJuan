@@ -133,6 +133,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/course/content/syllabus/{course}/manage_add', 'InstructorCourseController@update_syllabus_add_new');
     Route::post('/instructor/course/content/syllabus/{course}/manage_delete', 'InstructorCourseController@update_syllabus_delete');
 
+    // lesson management
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}', 'InstructorCourseController@view_lesson');
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/json', 'InstructorCourseController@lesson_content_json');
 
@@ -147,7 +148,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/delete_file/{lesson_content}', 'InstructorCourseController@lesson_content_delete_file');
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/generate_pdf', 'InstructorCourseController@lesson_generate_pdf');
     
-    
+    // activity management
     Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}', 'InstructorCourseController@view_activity');
     Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/json', 'InstructorCourseController@activity_content_json');
     Route::post('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/instructions', 'InstructorCourseController@update_activity_instructions');
@@ -158,7 +159,16 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/course/content/{course}/{syllabus}/activity/{topic_id}/{learner_course}', 'InstructorCourseController@view_learner_activity_response');
     Route::post('/instructor/course/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}', 'InstructorCourseController@learnerResponse_overallScore');
     Route::post('/instructor/course/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}/criteria', 'InstructorCourseController@learnerResponse_criteriaScore');
-// // })->middleware('web');
+
+    // quiz management
+    Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}', 'InstructorCourseController@view_quiz');
+    Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/json', 'InstructorCourseController@quiz_info_json');
+    
+    Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/add', 'InstructorCourseController@manage_add_reference');
+    Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/update', 'InstructorCourseController@manage_update_reference');
+
+
+    // // })->middleware('web');
 });
 
 Route::namespace('App\Http\Controllers')->group(function () {
