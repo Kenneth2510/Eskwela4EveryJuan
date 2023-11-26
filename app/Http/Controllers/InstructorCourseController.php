@@ -26,7 +26,7 @@ use App\Models\LearnerActivityCriteriaScore;
 use App\Models\QuizContents;
 use App\Models\QuizReferences;
 use App\Models\Questions;
-use App\Models\QuestionsAnswers;
+use App\Models\QuestionAnswers;
 use App\Models\LearnerQuizOutputs;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -2127,4 +2127,376 @@ if ($activityInfo === null) {
         }
     }
 
+    public function quiz_content (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+    
+            try {
+                if (!function_exists('getRandomColor')) {
+                    function getRandomColor() {
+                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    }
+                }
+                
+                // Generate a random color for mainBackgroundCol
+                $mainBackgroundCol = getRandomColor();
+    
+                // Darken the mainBackgroundCol
+                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+    
+                // Darken the mainBackgroundCol further for darkenedColor
+                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+
+                $quizInfo = DB::table('quizzes')
+                ->select(
+                    'quiz_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id',
+                    'quiz_title',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('topic_id', $topic_id)
+                ->first();
+
+                $quizReference = DB::table('quiz_reference')
+                ->select(
+                    'quiz_reference.quiz_reference_id',
+                    'quiz_reference.quiz_id',
+                    'quiz_reference.course_id',
+                    'quiz_reference.syllabus_id',
+
+                    'syllabus.topic_title'
+                )
+                ->join('syllabus', 'syllabus.syllabus_id' , '=', 'quiz_reference.syllabus_id')
+                ->where('quiz_reference.quiz_id' , $quizInfo->quiz_id)
+                ->get();
+
+
+                $questionsData = DB::table('questions')
+                ->select(
+                    'questions.question_id',
+                    'questions.syllabus_id',
+                    'questions.course_id',
+                    'questions.question',
+                    'questions.category',
+
+                    'question_answer.answer',
+                    'question_answer.isCorrect'
+                )
+                ->join('question_answer', 'question_answer.question_id', '=', 'questions.question_id')
+                ->where('questions.course_id', $course->course_id)
+                ->get();
+
+             
+
+
+
+
+            $response = $this->course_content($course);
+
+            session(['quiz_data' => [
+                'quizInfo' => $quizInfo,
+                'quizReference' => $quizReference,
+                'courseData' => $response,
+                'instructor' => $instructor,
+                'title' => 'Course Quiz',
+            ]]);
+
+                $data = [
+                    'title' => 'Course Quiz',
+                    'mainBackgroundCol' => $mainBackgroundCol,
+                    'scripts' => ['instructor_quiz_builder.js'],
+                    'lessonCount' => $response['lessonCount'],
+                    'activityCount' => $response['activityCount'],
+                    'quizCount' => $response['quizCount'],
+                    'course' => $response['course'],
+                    'syllabus' => $response['syllabus'],
+                    'quizInfo' => $quizInfo,
+                    'quizReference' => $quizReference,
+                    'questionsData' => $questionsData,
+                    // 'instructor' => $response['instructor'],
+                ];
+
+
+                    // dd($data);
+            
+                return view('instructor_course.courseQuizContent', compact('instructor'))->with($data);
+
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+        
+                return response()->json(['errors' => $errors], 422);
+            }
+        
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+
+    public function quiz_content_json (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+    
+            try {
+                if (!function_exists('getRandomColor')) {
+                    function getRandomColor() {
+                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    }
+                }
+                
+                // Generate a random color for mainBackgroundCol
+                $mainBackgroundCol = getRandomColor();
+    
+                // Darken the mainBackgroundCol
+                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+    
+                // Darken the mainBackgroundCol further for darkenedColor
+                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+
+                $quizInfo = DB::table('quizzes')
+                ->select(
+                    'quiz_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id',
+                    'quiz_title',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('topic_id', $topic_id)
+                ->first();
+
+                $quizReference = DB::table('quiz_reference')
+                ->select(
+                    'quiz_reference.quiz_reference_id',
+                    'quiz_reference.quiz_id',
+                    'quiz_reference.course_id',
+                    'quiz_reference.syllabus_id',
+
+                    'syllabus.topic_title'
+                )
+                ->join('syllabus', 'syllabus.syllabus_id' , '=', 'quiz_reference.syllabus_id')
+                ->where('quiz_reference.quiz_id' , $quizInfo->quiz_id)
+                ->get();
+
+                $quizContentData = DB::table('quiz_content')
+                ->select(
+                    'quiz_content.quiz_content_id',
+                    'quiz_content.syllabus_id',
+                    'quiz_content.course_id',
+                    'quiz_content.question_id',
+                    'questions.question',
+                    'questions.category',
+                    'syllabus.topic_title',
+                    DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers'),
+                    DB::raw('JSON_ARRAYAGG(question_answer.isCorrect) as isCorrect')
+                )
+                ->join('syllabus', 'syllabus.syllabus_id', '=', 'quiz_content.syllabus_id')
+                ->join('questions', 'questions.question_id', '=', 'quiz_content.question_id')
+                ->leftJoin('question_answer', 'question_answer.question_id', '=', 'quiz_content.question_id')
+                ->where('quiz_content.course_id', $course->course_id)
+                ->groupBy(
+                    'quiz_content.quiz_content_id',
+                    'quiz_content.syllabus_id',
+                    'quiz_content.course_id',
+                    'quiz_content.question_id',
+                    'questions.question',
+                    'questions.category',
+                    'syllabus.topic_title'
+                )
+                ->get();
+
+
+
+                $questionsData = DB::table('questions')
+                ->select(
+                    'questions.question_id',
+                    'questions.syllabus_id',
+                    'questions.course_id',
+                    'questions.question',
+                    'questions.category',
+                    'syllabus.topic_title',
+                    DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers'),
+                    DB::raw('JSON_ARRAYAGG(question_answer.isCorrect) as isCorrect')
+                )
+                ->join('syllabus', 'syllabus.syllabus_id' , '=', 'questions.syllabus_id')
+                ->leftJoin('question_answer', 'question_answer.question_id', '=', 'questions.question_id')
+                ->where('questions.course_id', $course->course_id)
+                ->groupBy('questions.question_id')
+                ->get();
+
+
+             
+
+
+
+
+            $response = $this->course_content($course);
+
+            session(['quiz_data' => [
+                'quizInfo' => $quizInfo,
+                'quizReference' => $quizReference,
+                'courseData' => $response,
+                'instructor' => $instructor,
+                'title' => 'Course Quiz',
+            ]]);
+
+                $data = [
+                    'title' => 'Course Quiz',
+                    'mainBackgroundCol' => $mainBackgroundCol,
+                    'scripts' => ['instructor_quiz_builder.js'],
+                    'lessonCount' => $response['lessonCount'],
+                    'activityCount' => $response['activityCount'],
+                    'quizCount' => $response['quizCount'],
+                    'course' => $response['course'],
+                    'syllabus' => $response['syllabus'],
+                    'quizInfo' => $quizInfo,
+                    'quizReference' => $quizReference,
+                    'questionsData' => $questionsData,
+                    'quizContent' => $quizContentData,
+                    // 'instructor' => $response['instructor'],
+                ];
+
+
+                    // dd($data);
+                    
+
+                return response()->json($data);
+            
+                // return view('instructor_course.courseQuizContent', compact('instructor'))->with($data);
+
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+        
+                return response()->json(['errors' => $errors], 422);
+            }
+        
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+    public function empty_quiz_question(Course $course, Syllabus $syllabus, $topic_id, $quiz_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            DB::table('quiz_content')
+                ->where('quiz_id', $quiz_id)
+                ->delete();
+
+            DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => 'An error occurred while emptying quiz content.']);
+        }
+    }
+
+    public function add_quiz_question(Course $course, Syllabus $syllabus, $topic_id, $quiz_id, Request $request)
+    {
+        try {
+            // DB::beginTransaction();
+
+            $questionData = [
+                'syllabus_id' => $request->input('syllabus_id'),
+                'course_id' => $request->input('course_id'),
+                'question' => $request->input('question'),
+                'category' => $request->input('category'),
+            ];
+
+            $questions = Questions::create($questionData);
+
+            $answersData = json_decode($request->input('answer'));
+            $isCorrectData = json_decode($request->input('isCorrect'));
+
+            foreach ($answersData as $index => $answer) {
+                $questionAnswerData = [
+                    'question_id' => $questions->question_id,
+                    'answer' => $answer,
+                    'isCorrect' => $isCorrectData[$index],
+                ];
+
+                QuestionAnswers::create($questionAnswerData);
+            }
+
+            $quizContentData = [
+                'quiz_id' => $quiz_id,
+                'syllabus_id' => $syllabus->syllabus_id,
+                'course_id' => $course->course_id,
+                'question_id' => $questions->question_id,
+            ];
+
+            QuizContents::create($quizContentData);
+
+            // DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Error in add_quiz_question: ' . $e->getMessage());
+            Log::error('Stack Trace: ' . $e->getTraceAsString());
+            return response()->json(['error' => 'An error occurred while adding quiz question: ' . $e->getMessage()]);
+        }
+    }
+
+    public function update_quiz_question(Course $course, Syllabus $syllabus, $topic_id, $quiz_id, Request $request)
+    {
+        try {
+            // DB::beginTransaction();
+
+            $question_id = $request->input('question_id');
+
+            DB::table('questions')
+                ->where('question_id', $question_id)
+                ->where('course_id', $course->course_id)
+                ->update([
+                    'syllabus_id' => $request->input('syllabus_id'),
+                    'course_id' => $request->input('course_id'),
+                    'question' => $request->input('question'),
+                    'category' => $request->input('category'),
+                ]);
+
+            DB::table('question_answer')
+                ->where('question_id', $question_id)
+                ->delete();
+
+            $answersData = json_decode($request->input('answer'));
+            $isCorrectData = json_decode($request->input('isCorrect'));
+
+            foreach ($answersData as $index => $answer) {
+                $questionAnswerData = [
+                    'question_id' => $question_id,
+                    'answer' => $answer,
+                    'isCorrect' => $isCorrectData[$index],
+                ];
+
+                QuestionAnswers::create($questionAnswerData);
+            }
+
+            $quizContentData = [
+                'quiz_id' => $quiz_id,
+                'syllabus_id' => $syllabus->syllabus_id,
+                'course_id' => $course->course_id,
+                'question_id' => $question_id,
+            ];
+
+            QuizContents::create($quizContentData);
+
+            // DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Error in update_quiz_question: ' . $e->getMessage());
+            Log::error('Stack Trace: ' . $e->getTraceAsString());
+            return response()->json(['error' => 'An error occurred while updating quiz question: ' . $e->getMessage()]);
+        }
+    }
 }

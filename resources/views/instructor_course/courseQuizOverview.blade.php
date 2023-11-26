@@ -88,12 +88,12 @@
                             <button id="saveQuizInfoBtn" class="px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
                         </div>
                         <div class="flex w-full mt-5">
-                            <button id="viewResponsesBtn" class="w-1/2 px-5 py-3 mx-3 mt-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            <button id="viewResponsesBtn" class="w-1/2 px-5 py-5 mx-3 mt-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                                 View Responses
                             </button>
-                            <button class="w-1/2 px-5 py-3 mx-3 mt-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            <a href="{{ url("/instructor/course/content/$quizInfo->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id/$quizInfo->quiz_id/content") }}" class="w-1/2 px-5 py-5 mx-3 mt-3 text-white text-center bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                                 Enter Quiz Editor
-                            </button>
+                            </a>
                         </div>
             
                 </div>
