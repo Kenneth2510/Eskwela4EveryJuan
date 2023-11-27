@@ -232,7 +232,7 @@
 
                     </div>
 
-                    <div class="w-full flex justify-center py-5">
+                    <div class="quizOptions w-full flex justify-center py-5">
                         <button class="mx-3 px-5 py-5 rounded-xl bg-darthmouthgreen  hover:bg-green-950 text-white w-max" id="addExistingQuestionBtn">
                             Add Existing Question
                         </button>
@@ -274,6 +274,24 @@
                         <button id="" class=" cancelAddExistingQuestionBtn px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
                     </div>
                     
+                </div>
+            </div>
+
+
+            <div id="confirmSaveQuizContentModal" class="fixed hidden top-0 left-0 flex items-center justify-center  w-full h-full bg-gray-200 bg-opacity-75 modal">
+                <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+                    <div class="flex justify-end w-full">
+                        <button class="cancelSaveQuizContentBtn">
+                            <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                        </button>
+                    </div>
+
+                    <h2 class="mb-2 text-xl font-semibold">Are you sure to apply changes to the quiz?</h2>
+
+                    <div class="flex justify-center w-full mt-5">
+                        <button id="confirmSaveQuizContentBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                        <button id="" class=" cancelSaveQuizContentBtn px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>

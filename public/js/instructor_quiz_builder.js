@@ -197,7 +197,7 @@ function getQuizData() {
 function resetQuestionNumber(questionsData, quizReferenceData) {
     if (Object.keys(questionsData).length > 0) {
         for (let i = 0; i < questionsData.length; i++) {
-            console.log(questionsData[i])
+            // console.log(questionsData[i])
             const question_id = questionsData[i]['question_id'];
             const syllabus_id = questionsData[i]['syllabus_id'];
             const course_id = questionsData[i]['course_id'];
@@ -237,12 +237,18 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
         console.log(temp_questionsData)
         var temp_question_id = 0;
         var questionData = '';
-    
+        var totalQuestions = 0;
+        var totalMultipleChoiceQuestions = 0;
+        var totalIdentificationQuestions = 0;
+        var referencesUsed = new Set();
+        var questionsPerReference = {};
+
+
         for (let i = 0; i < temp_questionsData.length; i++) {
             const questionCount = temp_questionsData[i]['questionCount'];
             const question_id = temp_questionsData[i]['question_id'];
-            const syllabus_id = temp_questionsData[i]['syllabus_id'];
-            const topic_title = temp_questionsData[i]['topic_title'];
+            const question_syllabus_id = parseInt(temp_questionsData[i]['syllabus_id']);
+            const question_topic_title = temp_questionsData[i]['topic_title'];
             const course_id = temp_questionsData[i]['course_id'];
             const question = temp_questionsData[i]['question'];
             const category = temp_questionsData[i]['category'];
@@ -251,6 +257,24 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
     
             const answersArray = JSON.parse(answers);
             const isCorrectArray = JSON.parse(isCorrect);
+
+            console.log(question_syllabus_id)
+            totalQuestions += 1;    
+
+            if(category === 'MULTIPLECHOICE'){
+                totalMultipleChoiceQuestions += 1;
+            } else if (category === 'IDENTIFICATION'){
+                totalIdentificationQuestions += 1;
+            }
+
+            referencesUsed.add(question_topic_title);
+
+            if(!questionsPerReference[question_topic_title]) {
+                questionsPerReference[question_topic_title] = 0;
+            }
+
+            questionsPerReference[question_topic_title] += 1;
+
 
             if (question_id !== temp_question_id) {
                 if (temp_question_id !== 0) {
@@ -274,22 +298,34 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
                                 <div class="mt-3 flex flex-col"> 
                                     <label for="questionReference">Reference</label>
                                     <select name="questionReference" id="" class="questionReference text-md my-1 py-2">
-                                            <option value="${syllabus_id}" selected>${topic_title}</option>`;
-                                            for (let x = 0; x < quizReferenceData.length; x++) {
-                                                const reference_syllabus_id = quizReferenceData[x]['syllabus_id'];
-                                                const topic_title = quizReferenceData[x]['topic_title'];
-                    
-                                                if(syllabus_id === reference_syllabus_id) {
-                                                    questionData += `
-                                                    <option value="${reference_syllabus_id}" selected>${topic_title}</option>
-                                                        `;
-                                                } else {
-                                                    questionData += `
-                                                    <option value="${reference_syllabus_id}">${topic_title}</option>
-                                                        `;
-                                                }
-                                                
+                                    `;
+                                    console.log(question_syllabus_id)
+                                    for (let x = 0; x < quizReferenceData.length; x++) {
+                                        const reference_syllabus_id = parseInt(quizReferenceData[x]['syllabus_id']);
+                                        const reference_topic_title = quizReferenceData[x]['topic_title'];
+                                        
+                                            if(reference_syllabus_id === question_syllabus_id) {
+                                                questionData += `
+                                                <option value="${reference_syllabus_id}" selected>${reference_topic_title}</option>
+                                            `;
+                                            } else {
+                                                questionData += `
+                                                <option value="${reference_syllabus_id}">${reference_topic_title}</option>
+                                            `;
                                             }
+                                            
+
+                                        // if (question_syllabus_id === reference_syllabus_id) {
+                                        //     questionData += `
+                                        //         <option value="${reference_syllabus_id}" selected>${reference_topic_title}</option>
+                                        //     `;
+                                        // } else {
+                                        //     questionData += `
+                                        //         <option value="${reference_syllabus_id}">${reference_topic_title}</option>
+                                        //     `;
+                                        // }
+                                    }
+                                    
                 questionData += `
                                     </select>
                                 </div>
@@ -372,9 +408,59 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
             // Close the last question div
             questionData += '</div></div>';
         }
-    
+
+ 
+        // // alert(questionTotalCount)
+        var quizContentSummaryDisp = `
+            <div class="quizContentSummary mt-5 border-t border-gray-300 outline-none ">
+                <h1 class="text-2xl font-semibold">Quiz Content Summary</h1>
+                <table class="table-auto">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-2">Category</th>
+                            <th class="px-5 py-2">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b-2 border-black">
+                            <td>Total Questions in the Quiz:</td>
+                            <td class="px-5 font-lg font-semibold">${totalQuestions}</td>
+                        </tr>
+                        <tr>
+                            <td>Multiple Choice Questions:</td>
+                            <td class="px-5 font-lg font-semibold">${totalMultipleChoiceQuestions}</td>
+                        </tr>
+                        <tr>
+                            <td>Identification Questions:</td>
+                            <td class="px-5 font-lg font-semibold">${totalIdentificationQuestions}</td>
+                        </tr>
+                        <tr class="border-b-2 border-black">
+                            <td>References Used in the Quiz:</td>
+                        </tr>
+                `;
+
+        for (const reference of referencesUsed) {
+            quizContentSummaryDisp += `
+                <tr>
+                    <td>${reference}:</td>
+                    <td class="px-5 font-lg font-semibold">${questionsPerReference[reference] || 0} questions</td>
+                </tr>
+            `;
+        }
+
+        quizContentSummaryDisp += `
+                </tbody>
+            </table>
+        </div>
+        `;
+
+        $('.quizContentSummary').remove();
+        $('.quizOptions').after(quizContentSummaryDisp);
+
+
         formContainer.empty();
         formContainer.append(questionData);
+
 
 
         // change question category
@@ -770,23 +856,19 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
 
         $('.questionContainer').on('change', '.questionReference', function(e) {
             e.preventDefault();
-
+        
             const questionContainer = $(this).closest('.questionContainer');
             const question_count = questionContainer.data('question-count');
-        
             const questionReference = $(this).val();
-
-            // Find the questionData before making any changes
+        
+            // Find the index of the questionData in temp_questionsData
             const questionData = temp_questionsData.find(q => q.questionCount === question_count);
+        
+            questionData.syllabus_id = parseInt(questionReference);
             
-            // console.log(questionData.question)
-
-            // alert(questionReference)
-            questionData.syllabus_id = questionReference;
-            // console.log(question);
-            
-            displayQuestions(temp_questionsData, quizReferenceData);
+                displayQuestions(temp_questionsData, quizReferenceData);
         });
+        
 
 
         $('.questionContainer').on('change', '.identificationAns', function(e) {
@@ -875,7 +957,7 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
         const newRow_temp_questionData = {
             questionCount: updatedCount,
             question_id: "temp " + temp_question_count++,
-            syllabus_id: quizReferenceData[0]['syllabus_id'],
+            syllabus_id: parseInt(quizReferenceData[0]['syllabus_id']),
             course_id: quizInfoData['course_id'],
             category: "MULTIPLECHOICE",
             question: " ",
@@ -962,8 +1044,28 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
         $('#addExistingQuestionModal').addClass('hidden');
     })
 
+
+
+
+
     
-    $('.saveQuizContent').on('click', function (e) {
+    $('.saveQuizContent').on('click', function(e) {
+        e.preventDefault();
+
+        $('#confirmSaveQuizContentModal').removeClass('hidden');
+
+    })
+
+
+    $('.cancelSaveQuizContentBtn').on('click', function(e) {
+        e.preventDefault();
+
+        
+        $('#confirmSaveQuizContentModal').addClass('hidden');
+    })
+    
+    
+    $('#confirmSaveQuizContentBtn').on('click', function (e) {
         e.preventDefault();
     
         let loopCounter = 0;

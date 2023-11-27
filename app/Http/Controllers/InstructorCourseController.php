@@ -2287,17 +2287,18 @@ if ($activityInfo === null) {
                 $quizContentData = DB::table('quiz_content')
                 ->select(
                     'quiz_content.quiz_content_id',
-                    'quiz_content.syllabus_id',
+                    // 'quiz_content.syllabus_id',
                     'quiz_content.course_id',
                     'quiz_content.question_id',
+                    'questions.syllabus_id',
                     'questions.question',
                     'questions.category',
                     'syllabus.topic_title',
                     DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers'),
                     DB::raw('JSON_ARRAYAGG(question_answer.isCorrect) as isCorrect')
                 )
-                ->join('syllabus', 'syllabus.syllabus_id', '=', 'quiz_content.syllabus_id')
                 ->join('questions', 'questions.question_id', '=', 'quiz_content.question_id')
+                ->join('syllabus', 'syllabus.syllabus_id', '=', 'questions.syllabus_id')
                 ->leftJoin('question_answer', 'question_answer.question_id', '=', 'quiz_content.question_id')
                 ->where('quiz_content.course_id', $course->course_id)
                 ->groupBy(
