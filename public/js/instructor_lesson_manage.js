@@ -2,20 +2,20 @@ $(document).ready(function() {
     var lessonData = {};
     // console.log(lessonData)
     // Select all <p> elements with the class .lesson_content_input_disp
-    var pElements = $('.lesson_content_input_disp');
+    // var pElements = $('.lesson_content_input_disp');
     var iElements = $('.lesson_content_input');
         
     // Use the filter function to select only those with newline characters
-    var pElementsWithNewlines = pElements.filter(function() {
-        return $(this).text().includes('\n');
-    });
+    // var pElementsWithNewlines = pElements.filter(function() {
+    //     return $(this).text().includes('\n');
+    // });
 
     var iElementsWithNewlines = iElements.filter(function() {
         return $(this).text().includes('\n');
     });
     
     // Apply white-space: pre to the selected elements
-    pElementsWithNewlines.css('white-space', 'pre');
+    // pElementsWithNewlines.css('white-space', 'pre');
     iElementsWithNewlines.css('white-space', 'pre');
     // overall edit button
     $('#editLessonBtn').on('click', function(e) {
@@ -76,59 +76,55 @@ $(document).ready(function() {
             const pic_url = baseUrl + '/storage/' + picture;
 
             displayLesson += `
-                <div data-content-order="${lesson_content_order}" class="px-10 lesson_content_area my-2 mb-8 w-full">
-                    <button class="edit_lesson_content hidden">
-                        <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
-                    </button>
-                    
-                    <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
-                    
-                    <p class="lesson_content_input_disp text-xl w-[90%] min-w-[90%] max-w-[90%]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};">${lesson_content}</p>
-                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[90%] min-w-[90%] max-w-[90%] h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
+    <div data-content-order="${lesson_content_order}" class="px-10 lesson_content_area  my-2 mb-8 w-full">
+        <button class="edit_lesson_content hidden">
+            <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                <path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/>
+            </svg>
+        </button>
+        
+        <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
+        
+        <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">${lesson_content}</p>
+        <textarea name="lesson_content_input" id="" class="hidden w-full text-xl lesson_content_input h-[250px]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
 
-                    
-                    ${picture !== null ? `
-                    <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
-                        <div class="w-full h-[400px] overflow-hidden rounded-lg">
-                            <img src="${pic_url}" class="object-contain w-full h-full" alt="">
-                        </div>
-                    </div>
-                    
-                    
-                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
-                            Change Photo
-                        </button>
-
-
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
-                            Delete Photo
-                        </button>
-                    </div>
-                    ` 
-                    
-                    : `
-                    
-                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
-                            Add Photo
-                        </button>
-                    </div>
-                    `}
-                    
-                    <div class="edit_lesson_content_btns hidden flex w-full justify-end">
-                        <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="save_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900" >
-                            Save
-                        </button>
-                        <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="delete_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-800">
-                            Delete
-                        </button>
-                        <button id="" class="cancel_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900" >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            `;
+        ${picture !== null ? `
+        <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+            <div class="w-full h-[400px] overflow-hidden rounded-lg">
+                <img src="${pic_url}" class="object-contain w-full h-full" alt="">
+            </div>
+        </div>
+        
+        <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Change Photo
+            </button>
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
+                Delete Photo
+            </button>
+        </div>
+        ` 
+        : `
+        <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Add Photo
+            </button>
+        </div>
+        `}
+        
+        <div class="edit_lesson_content_btns hidden flex w-full justify-end">
+            <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="save_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Save
+            </button>
+            <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="delete_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-800">
+                Delete
+            </button>
+            <button id="" class="cancel_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
+                Cancel
+            </button>
+        </div>
+    </div>
+`;
         }
             $('#main_content_area').empty();
             $('#main_content_area').append(displayLesson);
@@ -321,7 +317,14 @@ $(document).ready(function() {
             'lesson_content': lesson_content_val,
         }
 
+        const lessonContentIndex = lessonData.findIndex(content => content.lesson_content_id === lessonContentID);
 
+        if (lessonContentIndex !== -1) {
+            lessonData[lessonContentIndex].lesson_content_title = updatedValues.lesson_content_title;
+            lessonData[lessonContentIndex].lesson_content = updatedValues.lesson_content;
+        }
+
+        console.log(lessonData);
         if(!/^none\d+$/.test(lessonContentID)) {
             const url = "/instructor/course/content/lesson/"+ lessonID +"/title/"+lessonContentID;
 

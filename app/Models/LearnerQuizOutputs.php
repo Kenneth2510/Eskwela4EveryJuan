@@ -19,6 +19,7 @@ class LearnerQuizOutputs extends Model
         'syllabus_id',
         'quiz_id',
         'quiz_content_id',
+        'attempts',
         'answer',
         'isCorrect'
     ];

@@ -989,14 +989,16 @@ class InstructorCourseController extends Controller
     public function update_lesson_content(Lessons $lesson, LessonContents $lesson_content, Request $request) {
         try {
             $updated_values = $request->validate([
-                'lesson_content_title' => ['required'],
-                'lesson_content' => ['required'],
+                'lesson_content_title' => ['nullable'],
+                'lesson_content' => ['nullable'],
             ]);
 
             DB::table('lesson_content')
                 ->where('lesson_id', $lesson->lesson_id)
                 ->where('lesson_content_id', $lesson_content->lesson_content_id)
                 ->update($updated_values);
+
+            return response()->json();
 
         }catch (ValidationException $e) {
             $errors = $e->validator->errors();
@@ -1049,8 +1051,8 @@ class InstructorCourseController extends Controller
 
         try{
         $lessonContentData = $request->validate([
-            'lesson_content_title' => ['required'],
-            'lesson_content' => ['required'],
+            'lesson_content_title' => ['nullable'],
+            'lesson_content' => ['nullable'],
             'lesson_content_order' => ['required']
         ]);
 
@@ -1732,7 +1734,7 @@ if ($activityInfo === null) {
             
     }
 
-    public function learnerResponse_overallScore ($learner_activity_output, $learner_course, $activity, $activity_content, Request $request) {
+    public function learnerResponse_overallScore($learner_activity_output, $learner_course, $activity, $activity_content, Request $request) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
     
@@ -1740,6 +1742,22 @@ if ($activityInfo === null) {
                 $remarks = $request->input('remarks');
                 $totalScore = $request->input('total_score');
     
+                $learnerActivityOutputData = DB::table('learner_activity_output')
+                    ->select(
+                        'learner_activity_output_id',
+                        'learner_course_id',
+                        'activity_id',
+                        'syllabus_id',
+                        'activity_content_id',
+                        'course_id'
+                    )
+                    ->where('learner_activity_output_id', $learner_activity_output)
+                    ->where('learner_course_id', $learner_course)
+                    ->where('activity_id', $activity)
+                    ->where('activity_content_id', $activity_content)
+                    ->first();
+    
+                // Update remarks and total score regardless of the current syllabus status
                 DB::table('learner_activity_output')
                     ->where('learner_activity_output_id', $learner_activity_output)
                     ->where('learner_course_id', $learner_course)
@@ -1749,70 +1767,46 @@ if ($activityInfo === null) {
                         'remarks' => $remarks,
                         'total_score' => $totalScore,
                     ]);
-
-                $learnerActivityOutputData = DB::table('learner_activity_output')
-                ->select(
-                    'learner_activity_output_id',
-                    'learner_course_id',
-                    'activity_id',
-                    'syllabus_id',
-                    'activity_content_id',
-                    'course_id'
-                )
-                ->where('learner_activity_output_id', $learner_activity_output)
-                ->where('learner_course_id', $learner_course)
-                ->where('activity_id', $activity)
-                ->where('activity_content_id', $activity_content)
-                ->first();
-
-                DB::table('learner_syllabus_progress')
-                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                ->where('course_id', $learnerActivityOutputData->course_id)
-                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
-                ->update([
-                    'status' => "COMPLETED",
-                ]);
-
-                DB::table('learner_activity_progress')
-                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                ->where('course_id', $learnerActivityOutputData->course_id)
-                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
-                ->where('activity_id', $learnerActivityOutputData->activity_id)
-                ->update([
-                    'status' => "COMPLETED",
-                ]);
-
-                // DB::table('learner_syllabus_progress')
-                // ->where('learner_course_id' , $learner_course->learner_course_id)
-                // ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
-                // ->where('status', 'LOCKED')
-                // ->orderBy('learner_syllabus_progress_id', 'ASC')
-                // ->limit(1)
-                // ->update(['status' => 'NOT YET STARTED']);
-
-                $learnerSyllabusProgress = DB::table('learner_syllabus_progress')
-                ->select('learner_syllabus_progress_id', 'syllabus_id', 'category', 'status', /* add other columns as needed */)
-                // ->where('learner_course_id', $learner_course)
-                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                // ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
-                // ->where('learner_syllabus_progress_id', '>', $learnerActivityOutputData->learner_syllabus_progress_id)
-                ->where('status', '=' , 'LOCKED')
-                ->orderBy('learner_syllabus_progress_id', 'ASC')
-                ->first();
-                // ->limit(1);
-                // dd($learnerSyllabusProgress);
-
-                if ($learnerSyllabusProgress) {
-                DB::table('learner_syllabus_progress')
-                    ->where('learner_syllabus_progress_id', $learnerSyllabusProgress->learner_syllabus_progress_id)
-                    ->update(['status' => 'NOT YET STARTED']);
-                }
-
-
-
-                
     
-            } catch(\Exception $e) {
+                $currentSyllabusStatus = DB::table('learner_syllabus_progress')
+                    ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                    ->where('course_id', $learnerActivityOutputData->course_id)
+                    ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                    ->value('status');
+    
+                if ($currentSyllabusStatus !== 'COMPLETED') {
+                    DB::table('learner_syllabus_progress')
+                        ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                        ->where('course_id', $learnerActivityOutputData->course_id)
+                        ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                        ->update([
+                            'status' => "COMPLETED",
+                        ]);
+    
+                    DB::table('learner_activity_progress')
+                        ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                        ->where('course_id', $learnerActivityOutputData->course_id)
+                        ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                        ->where('activity_id', $learnerActivityOutputData->activity_id)
+                        ->update([
+                            'status' => "COMPLETED",
+                        ]);
+    
+                    $learnerSyllabusProgress = DB::table('learner_syllabus_progress')
+                        ->select('learner_syllabus_progress_id', 'syllabus_id', 'category', 'status', /* add other columns as needed */)
+                        ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                        ->where('status', '=', 'LOCKED')
+                        ->orderBy('learner_syllabus_progress_id', 'ASC')
+                        ->first();
+    
+                    if ($learnerSyllabusProgress) {
+                        DB::table('learner_syllabus_progress')
+                            ->where('learner_syllabus_progress_id', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                            ->update(['status' => 'NOT YET STARTED']);
+                    }
+                }
+    
+            } catch (\Exception $e) {
                 dd($e->getMessage());
             }
     
@@ -1820,6 +1814,9 @@ if ($activityInfo === null) {
             return redirect('/instructor');
         }
     }
+    
+    
+    
 
     public function learnerResponse_criteriaScore ($learner_activity_output, $learner_course,  $activity, $activity_content, Request $request) {
         if (auth('instructor')->check()) {

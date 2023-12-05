@@ -109,7 +109,7 @@
                             <h3 class="my-2 text-xl font-medium">Remarks:</h3> 
                         </div>
 
-                        <textarea name="remarks" id="remarks" class="border-2 border-gray-200 rounded-xl px-3 py-3 w-full max-w-full min-w-full activity_instructions h-[200px]"></textarea>
+                        <textarea name="remarks" id="remarks" class="border-2 border-gray-200 rounded-xl px-3 py-3 w-full max-w-full min-w-full activity_instructions h-[200px]">{{$learnerActivityOutput->remarks}}</textarea>
                     </div>
                 </div>
 

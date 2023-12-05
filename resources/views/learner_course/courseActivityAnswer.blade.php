@@ -38,7 +38,7 @@
                     <h1 class="mx-2 text-2xl font-semibold">{{$syllabus->activity_title}}</h1>
                 </div>
                 <div class="text-right">
-                    <p class="text-2xl font-semibold">Overall Total Score: </p>
+                    <p class="text-2xl font-semibold">Your Score: </p>
                     @if ($activityOutput)
                         <p class="px-10 text-4xl">{{$activityOutput->total_score ?? 'N/A'}} / {{$activity->total_score ?? 'N/A'}}</p>
                     @else
@@ -53,7 +53,7 @@
                     <h3 class="my-2 text-xl font-medium">Instructions:</h3>
                 </div>
 
-                <p style="white-space: pre">{{ $activity->activity_instructions }}</p>
+                <p style="white-space: pre-wrap">{{ $activity->activity_instructions }}</p>
      
                 {{-- <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions h-[200px]" disabled>{{$activity->activity_instructions}}</textarea> --}}
 
@@ -106,17 +106,17 @@
             <h3 class="w-full my-2 text-2xl font-semibold border-b-4 border-green-900">Your Answer:</h3>
             
             @if ($activityOutput && $activityOutput->answer)
-                <textarea name="" style="white-space: pre" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black" readonly>{{$activityOutput->answer}}</textarea>
+                <textarea name="" style="white-space: pre-wrap" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black" readonly>{{$activityOutput->answer}}</textarea>
             @else
-                <textarea id="activity_answer" name="activity_answer" style="white-space: pre" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black"></textarea>
+                <textarea id="activity_answer" name="activity_answer" style="white-space: pre-wrap" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black"></textarea>
             @endif
         </div>
     
 
         <div class="px-5 my-10">
             <h3 class="my-2 text-2xl font-medium">Instructor's Remarks:</h3>
-            @if ($activityOutput)
-        <p style="white-space: pre" class="px-5">{{ $activityOutput->remarks }}</p>
+        @if ($activityOutput)
+        <p style="white-space: pre-wrap" class="px-5">{{ $activityOutput->remarks }}</p>
         @else
         @endif
         </div>

@@ -67,10 +67,12 @@ Route::controller(InstructorController::class)->group(function() {
 
 
 Route::controller(AdminController::class)->group(function() {
-    Route::get('/admin', 'index')->name('login')->middleware('web', 'guest:admin');
+    // Route::get('/admin', 'index')->name('login')->middleware('web', 'guest:admin');
+    Route::get('/admin', 'index');
     Route::post('/admin/login', 'login_process');
     Route::post('/admin/logout', 'logout');
-    Route::get('/admin/dashboard', 'dashboard')->middleware('auth:admin');
+    // Route::get('/admin/dashboard', 'dashboard')->middleware('auth:admin');
+    Route::get('/admin/dashboard', 'dashboard');
     // learner area---------------
     Route::get('/admin/learners', 'learners');
     Route::get('/admin/add_learner', 'add_learner');
@@ -198,6 +200,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}', 'LearnerCourseController@view_quiz');
+    Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer', 'LearnerCourseController@answer_quiz');
 
     
     // // })->middleware('web');

@@ -181,21 +181,21 @@
                         @forelse ($lessonContent as $lesson)
                         <div data-content-order="{{$lesson->lesson_content_order}}" class="w-full px-10 my-2 mb-8 lesson_content_area">
                             <button class="hidden edit_lesson_content">
-                                <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                                <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                    <path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/>
+                                </svg>
                             </button>
                             
                             <input type="text" class="w-10/12 text-2xl font-bold border-none lesson_content_title_input" disabled name="lesson_content_title_input" id="" value="{{ $lesson->lesson_content_title }}">
                             
                             @if ($lesson->picture !== null)
                                 <img src="{{ asset("storage/$lesson->picture") }}" class="object-contain w-full h-full" alt="">
-                                
                             @else
-                                
                             @endif
                             
-                            <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp">{{$lesson->lesson_content}}</p>
-                            <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%]"  disabled>{{ $lesson->lesson_content }}</textarea>
-                            
+                            {{-- <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-line">{{$lesson->lesson_content}}</p> --}}
+                            <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
+                            {{-- <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea> --}}
                             <div class="flex justify-end hidden w-full edit_lesson_content_btns">
                                 <button id="" class="px-5 py-3 mx-1 text-white save_lesson_content_btn rounded-xl" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
                                     Save
@@ -214,8 +214,8 @@
                             <p class="pl-4 text-justify">No Lesson content</p>
                         </div>
                         @endforelse
-
                     </div>
+                    
                 
 
                     <button class="flex items-center hidden w-full px-10 py-4 mt-4 rounded-lg shadow-lg ring-2 ring-seagreen" id="lessonAddContent">

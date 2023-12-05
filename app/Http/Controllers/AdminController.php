@@ -43,30 +43,32 @@ class AdminController extends Controller
 }
 
 
-    public function login_process(Request $request) {
-        $adminData = $request->validate([
-            "admin_username" => ['required'],
-            "password" => ['required']
-        ]);
-    
-        if (auth('admin')->attempt($adminData)) {
+public function login_process(Request $request) {
+    $adminData = $request->validate([
+        "admin_username" => ['required'],
+        "password" => ['required']
+    ]);
 
-            $admin = auth('admin')->user();
-            // dd($admin);
+    // Use the "admin" guard to attempt the login
+    if (auth('admin')->attempt($adminData)) {
+        $admin = auth('admin')->user();
 
-            $admin = Admin::find($admin->admin_id);
+        // It's not necessary to fetch the user again using Admin::find
+        // The authenticated user is already available in $admin variable
 
-            if($admin) {
-                $request->session()->put('admin' , $admin);
-            }
+        // Store the authenticated admin in the session
+        $request->session()->put('admin', $admin);
 
-            $request->session()->regenerate();
-    
-            return redirect('/admin/dashboard')->with('message', "Welcome Back");
-        }
-    
-        return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+        // Regenerate the session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        return redirect('/admin/dashboard')->with('message', "Welcome Back");
     }
+
+    // If authentication fails, redirect back with errors
+    return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+}
+
     
     public function logout(Request $request) {
         auth('admin')->logout();

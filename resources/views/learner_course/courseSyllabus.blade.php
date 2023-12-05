@@ -103,7 +103,7 @@
                             <h1 class="mx-3 text-2xl font-semibold">General Overview</h1>
                         </div>
                     </div>
-                    <p class="px-4 text-justify">{{ $course->course_description }}</p>
+                    <p class="px-4 text-justify" style="white-space: pre-wrap">{{ $course->course_description }}</p>
                 </div>
                 
                 {{-- views --}}

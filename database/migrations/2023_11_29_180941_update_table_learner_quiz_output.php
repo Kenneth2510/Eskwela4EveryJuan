@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('learner_quiz_progress' , function(Blueprint $table) {
-            $table->integer('max_attempt')->default(1)->after('attempt');
+        Schema::table('learner_quiz_output', function (Blueprint $table) {
+            $table->integer('attempts')->default(0)->after('quiz_content_id');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('learner_quiz_content', function(Blueprint $table) {
-            $table->dropColumn('max_attempt');
+        Schema::table('learner_quiz_output', function (Blueprint $table) {
+            $table->dropColumn(['attempts']);
         });
     }
 };

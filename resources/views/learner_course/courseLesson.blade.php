@@ -61,22 +61,18 @@
              <div id="main_content_area" class="">
                 @forelse ($lessons as $lesson)
                 <div data-content-order="{{$lesson->lesson_content_order}}" class="w-full px-10 my-2 mb-8 lesson_content_area">
-                    <button class="hidden edit_lesson_content">
-                        <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
-                    </button>
+                   
                     
-                    <input type="text" class="w-10/12 text-2xl font-bold border-none lesson_content_title_input" disabled name="lesson_content_title_input" id="" value="{{ $lesson->lesson_content_title }}">
+                    {{-- <input type="text" class="w-10/12 text-2xl font-bold border-none lesson_content_title_input" disabled name="lesson_content_title_input" id="" value="{{ $lesson->lesson_content_title }}"> --}}
+                    <p class="w-10/12 my-5 text-2xl font-bold border-none lesson_content_title_input">{{ $lesson->lesson_content_title }}</p>
                     
                     @if ($lesson->picture !== null)
                         <img src="{{ asset("storage/$lesson->picture") }}" class="object-contain w-full h-full" alt="">
-                        
                     @else
-                        
                     @endif
-                    
-                    <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp">{{$lesson->lesson_content}}</p>
-                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%]"  disabled>{{ $lesson->lesson_content }}</textarea>
-                    
+            
+                    <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
+                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea>
                 </div>
                 @empty
                 <div class="my-2 mb-8">
@@ -84,15 +80,17 @@
                     <p class="pl-4 text-justify">No Lesson content</p>
                 </div>
                 @endforelse
-
             </div>
+            
+            
+            
 
 
             <div class="px-10 mt-[50px] flex justify-between">
-                <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="w-1/2 mx-3 flex justify-center py-3 bg-darthmouthgreen hover:bg-green-900 rounded-xl text-white text-xl font-semibold">
+                <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-3 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                     Return    
                 </a>
-                <button type="button" id="finishLessonBtn" data-course-id="{{$syllabus->course_id}}" data-learner-course-id="{{$syllabus->learner_course_id}}" data-syllabus-id="{{$syllabus->syllabus_id}}" class="w-1/2 mx-3 flex justify-center py-3 bg-darthmouthgreen hover:bg-green-900 rounded-xl text-white text-xl font-semibold">
+                <button type="button" id="finishLessonBtn" data-course-id="{{$syllabus->course_id}}" data-learner-course-id="{{$syllabus->learner_course_id}}" data-syllabus-id="{{$syllabus->syllabus_id}}" class="flex justify-center w-1/2 py-3 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                     Finish
                 </button>         
             </div>
@@ -103,6 +101,23 @@
 
         </div>
         
+
+        <div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+                <div class="flex justify-end w-full">
+                    <button class="cancelFinishLessonBtn">
+                        <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                    </button>
+                </div>
+
+                <h2 class="mb-2 text-xl font-semibold">Do you wish to proceed to the next topic?</h2>
+
+                <div class="flex justify-center w-full mt-5">
+                    <button data-course-id="{{$syllabus->course_id}}" data-learner-course-id="{{$syllabus->learner_course_id}}" data-syllabus-id="{{$syllabus->syllabus_id}}" id="confirmFinishLessonBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded-lg hover:bg-green-950 bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                    <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-red-900 cancelFinishLessonBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 

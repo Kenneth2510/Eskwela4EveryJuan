@@ -56,7 +56,7 @@
                     <h3 class="my-2 text-xl font-medium">Instructions:</h3>
                 </div>
 
-                <p style="white-space: pre">{{ $activity->activity_instructions }}</p>
+                <p style="white-space: pre-wrap">{{ $activity->activity_instructions }}</p>
      
                 {{-- <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions h-[200px]" disabled>{{$activity->activity_instructions}}</textarea> --}}
 
