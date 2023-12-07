@@ -21,21 +21,11 @@
     <script src="{{asset('js/sidebar.js')}}" defer></script>
     <script src="{{ asset('js/script.js')}}" defer></script>
     <script src="{{ asset('js/modal.js')}}" defer></script>
-    {{-- <script src="{{asset('js/instructorLogin.js')}}" defer></script>
-    <script src="{{asset('js/instructorRegister.js')}}" defer></script>
-    <script src="{{asset('js/AD_SB.js')}}" defer></script>
-    <script src="{{asset('js/instructorCreateCourse.js')}}" defer></script>
-    <script src="{{asset('js/learnerUserSettings.js')}}" defer></script>
-    <script src="{{asset('js/instructorSettings.js')}}" defer></script>
-    <script src="{{asset('js/learnerRegister.js')}}" defer></script>
-    <script src="{{asset('js/instructorNewContent.js')}}" defer></script>
-    <script src="{{asset('js/instructor_course_create.js')}}" defer></script>
-    <script src="{{asset('js/instructor_course_manage.js')}}" defer></script>
-    <script src="{{asset('js/AD_course_manage.js')}}" defer></script>
-    <script src="{{asset('js/AD_instructor_manage.js')}}" defer></script>
-    <script src="{{asset('js/AD_learner_manage.js')}}" defer></script>
-    <script src="{{asset('js/L_course_manage.js')}}" defer></script>
-    <script src="{{ asset('js/script.js')}}" defer></script> --}}
+
+    <script src="https://cdn.tiny.cloud/1/tu1cijjt9ribhv45aa09w924q0rsgb4nrij1ixwt0tnjt0ql/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    
+    
     @if (isset($scripts))
         @forelse ($scripts as $script)
             

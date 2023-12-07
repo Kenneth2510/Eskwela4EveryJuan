@@ -1,4 +1,16 @@
 $(document).ready(function() {
+
+    tinymce.init({  
+     selector: '#insertLessonContent',  
+     width: 500  
+    }); 
+
+    
+    // tinymce.init({  
+    //     selector: 'textarea#lesson_content_id',  
+    //     width: 500  
+    //    }); 
+    
     var lessonData = {};
     // console.log(lessonData)
     // Select all <p> elements with the class .lesson_content_input_disp
@@ -57,6 +69,8 @@ $(document).ready(function() {
     });
 
     function reDisplayLesson(lessonData) {
+
+
         var displayLesson = ``;
 
         const baseUrl = window.location.protocol + '//' + window.location.host;
@@ -85,8 +99,7 @@ $(document).ready(function() {
         
         <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
         
-        <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">${lesson_content}</p>
-        <textarea name="lesson_content_input" id="" class="hidden w-full text-xl lesson_content_input h-[250px]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
+        <textarea name="lesson_content_input" class="w-full text-xl lesson_content_input h-[250px]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
 
         ${picture !== null ? `
         <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
@@ -273,6 +286,11 @@ $(document).ready(function() {
         const lesson_content = lesson_content_area.find('.lesson_content_input');
         const lesson_content_disp = lesson_content_area.find('.lesson_content_input_disp');
         const lesson_content_picture = lesson_content_area.find('.edit_lesson_content_picture_btns')
+
+
+        // var content = tinyMCE.get("lesson_content_input").getContent();
+
+        // const lessonContent = content;
 
         lesson_content_disp.addClass('hidden');
         lesson_content.removeClass('hidden');
@@ -509,7 +527,10 @@ $(document).ready(function() {
 
         const chosenLocation = $('#insertLocation').val();
         const lessonContentTitle = $('#insertLessonContentTitle').val();
-        const lessonContent = $('#insertLessonContent').val();
+
+        var content = tinyMCE.get("insertLessonContent").getContent();
+
+        const lessonContent = content;
 
         const lessonID = $(this).data('lesson-id');
 

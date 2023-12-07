@@ -214,6 +214,10 @@
                             <p class="pl-4 text-justify">No Lesson content</p>
                         </div>
                         @endforelse
+
+                        <iframe width="420" height="315"
+src="https://www.youtube.com/embed/tgbNymZ7vqY">
+</iframe>
                     </div>
                     
                 
@@ -255,21 +259,22 @@
 <hr>
 <br>
 
-<h2>{{$lessonInfo->lesson_title}}</h2>
+<h2 style="white-space: pre-wrap">{{$lessonInfo->lesson_title}}</h2>
 {{-- <h2>{{$lessonInfo->picture}}</h2> --}}
 
-<img src="storage/app/public/{{$lessonInfo->picture}}" alt="" width="250px" height="250px">
+<img src="{{ asset('storage/' . $lessonInfo->picture) }}" alt="" width="250px" height="250px">
+
 <hr>
 <br>
 <br>
 @forelse ($lessonContent as $lesson)
 
-<h4>{{$lesson->lesson_content_title}}</h4>
-@if ($lesson->picture !== null)
+<h4 style="white-space: pre-wrap">{{$lesson->lesson_content_title}}</h4>
+    @if ($lesson->picture !== null)
 
-<img src="storage/app/public/{{$lesson->picture}}" alt="" width="250px" height="250px">
-@endif
-<p>{{$lesson->lesson_content}}</p>
+    <img src="storage/app/public/{{$lesson->picture}}" alt="" width="250px" height="250px">
+    @endif
+<p style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
 @empty
 <h5>No Content</h5>
 @endforelse
