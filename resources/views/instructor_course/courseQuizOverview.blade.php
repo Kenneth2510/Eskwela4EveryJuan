@@ -83,9 +83,26 @@
                                 </div>
                         </div>
 
+                        <div class="mt-16" id="durationArea">
+                            <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
+                            <div class="">
+                                <label class="text-lg" for="hours">Hours:</label>
+                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
+                        
+                                <label class="text-lg" for="minutes">Minutes:</label>
+                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+                        
+                                <label class="text-lg" for="seconds">Seconds:</label>
+                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                        
+                                <button id="saveDurationBtn" class="hidden px-3 py-1 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">Set Duration</button>
+                            </div>
+                        </div>
+                        
+
                         <button id="editQuizInfoBtn" class="w-32 px-5 py-3 mx-3 mt-10 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Edit</button>
-                        <div class="hidden" id="editQuizInfo_clickedBtns">
-                            <button id="saveQuizInfoBtn" class="px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
+                        <div class="hidden mt-5" id="editQuizInfo_clickedBtns">
+                            <button id="saveQuizInfoBtn" class="px-6 py-4 mx-3 text-xl text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
                         </div>
                         <div class="flex w-full mt-5">
                             <button id="viewResponsesBtn" class="w-1/2 px-5 py-5 mx-3 mt-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">

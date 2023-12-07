@@ -3,6 +3,7 @@ $(document).ready(function() {
     quizReferenceData = {};
     syllabusData = {}
     quizInfoData = {}
+    var duration_ms = 0;
 
     isEditing = 0;
 
@@ -24,6 +25,7 @@ $(document).ready(function() {
                 // console.log(quizReferenceData)
 
                 displayReference(quizReferenceData, syllabusData);
+                setDuration(quizInfoData)
                 
             },
             error: function(error) {
@@ -31,6 +33,20 @@ $(document).ready(function() {
             }
       })
 
+    }
+
+    function setDuration(quizInfoData) {
+        var durationInMilliseconds = quizInfoData['duration'] ;
+
+        // Convert milliseconds to H M S format
+        var hours = Math.floor(durationInMilliseconds / 3600000);
+        var minutes = Math.floor((durationInMilliseconds % 3600000) / 60000);
+        var seconds = Math.floor((durationInMilliseconds % 60000) / 1000);
+
+        // Set the values in the input fields
+        $('#hours').val(hours);
+        $('#minutes').val(minutes);
+        $('#seconds').val(seconds);
     }
     
 
@@ -189,7 +205,16 @@ $(document).ready(function() {
         
         $('.editReferenceBtn').removeClass('hidden');
         $('#addNewReference').removeClass('hidden');
+        $('#saveDurationBtn').removeClass('hidden');
+        $('.duration_input').prop('disabled', false);
 
+        
+        const hours = parseInt($('#hours').val()) || 0;
+        const minutes = parseInt($('#minutes').val()) || 0;
+        const seconds = parseInt($('#seconds').val()) || 0;
+
+        // Convert the duration to milliseconds
+        duration_ms = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
         
         // $('#saveQuizInfoBtn').removeClass('hidden');
 
@@ -231,7 +256,8 @@ $(document).ready(function() {
                 success: function(response) {
                     // Handle success if needed
                     if(quizReferenceData.length === loopCounter++) {
-                        window.location.reload();
+                        // window.location.reload();
+                        addQuizDuration(quiz_id);
                     }
                 },
                 error: function(error) {
@@ -253,7 +279,8 @@ $(document).ready(function() {
                     // Handle success if needed
                      
                     if(quizReferenceData.length === loopCounter++) {
-                        window.location.reload();
+                        // window.location.reload();
+                        addQuizDuration(quiz_id);
                     }
                 },
                 error: function(error) {
@@ -271,6 +298,9 @@ $(document).ready(function() {
         $('.editReferenceBtn').addClass('hidden');
         $('#addNewReference').addClass('hidden');
 
+        $('#saveDurationBtn').addClass('hidden');
+        $('.duration_input').prop('disabled', true);
+
         
         // $('#saveQuizInfoBtn').removeClass('hidden');
 
@@ -278,6 +308,34 @@ $(document).ready(function() {
 
         // add ajax to save everything
      })
+
+    function addQuizDuration(quiz_id) {
+        // console.log(duration_ms);
+
+        var baseUrl = window.location.href;
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var url = baseUrl + `/${quiz_id}/duration`;
+          
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { duration_ms: duration_ms },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                // Handle success if needed
+                 
+                console.log(response);
+                    window.location.reload();
+        
+            
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
 
      $('#addNewReference').addClass('hidden');
     //adding new reference
@@ -367,6 +425,34 @@ $(document).ready(function() {
     //     $('#addNewReference').removeClass('hidden');
     // })
 
+    $('.duration_input').on('change', function(e) {
+        e.preventDefault();
+
+        const hours = parseInt($('#hours').val()) || 0;
+        const minutes = parseInt($('#minutes').val()) || 0;
+        const seconds = parseInt($('#seconds').val()) || 0;
+
+        // Convert the duration to milliseconds
+        duration_ms = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
+
+    });    
+
+    $('#saveDurationBtn').on('click', function(e) {
+        e.preventDefault();
+
+        // Get the values from the input fields
+        const hours = parseInt($('#hours').val()) || 0;
+        const minutes = parseInt($('#minutes').val()) || 0;
+        const seconds = parseInt($('#seconds').val()) || 0;
+
+        // Convert the duration to milliseconds
+        duration_ms = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
+
+        // For testing purposes, you can log the duration
+        console.log('Quiz Duration in milliseconds:', duration_ms);
+
+        // You can continue with the rest of your logic or send the duration to the server
+    });
 
 
     // view responses

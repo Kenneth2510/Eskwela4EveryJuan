@@ -60,7 +60,7 @@
                         <div class="flex items-center justify-center question_isAnswered w-[35px] h-[45px] hover:cursor-pointer border border-darthmouthgreen transition-all duration-300">5</div> --}}
                     </div>
 
-                    <div class="mt-5">
+                    <div class="mt-5" id="timerArea">
                         <h1 class="">Time remaining: </h1>
                     </div>
                     

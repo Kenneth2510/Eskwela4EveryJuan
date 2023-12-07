@@ -1909,6 +1909,7 @@ if ($activityInfo === null) {
                         'syllabus_id',
                         'topic_id',
                         'quiz_title',
+                        'duration',
                     )
                     ->where('course_id', $course->course_id)
                     ->where('syllabus_id', $syllabus->syllabus_id)
@@ -2006,6 +2007,7 @@ if ($activityInfo === null) {
                         'syllabus_id',
                         'topic_id',
                         'quiz_title',
+                        'duration',
                     )
                     ->where('course_id', $course->course_id)
                     ->where('syllabus_id', $syllabus->syllabus_id)
@@ -2122,6 +2124,34 @@ if ($activityInfo === null) {
         
             return response()->json(['errors' => $errors], 422);
         }
+    }
+
+    public function manage_update_duration(Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz, Request $request) {
+        
+        try {
+
+            $duration = $request->input('duration_ms');
+
+            DB::table('quizzes')
+            ->where('quiz_id', $quiz->quiz_id)
+            ->where('course_id' , $course->course_id)
+            ->where('syllabus_id', $syllabus->syllabus_id)
+            ->update([
+                'duration' => $duration,
+            ]);
+
+            $data = [
+                'message' => 'quiz duration successfully updated'
+            ];
+
+            return response()->json($data);
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+
     }
 
     public function quiz_content (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz) {

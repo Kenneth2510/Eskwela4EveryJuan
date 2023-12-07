@@ -168,6 +168,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     
     Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/add', 'InstructorCourseController@manage_add_reference');
     Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/update', 'InstructorCourseController@manage_update_reference');
+    Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/duration', 'InstructorCourseController@manage_update_duration');
 
     Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content', 'InstructorCourseController@quiz_content');
     Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content/json', 'InstructorCourseController@quiz_content_json');

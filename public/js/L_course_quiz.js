@@ -4,6 +4,7 @@ $(document).ready(function() {
     var currentPage = 1;
     var questionsPerPage = 5;
     var baseUrl = window.location.href;
+    var durationVal;
     
 
 getLearnerQuizData();
@@ -19,6 +20,7 @@ getLearnerQuizData();
             success: function(response) {
                 console.log(response);
 
+                durationVal = response['learnerSyllabusProgressData']['duration'];
                 quizLearnerQuestions = response['quizLearnerData'];
                 // console.log(quizLearnerQuestions);
 
@@ -30,6 +32,24 @@ getLearnerQuizData();
         });
     }
 
+
+     // Function to convert milliseconds to H:MM:SS format
+     function formatTime(milliseconds) {
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    // Function to update the timer display
+    function updateTimerDisplay() {
+        const timerElement = $('#timerArea'); // Updated to target #timerArea
+        const formattedTime = formatTime(durationVal);
+
+        timerElement.html('<h1>Time remaining: ' + formattedTime + '</h1>');
+    }
 
     function displayLearnerQuizData(quizLearnerQuestions) {
         var questionDataDisp = ``;
@@ -117,6 +137,29 @@ getLearnerQuizData();
     
         $('#questionContainer').prepend(questionDataDisp);
         $('#isAnsweredMeter').append(questionIndicatorDisp);
+
+
+        // Update the timer display initially
+        updateTimerDisplay();
+        setTimeout(submitQuizContent, durationVal);
+
+        // Start the timer
+        const timerInterval = setInterval(function () {
+            // Decrease the remaining time
+            durationVal -= 1000;
+
+            // Update the timer display
+            updateTimerDisplay();
+
+            // Check if the time has run out
+            if (durationVal <= 0) {
+                clearInterval(timerInterval);
+                // Perform actions when time is up
+                console.log('Time is up!');
+            }
+        }, 1000);
+
+
     
         $('input[type="radio"]').on('change', function () {
             const questionCount = $(this).attr('name');
@@ -206,11 +249,10 @@ getLearnerQuizData();
         $('#confirmSubmitQuizModal').addClass('hidden');
     })
 
-    $('#confirmSubmitQuizBtn').on('click', function(e) {
-        e.preventDefault();
 
+    function submitQuizContent() {
         let loopCounter = 0;
-        console.log(quizLearnerAnswers);
+        // console.log(quizLearnerAnswers);
         
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -249,10 +291,7 @@ getLearnerQuizData();
                         }
                     });
         }
-
-        $('#confirmSubmitQuizModal').addClass('hidden');
-    })
-
+    }
 
     function compute_score(rowData) {
         var url = baseUrl + "/score";
@@ -283,6 +322,14 @@ getLearnerQuizData();
         });
 
     }
+
+       $('#confirmSubmitQuizBtn').on('click', function(e) {
+        e.preventDefault();
+        submitQuizContent();
+        $('#confirmSubmitQuizModal').addClass('hidden');
+    })
+
+
     
 
 })

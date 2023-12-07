@@ -80,6 +80,37 @@
                 </table>
             </div>
 
+            <div class="mt-16" id="durationArea">
+                <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
+                <div class="">
+                    <label class="text-lg" for="hours">Hours:</label>
+                    <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
+            
+                    <label class="text-lg" for="minutes">Minutes:</label>
+                    <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+            
+                    <label class="text-lg" for="seconds">Seconds:</label>
+                    <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Get the milliseconds duration from your controller
+                    let durationInMilliseconds = {{$learnerSyllabusProgressData->duration}};
+            
+                    // Calculate hours, minutes, and seconds
+                    let hours = Math.floor(durationInMilliseconds / 3600000);
+                    let minutes = Math.floor((durationInMilliseconds % 3600000) / 60000);
+                    let seconds = Math.floor((durationInMilliseconds % 60000) / 1000);
+            
+                    // Set the values in the input fields
+                    document.getElementById('hours').value = hours;
+                    document.getElementById('minutes').value = minutes;
+                    document.getElementById('seconds').value = seconds;
+                });
+            </script>
+
             <div class="mt-8 px-10" id="score_area">
                 <h1 class="text-2xl font-semibold mb-2">Attempt Number: {{$learnerQuizProgressData->attempt}}</h1>
 
