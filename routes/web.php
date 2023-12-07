@@ -204,6 +204,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/json', 'LearnerCourseController@answer_quiz_json');
     Route::post('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/submit', 'LearnerCourseController@submit_quiz');
     Route::post('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/score', 'LearnerCourseController@compute_score');
+
+    
+    Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/view_output/{attempt}', 'LearnerCourseController@view_output');
+    Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/view_output/{attempt}/json', 'LearnerCourseController@view_output_json');
     
     // // })->middleware('web');
 });

@@ -44,7 +44,7 @@
                     @elseif ($learnerSyllabusProgressData->status === "COMPLETED")
                     <span class="">STATUS: COMPLETED</span>
                     @else
-                    <span class="">STATUS: NOT YET STARTED</span>
+                    <span class="">STATUS: IN PROGRESS</span>
                     @endif
                 </h1>
             </div>
@@ -55,7 +55,7 @@
 
             <div id="coverageArea" class="mt-5">
                 <table class="w-full">
-                    <thead class="h-16 text-2xl text-white bg-green-700 rounded-xl">
+                    <thead class="h-10 text-2xl text-white bg-green-700 rounded-xl">
                       
                         <th class="w-4/5">Title</th>
                         <th class="w-3/5"></th>
@@ -80,6 +80,39 @@
                 </table>
             </div>
 
+            <div class="mt-8 px-10" id="score_area">
+                <h1 class="text-2xl font-semibold mb-2">Attempt Number: {{$learnerQuizProgressData->attempt}}</h1>
+
+                @if($learnerQuizProgressData->remarks)
+                <h1 class="text-2xl font-semibold mb-2">Attempt Taken on {{$learnerQuizProgressData->updated_at}}</h1>
+                @endif
+                <div class="bg-gray-100 p-6 rounded-xl shadow-md">
+                    <h1 class="text-3xl font-bold mb-4">Score:</h1>
+                    <h1 class="text-4xl font-bold text-green-600">{{$learnerQuizProgressData->score}} <span class="text-2xl font-bold text-black"> / {{$totalQuestionCount}}</span></h1>
+                    
+                    <div class="mt-4">
+                        <h1 class="text-xl font-semibold">Remarks:</h1>
+                        <p class="text-lg">{{$learnerQuizProgressData->remarks}}</p>
+                        
+                    </div>
+
+                    @if($learnerQuizProgressData->remarks && $learnerQuizProgressData == 'FAIL')
+                    <div class="mt-3">
+                        <a href="" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">Re attempt the Quiz</a>
+                    </div>
+                    @endif
+                    @if($learnerQuizProgressData->remarks)
+                    <div class="mt-3">
+                        <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$learnerQuizProgressData->attempt") }}" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">
+                            View Output
+                        </a> 
+                    </div>
+                    @endif
+                      
+                </div>
+            </div>
+            
+
             <div class="px-10 mt-[50px] flex justify-between">
                 <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                     Return    
@@ -89,9 +122,10 @@
                     Answer Now
                 </a>   
                 @elseif ($learnerSyllabusProgressData->status === "COMPLETED" || $learnerSyllabusProgressData->status === "IN PROGRESS")
-                <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/answer") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                <a href="#" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
                     View Output
-                </a>   
+                </a>
+                  
                 @else 
                 <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/answer") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                     Answer Now

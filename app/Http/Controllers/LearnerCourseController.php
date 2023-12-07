@@ -1088,6 +1088,14 @@ class LearnerCourseController extends Controller
                 ->where('learner_quiz_progress.quiz_id', $learnerSyllabusProgressData->quiz_id)
                 ->first();
 
+                $totalCount = DB::table('learner_quiz_output')
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('quiz_id', $learnerQuizProgressData->quiz_id)
+                ->where('attempts', $learnerQuizProgressData->attempt)
+                ->count();
+
 
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -1104,6 +1112,7 @@ class LearnerCourseController extends Controller
             'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
             'learnerQuizProgressData' => $learnerQuizProgressData,
             'quizReferenceData' => $quizReferenceData,
+            'totalQuestionCount' => $totalCount,
         ];
 
         // dd($data);
@@ -1214,7 +1223,6 @@ class LearnerCourseController extends Controller
                     ->where('learner_syllabus_progress.learner_course_id', $learner_course->learner_course_id)
                     ->first();
 
-                
                     $quizReferenceData = DB::table('quiz_reference')
                     ->select(
                         'quiz_reference.quiz_reference_id',
@@ -1462,6 +1470,7 @@ class LearnerCourseController extends Controller
                         $learnerQuizOutputData = DB::table('learner_quiz_output')
                         ->select(
                             'learner_quiz_output.learner_quiz_output_id',
+                            'learner_quiz_output.learner_course_id',
                             'learner_quiz_output.quiz_id',
                             'learner_quiz_output.quiz_content_id',
                             'learner_quiz_output.attempts',
@@ -1510,6 +1519,7 @@ class LearnerCourseController extends Controller
                         ->select(
                             'learner_quiz_output.learner_quiz_output_id',
                             'learner_quiz_output.quiz_id',
+                            'learner_quiz_output.learner_course_id',
                             'learner_quiz_output.quiz_content_id',
                             'quiz_content.course_id',
                             'quiz_content.question_id',
@@ -1522,6 +1532,7 @@ class LearnerCourseController extends Controller
                         ->join('questions', 'quiz_content.question_id', '=', 'questions.question_id')
                         ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
                         ->where('learner_quiz_output.attempts', $learnerQuizProgressData->attempt)
+                        ->where('learner_quiz_output.learner_course_id', $learner_course->learner_course_id)
                         ->where('quiz_content.quiz_id', $learnerSyllabusProgressData->quiz_id)
                         ->where('quiz_content.course_id', $learnerSyllabusProgressData->course_id)
                         ->where('quiz_content.syllabus_id', $learnerSyllabusProgressData->syllabus_id)
@@ -1554,6 +1565,7 @@ class LearnerCourseController extends Controller
                         ->join('questions', 'quiz_content.question_id', '=', 'questions.question_id')
                         ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
                         ->where('learner_quiz_output.attempts', $learnerQuizProgressData->attempt)
+                        ->where('learner_quiz_output.learner_course_id', $learner_course->learner_course_id)
                         ->where('quiz_content.quiz_id', $learnerSyllabusProgressData->quiz_id)
                         ->where('quiz_content.course_id', $learnerSyllabusProgressData->course_id)
                         ->where('quiz_content.syllabus_id', $learnerSyllabusProgressData->syllabus_id)
@@ -1683,6 +1695,15 @@ class LearnerCourseController extends Controller
             ->where('learner_quiz_output_id', $learner_quiz_output_id)
             ->first();
 
+            // update syllabus_progress
+            DB::table('learner_syllabus_progress')
+            ->where('course_id', $learnerQuizOutputData->course_id)
+            ->where('syllabus_id', $learnerQuizOutputData->syllabus_id)
+            ->where('learner_course_id', $learnerQuizOutputData->learner_course_id)
+            ->update([
+                'status' => 'IN PROGRESS'
+            ]);
+
 
             // total items of the quiz
             $totalCount = DB::table('learner_quiz_output')
@@ -1793,6 +1814,272 @@ class LearnerCourseController extends Controller
             return response()->json(['errors' => $errors], 422);
         }
     }   
+
+
+    public function view_output (Course $course, LearnerCourse $learner_course, Syllabus $syllabus, $attempt) {
+        if (auth('learner')->check()) {
+            $learner = session('learner'); 
+            try {
+
+                if (!function_exists('getRandomColor')) {
+                    function getRandomColor() {
+                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    }
+                }
+    
+                // Generate a random color for mainBackgroundCol
+                $mainBackgroundCol = getRandomColor();
+    
+                // Darken the mainBackgroundCol
+                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+    
+                // Darken the mainBackgroundCol further for darkenedColor
+                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+
+                $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
+                    ->select(
+                        'learner_syllabus_progress.learner_syllabus_progress_id',
+                        'learner_syllabus_progress.learner_course_id',
+                        'learner_syllabus_progress.learner_id',
+                        'learner_syllabus_progress.course_id',
+                        'learner_syllabus_progress.syllabus_id',
+                        'learner_syllabus_progress.category',
+                        'learner_syllabus_progress.status', 
+                        'course.course_name',
+                        'quizzes.quiz_id',
+                        'quizzes.quiz_title',
+                    )
+                    ->join('quizzes', 'learner_syllabus_progress.syllabus_id', '=', 'quizzes.syllabus_id')
+                    ->join('course','learner_syllabus_progress.course_id','=','course.course_id')
+                    ->where('learner_syllabus_progress.course_id', $course->course_id)
+                    ->where('learner_syllabus_progress.syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_syllabus_progress.learner_course_id', $learner_course->learner_course_id)
+                    ->first();
+
+                
+                    $quizReferenceData = DB::table('quiz_reference')
+                    ->select(
+                        'quiz_reference.quiz_reference_id',
+                        'quiz_reference.quiz_id',
+                        'quiz_reference.course_id',
+                        'quiz_reference.syllabus_id',
+                        'syllabus.topic_title',
+                    )
+                    ->join('syllabus', 'quiz_reference.syllabus_id', '=', 'syllabus.syllabus_id' )
+                    ->where('quiz_reference.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                    ->get();
+
+
+                    $learnerQuizProgressData = DB::table('learner_quiz_progress')
+                    ->select(
+                        'learner_quiz_progress.learner_quiz_progress_id',
+                        'learner_quiz_progress.learner_course_id',
+                        'learner_quiz_progress.syllabus_id',
+                        'learner_quiz_progress.quiz_id',
+                        'learner_quiz_progress.status',
+                        'learner_quiz_progress.max_attempt',
+                        'learner_quiz_progress.attempt',
+                        'learner_quiz_progress.score',
+                    )
+                    ->where('learner_quiz_progress.learner_course_id', $learner_course->learner_course_id)
+                    ->where('learner_quiz_progress.course_id', $course->course_id)
+                    ->where('learner_quiz_progress.syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_quiz_progress.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                    ->orderBy('learner_quiz_progress.learner_quiz_progress_id', 'DESC')
+                    ->first();
+
+
+                    // $correctAnswerSubquery = DB::table('question_answer')
+                    //     ->select('question_id', DB::raw('JSON_ARRAYAGG(answer) as correct_answer'))
+                    //     ->where('isCorrect', 1)
+                    //     ->groupBy('question_id');
+
+                    // $learnerQuizData = DB::table('learner_quiz_output')
+                    //     ->select(
+                    //         'learner_quiz_output.learner_quiz_output_id',
+                    //         'learner_quiz_output.quiz_id',
+                    //         'learner_quiz_output.quiz_content_id',
+                    //         'learner_quiz_output.attempts',
+                    //         'learner_quiz_output.answer',
+                    //         'learner_quiz_output.isCorrect',
+                    //         'quiz_content.course_id',
+                    //         'quiz_content.question_id',
+                    //         'questions.syllabus_id',
+                    //         'questions.question',
+                    //         'questions.category',
+                    //         DB::raw('JSON_ARRAYAGG(question_answer.answer) as all_choices'),
+                    //         DB::raw('correct_answers.correct_answer')
+                    //     )
+                    //     ->join('quiz_content', 'learner_quiz_output.quiz_content_id', '=', 'quiz_content.quiz_content_id')
+                    //     ->join('questions', 'quiz_content.question_id', '=', 'questions.question_id')
+                    //     ->leftJoinSub($correctAnswerSubquery, 'correct_answers', function ($join) {
+                    //         $join->on('questions.question_id', '=', 'correct_answers.question_id');
+                    //     })
+                    //     ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                    //     ->where('learner_quiz_output.attempts', $attempt)
+                    //     ->where('learner_quiz_output.learner_course_id', $learner_course->learner_course_id)
+                    //     ->where('quiz_content.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                    //     ->where('quiz_content.course_id', $learnerSyllabusProgressData->course_id)
+                    //     ->where('quiz_content.syllabus_id', $learnerSyllabusProgressData->syllabus_id)
+                    //     ->groupBy(
+                    //         'learner_quiz_output.learner_quiz_output_id',
+                    //         'learner_quiz_output.quiz_content_id',
+                    //         'quiz_content.course_id',
+                    //         'quiz_content.question_id',
+                    //         'questions.syllabus_id',
+                    //         'questions.question',
+                    //         'questions.category',
+                    //         'correct_answers.correct_answer'
+                    //     )
+                    //     ->get();
+
+
+
+                    $data = [
+                        'title' => 'Quiz',
+                        'scripts' => ['/L_course_quiz_output.js'],
+                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'darkenedColor' => $darkenedColor,
+                        'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
+                        'quizReferences' => $quizReferenceData,
+                        'quizProgressData' => $learnerQuizProgressData,
+                        // 'quizLearnerData' => $learnerQuizData,
+                    ];
+
+                    // dd($data);
+
+            return view('learner_course.courseQuizOutput', compact('learner'))
+            ->with($data);
+
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function view_output_json (Course $course, LearnerCourse $learner_course, Syllabus $syllabus, $attempt) {
+
+        try {
+
+            $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
+                    ->select(
+                        'learner_syllabus_progress.learner_syllabus_progress_id',
+                        'learner_syllabus_progress.learner_course_id',
+                        'learner_syllabus_progress.learner_id',
+                        'learner_syllabus_progress.course_id',
+                        'learner_syllabus_progress.syllabus_id',
+                        'learner_syllabus_progress.category',
+                        'learner_syllabus_progress.status', 
+                        'course.course_name',
+                        'quizzes.quiz_id',
+                        'quizzes.quiz_title',
+                    )
+                    ->join('quizzes', 'learner_syllabus_progress.syllabus_id', '=', 'quizzes.syllabus_id')
+                    ->join('course','learner_syllabus_progress.course_id','=','course.course_id')
+                    ->where('learner_syllabus_progress.course_id', $course->course_id)
+                    ->where('learner_syllabus_progress.syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_syllabus_progress.learner_course_id', $learner_course->learner_course_id)
+                    ->first();
+
+                
+                    $quizReferenceData = DB::table('quiz_reference')
+                    ->select(
+                        'quiz_reference.quiz_reference_id',
+                        'quiz_reference.quiz_id',
+                        'quiz_reference.course_id',
+                        'quiz_reference.syllabus_id',
+                        'syllabus.topic_title',
+                    )
+                    ->join('syllabus', 'quiz_reference.syllabus_id', '=', 'syllabus.syllabus_id' )
+                    ->where('quiz_reference.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                    ->get();
+
+
+                    $learnerQuizProgressData = DB::table('learner_quiz_progress')
+                    ->select(
+                        'learner_quiz_progress.learner_quiz_progress_id',
+                        'learner_quiz_progress.learner_course_id',
+                        'learner_quiz_progress.syllabus_id',
+                        'learner_quiz_progress.quiz_id',
+                        'learner_quiz_progress.status',
+                        'learner_quiz_progress.max_attempt',
+                        'learner_quiz_progress.attempt',
+                        'learner_quiz_progress.score',
+                    )
+                    ->where('learner_quiz_progress.learner_course_id', $learner_course->learner_course_id)
+                    ->where('learner_quiz_progress.course_id', $course->course_id)
+                    ->where('learner_quiz_progress.syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_quiz_progress.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                    ->orderBy('learner_quiz_progress.learner_quiz_progress_id', 'DESC')
+                    ->first();
+
+
+                    $correctAnswerSubquery = DB::table('question_answer')
+                        ->select('question_id', DB::raw('JSON_ARRAYAGG(answer) as correct_answer'))
+                        ->where('isCorrect', 1)
+                        ->groupBy('question_id');
+
+                    $learnerQuizData = DB::table('learner_quiz_output')
+                        ->select(
+                            'learner_quiz_output.learner_quiz_output_id',
+                            'learner_quiz_output.quiz_id',
+                            'learner_quiz_output.quiz_content_id',
+                            'learner_quiz_output.attempts',
+                            'learner_quiz_output.answer',
+                            'learner_quiz_output.isCorrect',
+                            'quiz_content.course_id',
+                            'quiz_content.question_id',
+                            'questions.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            DB::raw('JSON_ARRAYAGG(question_answer.answer) as all_choices'),
+                            DB::raw('correct_answers.correct_answer')
+                        )
+                        ->join('quiz_content', 'learner_quiz_output.quiz_content_id', '=', 'quiz_content.quiz_content_id')
+                        ->join('questions', 'quiz_content.question_id', '=', 'questions.question_id')
+                        ->leftJoinSub($correctAnswerSubquery, 'correct_answers', function ($join) {
+                            $join->on('questions.question_id', '=', 'correct_answers.question_id');
+                        })
+                        ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                        ->where('learner_quiz_output.attempts', $attempt)
+                        ->where('learner_quiz_output.learner_course_id', $learner_course->learner_course_id)
+                        ->where('quiz_content.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                        ->where('quiz_content.course_id', $learnerSyllabusProgressData->course_id)
+                        ->where('quiz_content.syllabus_id', $learnerSyllabusProgressData->syllabus_id)
+                        ->groupBy(
+                            'learner_quiz_output.learner_quiz_output_id',
+                            'learner_quiz_output.quiz_content_id',
+                            'quiz_content.course_id',
+                            'quiz_content.question_id',
+                            'questions.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            'correct_answers.correct_answer'
+                        )
+                        ->get();
+
+
+
+                    $data = [
+                        'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
+                        'quizReferences' => $quizReferenceData,
+                        'quizProgressData' => $learnerQuizProgressData,
+                        'quizLearnerData' => $learnerQuizData,
+                    ];
+
+                    return response()->json($data);
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+
+    }
 
 
 }

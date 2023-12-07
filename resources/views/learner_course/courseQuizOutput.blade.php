@@ -48,7 +48,6 @@
                 </h1>
             </div>
 
-
             {{-- main content --}}
             <div class="flex mt-5">
                 <div class="border-r-2 border-green-200 w-2/6 px-auto" id="quiz_info_area">
@@ -60,38 +59,16 @@
                         <div class="flex items-center justify-center question_isAnswered w-[35px] h-[45px] hover:cursor-pointer border border-darthmouthgreen transition-all duration-300">5</div> --}}
                     </div>
 
-                    <div class="mt-5">
+                    {{-- <div class="mt-5">
                         <h1 class="">Time remaining: </h1>
-                    </div>
+                    </div> --}}
                     
                 </div>
+
                 <div id="quiz_content_area" class="
                 px-auto w-full overflow-y-auto">
                     <div id="questionContainer" class="mx-auto  my-5 p-5 rounded-lg w-4/5">
-                        
-                        {{-- <div class="my-5 py-5 px-3 questionData border-darthmouthgreen border-2 rounded-lg">
-                            <div class="questionContent">
-                                <h6 class="opacity-40 text-right">Question 1</h6>
-                                <p class="text-xl font-normal p-2 font-semibold">question 1</p>
-                            </div>
-                            <div class="questionChoices mt-2 text-lg">
-                                <input type="radio" name="1" class=" w-5 h-5 questionChoice mx-3">Option 1<br>
-                                <input type="radio" name="1" class=" w-5 h-5 questionChoice mx-3">Option 1<br>
-                                <input type="radio" name="1" class=" w-5 h-5 questionChoice mx-3">Option 1<br>
-                            </div>
-                        </div> --}}
-
-
-                        {{--<div class="my-5 py-5 px-3 questionData border-darthmouthgreen border-2 rounded-lg">
-                            <div class="questionContent">
-                                <h6 class="opacity-40 text-right">Question 3</h6>
-                                <p class="text-xl font-normal p-2 font-semibold">question 3</p>
-                            </div>
-                            <div class="questionChoices mt-2 text-lg">
-                                <textarea type="text" class="border-2 border-gray-200 p-3 text-lg w-full identificationAns " placeholder=""></textarea>
-                            </div>
-                        </div> --}}
-
+                      
                     </div>
                     <div id="pagination" class="mt-4 mb-8 mx-10">
                         <button id="prevPage" class="py-2 px-4 bg-gray-200 text-gray-600 rounded-lg">Previous</button>
@@ -104,32 +81,11 @@
 
             </div>
 
-            <div class="w-full text-center" id="quizSubmitBtn">
-                <button class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white rounded-lg">Submit Quiz</button>
+            <div class="w-full text-center" id="">
+                <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id")}}" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white rounded-lg">Return</a>
             </div>
 
-        </div>
-
-
-        <div id="confirmSubmitQuizModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-                <div class="flex justify-end w-full">
-                    <button class="cancelConfirmSubmitQuiz">
-                        <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                    </button>
-                </div>
-        
-                <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your quiz?</h2>
-        
-                <p class="text-gray-600">Once you submit, you won't be able to make any changes. Make sure you have answered all the questions.</p>
-        
-                <div class="flex justify-center w-full mt-5">
-                    <button id="confirmSubmitQuizBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Submit Quiz</button>
-                    <button id="" class="cancelConfirmSubmitQuiz px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
-                </div>
-            </div>
-        </div>
-        
+        </div> 
 
     </div>
 </section>
