@@ -2663,6 +2663,7 @@ if ($activityInfo === null) {
                     ->where('course_id', $course->course_id)
                     ->where('syllabus_id', $syllabus->syllabus_id)
                     ->where('quiz_id', $quizInfo->quiz_id)
+                    ->where('attempts', 1)
                     ->count();
 
 

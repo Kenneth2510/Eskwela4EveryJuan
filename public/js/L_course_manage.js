@@ -243,12 +243,12 @@ $(document).ready(function() {
                         <div class="flex justify-normal my-1 py-1">
                             <label for="" class="text-lg w-2/5">Course Difficulty:</label>
                             <select name="course_difficulty" id="course_difficulty" class="w-2/5" disabled>
-                                <option value="">--select an option--</option>
-                                <option value="Beginner">Beginner</option>
-                                <option value="Intermediate">Intermediate</option>
-                                <option value="Advanced">Advanced</option>
+                                <option value="Beginner" ${course_difficulty === 'Beginner' ? 'selected' : ''}>Beginner</option>
+                                <option value="Intermediate" ${course_difficulty === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+                                <option value="Advanced" ${course_difficulty === 'Advanced' ? 'selected' : ''}>Advanced</option>
                             </select>
                         </div>
+
                     </div>
 
                     <div class="mt-5">

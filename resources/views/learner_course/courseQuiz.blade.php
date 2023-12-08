@@ -111,61 +111,141 @@
                 });
             </script>
 
+            @foreach ($learnerQuizProgressData as $quizAttemptData)
             <div class="mt-8 px-10" id="score_area">
-                <h1 class="text-2xl font-semibold mb-2">Attempt Number: {{$learnerQuizProgressData->attempt}}</h1>
+                <h1 class="text-2xl font-semibold mb-2">Attempt Number: {{$quizAttemptData->attempt}}</h1>
 
-                @if($learnerQuizProgressData->remarks)
-                <h1 class="text-2xl font-semibold mb-2">Attempt Taken on {{$learnerQuizProgressData->updated_at}}</h1>
+                @if($quizAttemptData->remarks)
+                <h1 class="text-2xl font-semibold mb-2">Attempt Taken on {{$quizAttemptData->updated_at}}</h1>
                 @endif
                 <div class="bg-gray-100 p-6 rounded-xl shadow-md">
                     <h1 class="text-3xl font-bold mb-4">Score:</h1>
-                    <h1 class="text-4xl font-bold text-green-600">{{$learnerQuizProgressData->score}} <span class="text-2xl font-bold text-black"> / {{$totalQuestionCount}}</span></h1>
+                    <h1 class="text-4xl font-bold text-green-600">{{$quizAttemptData->score}} <span class="text-2xl font-bold text-black"> / {{$totalQuestionCount}}</span></h1>
                     
-                    <div class="mt-4">
+                    <div class="my-5">
                         <h1 class="text-xl font-semibold">Remarks:</h1>
-                        <p class="text-lg">{{$learnerQuizProgressData->remarks}}</p>
+   
+                            <span class="mx-2 text-2xl font-semibold {{ $quizAttemptData->remarks == 'PASS' ? 'text-dartmouthgreen' : 'text-red-600' }}">
+                                {{ $quizAttemptData->remarks }}
+                            </span>
+                        </h1>
                         
                     </div>
 
-                    @if($learnerQuizProgressData->remarks && $learnerQuizProgressData == 'FAIL')
-                    <div class="mt-3">
-                        <a href="" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">Re attempt the Quiz</a>
-                    </div>
-                    @endif
-                    @if($learnerQuizProgressData->remarks)
-                    <div class="mt-3">
-                        <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$learnerQuizProgressData->attempt") }}" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">
+                    <div class="my-3">
+                        @if($quizAttemptData->remarks)
+                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$quizAttemptData->attempt") }}" method="GET" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">
                             View Output
                         </a> 
+                        @endif
                     </div>
-                    @endif
+                    
                       
                 </div>
             </div>
+            @endforeach
+            
+            
+        
             
 
-            <div class="px-10 mt-[50px] flex justify-between">
-                <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
-                    Return    
-                </a>
-                @if ($learnerSyllabusProgressData->status === "NOT YET STARTED")
-                <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/answer") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
-                    Answer Now
-                </a>   
-                @elseif ($learnerSyllabusProgressData->status === "COMPLETED" || $learnerSyllabusProgressData->status === "IN PROGRESS")
-                <a href="#" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
-                    View Output
-                </a>
-                  
-                @else 
-                <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/answer") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
-                    Answer Now
-                </a>  
-                @endif       
-            </div>
-       
-        </div>
+        <div class="px-10 mt-[50px] flex justify-between">
+            @if(count($learnerQuizProgressData) == 1)
+                @foreach ($learnerQuizProgressData as $quizAttemptData)
+                    
+                    @if ($quizAttemptData->status == 'COMPLETED')
+                        <!-- has attempt 1 only and complete -->
+                        @if ($quizAttemptData->remarks == 'PASS')
+                            <!-- has attempt 1 only and pass -->
+                        <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            Return    
+                        </a>
 
+                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$quizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
+                        View Output
+                        </a>
+
+                        @else
+                            <!-- has attempt 1 only and fail -->
+                        <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            Return    
+                        </a>
+
+                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/reattempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            Re attempt the Quiz
+                        </a>
+
+                        @endif
+
+                    @else
+                        <!-- has attempt 1 only and not yet started -->
+                    <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Return    
+                    </a>
+
+                    <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/answer/$quizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Answer Now
+                    </a>  
+
+                    @endif
+
+
+                @endforeach
+
+
+            @else
+
+                @php
+                    $lastRowQuizAttemptData = $learnerQuizProgressData->last();
+                @endphp
+                {{-- {{ dd($lastRowQuizAttemptData) }} --}}
+
+                @if ($lastRowQuizAttemptData->status == 'COMPLETED')
+                    <!-- has attempt 2 and complete -->
+                    @if ($lastRowQuizAttemptData->remarks == 'PASS')
+                    <!-- has attempt 2 and pass -->
+                    <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Return    
+                    </a>
+
+                    <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
+                    View Output
+                    </a>
+
+                    @else
+                    <!-- has attempt 2 and fail -->
+                    <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Return    
+                    </a>
+
+
+                    <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
+                        View Output
+                    </a>
+                    {{-- <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/reattempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Re attempt the Quiz
+                    </a> --}}
+
+                    @endif
+
+                @else
+                <!-- has attempt 2 and not yet started -->
+                <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                Return    
+                </a>
+
+                <a href="{{ url("/learner/course/content/$learnerSyllabusProgressData->course_id/$learnerSyllabusProgressData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/answer/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                Answer Now
+                </a>  
+
+                @endif
+
+            @endif
+        </div>
+        
+
+
+        
     </div>
 </section>
 

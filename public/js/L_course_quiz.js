@@ -272,7 +272,7 @@ getLearnerQuizData();
                         success: function (response) {
                             // Handle success if needed
                             var baseUrl = window.location.href;
-                            var modifiedUrl = baseUrl.replace(/\/answer$/, '');
+                            // var modifiedUrl = baseUrl.replace(/\/answer$/, '');
                     
                             // Continue with the rest of your logic
                             loopCounter++;
@@ -310,7 +310,7 @@ getLearnerQuizData();
             success: function (response) {
                 // Handle success if needed
                 var baseUrl = window.location.href;
-                var modifiedUrl = baseUrl.replace(/\/answer$/, '');
+                var modifiedUrl = baseUrl.replace(/\/answer\/\d+$/, '');
         
                 console.log(response)
                     window.location.href = modifiedUrl;
