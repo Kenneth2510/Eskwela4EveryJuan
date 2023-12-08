@@ -165,6 +165,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
     // quiz management
     Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}', 'InstructorCourseController@view_quiz');
     Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/json', 'InstructorCourseController@quiz_info_json');
+    Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/view_learner_output/{learner_quiz_progress}', 'InstructorCourseController@view_learner_output');
+    Route::get('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/view_learner_output/{learner_quiz_progress}/json', 'InstructorCourseController@view_learner_output_json');
     
     Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/add', 'InstructorCourseController@manage_add_reference');
     Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/update', 'InstructorCourseController@manage_update_reference');

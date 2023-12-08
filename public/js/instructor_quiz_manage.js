@@ -3,7 +3,9 @@ $(document).ready(function() {
     quizReferenceData = {};
     syllabusData = {}
     quizInfoData = {}
+    learnerQuizOutputData = []
     var duration_ms = 0;
+    var baseUrl = window.location.href;
 
     isEditing = 0;
 
@@ -21,12 +23,12 @@ $(document).ready(function() {
                 quizInfoData = response['quizInfo']
                 quizReferenceData = response['quizReference']
                 syllabusData = response['syllabusData']
-
+                learnerQuizOutputData = response['learnerQuizOutputData']
                 // console.log(quizReferenceData)
 
                 displayReference(quizReferenceData, syllabusData);
                 setDuration(quizInfoData)
-                
+                displayLearnerOutputData(learnerQuizOutputData)
             },
             error: function(error) {
                 console.log(error);
@@ -189,8 +191,57 @@ $(document).ready(function() {
     }
 
 
+    function displayLearnerOutputData(learnerQuizOutputData) {
+        // console.log(learnerQuizOutputData);
+        var responsesRowDataDisp = ``;
+
+        for (let i = 0; i < learnerQuizOutputData.length; i++) {
+            const learner_quiz_progress_id = learnerQuizOutputData[i]['learner_quiz_progress_id'];
+            const learner_course_id = learnerQuizOutputData[i]['learner_course_id'];
+            const learner_fname = learnerQuizOutputData[i]['learner_fname'];
+            const learner_lname = learnerQuizOutputData[i]['learner_lname'];
+            const attempt = learnerQuizOutputData[i]['attempt'];
+            const updated_at = learnerQuizOutputData[i]['updated_at'];
+            const score = learnerQuizOutputData[i]['score'];
+            const question_count = learnerQuizOutputData[i]['question_count'];
+            const remarks = learnerQuizOutputData[i]['remarks'];
 
 
+
+            responsesRowDataDisp += `
+                <tr class="text-center">
+                    <td class="py-5 my-3">${learner_course_id}</td>
+                    <td>${learner_fname} ${learner_lname}</td>
+                    <td>${attempt}</td>
+                    <td>${updated_at}</td>
+                    <td>${score}/${question_count}</td>
+                    <td>${remarks}</td>
+                    <td>
+                        <a href="${baseUrl + "/view_learner_output/" + learner_quiz_progress_id}" data-learner-quiz-progress-id="${learner_quiz_progress_id}" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white rounded-xl">View</a>
+                    </td>
+                </tr>
+            `;
+        }
+
+        $('#responsesRowDataArea').empty();
+        $('#responsesRowDataArea').append(responsesRowDataDisp);
+        
+    }
+
+
+
+    $('#viewResponsesBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('#responsesModal').removeClass('hidden');
+    })
+
+    
+    $('.exitResponsesModalBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('#responsesModal').addClass('hidden');
+    })
 
 
 

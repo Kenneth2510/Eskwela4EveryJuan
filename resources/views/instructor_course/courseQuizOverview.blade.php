@@ -115,10 +115,52 @@
             
                 </div>
                 
-                {{-- area for modals --}}
+                
 
             </section>
 @include('partials.instructorProfile')
+
+            {{-- area for modals --}}
+            <div id="responsesModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
+                <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-3/5">
+
+                    <div class="flex justify-end w-full">
+                        <button class="exitResponsesModalBtn">
+                            <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="text-2xl font-bold ">View All Responses</h1>
+                    
+                    <div id="responsesContent" class="mt-5 overflow-y-auto">
+                        <table class="w-full">
+                            <thead class="bg-darthmouthgreen text-white">
+                                <th class="w-1/6 py-3 font-semibold">Enrollee ID</th>
+                                <th class="w-1/6 py-3 font-semibold">Name</th>
+                                <th class="w-1/6 py-3 font-semibold">Attempt</th>
+                                <th class="w-1/6 py-3 font-semibold">Attempt Taken</th>
+                                <th class="w-1/6 py-3 font-semibold">Score</th>
+                                <th class="w-1/6 py-3 font-semibold">Remarks</th>
+                                <th class="w-1/6 py-3 font-semibold"></th>
+                            </thead>
+
+                            <tbody id="responsesRowDataArea" class="">  
+                                {{-- <tr class="text-center">
+                                    <td class="py-5 my-3">1</td>
+                                    <td>Kenneth Timblaco</td>
+                                    <td>1</td>
+                                    <td>December 10, 2023</td>
+                                    <td>5/6</td>
+                                    <td>
+                                        <button class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white rounded-xl">View</button>
+                                    </td>
+                                </tr> --}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
 </section>
             
 @include('partials.footer')
