@@ -38,7 +38,8 @@
                         <svg class="absolute left-0 border-2 border-black rounded-full p-[2px]" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 32 32"><path fill="currentColor" d="M19 10h7v2h-7zm0 5h7v2h-7zm0 5h7v2h-7zM6 10h7v2H6zm0 5h7v2H6zm0 5h7v2H6z"/><path fill="currentColor" d="M28 5H4a2.002 2.002 0 0 0-2 2v18a2.002 2.002 0 0 0 2 2h24a2.002 2.002 0 0 0 2-2V7a2.002 2.002 0 0 0-2-2ZM4 7h11v18H4Zm13 18V7h11v18Z"/></svg>
                     
                         {{-- <h1 class="pl-[50px] text-3xl font-bold">{{ $lessonInfo->lesson_title }}</h1> --}}
-                        <input class="ml-[50px] w-[750px] text-3xl font-bold border-none" disabled type="text" name="lesson_title" id="lesson_title" value="{{ $syllabus->lesson_title }}">
+                        {{-- <input class="ml-[50px] w-[750px] text-3xl font-bold border-none" disabled type="text" name="lesson_title" id="lesson_title" value="{{ $syllabus->lesson_title }}"> --}}
+                        <div id="lesson_title" class="pl-[50px] text-3xl font-bold border-none" contenteditable="false">{{ $syllabus->lesson_title }}</div>
                     </div>
                 </div> 
             </div>
@@ -62,17 +63,23 @@
                 @forelse ($lessons as $lesson)
                 <div data-content-order="{{$lesson->lesson_content_order}}" class="w-full px-10 my-2 mb-8 lesson_content_area">
                    
-                    
-                    {{-- <input type="text" class="w-10/12 text-2xl font-bold border-none lesson_content_title_input" disabled name="lesson_content_title_input" id="" value="{{ $lesson->lesson_content_title }}"> --}}
-                    <p class="w-10/12 my-5 text-2xl font-bold border-none lesson_content_title_input">{{ $lesson->lesson_content_title }}</p>
-                    
+                  
                     @if ($lesson->picture !== null)
                         <img src="{{ asset("storage/$lesson->picture") }}" class="object-contain w-full h-full" alt="">
                     @else
                     @endif
-            
-                    <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
-                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea>
+                    <div class="contentArea text-xl font-normal lesson_content_input_disp mt-5 px-5" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
+                     
+                    {{-- <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
+                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea> --}}
+                    @if ($lesson->video_url !== null)
+                        <div id="lesson_content_url" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+                            <div class="url_embed_area w-full h-[400px] flex justify-center overflow-hidden rounded-lg">
+                                {!! $lesson->video_url !!}
+                            </div>
+                        </div>    
+                    @else
+                    @endif
                 </div>
                 @empty
                 <div class="my-2 mb-8">

@@ -485,6 +485,7 @@ class LearnerCourseController extends Controller
                     'lesson_content.lesson_content',
                     'lesson_content.lesson_content_order',
                     'lesson_content.picture',
+                    'lesson_content.video_url',
                 )
                 ->join('lesson_content', 'learner_lesson_progress.lesson_id', '=', 'lesson_content.lesson_id')
                 ->where('learner_lesson_progress.course_id', $course->course_id)

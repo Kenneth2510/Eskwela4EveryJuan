@@ -765,6 +765,7 @@ class InstructorCourseController extends Controller
                                 'lesson_content',
                                 'lesson_content_order',
                                 'picture',
+                                'video_url'
                             )
                             ->where('lesson_id', $lessonInfo->lesson_id)
                             ->orderBy('lesson_content_order', 'ASC')
@@ -843,8 +844,10 @@ class InstructorCourseController extends Controller
                             'lesson_content',
                             'lesson_content_order',
                             'picture',
+                            'video_url',
                         )
                         ->where('lesson_id', $lessonInfo->lesson_id)
+                        ->orderBy('lesson_content_order', 'ASC')
                         ->get();
 
 
@@ -904,34 +907,7 @@ class InstructorCourseController extends Controller
         }
     }
 
-    // public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, $lesson_id) {
-    //     try {
 
-    //         $pictureData = $request->validate([
-    //             'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
-    //         ]);
-
-    //         $folderName = "{$course->course_id} {$course->course_name}";
-
-    //         $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
-    //         $folderPath = "courses/" .$folderName;
-
-    //         $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
-
-    //         Lessons::where('lesson_id' , $lesson_id)
-    //         ->update(['picture' => $filePath]);
-
-    //         if(!Storage::exists($folderPath)) { 
-    //         Storage::makeDirectory($folderPath);
-    //     }
-
-
-    //     } catch (ValidationException $e) {
-    //         $errors = $e->validator->errors();
-        
-    //         return response()->json(['errors' => $errors], 422);
-    //     }
-    // }
     public function update_lesson_picture(Course $course, Syllabus $syllabus, Request $request, $topic_id, Lessons $lesson) {
         try {
 
@@ -1149,6 +1125,42 @@ class InstructorCourseController extends Controller
 
             $updatedRow = [
                 'picture' => null
+            ];
+                
+            DB::table('lesson_content')
+                ->where('lesson_id', $lesson->lesson_id)
+                ->where('lesson_content_id', $lesson_content->lesson_content_id)
+                ->update($updatedRow);
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+
+    public function lesson_content_embed_url(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson, LessonContents $lesson_content, Request $request) {
+        try {
+
+            $embedUrlData = $request->input('video_url');
+
+            LessonContents::where('lesson_content_id' , $lesson_content['lesson_content_id'])
+            ->update(['video_url' => $embedUrlData]);
+
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }
+
+
+    public function lesson_content_delete_url (Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson, LessonContents $lesson_content) {
+        try {
+            $updatedRow = [
+                'video_url' => null
             ];
                 
             DB::table('lesson_content')

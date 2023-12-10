@@ -11,7 +11,7 @@
 
 
  
-    <section id="start" class="w-full px-2 mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
+    <section id="start" class="w-full px-2 mx-2 mt-2 bg-white md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
         @php
         if (!function_exists('getRandomColor')) {
             function getRandomColor() {
@@ -90,16 +90,19 @@
                     <a href="">{{ $lessonInfo->lesson_title }}</a>
                 </div>
                 {{-- overview --}}
-                <div class="mb-4">
+                <div id="lesson_title_area" class="mb-4">
                     <div class="flex items-center justify-between pb-3 my-4 mt-5 border-b-2 border-seagreen">
                         <div class="relative flex items-center">
-                            <svg class="absolute left-0 border-2 border-black rounded-full p-[2px]" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 32 32"><path fill="currentColor" d="M19 10h7v2h-7zm0 5h7v2h-7zm0 5h7v2h-7zM6 10h7v2H6zm0 5h7v2H6zm0 5h7v2H6z"/><path fill="currentColor" d="M28 5H4a2.002 2.002 0 0 0-2 2v18a2.002 2.002 0 0 0 2 2h24a2.002 2.002 0 0 0 2-2V7a2.002 2.002 0 0 0-2-2ZM4 7h11v18H4Zm13 18V7h11v18Z"/></svg>
-                        
-                            {{-- <h1 class="pl-[50px] text-3xl font-bold">{{ $lessonInfo->lesson_title }}</h1> --}}
-                            <input class="ml-[50px] w-[750px] text-3xl font-bold border-none" disabled type="text" name="lesson_title" id="lesson_title" value="{{ $lessonInfo->lesson_title }}">
+                            <svg class="absolute left-0 border-2 border-black rounded-full p-[2px]" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 32 32">
+                                <path fill="currentColor" d="M19 10h7v2h-7zm0 5h7v2h-7zm0 5h7v2h-7zM6 10h7v2H6zm0 5h7v2H6zm0 5h7v2H6z"/>
+                                <path fill="currentColor" d="M28 5H4a2.002 2.002 0 0 0-2 2v18a2.002 2.002 0 0 0 2 2h24a2.002 2.002 0 0 0 2-2V7a2.002 2.002 0 0 0-2-2ZM4 7h11v18H4Zm13 18V7h11v18Z"/>
+                            </svg>
+                            <div id="lesson_title" class="pl-[50px] text-3xl font-bold border-none" contenteditable="false">{{ $lessonInfo->lesson_title }}</div>
                         </div>
                         <button id="edit_lesson_title" class="hidden">
-                            <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                            <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                <path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/>
+                            </svg>
                         </button>
                         <div id="edit_lesson_btns" class="hidden">
                             <button id="save_lesson_btn" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" class="px-5 py-3 text-white rounded-xl" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
@@ -109,9 +112,10 @@
                                 Cancel
                             </button>
                         </div>
-                        
                     </div>
                 </div>
+                
+                
                 
                 {{-- course --}}
                 <div class="mt-5">
@@ -194,8 +198,19 @@
                             @endif
                             
                             {{-- <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-line">{{$lesson->lesson_content}}</p> --}}
-                            <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
+                   
+                            <div class="contentArea text-xl font-normal lesson_content_input_disp mt-5 px-5" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
                             {{-- <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea> --}}
+                            
+                            @if ($lesson->video_url !== null)
+                            <div id="lesson_content_url" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+                                <div class="url_embed_area w-full h-[400px] flex justify-center overflow-hidden rounded-lg">
+                                    {!! $lesson->video_url !!}
+                                </div>
+                            </div>    
+                            @else
+                            @endif
+
                             <div class="flex justify-end hidden w-full edit_lesson_content_btns">
                                 <button id="" class="px-5 py-3 mx-1 text-white save_lesson_content_btn rounded-xl" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'" onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'">
                                     Save
@@ -215,10 +230,11 @@
                         </div>
                         @endforelse
 
-                        <iframe width="420" height="315"
-src="https://www.youtube.com/embed/tgbNymZ7vqY">
-</iframe>
+                
+                        
+
                     </div>
+                    
                     
                 
 
@@ -363,37 +379,10 @@ src="https://www.youtube.com/embed/tgbNymZ7vqY">
         
     </div>
 
-    {{-- <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
-        <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
-            <div class="flex flex-col m-4">
-                <select name="" id="">
-                    <option value="" selected disabled>--select lesson/quiz/assignment</option>
-                    <option value="">Lesson 1</option>
-                    <option value="">Quiz 1</option>
-                    <option value="">Assignment 1</option>
-                </select>
-            </div>
-            <div class="flex flex-col m-4">
-                <input class="h-8 px-2 rounded" type="text" placeholder="Enter Title">
-            </div>
 
-            <div class="m-4">
-                <textarea class="w-full h-32 px-2 rounded resize-none" name="" id=""  placeholder="Enter Content"></textarea>
-            </div>
-
-            <div class="flex items-center justify-end mx-4 mb-4">
-                <button class="w-16 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg" id="lessonNewContentCloseBtn">
-                    <h1>Close</h1>
-                </button>
-                <button class="w-16 py-2 mx-1 text-white rounded-lg shadow-lg bg-darthmouthgreen">
-                    <h1>Save</h1>
-                </button>
-            </div>
-        </div>
-    </div> --}}
 
     <div id="addLessonContentModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
             <div class="flex justify-end w-full">
                 <button id="closeAddLessonContentModal">
                     <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
@@ -431,12 +420,105 @@ src="https://www.youtube.com/embed/tgbNymZ7vqY">
                         <option value="END">In the End</option>
                 </select>
             </div>
+            
             <div class="flex justify-center w-full mt-5">
                 <button id="confirmAddLessonContentBtn" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
                 <button id="cancelAddLessonContentBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
             </div>
         </div>
     </div>
+
+
+
+    
+    <div id="editLessonContentModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+            <div class="flex justify-end w-full">
+                <button class="closeEditLessonContentModal">
+                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                </button>
+            </div>
+            <h2 class="mb-2 text-2xl font-semibold">Edit Lesson Content</h2>
+            <div class="mt-4">
+                <label for="insertEditLessonContentTitle" class="text-lg font-semibold">Enter Title:</label>
+                <input type="text" name="insertLessonContentTitle" id="insertEditLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+            </div>
+
+            <div class="mt-4">
+                <label for="insertEditLessonContent" class="text-lg font-semibold">Enter Content:</label>
+                {{-- <input type="text" name="insertLessonContent" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"> --}}
+                <textarea
+                  name="insertEditLessonContent"
+                    id="insertEditLessonContent"
+                    class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"
+                    cols="30"
+                    rows="10"
+                    style="white-space: pre;"
+                  ></textarea>
+              
+            </div>
+    
+            <div class="flex justify-center w-full mt-5">
+                <button id="confirmEditLessonContentBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                <button id="" class="closeEditLessonContentModal px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="addLessonContentUrlModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+            <div class="flex justify-end w-full">
+                <button class="closeAddLessonContentUrlModal">
+                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                </button>
+            </div>
+            <h2 class="mb-2 text-2xl font-semibold">Embed Video from Youtube</h2>
+            <div class="mt-4">
+                <label for="insertAddLessonContentUrl" class="text-lg font-semibold">Enter Embed Code copied</label>
+                <input type="text" name="insertAddLessonContentUrl" id="insertAddLessonContentUrl" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+            </div>
+        
+            <div class="flex justify-center w-full mt-5">
+                <button id="confirmAddLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                <button id="cancelAddLessonContentUrlBtn" class="closeAddLessonContentUrlModal px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div id="editLessonContentUrlModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+            <div class="flex justify-end w-full">
+                <button class="closeEditLessonContentUrlModal">
+                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                </button>
+            </div>
+            <h2 class="mb-2 text-2xl font-semibold">Embed Video from Youtube</h2>
+            <div class="mt-4">
+                <label for="insertEditLessonContentUrl" class="text-lg font-semibold">Enter Embed Code copied</label>
+                <input type="text" name="insertEditLessonContentUrl" id="insertEditLessonContentUrl" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+            </div>
+
+            <div class="flex justify-center w-full mt-5">
+                <button id="confirmEditLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                <button id="" class="closeEditLessonContentUrlModal px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+            </div>
+        </div>
+    </div> --}}
+
+    
+    <div id="deleteLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+        {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
+            {{-- @csrf --}}
+            <div class="p-5 text-center bg-white rounded-lg">
+                <p>Are you sure you want to delete this content?</p>
+                <button type="button" id="confirmDelete_lessonContentUrl" data-content-order="" data-lesson-content-id="" data-lesson-id="" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" data-topic_id="{{$lessonInfo->topic_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+                <button type="button" id="cancelDelete_lessonContentUrl" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
+            </div>
+        {{-- </form> --}}
+        
+    </div>
+
     @include('partials.instructorProfile')
 </section>
 @include('partials.footer')
