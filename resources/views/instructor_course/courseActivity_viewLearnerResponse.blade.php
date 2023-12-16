@@ -78,7 +78,7 @@
                                            data-activity-content-criteria-id="{{ $criteria->activity_content_criteria_id }}"
                                             
                                            data-learner-activity-criteria-score-id="{{ $criteria->learner_activity_criteria_score_id }}"  
-                                           class="flex px-3 py-3 text-center border-2 border-gray-500 criteriaScore" 
+                                           class="flex px-3 w-16 py-3 text-center border-2 border-gray-500 criteriaScore" 
                                            max="{{ $criteria->criteria_score }}" 
                                            min="0"
                                            value="{{$criteria->score}}" disabled>
@@ -95,22 +95,54 @@
                     <br>
                     <br>
                     <br>
-                    <div class="mb-16">
-                        <p class="text-2xl font-semibold">Overall Total Score: </p>
-                        <div class="">
-                            <input type="number" id="overallScore_input" class="w-full px-5 py-5 text-4xl" value="{{$learnerActivityOutput->total_score}}" max="{{$activity->total_score}}" min="0" disabled> 
-                            <p class="px-10 text-4xl">/ {{$activity->total_score}}</p>
-                        </div>
-                        
-                    </div>
 
-                    <div id="remarks_area" class="hidden">
+                    <div id="remarks_area" class="">
                         <div class="flex flex-row items-center">
                             <h3 class="my-2 text-xl font-medium">Remarks:</h3> 
                         </div>
 
-                        <textarea name="remarks" id="remarks" class="border-2 border-gray-200 rounded-xl px-3 py-3 w-full max-w-full min-w-full activity_instructions h-[200px]">{{$learnerActivityOutput->remarks}}</textarea>
+                        <textarea name="remarks" id="remarks" class="border-2 border-gray-200 rounded-xl px-3 py-3 w-full max-w-full min-w-full activity_instructions h-[200px]" disabled>{{$learnerActivityOutput->remarks}}</textarea>
                     </div>
+
+                    <div class="bg-gray-100 p-6 rounded-xl shadow-md">
+                        <h1 class="text-3xl font-bold mb-4">Score:</h1>
+                        <div class="flex items-center">
+                            <input type="number" id="overallScore_input" class=" px-5 py-5 text-4xl font-semibold text-darthmouthgreen" value="{{$learnerActivityOutput->total_score}}" max="{{$activity->total_score}}" min="0" disabled>
+                            <span class="text-2xl font-normal text-black"> / {{$activity->total_score}}</span>
+                        </div>
+                    
+                        <div class="my-5">
+                            <h1 class="text-xl font-semibold">Mark:</h1>
+                                <span class="mx-2 text-4xl font-semibold {{ $learnerActivityOutput->mark == 'PASS' ? 'text-darthmouthgreen' : 'text-red-600' }}">
+                                    {{ $learnerActivityOutput->mark }}
+                                </span>
+                            </h1>
+                        </div>
+
+                        @if($learnerActivityOutput_2nd == null)
+
+                            @if($learnerActivityOutput->mark == 'FAIL')
+                                @if($learnerActivityOutput->attempt >= $learnerActivityOutput->max_attempt)
+                                @else 
+                                    <div class="my-5">
+                                        <a href="{{ url("/instructor/course/content/activity/$learnerActivityOutput->learner_activity_output_id/$learnerActivityOutput->learner_course_id/$learnerActivityOutput->activity_id/$learnerActivityOutput->activity_content_id/$learnerActivityOutput->attempt/reattempt") }}"  class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white font-semibold rounded-xl">Allow Re-Attempt Activity</a>
+                                    </div>
+                                @endif
+                            @endif
+                        
+                        @else
+                            <div class="my-5">
+                                <a href="{{ url("/instructor/course/content/$activity->course_id/$activity->syllabus_id/activity/$activity->topic_id/$learnerActivityOutput_2nd->learner_course_id/$learnerActivityOutput_2nd->attempt") }}"  class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white font-semibold rounded-xl">View Second Attempt</a>
+                            </div>
+                        @endif
+
+                        
+                    
+                  
+                    </div>
+                    
+
+                    
                 </div>
 
                 <div class="flex justify-between w-full px-3 mx-3">
@@ -142,6 +174,7 @@
                             data-learner-course-id="{{$learnerActivityOutput->learner_course_id}}" 
                             data-activity-id="{{$learnerActivityOutput->activity_id}}" 
                             data-activity-content-id="{{$learnerActivityOutput->activity_content_id}}" 
+                            data-attempt="{{$learnerActivityOutput->attempt}}"
                             >Yes</button>
                             <button id="cancelSubmit" class="px-4 py-2 ml-4 text-gray-700 bg-gray-300 rounded-md hover:bg-gray-400 focus:outline-none">Cancel</button>
                         </div>

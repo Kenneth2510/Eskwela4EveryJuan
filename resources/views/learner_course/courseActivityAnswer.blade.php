@@ -101,7 +101,7 @@
             </div>
           
         </div>
-
+        <!--scorearea-->
         <div class="w-full px-5">
             <h3 class="w-full my-2 text-2xl font-semibold border-b-4 border-green-900">Your Answer:</h3>
             
@@ -112,7 +112,6 @@
             @endif
         </div>
     
-
         <div class="px-5 my-10">
             <h3 class="my-2 text-2xl font-medium">Instructor's Remarks:</h3>
         @if ($activityOutput)
@@ -153,6 +152,7 @@
             data-syllabus-id="{{$activity->syllabus_id}}"
             data-activity-id="{{$activity->activity_id}}"
             data-activity-content-id="{{$activity->activity_content_id}}"
+            data-attempt="{{$activityOutput->attempt}}"
             class="px-4 py-2 text-white rounded-md bg-darthmouthgreen">Submit</button>
         </div>
     </div>

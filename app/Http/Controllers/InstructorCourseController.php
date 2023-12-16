@@ -388,21 +388,21 @@ class InstructorCourseController extends Controller
             } else {
                 try {
 
-                    if (!function_exists('getRandomColor')) {
-                        function getRandomColor() {
-                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                        }
-                    }
+                    // if (!function_exists('getRandomColor')) {
+                    //     function getRandomColor() {
+                    //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    //     }
+                    // }
                     
-                    // Generate a random color for mainBackgroundCol
-                    $mainBackgroundCol = getRandomColor();
+                    // // Generate a random color for mainBackgroundCol
+                    // $mainBackgroundCol = getRandomColor();
         
-                    // Darken the mainBackgroundCol
-                    $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                    // // Darken the mainBackgroundCol
+                    // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                    // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
         
-                    // Darken the mainBackgroundCol further for darkenedColor
-                    $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                    // // Darken the mainBackgroundCol further for darkenedColor
+                    // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
                     
 
 
@@ -416,8 +416,8 @@ class InstructorCourseController extends Controller
                         'quizCount' => $response['quizCount'],
                         'course' => $response['course'],
                         'syllabus' => $response['syllabus'],
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         // 'instructor' => $response['instructor'],
                     ]);
 
@@ -1289,99 +1289,99 @@ class InstructorCourseController extends Controller
             } else {
                 try {
 
-                    if (!function_exists('getRandomColor')) {
-                        function getRandomColor() {
-                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                        }
-                    }
+                    // if (!function_exists('getRandomColor')) {
+                    //     function getRandomColor() {
+                    //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    //     }
+                    // }
                     
-                    // Generate a random color for mainBackgroundCol
-                    $mainBackgroundCol = getRandomColor();
+                    // // Generate a random color for mainBackgroundCol
+                    // $mainBackgroundCol = getRandomColor();
         
-                    // Darken the mainBackgroundCol
-                    $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                    // // Darken the mainBackgroundCol
+                    // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                    // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
         
-                    // Darken the mainBackgroundCol further for darkenedColor
-                    $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                    // // Darken the mainBackgroundCol further for darkenedColor
+                    // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
     
     
 
-                    $activityInfo = DB::table('activities')
-    ->select(
-        'activity_id',
-        'course_id',
-        'syllabus_id',
-        'topic_id',
-        'activity_title',
-    )
-    ->where('course_id', $course->course_id)
-    ->where('syllabus_id', $syllabus->syllabus_id)
-    ->where('topic_id', $topic_id)
-    ->first();
-
-if ($activityInfo === null) {
-    // Set $activityContent to null or an empty array if it's appropriate
-    $activityContent = null; // or $activityContent = [];
-    $activityContentCriteria = null;
-
-    // You can also provide a message to indicate that no data was found
-    session()->flash('message', 'Please Save the Syllabus First');
-    return redirect("/instructor/course/content/$course->course_id");
-} else {
-    // Fetch $activityContent as you normally would
-    $activityContent = DB::table('activity_content')
-        ->select(
-            'activity_content_id',
-            'activity_id',
-            'activity_instructions',
-            'total_score',
-        )
-        ->where('activity_id', $activityInfo->activity_id)
-        ->get();
-
-    // Check if $activityContent is empty, and if so, create a new row
-    if ($activityContent->isEmpty()) {
-        $newActivityContent = [
-            'activity_id' => $activityInfo->activity_id,
-            'activity_instructions' => 'Default Instructions', // You can set default values here
-            'total_score' => 0, // You can set default values here
-        ];
-        DB::table('activity_content')->insert($newActivityContent);
-
-        // Fetch the newly inserted row
-        $activityContent = DB::table('activity_content')
-            ->where('activity_id', $activityInfo->activity_id)
-            ->get();
-    }
-
-    // Check if $activityContentCriteria is empty, and if so, create a new row
-    if ($activityContent->isNotEmpty()) {
-        $activityContentCriteria = DB::table('activity_content_criteria')
+            $activityInfo = DB::table('activities')
             ->select(
-                'activity_content_criteria_id',
-                'activity_content_id',
-                'criteria_title',
-                'score'
+                'activity_id',
+                'course_id',
+                'syllabus_id',
+                'topic_id',
+                'activity_title',
             )
-            ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray())
-            ->get();
+            ->where('course_id', $course->course_id)
+            ->where('syllabus_id', $syllabus->syllabus_id)
+            ->where('topic_id', $topic_id)
+            ->first();
 
-        if ($activityContentCriteria->isEmpty()) {
-            $newActivityContentCriteria = [
-                'activity_content_id' => $activityContent[0]->activity_content_id,
-                'criteria_title' => 'Default Criteria', // You can set default values here
-                'score' => 0, // You can set default values here
-            ];
-            DB::table('activity_content_criteria')->insert($newActivityContentCriteria);
+        if ($activityInfo === null) {
+            // Set $activityContent to null or an empty array if it's appropriate
+            $activityContent = null; // or $activityContent = [];
+            $activityContentCriteria = null;
 
-            // Fetch the newly inserted row
-            $activityContentCriteria = DB::table('activity_content_criteria')
-                ->where('activity_content_id', $activityContent[0]->activity_content_id)
+            // You can also provide a message to indicate that no data was found
+            session()->flash('message', 'Please Save the Syllabus First');
+            return redirect("/instructor/course/content/$course->course_id");
+        } else {
+            // Fetch $activityContent as you normally would
+            $activityContent = DB::table('activity_content')
+                ->select(
+                    'activity_content_id',
+                    'activity_id',
+                    'activity_instructions',
+                    'total_score',
+                )
+                ->where('activity_id', $activityInfo->activity_id)
                 ->get();
+
+            // Check if $activityContent is empty, and if so, create a new row
+            if ($activityContent->isEmpty()) {
+                $newActivityContent = [
+                    'activity_id' => $activityInfo->activity_id,
+                    'activity_instructions' => 'Default Instructions', // You can set default values here
+                    'total_score' => 0, // You can set default values here
+                ];
+                DB::table('activity_content')->insert($newActivityContent);
+
+                // Fetch the newly inserted row
+                $activityContent = DB::table('activity_content')
+                    ->where('activity_id', $activityInfo->activity_id)
+                    ->get();
+            }
+
+            // Check if $activityContentCriteria is empty, and if so, create a new row
+            if ($activityContent->isNotEmpty()) {
+                $activityContentCriteria = DB::table('activity_content_criteria')
+                    ->select(
+                        'activity_content_criteria_id',
+                        'activity_content_id',
+                        'criteria_title',
+                        'score'
+                    )
+                    ->whereIn('activity_content_id', $activityContent->pluck('activity_content_id')->toArray())
+                    ->get();
+
+                if ($activityContentCriteria->isEmpty()) {
+                    $newActivityContentCriteria = [
+                        'activity_content_id' => $activityContent[0]->activity_content_id,
+                        'criteria_title' => 'Default Criteria', // You can set default values here
+                        'score' => 0, // You can set default values here
+                    ];
+                    DB::table('activity_content_criteria')->insert($newActivityContentCriteria);
+
+                    // Fetch the newly inserted row
+                    $activityContentCriteria = DB::table('activity_content_criteria')
+                        ->where('activity_content_id', $activityContent[0]->activity_content_id)
+                        ->get();
+                }
+            }
         }
-    }
-}
 
                                 // dd($lessonContent);
 
@@ -1398,7 +1398,8 @@ if ($activityInfo === null) {
 
                     return view('instructor_course.courseActivity', compact('instructor'))->with([
                         'title' => 'Course Lesson',
-                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'scripts' => ['instructorActivities.js'],
                         'lessonCount' => $response['lessonCount'],
                         'activityCount' => $response['activityCount'],
@@ -1512,7 +1513,10 @@ if ($activityInfo === null) {
                         'learner.learner_fname',
                         'learner.learner_lname',
 
-                        'learner_activity_output.total_score'
+                        'learner_activity_output.total_score',
+                        'learner_activity_output.attempt',
+                        'learner_activity_output.mark',
+                        'learner_activity_output.created_at',
                     )
                     ->join('learner', 'learner.learner_id', '=', 'learner_activity_progress.learner_id')
                     ->join('learner_activity_output', function ($join) {
@@ -1633,27 +1637,27 @@ if ($activityInfo === null) {
         }
     }
 
-    public function view_learner_activity_response(Course $course, Syllabus $syllabus, $topic_id, LearnerCourse $learner_course) {
+    public function view_learner_activity_response(Course $course, Syllabus $syllabus, $topic_id, LearnerCourse $learner_course, $attempt) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
 
             try {
 
-                if (!function_exists('getRandomColor')) {
-                        function getRandomColor() {
-                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                        }
-                    }
+                // if (!function_exists('getRandomColor')) {
+                //         function getRandomColor() {
+                //         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //         }
+                //     }
                     
-                    // Generate a random color for mainBackgroundCol
-                    $mainBackgroundCol = getRandomColor();
+                //     // Generate a random color for mainBackgroundCol
+                //     $mainBackgroundCol = getRandomColor();
         
-                    // Darken the mainBackgroundCol
-                    $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                //     // Darken the mainBackgroundCol
+                //     $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                //     $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
         
-                    // Darken the mainBackgroundCol further for darkenedColor
-                    $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                //     // Darken the mainBackgroundCol further for darkenedColor
+                //     $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
     
     
 
@@ -1686,6 +1690,9 @@ if ($activityInfo === null) {
                     'learner_activity_output.course_id',
                     'learner_activity_output.answer',
                     'learner_activity_output.total_score',
+                    'learner_activity_output.max_attempt',
+                    'learner_activity_output.attempt',
+                    'learner_activity_output.mark',
                     'learner_activity_output.remarks',
                     'learner_activity_output.created_at',
 
@@ -1701,6 +1708,39 @@ if ($activityInfo === null) {
                 ->where('learner_activity_output.syllabus_id', $syllabus->syllabus_id)
                 ->where('learner_activity_output.activity_id', $activityData->activity_id)
                 ->where('learner_activity_output.activity_content_id', $activityData->activity_content_id)
+                ->where('learner_activity_output.attempt', $attempt)
+                ->first();
+
+                $updatedAttempt = $attempt + 1;
+                $learnerActivityData_2nd = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output.learner_activity_output_id',
+                    'learner_activity_output.learner_course_id',
+                    'learner_activity_output.syllabus_id',
+                    'learner_activity_output.activity_id',
+                    'learner_activity_output.activity_content_id',
+                    'learner_activity_output.course_id',
+                    'learner_activity_output.answer',
+                    'learner_activity_output.total_score',
+                    'learner_activity_output.max_attempt',
+                    'learner_activity_output.attempt',
+                    'learner_activity_output.mark',
+                    'learner_activity_output.remarks',
+                    'learner_activity_output.created_at',
+
+                    'learner_course.learner_id',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname'
+                )
+                ->join('learner_course', 'learner_course.learner_course_id', '=', 'learner_activity_output.learner_course_id')
+                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                ->where('learner_activity_output.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_activity_output.course_id', $course->course_id)
+                ->where('learner_activity_output.syllabus_id', $syllabus->syllabus_id)
+                ->where('learner_activity_output.activity_id', $activityData->activity_id)
+                ->where('learner_activity_output.activity_content_id', $activityData->activity_content_id)
+                ->where('learner_activity_output.attempt', $updatedAttempt)
                 ->first();
 
                 $learnerActivityScoreData = DB::table('learner_activity_criteria_score')
@@ -1710,6 +1750,7 @@ if ($activityInfo === null) {
                     'learner_activity_criteria_score.activity_content_criteria_id',
                     'learner_activity_criteria_score.activity_content_id',
                     'learner_activity_criteria_score.score',
+                    'learner_activity_criteria_score.attempt',
 
                     'activity_content_criteria.criteria_title',
                     'activity_content_criteria.score as criteria_score'
@@ -1717,17 +1758,21 @@ if ($activityInfo === null) {
                 ->join('activity_content_criteria', 'activity_content_criteria.activity_content_criteria_id', '=', 'learner_activity_criteria_score.activity_content_criteria_id')
                 ->where('learner_activity_criteria_score.learner_activity_output_id', $learnerActivityData->learner_activity_output_id)
                 ->where('learner_activity_criteria_score.activity_content_id', $learnerActivityData->activity_content_id)
+                ->where('learner_activity_criteria_score.attempt', $attempt)
                 ->orderBy('learner_activity_criteria_score.activity_content_criteria_id', 'ASC')
                 ->get();
-
+                
+                // dd($learnerActivityScoreData);
                 $response = $this->course_content($course);
 
                $data = [
                 'title' => 'Activity Output',
                 'scripts' => ['instructorActivities_learnerResponse.js'],
-                'mainBackgroundCol' => $mainBackgroundCol,
+                'mainBackgroundCol' => '#00693e',
+                'darkenedColor' => '#00693e',
                 'activity' => $activityData,
                 'learnerActivityOutput' => $learnerActivityData,
+                'learnerActivityOutput_2nd' => $learnerActivityData_2nd,
                 'learnerActivityScore' => $learnerActivityScoreData,
                 'course' => $response['course'],
                ];
@@ -1746,45 +1791,83 @@ if ($activityInfo === null) {
             
     }
 
-    public function learnerResponse_overallScore($learner_activity_output, $learner_course, $activity, $activity_content, Request $request) {
+    public function learnerResponse_overallScore($learner_activity_output, $learner_course, $activity, $activity_content, $attempt, Request $request) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
     
             try {
                 $remarks = $request->input('remarks');
                 $totalScore = $request->input('total_score');
+
+
+                $activityData = DB::table('activity_content')
+                ->select(
+                    'activity_content_id',
+                    'activity_id',
+                    'total_score',
+                )
+                ->where('activity_id', $activity)
+                ->where('activity_content_id', $activity_content)
+                ->first();
+
+                $activityMaxScore = $activityData->total_score;
+
+
+                    // Check if the total score is below 50% of the activity's maximum score
+                $passingPercentage = 50;
+                $passingScore = ($activityMaxScore * $passingPercentage) / 100;
+
+                if ($totalScore < $passingScore) {
+                    // Set the mark as 'fail'
+                    $mark = "FAIL";
+                } else {
+                    // Set the mark as 'pass'
+                    $mark = "PASS";
+                }   
     
-                $learnerActivityOutputData = DB::table('learner_activity_output')
-                    ->select(
-                        'learner_activity_output_id',
-                        'learner_course_id',
-                        'activity_id',
-                        'syllabus_id',
-                        'activity_content_id',
-                        'course_id'
-                    )
-                    ->where('learner_activity_output_id', $learner_activity_output)
-                    ->where('learner_course_id', $learner_course)
-                    ->where('activity_id', $activity)
-                    ->where('activity_content_id', $activity_content)
-                    ->first();
     
                 // Update remarks and total score regardless of the current syllabus status
                 DB::table('learner_activity_output')
-                    ->where('learner_activity_output_id', $learner_activity_output)
-                    ->where('learner_course_id', $learner_course)
-                    ->where('activity_id', $activity)
-                    ->where('activity_content_id', $activity_content)
-                    ->update([
-                        'remarks' => $remarks,
-                        'total_score' => $totalScore,
-                    ]);
+                ->where('learner_activity_output_id', $learner_activity_output)
+                ->where('learner_course_id', $learner_course)
+                ->where('activity_id', $activity)
+                ->where('activity_content_id', $activity_content)
+                ->where('attempt', $attempt)
+                ->update([
+                    'remarks' => $remarks,
+                    'total_score' => $totalScore,
+                    'mark' => $mark,
+                ]);
+
+                $learnerActivityOutputData = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id',
+                    'learner_course_id',
+                    'activity_id',
+                    'syllabus_id',
+                    'activity_content_id',
+                    'course_id',
+                    'attempt',
+                    'answer',
+                    'total_score',
+                    'remarks',
+                    'mark'
+                )
+                ->where('learner_activity_output_id', $learner_activity_output)
+                ->where('learner_course_id', $learner_course)
+                ->where('activity_id', $activity)
+                ->where('activity_content_id', $activity_content)
+                ->where('attempt', $attempt)
+                ->first();
+
+                // dd($learnerActivityOutputData);
+            
     
                 $currentSyllabusStatus = DB::table('learner_syllabus_progress')
-                    ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                    ->where('course_id', $learnerActivityOutputData->course_id)
-                    ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
-                    ->value('status');
+                        ->where('learner_course_id', $learner_course)
+                        ->where('course_id', $learnerActivityOutputData->course_id)
+                        ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                        ->value('status');
     
                 if ($currentSyllabusStatus !== 'COMPLETED') {
                     DB::table('learner_syllabus_progress')
@@ -1817,6 +1900,12 @@ if ($activityInfo === null) {
                             ->update(['status' => 'NOT YET STARTED']);
                     }
                 }
+
+                $response = [
+                    'message' => 'Output Scored Successfully',
+                ];
+        
+                return response()->json($response);
     
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -1830,7 +1919,7 @@ if ($activityInfo === null) {
     
     
 
-    public function learnerResponse_criteriaScore ($learner_activity_output, $learner_course,  $activity, $activity_content, Request $request) {
+    public function learnerResponse_criteriaScore ($learner_activity_output, $learner_course,  $activity, $activity_content, $attempt, Request $request) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
     
@@ -1843,29 +1932,10 @@ if ($activityInfo === null) {
                 DB::table('learner_activity_criteria_score')
                     ->where('activity_content_criteria_id', $activity_content_criteria_id)
                     ->where('learner_activity_criteria_score_id', $learner_activity_criteria_score_id)
-             
+                    ->where('activity_content_id', $activity_content)
                     ->update([
                         'score' => $score,
                     ]);
-
-
-                // $learnerActivityOutputData = DB::table('learner_activity_output')
-                // ->select(
-                //     'learner_activity_output_id',
-                //     'learner_course_id',
-                //     'activity_id',
-                //     'syllabus_id',
-                //     'activity_content_id',
-                //     'course_id'
-                // )
-                // ->where('learner_activity_output_id', $learner_activity_output)
-                // ->where('learner_course_id', $learner_course)
-                // ->where('activity_id', $activity)
-                // ->where('activity_content_id', $activity_content)
-                // ->first();
-
-                
-           
 
                     session()->flash('message', 'Output Scored Successfully');
 
@@ -1886,6 +1956,120 @@ if ($activityInfo === null) {
 
     }
 
+
+
+    private function getLearnerActivityOutputData($learner_activity_output, $learner_course, $activity, $activity_content, $attempt) {
+        return DB::table('learner_activity_output')
+            ->select(
+                'learner_activity_output_id',
+                'learner_course_id',
+                'syllabus_id',
+                'activity_id',
+                'activity_content_id',
+                'course_id',
+                'attempt',
+                'total_score',
+                'mark',
+                'max_attempt',
+            )
+            ->where('learner_activity_output_id', $learner_activity_output)
+            ->where('learner_course_id', $learner_course)
+            ->where('activity_id', $activity)
+            ->where('activity_content_id', $activity_content)
+            ->where('attempt', $attempt)
+            ->first();
+    }
+
+    public function reattempt_activity($learner_activity_output, $learner_course,  $activity, $activity_content, $attempt, Request $request) {
+        try {
+
+            $learnerActivityOutputData = $this->getLearnerActivityOutputData($learner_activity_output, $learner_course, $activity, $activity_content, $attempt);
+            $learnerActivityOutputData_2nd = $this->getLearnerActivityOutputData($learner_activity_output, $learner_course, $activity, $activity_content, 2);
+
+            $activityCriteria = DB::table('learner_activity_criteria_score')
+            ->select(
+                'learner_activity_output_id',
+                'activity_content_criteria_id',
+                'activity_content_id',
+            )
+            ->where('learner_activity_output_id', $learner_activity_output)
+            ->where('activity_content_id', $activity_content)
+            ->get();
+
+            // dd($activityCriteria);
+
+            if ($learnerActivityOutputData_2nd) {
+                // If a record with attempt 2 already exists, handle accordingly
+                session()->flash('message', 'The learner has already taken the second attempt');
+            } else {
+                // If conditions for a new attempt are met
+                if ($learnerActivityOutputData->total_score !== null && $learnerActivityOutputData->mark) {
+                    // Check if a record with attempt 2 already exists with the same criteria
+                    $existingAttempt2Data = DB::table('learner_activity_output')
+                        ->where('learner_activity_output_id', $learner_activity_output)
+                        ->where('learner_course_id', $learner_course)
+                        ->where('activity_id', $activity)
+                        ->where('activity_content_id', $activity_content)
+                        ->where('attempt', 2)
+                        ->first();
+
+                        
+                    if ($existingAttempt2Data) {
+                        // If a record with attempt 2 already exists, don't create a new row
+                        session()->flash('message', 'The learner has already taken the second attempt');
+                    } else {
+                        // If conditions for a new attempt are met, create a new row with attempt 2
+                        $newAttemptRow = [
+                            'learner_course_id' => $learner_course,
+                            'syllabus_id' => $learnerActivityOutputData->syllabus_id,
+                            'activity_id' => $activity,
+                            'activity_content_id' => $activity_content,
+                            'course_id' => $learnerActivityOutputData->course_id,
+                            'attempt' => 2, // Fixed attempt value for the new row
+                        ];
+            
+                        LearnerActivityOutput::create($newAttemptRow);
+
+                        $learnerActivityOutputNewDataRow = DB::table('learner_activity_output')
+                        ->select(
+                            'learner_activity_output_id',
+                        )
+                        ->where('learner_course_id', $learner_course)
+                        ->where('activity_id', $activity)
+                        ->where('activity_content_id', $activity_content)
+                        ->orderBy('learner_activity_output_id', 'DESC')
+                        ->first();
+
+                        foreach ($activityCriteria as $criteria) {
+                            $rowData = [
+                                'learner_activity_output_id' => $learnerActivityOutputNewDataRow->learner_activity_output_id,
+                                'activity_content_id' => $activity_content,
+                                'activity_content_criteria_id' => $criteria->activity_content_criteria_id, // Use $criteria instead of $activity
+                                'attempt' => 2,
+                            ];
+                        
+                            LearnerActivityCriteriaScore::create($rowData);
+                        }
+
+                        session()->flash('message', 'Second Attempt was allowed to this learner');
+                    }
+                } else {
+                    session()->flash('message', 'The learner has taken the maximum attempts');
+                }
+            }
+            
+            
+            
+
+            // dd($newAttemptRow);
+            // Redirect back to the previous page
+        return back();
+
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
     public function view_quiz(Course $course, Syllabus $syllabus, $topic_id) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
@@ -1897,21 +2081,21 @@ if ($activityInfo === null) {
             } else {
                 try {       
 
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
                 $quizInfo = DB::table('quizzes')
@@ -1955,7 +2139,8 @@ if ($activityInfo === null) {
 
                     $data = [
                         'title' => 'Course Quiz',
-                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'scripts' => ['instructor_quiz_manage.js'],
                         'lessonCount' => $response['lessonCount'],
                         'activityCount' => $response['activityCount'],
@@ -1995,21 +2180,21 @@ if ($activityInfo === null) {
             } else {
                 try {       
 
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
                 $quizInfo = DB::table('quizzes')
@@ -2109,7 +2294,8 @@ if ($activityInfo === null) {
 
                     $data = [
                         'title' => 'Course Quiz',
-                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'scripts' => ['instructor_quiz_manage.js'],
                         'lessonCount' => $response['lessonCount'],
                         'activityCount' => $response['activityCount'],
@@ -2211,21 +2397,21 @@ if ($activityInfo === null) {
             $instructor = session('instructor');
     
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
                 $quizInfo = DB::table('quizzes')
                 ->select(
@@ -2286,7 +2472,8 @@ if ($activityInfo === null) {
 
                 $data = [
                     'title' => 'Course Quiz',
-                    'mainBackgroundCol' => $mainBackgroundCol,
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
                     'scripts' => ['instructor_quiz_builder.js'],
                     'lessonCount' => $response['lessonCount'],
                     'activityCount' => $response['activityCount'],
@@ -2321,21 +2508,21 @@ if ($activityInfo === null) {
             $instructor = session('instructor');
     
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
                 $quizInfo = DB::table('quizzes')
                 ->select(
@@ -2428,7 +2615,8 @@ if ($activityInfo === null) {
 
                 $data = [
                     'title' => 'Course Quiz',
-                    'mainBackgroundCol' => $mainBackgroundCol,
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
                     'scripts' => ['instructor_quiz_builder.js'],
                     'lessonCount' => $response['lessonCount'],
                     'activityCount' => $response['activityCount'],
@@ -2593,21 +2781,21 @@ if ($activityInfo === null) {
             } else {
                 try {  
 
-                    if (!function_exists('getRandomColor')) {
-                        function getRandomColor() {
-                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                        }
-                    }
+                    // if (!function_exists('getRandomColor')) {
+                    //     function getRandomColor() {
+                    //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                    //     }
+                    // }
                     
-                    // Generate a random color for mainBackgroundCol
-                    $mainBackgroundCol = getRandomColor();
+                    // // Generate a random color for mainBackgroundCol
+                    // $mainBackgroundCol = getRandomColor();
         
-                    // Darken the mainBackgroundCol
-                    $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                    // // Darken the mainBackgroundCol
+                    // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                    // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
         
-                    // Darken the mainBackgroundCol further for darkenedColor
-                    $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                    // // Darken the mainBackgroundCol further for darkenedColor
+                    // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
                     $quizInfo = DB::table('quizzes')
                     ->select(
@@ -2682,7 +2870,8 @@ if ($activityInfo === null) {
 
                     $data = [
                         'title' => 'Course Quiz',
-                        'mainBackgroundCol' => $mainBackgroundCol,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'scripts' => ['instructor_quiz_learnerResponse.js'],
                         'course' => $response['course'],
                         'syllabus' => $response['syllabus'],

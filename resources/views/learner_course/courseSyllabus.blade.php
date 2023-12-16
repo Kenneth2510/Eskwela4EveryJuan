@@ -15,21 +15,25 @@
                   
 
             @php
-            if (!function_exists('getRandomColor')) {
-                function getRandomColor() {
-                return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                }
-            }
+            // if (!function_exists('getRandomColor')) {
+            //     function getRandomColor() {
+            //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+            //     }
+            // }
             
-            // Generate a random color for mainBackgroundCol
-            $mainBackgroundCol = getRandomColor();
+            // // Generate a random color for mainBackgroundCol
+            // $mainBackgroundCol = getRandomColor();
 
-            // Darken the mainBackgroundCol
-            $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-            $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+            // // Darken the mainBackgroundCol
+            // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+            // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
 
-            // Darken the mainBackgroundCol further for darkenedColor
-            $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+            // // Darken the mainBackgroundCol further for darkenedColor
+            // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+            
+            $mainBackgroundCol = '#00592e';
+            $darkenedColor = '#00592e';
+            
             @endphp
 
    

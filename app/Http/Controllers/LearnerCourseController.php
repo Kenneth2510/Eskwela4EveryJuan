@@ -430,21 +430,21 @@ class LearnerCourseController extends Controller
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
 
@@ -527,8 +527,8 @@ class LearnerCourseController extends Controller
             'scripts' => ['/L_course_lesson.js'],
             'syllabus' => $learnerSyllabusProgressData,
             'lessons' => $learnerLessonProgressData,
-            'mainBackgroundCol' => $mainBackgroundCol,
-            'darkenedColor' => $darkenedColor,
+            'mainBackgroundCol' => '#00693e',
+            'darkenedColor' => '#00693e',
         ]);
     }
 
@@ -601,21 +601,21 @@ class LearnerCourseController extends Controller
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
                 
@@ -675,10 +675,14 @@ class LearnerCourseController extends Controller
                 )
                 ->where('activity_content_id', $learnerActivityProgressData->activity_content_id)
                 ->get();
+                $totalScores = 0;
+                // foreach ($activityContentCriteriaData as $criteria) {
+                //     $totalScore += $criteria->score;
+                // }
 
-                
-                if ($learnerActivityProgressData->status === "COMPLETED" || $learnerActivityProgressData->status === "IN PROGRESS") {
-                    $activityOutputData = DB::table('learner_activity_output')
+
+                // if ($learnerActivityProgressData->status === "COMPLETED" || $learnerActivityProgressData->status === "IN PROGRESS") {
+                    $activityOutputData1st = DB::table('learner_activity_output')
                         ->select(
                             'learner_activity_output_id',
                             'learner_course_id',
@@ -687,6 +691,8 @@ class LearnerCourseController extends Controller
                             'activity_content_id',
                             'course_id',
                             'answer',
+                            'attempt',
+                            'mark',
                             'total_score',
                             'remarks',
                             'created_at',
@@ -696,20 +702,51 @@ class LearnerCourseController extends Controller
                         ->where('learner_course_id', $learnerSyllabusProgressData->learner_course_id)
                         ->first();
 
-                       
-                
-                    $activityScoreData = DB::table('learner_activity_criteria_score')
+                        $activityOutputData = DB::table('learner_activity_output')
+                        ->select(
+                            'learner_activity_output_id',
+                            'learner_course_id',
+                            'syllabus_id',
+                            'activity_id',
+                            'activity_content_id',
+                            'course_id',
+                            'answer',
+                            'attempt',
+                            'mark',
+                            'total_score',
+                            'remarks',
+                            'updated_at',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('learner_course_id', $learnerSyllabusProgressData->learner_course_id)
+                        ->get();
+
+                    //    dd($activityOutputData);
+                        $activityScoreData = [];
+                    if(!empty($activityOutputData1st)) {
+                        $activityScoreData = DB::table('learner_activity_criteria_score')
                         ->select(
                             'learner_activity_criteria_score_id',
                             'learner_activity_output_id',
                             'activity_content_criteria_id',
                             'activity_content_id',
+                            'attempt',
                             'score'
                         )
-                        ->where('learner_activity_output_id', $activityOutputData->learner_activity_output_id)
-                        ->where('activity_content_id', $activityOutputData->activity_content_id)
+                        ->where('learner_activity_output_id', $activityOutputData1st->learner_activity_output_id)
+                        ->where('activity_content_id', $activityOutputData1st->activity_content_id)
                         ->orderBy('learner_activity_criteria_score_id', 'ASC')
                         ->get();
+
+                       
+                    }
+                    
+
+
+                    foreach ($activityContentCriteriaData as $score) {
+                        $totalScores += $score->score;
+                    }
                 
                     $data = [
                         'title' => 'Course Lesson',
@@ -717,28 +754,30 @@ class LearnerCourseController extends Controller
                         'syllabus' => $learnerSyllabusProgressData,
                         'activity' => $learnerActivityProgressData,
                         'activityCriteria' => $activityContentCriteriaData,
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'activityOutput' => $activityOutputData,
                         'activityScore' => $activityScoreData,
+                        'totalScores' => $totalScores,
                     ];
-
+//
                     //  dd($data);
-                } else {
-                    $data = [
-                        'title' => 'Course Lesson',
-                        'scripts' => ['/L_course_activity.js'],
-                        'syllabus' => $learnerSyllabusProgressData,
-                        'activity' => $learnerActivityProgressData,
-                        'activityCriteria' => $activityContentCriteriaData,
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
-                        'activityOutput' => '',
-                        'activityScore' => '',
-                    ];
-                }
+                // } else {
+                //     $data = [
+                //         'title' => 'Course Lesson',
+                //         'scripts' => ['/L_course_activity.js'],
+                //         'syllabus' => $learnerSyllabusProgressData,
+                //         'activity' => $learnerActivityProgressData,
+                //         'activityCriteria' => $activityContentCriteriaData,
+                //         'mainBackgroundCol' => '#00693e',
+                //         'darkenedColor' => '#00693e',
+                //         'activityOutput' => null,
+                //         'activityScore' => null,
+                //         'totalScores' => $totalScores,
+                //     ];
+                // }
 
-                // dd($activityContentCriteriaData);
+                // dd($data);
 
 
             } catch (\Exception $e) {
@@ -750,36 +789,28 @@ class LearnerCourseController extends Controller
 
 
         return view('learner_course.courseActivity', compact('learner'))
-        ->with([
-            'title' => 'Course Lesson',
-            'scripts' => ['/L_course_activity.js'],
-            'syllabus' => $learnerSyllabusProgressData,
-            'activity' => $learnerActivityProgressData,
-            'activityCriteria' => $activityContentCriteriaData,
-            'mainBackgroundCol' => $mainBackgroundCol,
-            'darkenedColor' => $darkenedColor,
-        ]);
+        ->with($data);
     }
 
-    public function answer_activity(Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
+    public function answer_activity(Course $course, LearnerCourse $learner_course, Syllabus $syllabus, $attempt) {
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
                 
@@ -838,6 +869,10 @@ class LearnerCourseController extends Controller
                 ->where('activity_content_id', $learnerActivityProgressData->activity_content_id)
                 ->get();
 
+    
+
+        
+
                 
                 if ($learnerActivityProgressData->status === "COMPLETED" || $learnerActivityProgressData->status === "IN PROGRESS") {
                     $activityOutputData = DB::table('learner_activity_output')
@@ -851,11 +886,13 @@ class LearnerCourseController extends Controller
                             'answer',
                             'total_score',
                             'remarks',
-                            'created_at',
+                            'attempt',
+                            'updated_at',
                         )
                         ->where('course_id', $course->course_id)
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('learner_course_id', $learnerSyllabusProgressData->learner_course_id)
+                        ->where('attempt', $attempt)
                         ->first();
 
                        
@@ -872,6 +909,9 @@ class LearnerCourseController extends Controller
                         ->where('activity_content_id', $activityOutputData->activity_content_id)
                         ->orderBy('learner_activity_criteria_score_id', 'ASC')
                         ->get();
+
+                     
+        
                 
                     $data = [
                         'title' => 'Course Lesson',
@@ -879,38 +919,96 @@ class LearnerCourseController extends Controller
                         'syllabus' => $learnerSyllabusProgressData,
                         'activity' => $learnerActivityProgressData,
                         'activityCriteria' => $activityContentCriteriaData,
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'activityOutput' => $activityOutputData,
                         'activityScore' => $activityScoreData,
                     ];
 
                     //  dd($data);
                 } else {
+
+                    $activityData =([
+                        'learner_course_id' => $learner_course->learner_course_id,
+                        'syllabus_id' => $syllabus->syllabus_id,
+                        'activity_id' => $learnerActivityProgressData->activity_id,
+                        'activity_content_id' => $learnerActivityProgressData->activity_content_id,
+                        'course_id' => $course->course_id,
+                        'attempt' => $attempt
+                    ]);
+    
+                    LearnerActivityOutput::create($activityData);
+
+                    $activityOutputData = DB::table('learner_activity_output')
+                        ->select(
+                            'learner_activity_output_id',
+                            'learner_course_id',
+                            'syllabus_id',
+                            'activity_id',
+                            'activity_content_id',
+                            'course_id',
+                            'answer',
+                            'total_score',
+                            'remarks',
+                            'attempt',
+                            'updated_at',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('learner_course_id', $learnerSyllabusProgressData->learner_course_id)
+                        ->where('attempt', $attempt)
+                        ->first();
+
+                        // dd($activityOutputData);
+                        $activityCriteria = DB::table('activity_content_criteria')
+                        ->select(
+                            'activity_content_criteria_id',
+                            'activity_content_id',
+                        )
+                        ->where('activity_content_id', $activityOutputData->activity_content_id)
+                        ->get();
+
+                        foreach($activityCriteria as $criteria) {
+                            $newRowData = ([
+                                'learner_activity_output_id' => $activityOutputData->learner_activity_output_id,
+                                'activity_content_criteria_id' => $criteria->activity_content_criteria_id,
+                                'activity_content_id' =>$criteria->activity_content_id,
+                            ]);
+        
+                            LearnerActivityCriteriaScore::create($newRowData);
+                        };
+                        
+
+                        $activityScoreData = DB::table('learner_activity_criteria_score')
+                        ->select(
+                            'learner_activity_criteria_score_id',
+                            'learner_activity_output_id',
+                            'activity_content_criteria_id',
+                            'activity_content_id',
+                            'attempt',
+                            'score'
+                        )
+                        ->where('learner_activity_output_id', $activityOutputData->learner_activity_output_id)
+                        ->where('activity_content_id', $criteria->activity_content_id)
+                        ->orderBy('learner_activity_criteria_score_id', 'ASC')
+                        ->get();
+
                     $data = [
                         'title' => 'Course Lesson',
                         'scripts' => ['/L_course_activity.js'],
                         'syllabus' => $learnerSyllabusProgressData,
                         'activity' => $learnerActivityProgressData,
                         'activityCriteria' => $activityContentCriteriaData,
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
-                        'activityOutput' => '',
-                        'activityScore' => '',
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
+                        'activityOutput' => $activityOutputData,
+                        'activityScore' => $activityScoreData,
                     ];
                 }
 
 
                 
-
-                // DB::table('learner_activity_progress')
-                // ->where('learner_activity_progress_id', $learnerActivityProgressData->learner_activity_progress_id)
-                // ->update(['status' => 'NOT YET STARTED']);
-
-
-                
-                
-                // dd($activityContentCriteriaData);
+                // dd($data);
 
 
             } catch (\Exception $e) {
@@ -925,20 +1023,27 @@ class LearnerCourseController extends Controller
         ->with($data);
     }
 
-    public function submit_answer(Course $course, LearnerCourse $learner_course, Syllabus $syllabus, Activities $activity, ActivityContents $activity_content, Request $request) {
+    public function submit_answer(Course $course, LearnerCourse $learner_course, Syllabus $syllabus,$attempt, Activities $activity, ActivityContents $activity_content , Request $request) {
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
                 $activityData =([
-                    'learner_course_id' => $learner_course->learner_course_id,
-                    'syllabus_id' => $syllabus->syllabus_id,
-                    'activity_id' => $activity->activity_id,
-                    'activity_content_id' => $activity_content->activity_content_id,
-                    'course_id' => $course->course_id,
+                    // 'learner_course_id' => $learner_course->learner_course_id,
+                    // 'syllabus_id' => $syllabus->syllabus_id,
+                    // 'activity_id' => $activity->activity_id,
+                    // 'activity_content_id' => $activity_content->activity_content_id,
+                    // 'course_id' => $course->course_id,
                     'answer' => $request->answer,
                 ]);
 
-                LearnerActivityOutput::create($activityData);
+                DB::table('learner_activity_output')
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('activity_id', $activity->activity_id)
+                ->where('activity_content_id', $activity_content->activity_content_id)
+                ->where('course_id', $course->course_id)
+                ->where('attempt', $attempt)
+                ->update($activityData);
 
                 $learnerActivityData = DB::table('learner_activity_output')
                 ->select(
@@ -983,15 +1088,15 @@ class LearnerCourseController extends Controller
 
 
 
-                foreach($activityCriteria as $criteria) {
-                    $newRowData = ([
-                        'learner_activity_output_id' => $learnerActivityData->learner_activity_output_id,
-                        'activity_content_criteria_id' => $criteria->activity_content_criteria_id,
-                        'activity_content_id' =>$criteria->activity_content_id,
-                    ]);
+                // foreach($activityCriteria as $criteria) {
+                //     $newRowData = ([
+                //         'learner_activity_output_id' => $learnerActivityData->learner_activity_output_id,
+                //         'activity_content_criteria_id' => $criteria->activity_content_criteria_id,
+                //         'activity_content_id' =>$criteria->activity_content_id,
+                //     ]);
 
-                    LearnerActivityCriteriaScore::create($newRowData);
-                };
+                //     LearnerActivityCriteriaScore::create($newRowData);
+                // };
 
 
 
@@ -1017,21 +1122,21 @@ class LearnerCourseController extends Controller
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
                 
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
@@ -1110,8 +1215,8 @@ class LearnerCourseController extends Controller
         $data = [
             'title' => 'Course Lesson',
             'scripts' => ['/.js'],
-            'mainBackgroundCol' => $mainBackgroundCol,
-            'darkenedColor' => $darkenedColor,
+            'mainBackgroundCol' => '#00693e',
+            'darkenedColor' => '#00693e',
             'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
             'learnerQuizProgressData' => $learnerQuizProgressData,
             'quizReferenceData' => $quizReferenceData,
@@ -1131,21 +1236,21 @@ class LearnerCourseController extends Controller
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
     
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
     
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
                     ->select(
@@ -1327,8 +1432,8 @@ class LearnerCourseController extends Controller
                     $data = [
                         'title' => 'Quiz',
                         'scripts' => ['/L_course_quiz.js'],
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
                         'quizReferences' => $quizReferenceData,
                         'quizProgressData' => $learnerQuizProgressData,
@@ -1680,21 +1785,21 @@ class LearnerCourseController extends Controller
             $learner = session('learner'); 
             try {
 
-                if (!function_exists('getRandomColor')) {
-                    function getRandomColor() {
-                        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    }
-                }
+                // if (!function_exists('getRandomColor')) {
+                //     function getRandomColor() {
+                //         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                //     }
+                // }
     
-                // Generate a random color for mainBackgroundCol
-                $mainBackgroundCol = getRandomColor();
+                // // Generate a random color for mainBackgroundCol
+                // $mainBackgroundCol = getRandomColor();
     
-                // Darken the mainBackgroundCol
-                $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+                // // Darken the mainBackgroundCol
+                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
     
-                // Darken the mainBackgroundCol further for darkenedColor
-                $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                // // Darken the mainBackgroundCol further for darkenedColor
+                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
                     ->select(
@@ -1753,8 +1858,8 @@ class LearnerCourseController extends Controller
                     $data = [
                         'title' => 'Quiz',
                         'scripts' => ['/L_course_quiz_output.js'],
-                        'mainBackgroundCol' => $mainBackgroundCol,
-                        'darkenedColor' => $darkenedColor,
+                        'mainBackgroundCol' => '#00693e',
+                        'darkenedColor' => '#00693e',
                         'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
                         'quizReferences' => $quizReferenceData,
                         'quizProgressData' => $learnerQuizProgressData,

@@ -58,11 +58,15 @@ $(document).ready(() => {
                             <table class="w-full text-center table-fixed">
                                <thead>
                                    <tr>
-                                       <th>Enrollee ID</th>
-                                       <th>Learner ID</th>
-                                       <th>Name</th>
-                                       <th>Score</th>
-                                       <th>Status</th>
+                                       <th class="w-1/12">Enrollee ID</th>
+                                       <th class="w-1/12">Learner ID</th>
+                                       <th class="w-2/12">Name</th>
+                                       <th class="w-1/12">Attempt</th>
+                                       <th class="w-2/12">Attempt Taken</th>
+                                       <th class="w-1/12">Score</th>
+                                       <th class="w-2/12">Status</th>
+                                       <th class="w-1/12">Mark</th>
+                                       <th class="w-1/12"></th>
                                    </tr>
                                </thead>
                                <tbody id="learnerActivityData">
@@ -90,6 +94,9 @@ $(document).ready(() => {
                 const learner_lname = learnerActivityContent[i]['learner_lname'];
                 const total_score = learnerActivityContent[i]['total_score'];
                 const status = learnerActivityContent[i]['status'];
+                const attempt = learnerActivityContent[i]['attempt'];
+                const mark = learnerActivityContent[i]['mark'];
+                const updated_at = learnerActivityContent[i]['updated_at'];
 
                 if(status == "NOT YET STARTED") {
                     dispStatus = "NOT YET STARTED"
@@ -108,11 +115,14 @@ $(document).ready(() => {
                         <td>${enrollee_id}</td>
                         <td>${learner_id}</td>
                         <td>${learner_fname} ${learner_lname}</td>
+                        <td>${attempt}</td>
+                        <td>${updated_at}</td>
                         <td>${total_score}/${criteria_total_score}</td>
                         <td>${dispStatus}</td>
+                        <td>${mark}</td>
                         <td class="float-right">
-                            <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}" 
-                            class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2"  
+                            <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}/${attempt}" 
+                            class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-darthmouthgreen hover:bg-green-650 md:h-12 py-2"  
                             data-learner-course-id="${enrollee_id}">
                                 <h1>visit</h1>
                             </a>

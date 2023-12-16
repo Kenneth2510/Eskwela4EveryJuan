@@ -86,21 +86,137 @@
                         @endforelse
                     </tbody>
                 </table>
-              
-                <br>
-                <br>
-                <br>
-                <div class="">
-                  
-                    <p class="text-2xl font-semibold">Overall Total Score: </p>
-                    <input type="number" id="overallScore_input py-5 px-5 border-2 border-green-400" class="w-full text-4xl" value="{{$activity->total_score}}" disabled> 
-                    <p class="px-10 text-4xl">/ {{$activity->total_score}}</p>
-                </div>
             </div>
-          
         </div>
 
-        <div class="px-10 mt-[50px] flex justify-between">
+        <!--score and remarks area-->
+        @if ($activityOutput)
+            @foreach ($activityOutput as $output)
+                <div class="px-10 mt-8" id="score_area">
+                    <h1 class="mb-2 text-2xl font-semibold">Attempt Number: {{$output->attempt}}</h1>
+
+                    @if($output->mark)
+                    <h1 class="mb-2 text-2xl font-semibold">Attempt Taken on {{$output->updated_at}}</h1>
+                    @endif
+                    <div class="p-6 bg-gray-100 shadow-md rounded-xl">
+                        <h1 class="mb-4 text-3xl font-bold">Score:</h1>
+                        <h1 class="text-4xl font-bold text-green-600">{{$output->total_score}} <span class="text-2xl font-bold text-black"> / {{$totalScores}}</span></h1>
+                        
+                        <div class="my-5">
+                            <h1 class="text-xl font-semibold">Remarks:</h1>
+
+                                <span class="mx-2 text-2xl font-semibold {{ $output->mark == 'PASS' ? 'text-dartmouthgreen' : 'text-red-600' }}">
+                                    {{ $output->mark }}
+                                </span>
+                            </h1>
+                            
+                        </div>
+
+                        <div class="my-3">
+                            @if($output)
+                            <a href="{{ url("/learner/course/content/$syllabus->course_id/$syllabus->learner_course_id/activity/$syllabus->syllabus_id/answer/$output->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                View Output
+                            </a>
+                            @endif
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            @endforeach
+        @endif
+        
+
+
+        <!--buttons area-->
+        <div class="flex mt-5">
+
+            @if ($activityOutput->isNotEmpty())
+                    @if ($activityOutput->count() == 1) {{-- if only 1 row --}}
+                    @foreach($activityOutput as $output)
+                        @if ($output->mark !== null || $output->mark !== '') {{-- if the mark is still null or no value --}}
+
+                            @if ($output->mark == 'PASS') {{-- if mark is PASS --}}
+                                <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                    Return    
+                                </a>
+                                <a href="{{ url("/learner/course/content/$syllabus->course_id/$syllabus->learner_course_id/activity/$syllabus->syllabus_id/answer/$output->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
+                                    Answer Now
+                                </a>   
+                            @else {{-- if mark is FAIL --}}
+                                <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                    Return    
+                                </a>
+                                <a disabled href="" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
+                                    Reattempt Now
+                                </a>   
+                            @endif
+
+                        @else {{-- if mark is null and not yet started --}}
+
+                            <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Return    
+                            </a>
+                            <a href="{{ url("/learner/course/content/$syllabus->course_id/$syllabus->learner_course_id/activity/$syllabus->syllabus_id/answer/$output->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Answer Now
+                            </a>   
+                        @endif
+                    @endforeach   
+                    @else {{-- if more than 1 attempt --}}
+                        
+                        @php
+                            $lastRowActivityData = $activityOutput->last();
+                        @endphp 
+                        @if ($lastRowActivityData !== null)
+                            @if ($lastRowActivityData->answer !== null) {{-- if not null--}}
+                                
+                                @if ($lastRowActivityData->mark == 'PASS') {{-- if mmark is PASS --}}
+                                        
+                                    <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                        Return    
+                                    </a>
+                                    <a disabled href="" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
+                                        Already Submitted
+                                    </a>    
+                                @else {{-- if mark is FAIL --}}
+
+                                    <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                        Return    
+                                    </a>
+                                    <a disabled href="" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
+                                        Already Submitted
+                                    </a>  
+                                @endif
+
+                            @else
+                                {{-- if attempt 2 is not yet started --}}
+                                    <!-- if attempt 2 is not yet started -->
+                                <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                    Return    
+                                </a>
+                                <a href="{{ url("/learner/course/content/$syllabus->course_id/$syllabus->learner_course_id/activity/$syllabus->syllabus_id/answer/$output->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                    Answer Now
+                                </a>  
+                            @endif
+                        @endif
+
+                    @endif
+                
+            @else
+                            <!-- if all null -->
+                    <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Return    
+                    </a> 
+                    <a href="{{ url("/learner/course/content/$syllabus->course_id/$syllabus->learner_course_id/activity/$syllabus->syllabus_id/answer/1") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                        Answer Now
+                    </a>   
+
+            @endif
+                <!-- test -->
+        </div>
+
+
+        {{-- <div class="px-10 mt-[50px] flex justify-between">
             <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                 Return    
             </a>
@@ -117,7 +233,9 @@
                 Answer Now
             </a>  
             @endif       
-        </div>
+        </div> --}}
+
+
     </div>
 </section>
 
