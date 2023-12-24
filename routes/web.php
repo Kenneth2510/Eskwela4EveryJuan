@@ -220,3 +220,14 @@ Route::namespace('App\Http\Controllers')->group(function () {
     
     // // })->middleware('web');
 });
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/instructor/performances', 'InstructorPerformanceController@performances');
+    Route::get('/instructor/performances/totalCourseNum', 'InstructorPerformanceController@totalCourseNum');
+    Route::get('/instructor/performances/courseChartData', 'InstructorPerformanceController@courseChartData');
+    Route::get('/instructor/performances/course/{course}', 'InstructorPerformanceController@coursePerformance');
+    Route::get('/instructor/performances/course/{course}/performanceData', 'InstructorPerformanceController@selectedCoursePerformance');
+    Route::get('/instructor/performances/course/{course}/learnerCourseData', 'InstructorPerformanceController@learnerCourseData');
+    Route::get('/instructor/performances/course/{course}/learnerSyllabusData', 'InstructorPerformanceController@learnerSyllabusData');
+});

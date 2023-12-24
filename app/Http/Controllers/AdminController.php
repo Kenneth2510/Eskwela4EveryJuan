@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 
 class AdminController extends Controller
@@ -1095,13 +1096,19 @@ public function login_process(Request $request) {
     // add learner course progress, learner syllabus progress, lesson, activity,quiz progress
     public function approve_learner_course(LearnerCourse $learnerCourse) {
         try {
+            
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
             // dd($learnerCourse);
-            $learnerCourse->update(['status' => 'Approved']);  
+            $learnerCourse->update([
+                'status' => 'Approved',
+            ]);  
 
             $courseProgressData = [
                 "learner_course_id" => $learnerCourse->learner_course_id,
                 "learner_id" => $learnerCourse->learner_id,
-                "course_id" => $learnerCourse->course_id
+                "course_id" => $learnerCourse->course_id,
+                "start_period" => $timestampString,
             ];
 
             // LearnerCourseProgress::create($courseProgressData);
@@ -1118,6 +1125,8 @@ public function login_process(Request $request) {
             ->where('course_id', $learnerCourse->course_id)
             ->orderBy('topic_id', 'ASC')
             ->get();
+
+            // dd($syllabusData);
 
             // $syllabusDataLength = count($syllabusData);
         
@@ -1172,9 +1181,10 @@ public function login_process(Request $request) {
                         )
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('course_id', $learnerCourse->course_id)
-                        ->where('topic_id', $syllabus->topic_id)
+                        // ->where('topic_id', $syllabus->topic_id)
                         ->first();
 
+                        // dd($activityData);
                         $rowActivityData = [
                             "learner_course_id" => $learnerCourse->learner_course_id,
                             "learner_id" => $learnerCourse->learner_id,
@@ -1198,7 +1208,7 @@ public function login_process(Request $request) {
                         )
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('course_id', $learnerCourse->course_id)
-                        ->where('topic_id', $syllabus->topic_id)
+                        // ->where('topic_id', $syllabus->topic_id)
                         ->first();
 
                         $rowQuizData = [
@@ -1291,7 +1301,31 @@ public function login_process(Request $request) {
                         ->where('course_id', $learnerCourse->course_id)
                         ->delete();
 
+            $learnerActivityOutput = DB::table('learner_activity_output')
+            ->select(
+                'learner_activity_output_id'
+            )
+            ->where('learner_course_id', $learnerCourse->learner_course_id)
+            ->where('course_id', $learnerCourse->course_id)
+            ->get();
+
+            foreach ($learnerActivityOutput as $activityOutput) {
+                DB::table('learner_activity_criteria_score')
+                ->where('learner_activity_output_id', $activityOutput->learner_activity_output_id)
+                ->delete();
+            }
+            DB::table('learner_activity_output')
+                            ->where('learner_course_id', $learnerCourse->learner_course_id)
+                            ->where('course_id', $learnerCourse->course_id)
+                            ->delete();
+                    
             DB::table('learner_activity_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->delete();
+
+            DB::table('learner_quiz_progress')
                         ->where('learner_course_id', $learnerCourse->learner_course_id)
                         ->where('learner_id', $learnerCourse->learner_id)
                         ->where('course_id', $learnerCourse->course_id)

@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Profiler\Profile;
+use Carbon\Carbon;
 
 class LearnerCourseController extends Controller
 {
@@ -501,11 +502,17 @@ class LearnerCourseController extends Controller
                     ->update(['status' => 'IN PROGRESS']);
                     // ->first();
                     // dd($a);
-                        
+                    
+                    $now = Carbon::now();
+                    $timestampString = $now->toDateTimeString();
+
                     DB::table('learner_lesson_progress')
                     ->where('lesson_id', $learnerSyllabusProgressData->lesson_id)
                     ->where('learner_course_id', $learnerSyllabusProgressData->learner_course_id)
-                    ->update(['status' => 'IN PROGRESS']);
+                    ->update([
+                        'status' => 'IN PROGRESS',
+                        'start_period' => $timestampString,
+                    ]);
                     // ->first();
                     // dd($b);
     
@@ -551,12 +558,18 @@ class LearnerCourseController extends Controller
                         ->where('syllabus_id' , $syllabus->syllabus_id)
                         ->update(['status' => 'COMPLETED']);
     
+                        $now = Carbon::now();
+                        $timestampString = $now->toDateTimeString();
+                    
                     // Update the status of the current lesson to 'COMPLETED'
                     DB::table('learner_lesson_progress')
                         ->where('learner_course_id' , $learner_course->learner_course_id)
                         ->where('course_id', $course->course_id)
                         ->where('syllabus_id' , $syllabus->syllabus_id)
-                        ->update(['status' => 'COMPLETED']);
+                        ->update([
+                            'status' => 'COMPLETED',
+                            'finish_period' => $timestampString,
+                        ]);
                     
                     // Find the next lesson that is still 'LOCKED' and update its status to 'NOT YET STARTED'
                     $nextLesson = DB::table('learner_syllabus_progress')
@@ -796,22 +809,6 @@ class LearnerCourseController extends Controller
         if (auth('learner')->check()) {
             $learner = session('learner'); 
             try {
-                // if (!function_exists('getRandomColor')) {
-                //     function getRandomColor() {
-                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //     }
-                // }
-                
-                // // Generate a random color for mainBackgroundCol
-                // $mainBackgroundCol = getRandomColor();
-    
-                // // Darken the mainBackgroundCol
-                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-    
-                // // Darken the mainBackgroundCol further for darkenedColor
-                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
-
 
                 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
@@ -858,6 +855,17 @@ class LearnerCourseController extends Controller
                 ->where('learner_activity_progress.syllabus_id', $syllabus->syllabus_id)
                 ->where('learner_activity_progress.learner_course_id' , $learnerSyllabusProgressData->learner_course_id)
                 ->first();
+
+                $now = Carbon::now();
+                $timestampString = $now->toDateTimeString();
+
+                DB::table('learner_activity_progress')
+                ->where('learner_activity_progress.course_id', $course->course_id)
+                ->where('learner_activity_progress.syllabus_id', $syllabus->syllabus_id)
+                ->where('learner_activity_progress.learner_course_id' , $learnerSyllabusProgressData->learner_course_id)
+                ->update([
+                    'start_period' => $timestampString,
+                ]);
 
                 $activityContentCriteriaData = DB::table('activity_content_criteria')
                 ->select(
@@ -1070,12 +1078,18 @@ class LearnerCourseController extends Controller
 
                 // updating the status of the learner progress
 
+                $now = Carbon::now();
+                $timestampString = $now->toDateTimeString();
+
                 DB::table('learner_activity_progress')
                 ->where('learner_course_id' , $learner_course->learner_course_id)
                 ->where('syllabus_id', $syllabus->syllabus_id)
                 ->where('course_id', $course->course_id)
                 ->where('activity_id', $activity->activity_id)
-                ->update(['status' => 'IN PROGRESS']);
+                ->update([
+                    'status' => 'IN PROGRESS',
+                    'finish_period' => $timestampString,
+                ]);
 
                 DB::table('learner_syllabus_progress')
                 ->where('learner_course_id' , $learner_course->learner_course_id)
@@ -1304,6 +1318,19 @@ class LearnerCourseController extends Controller
                     ->where('learner_quiz_progress.quiz_id', $learnerSyllabusProgressData->quiz_id)
                     ->orderBy('learner_quiz_progress.learner_quiz_progress_id', 'DESC')
                     ->first();
+
+                    $now = Carbon::now();
+                    $timestampString = $now->toDateTimeString();
+
+                    DB::table('learner_quiz_progress')
+                    ->where('learner_quiz_progress_id', $learnerQuizProgressData->learner_quiz_progress_id)
+                    ->where('learner_quiz_progress.learner_course_id', $learner_course->learner_course_id)
+                    ->where('learner_quiz_progress.course_id', $course->course_id)
+                    ->where('learner_quiz_progress.syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_quiz_progress.quiz_id', $learnerSyllabusProgressData->quiz_id)
+                    ->update([
+                        'start_period' => $timestampString,
+                    ]);
 
 
                     if($learnerQuizProgressData->status === 'COMPLETED' || $learnerSyllabusProgressData === 'COMPLETED') {
@@ -1688,7 +1715,8 @@ class LearnerCourseController extends Controller
             ->where('attempts', $learnerQuizOutputData->attempts)
             ->count();
             
-
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
             // update the score and status
             DB::table('learner_quiz_progress')
             ->where('quiz_id', $quiz_id)
@@ -1699,6 +1727,7 @@ class LearnerCourseController extends Controller
             ->update([
                 'score' => $scoreCount,
                 'remarks' => ($scoreCount >= $totalCount / 2) ? 'PASS' : 'FAIL',
+                'finish_period' => $timestampString,
             ]);
 
             $learnerQuizProgress = DB::table('learner_quiz_progress')

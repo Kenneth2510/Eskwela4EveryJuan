@@ -21,7 +21,9 @@ class LearnerQuizProgress extends Model
         'status',
         'attempt',
         'max_attempt',
-        'score'
+        'score',
+        'start_period',
+        'finish_period',
     ];
 
     public function learner_course_id()
