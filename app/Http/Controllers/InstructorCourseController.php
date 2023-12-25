@@ -42,6 +42,8 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\URL;
 use Dompdf\Dompdf;
+use Carbon\Carbon;
+
 
 class InstructorCourseController extends Controller
 {
@@ -1839,6 +1841,8 @@ class InstructorCourseController extends Controller
                     'mark' => $mark,
                 ]);
 
+                
+
                 $learnerActivityOutputData = DB::table('learner_activity_output')
                 ->select(
                     'learner_activity_output_id',
@@ -1860,6 +1864,20 @@ class InstructorCourseController extends Controller
                 ->where('attempt', $attempt)
                 ->first();
 
+
+                $now = Carbon::now();
+                $timestampString = $now->toDateTimeString();
+
+            DB::table('learner_activity_progress')
+                ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
+                ->where('course_id', $learnerActivityOutputData->course_id)
+                ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
+                ->where('activity_id', $learnerActivityOutputData->activity_id)
+                ->update([
+                    'status' => "COMPLETED",
+                    'finish_period' => $timestampString,
+                ]);
+
                 // dd($learnerActivityOutputData);
             
                 if($attempt <= 2) {
@@ -1878,6 +1896,9 @@ class InstructorCourseController extends Controller
                                 'status' => "COMPLETED",
                             ]);
 
+                            $now = Carbon::now();
+                            $timestampString = $now->toDateTimeString();
+
                         DB::table('learner_activity_progress')
                             ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
                             ->where('course_id', $learnerActivityOutputData->course_id)
@@ -1885,6 +1906,7 @@ class InstructorCourseController extends Controller
                             ->where('activity_id', $learnerActivityOutputData->activity_id)
                             ->update([
                                 'status' => "COMPLETED",
+                                'finish_period' => $timestampString,
                             ]);
 
                         $learnerSyllabusProgress = DB::table('learner_syllabus_progress')

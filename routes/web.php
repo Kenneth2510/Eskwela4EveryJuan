@@ -230,4 +230,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/performances/course/{course}/performanceData', 'InstructorPerformanceController@selectedCoursePerformance');
     Route::get('/instructor/performances/course/{course}/learnerCourseData', 'InstructorPerformanceController@learnerCourseData');
     Route::get('/instructor/performances/course/{course}/learnerSyllabusData', 'InstructorPerformanceController@learnerSyllabusData');
+    Route::get('/instructor/performances/course/{course}/syllabus/{syllabus}', 'InstructorPerformanceController@courseSyllabusPerformance');
+    Route::get('/instructor/performances/course/{course}/syllabus/{syllabus}/lessonData', 'InstructorPerformanceController@courseSyllabusLessonPerformance');
+    Route::get('/instructor/performances/course/{course}/syllabus/{syllabus}/activityData', 'InstructorPerformanceController@courseSyllabusActivityPerformance');
+    Route::get('/instructor/performances/course/{course}/syllabus/{syllabus}/activityData/outputs', 'InstructorPerformanceController@courseSyllabusActivityScoresPerformance');
 });

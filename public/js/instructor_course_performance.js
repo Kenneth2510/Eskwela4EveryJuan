@@ -109,15 +109,12 @@ $(document).ready(function(){
 
         const progressData = learnerCourseProgressData.map(item => item.course_progress);
 
-
         const allProgressCategories = ['IN PROGRESS', 'NOT YET STARTED', 'COMPLETED'];
-
 
         const progressCounts = {};
         allProgressCategories.forEach(category => {
             progressCounts[category] = progressData.filter(progress => progress === category).length;
         });
-
 
         const labels = Object.keys(progressCounts);
         const dataValues = Object.values(progressCounts);
@@ -159,6 +156,9 @@ $(document).ready(function(){
 
         var syllabus_id = $('#selectTopic').val();
 
+        var viewMoreLink = $('#learnerCourseTopicProgressTable a');
+        viewMoreLink.attr("href", baseUrl + "/syllabus/" + syllabus_id);
+
         var url = baseUrl + "/learnerSyllabusData"
     
             $.ajax({
@@ -168,7 +168,7 @@ $(document).ready(function(){
                     syllabus_id: syllabus_id
                 },
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
 
                     learnerSyllabusData = response['learnerSyllabusData'];
                     displayLearnerSyllabusProgressChart(learnerSyllabusData)

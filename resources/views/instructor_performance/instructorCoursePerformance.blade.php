@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="mt-5 w-full px-10 flex flex-col" id="learnerCourseTopicProgressTable">
-                    <a href="#" method="GET" class="text-right underline text-xl text-darthmouthgreen hover:text-green-950">view more details</a>
+                    <a href="" method="GET" class="text-right underline text-xl text-darthmouthgreen hover:text-green-950">view more details</a>
                     <table id="learnerSyllabusTable" class="w-full mt-5">
                         <thead class="bg-darthmouthgreen text-white">
                             <th class="w-1/5">Name</th>
@@ -118,16 +118,7 @@
                             <th class="w-1/5"></th>
                         </thead>
                         <tbody class="learnerSyllabusRowData">
-                            <tr class="text-center">
-                                <td class="mt-5 py-5">sample 1</td>
-                                <td>10/25/2001</td>
-                                <td>IN PROGRESS</td>
-                                <td>10/25/20232</td>
-                                <td>10/25/2023</td>
-                                <td>
-                                    <a href="#" class="px-5 py-3 bg-darthmouthgreen hover:bg-green-950 text-white rounded-xl">view</a>
-                                </td>
-                            </tr>
+                       
                         </tbody>
                     </table>
                 </div>

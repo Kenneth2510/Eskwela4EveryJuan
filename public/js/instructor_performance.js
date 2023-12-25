@@ -127,7 +127,7 @@ $(document).ready(function() {
             `
         } else {
             courseDataDisp += `
-            <div class="w-full text-center"><i class="fa-solid fa-book-open-reader text-darthmouthgreen  text-[100px]"></i></div>
+            <div class="w-full text-center text-[100px]"><i class="fa-solid fa-book-open-reader text-[100px] text-darthmouthgreen"></i></div>
             <h1 class="text-2xl h-1/3 text-darthmouthgreen font-semibold">${courseData[0]['course_name']}</h1>
             <p class=""><span class="" id="">${courseData[0]['course_code']}</span></p>
             <p class="">Created at: <span class="" id="">${courseData[0]['created_at']}</span></p>
