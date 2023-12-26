@@ -168,7 +168,7 @@ $(document).ready(function(){
                     syllabus_id: syllabus_id
                 },
                 success: function (response) {
-                    // console.log(response);
+                    console.log(response);
 
                     learnerSyllabusData = response['learnerSyllabusData'];
                     displayLearnerSyllabusProgressChart(learnerSyllabusData)

@@ -82,7 +82,7 @@ $(document).ready(function() {
                 'selectedCourse': selectedCourse
             },
             success: function(response) {
-                // console.log(response)
+                console.log(response)
 
                 courseData = response['courseData']
                 displayCourseData(response, courseData, selectedCourse)
