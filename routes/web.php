@@ -204,16 +204,12 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/content/{course}/{learner_course}/activity/{syllabus}/answer/{attempt}', 'LearnerCourseController@answer_activity');
     Route::post('/learner/course/content/{course}/{learner_course}/activity/{syllabus}/answer/{attempt}/{activity}/{activity_content}', 'LearnerCourseController@submit_answer');
 
-
-
-
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}', 'LearnerCourseController@view_quiz');
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/{attempt}', 'LearnerCourseController@answer_quiz');
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/{attempt}/json', 'LearnerCourseController@answer_quiz_json');
     Route::post('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/{attempt}/submit', 'LearnerCourseController@submit_quiz');
     Route::post('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/answer/{attempt}/score', 'LearnerCourseController@compute_score');
 
-    
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/view_output/{attempt}', 'LearnerCourseController@view_output');
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/view_output/{attempt}/json', 'LearnerCourseController@view_output_json');
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/reattempt', 'LearnerCourseController@reattempt_answer_quiz');
@@ -240,4 +236,14 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/performances/course/{course}/learner/{learner_course}', 'InstructorPerformanceController@learnerCoursePerformance');
     Route::get('/instructor/performances/course/{course}/learner/{learner_course}/coursePerformance', 'InstructorPerformanceController@learnerCourseOverallPerformance');
     Route::get('/instructor/performances/course/{course}/learner/{learner_course}/syllabusPerformance', 'InstructorPerformanceController@learnerCourseSyllabusPerformance');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/learner/performances', 'LearnerPerformanceController@performances');
+    Route::get('/learner/performances/totalEnrolledCourses', 'LearnerPerformanceController@enrolledCoursesPerformances');
+    Route::get('/learner/performances/enrolledCoursesData', 'LearnerPerformanceController@enrolledCoursesPerformancesData');
+    Route::get('/learner/performances/course/{course}', 'LearnerPerformanceController@coursePerformance');
+    Route::get('/learner/performances/course/{course}/coursePerformance', 'LearnerPerformanceController@coursePerformanceData');
+    Route::get('/learner/performances/course/{course}/syllabusPerformance', 'LearnerPerformanceController@syllabusPerformanceData');
 });

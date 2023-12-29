@@ -67,7 +67,7 @@
 
             <hr class="border-t-2 border-gray-300 my-6">
 
-            <h1 class="text-2xl mx-5 mb-5">Learner Progress</h1>
+            <h1 class="text-2xl mx-5 mb-5">Course Progress</h1>
             <div class="flex justify-between" id="learnerCourseProgressArea">
                 <div class="w-3/5 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerCourseProgressChart">
                     <canvas id="learnerCourseDataChart"></canvas>

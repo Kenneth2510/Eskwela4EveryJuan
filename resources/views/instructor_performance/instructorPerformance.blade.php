@@ -9,6 +9,7 @@
         <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
             <h1 class="mx-5 text-2xl font-semibold md:text-3xl">PERFORMANCE DASHBOARD</h1>
             <hr class="border-t-2 border-gray-300 my-6">
+            
             <div class="mt-5 p-10 flex" id="genInfo">
                 <div class="w-3/5 h-[300px] border-2 border-darthmouthgreen" id="totalCourseArea">
                     <div class=" mt-10 mx-10 h-2/3 text-center item-center flex justify-center">
