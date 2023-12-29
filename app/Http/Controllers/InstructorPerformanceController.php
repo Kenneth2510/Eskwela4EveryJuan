@@ -1303,4 +1303,515 @@ class InstructorPerformanceController extends Controller
             return redirect('/instructor');
         }
     }
+
+    public function learnerCoursePerformance(Course $course, LearnerCourse $learner_course) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+
+            try {
+                $course = DB::table('course')
+                    ->select(
+                        "course.course_id",
+                        "course.course_name",
+                        "course.course_code",
+                        "instructor.instructor_lname",
+                        "instructor.instructor_fname",
+                        "instructor.profile_picture"
+                    )
+                ->where('course.instructor_id', '=', $instructor['instructor_id'])
+                ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                ->orderBy("course.created_at", "ASC")
+                ->where('course.course_id', $course->course_id)
+                ->first();
+
+                $syllabus = DB::table('syllabus')
+                ->select(
+                    'syllabus_id',
+                    'topic_id',
+                    'topic_title',
+                    'category',
+                )
+                ->where('course_id', $course->course_id)
+                ->orderBy('topic_id', 'ASC')
+                ->get();
+
+                $learner_course_data = DB::table('learner_syllabus_progress')
+                ->select(
+                    'learner_syllabus_progress.learner_syllabus_progress_id',
+                    'learner_syllabus_progress.learner_course_id',
+                    'learner_syllabus_progress.category',
+                    'learner_syllabus_progress.syllabus_id',
+                    'learner_syllabus_progress.status',
+
+                    'syllabus.topic_id',
+                    'syllabus.topic_title',
+                    'syllabus.category',
+                )
+                ->join('syllabus', 'learner_syllabus_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_syllabus_progress.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_syllabus_progress.course_id', $course->course_id)
+                ->get();
+
+                $learner_data = DB::table('learner_course')
+                ->select(
+                    'learner_course.*',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner', 'learner_course.learner_id', '=', 'learner.learner_id')
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
+                ->first();
+
+
+                $data = [
+                    'title' => 'Course Performance',
+                    'scripts' => ['instructor_view_learner_performance.js'],
+                    'course' => $course,
+                    'syllabus' => $syllabus,
+                    'learnerCourse' => $learner_course_data,
+                    'learner' => $learner_data,
+                ];
+        
+                // dd($data);
+                return view('instructor_performance.instructorViewLearnerPerformance' , compact('instructor'))
+                ->with($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+    public function learnerCourseOverallPerformance(Course $course, LearnerCourse $learner_course) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            try {
+
+                $learnerCourseData = DB::table('learner_syllabus_progress')
+                ->select(
+                    'learner_syllabus_progress_id',
+                    'learner_course_id',
+                    'syllabus_id',
+                    'category',
+                    'status',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->get();
+
+                $learnerCourseCount = DB::table('learner_syllabus_progress')
+                ->select(
+                    'learner_syllabus_progress_id',
+                    'learner_course_id',
+                    'syllabus_id',
+                    'category',
+                    'status',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->count();
+
+                $learnerCompletedSyllabusCount = DB::table('learner_syllabus_progress')
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('status', 'COMPLETED')
+                ->count();
+
+                $learnerInProgressSyllabusCount = DB::table('learner_syllabus_progress')
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('status', 'IN PROGRESS')
+                ->count();
+
+                $learnerLockedSyllabusCount = DB::table('learner_syllabus_progress')
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where(function ($query) {
+                    $query->where('status', 'LOCKED')
+                          ->orWhere('status', 'NOT YET STARTED');
+                })
+                ->count();
+
+                $percentageCompleted = ($learnerCompletedSyllabusCount / $learnerCourseCount) * 100;
+
+                $learnerLessonCompletedData = DB::table('learner_lesson_progress')
+                ->select(
+                    'start_period',
+                    'finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_lesson_progress.finish_period, learner_lesson_progress.start_period), "%H:%i:%s") as time_difference')
+
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('status', 'COMPLETED')
+                ->get();
+
+                $learnerActivityCompletedData = DB::table('learner_activity_progress')
+                ->select(
+                    'start_period',
+                    'finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_activity_progress.finish_period, learner_activity_progress.start_period), "%H:%i:%s") as time_difference')
+
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('status', 'COMPLETED')
+                ->get();
+
+                $learnerQuizCompletedData = DB::table('learner_quiz_progress')
+                ->select(
+                    'start_period',
+                    'finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_quiz_progress.finish_period, learner_quiz_progress.start_period), "%H:%i:%s") as time_difference')
+
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('status', 'COMPLETED')
+                ->get();
+
+                $totalLessonTimeDifference = 0;
+                $totalActivityTimeDifference = 0;
+                $totalQuizTimeDifference = 0;
+
+                $numberOfLessonRows = count($learnerLessonCompletedData);
+                $numberOfActivityRows = count($learnerActivityCompletedData);
+                $numberOfQuizRows = count($learnerQuizCompletedData);
+
+                foreach ($learnerLessonCompletedData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalLessonTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                foreach ($learnerActivityCompletedData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalActivityTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                foreach ($learnerQuizCompletedData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalQuizTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+
+                $totalNumberOfRows = ($numberOfLessonRows + $numberOfActivityRows + $numberOfQuizRows);
+                $totalTimeDifference = ($totalLessonTimeDifference + $totalActivityTimeDifference + $totalQuizTimeDifference);
+
+                // Calculate average time difference in seconds
+                $averageTimeDifference = ($totalNumberOfRows > 0) ? ($totalTimeDifference / $totalNumberOfRows) : 0;
+
+                // Format the average time difference
+                $averageTimeFormatted = gmdate("H:i:s", $averageTimeDifference);
+
+                $data = [
+                'title' => 'Performance',
+                'learnerCourseData' => $learnerCourseData,
+                'learnerCourseCount' => $learnerCourseCount,
+                'learnerCompletedSyllabusCount' => $learnerCompletedSyllabusCount,
+                'learnerInProgressSyllabusCount' => $learnerInProgressSyllabusCount,
+                'learnerLockedSyllabusCount' => $learnerLockedSyllabusCount,
+                'percentageCompleted' => $percentageCompleted,
+                'averageTimeFormatted' => $averageTimeFormatted,
+                'learnerLessonCompletedData' => $learnerLessonCompletedData,
+                'learnerActivityCompletedData' => $learnerActivityCompletedData,
+                'learnerQuizCompletedData' => $learnerQuizCompletedData,
+            ];
+
+            return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+    public function learnerCourseSyllabusPerformance(Course $course, LearnerCourse $learner_course) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+            
+            try {
+
+                $learnerLessonPerformanceData = DB::table('learner_lesson_progress')
+                ->select(
+                    'learner_lesson_progress.learner_lesson_progress_id',
+                    'learner_lesson_progress.lesson_id',
+                    'learner_lesson_progress.status',
+                    'learner_lesson_progress.start_period',
+                    'learner_lesson_progress.finish_period',
+                    DB::raw('TIMEDIFF(learner_lesson_progress.finish_period, learner_lesson_progress.start_period) as time_difference'),
+
+                    'syllabus.topic_title',
+                )
+                ->join('syllabus', 'learner_lesson_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_lesson_progress.course_id', $course->course_id)
+                ->where('learner_lesson_progress.learner_course_id', $learner_course->learner_course_id)
+                ->get();
+
+                $learnerLessonCompletedPerformanceData = DB::table('learner_lesson_progress')
+                ->select(
+                    'learner_lesson_progress.learner_lesson_progress_id',
+                    'learner_lesson_progress.lesson_id',
+                    'learner_lesson_progress.status',
+                    'learner_lesson_progress.start_period',
+                    'learner_lesson_progress.finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_lesson_progress.finish_period, learner_lesson_progress.start_period), "%H:%i:%s") as time_difference'),
+
+                
+                    'syllabus.topic_title',
+                )
+                ->join('syllabus', 'learner_lesson_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_lesson_progress.course_id', $course->course_id)
+                ->where('learner_lesson_progress.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_lesson_progress.status', 'COMPLETED')
+                ->get();
+
+                $totalLessonTimeDifference = 0;
+                $numberOfLessonRows = count($learnerLessonCompletedPerformanceData);
+
+                foreach ($learnerLessonCompletedPerformanceData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalLessonTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                // Calculate average time difference in seconds
+                $averageLessonTimeDifference = ($numberOfLessonRows > 0) ? ($totalLessonTimeDifference / $numberOfLessonRows) : 0;
+
+                // Format the average time difference
+                $averageLessonTimeFormatted = gmdate("H:i:s", $averageLessonTimeDifference);
+
+
+
+                $learnerActivityPerformanceData = DB::table('learner_activity_progress')
+                ->select(
+                    'learner_activity_progress.learner_activity_progress_id',
+                    'learner_activity_progress.course_id',
+                    'learner_activity_progress.syllabus_id',
+                    'learner_activity_progress.activity_id',
+                    'learner_activity_progress.learner_course_id',
+                    'learner_activity_progress.status',
+                    'learner_activity_progress.start_period',
+                    'learner_activity_progress.finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_activity_progress.finish_period, learner_activity_progress.start_period), "%H:%i:%s") as time_difference'),
+
+                    'syllabus.topic_title',
+                    'syllabus.topic_id',
+                )
+                ->join('syllabus', 'learner_activity_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_activity_progress.course_id', $course->course_id)
+                ->where('learner_activity_progress.learner_course_id', $learner_course->learner_course_id)
+                ->get();
+
+                $learnerActivityCompletedPerformanceData = DB::table('learner_activity_progress')
+                ->select(
+                    'learner_activity_progress.learner_activity_progress_id',
+                    'learner_activity_progress.course_id',
+                    'learner_activity_progress.syllabus_id',
+                    'learner_activity_progress.activity_id',
+                    'learner_activity_progress.learner_course_id',
+                    'learner_activity_progress.status',
+                    'learner_activity_progress.start_period',
+                    'learner_activity_progress.finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_activity_progress.finish_period, learner_activity_progress.start_period), "%H:%i:%s") as time_difference'),
+
+                    'syllabus.topic_title',
+                    'syllabus.topic_id',
+                )
+                ->join('syllabus', 'learner_activity_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_activity_progress.course_id', $course->course_id)
+                ->where('learner_activity_progress.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_activity_progress.status', 'COMPLETED')
+                ->get();
+
+                $learnerActivityCompletedOutputData = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id',
+                    'learner_course_id',
+                    'syllabus_id',
+                    'activity_id',
+                    'activity_content_id',
+                    'total_score',
+                    'attempt',
+                    'mark',
+                )
+                ->where('learner_activity_output.course_id', $course->course_id)
+                ->where('learner_activity_output.learner_course_id', $learner_course->learner_course_id)
+                ->get();
+
+                $totalActivityTimeDifference = 0;
+                $numberOfActivityRows = count($learnerActivityCompletedPerformanceData);
+
+                foreach ($learnerActivityCompletedPerformanceData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalActivityTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                // Calculate average time difference in seconds
+                $averageActivityTimeDifference = ($numberOfActivityRows > 0) ? ($totalActivityTimeDifference / $numberOfActivityRows) : 0;
+
+                // Format the average time difference
+                $averageActivityTimeFormatted = gmdate("H:i:s", $averageActivityTimeDifference);
+
+
+
+                
+                $learnerQuizPerformanceData = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.learner_quiz_progress_id',
+                    'learner_quiz_progress.course_id',
+                    'learner_quiz_progress.syllabus_id',
+                    'learner_quiz_progress.quiz_id',
+                    'learner_quiz_progress.learner_course_id',
+                    'learner_quiz_progress.status',
+                    'learner_quiz_progress.attempt',
+                    'learner_quiz_progress.score',
+                    'learner_quiz_progress.remarks',
+                    'learner_quiz_progress.start_period',
+                    'learner_quiz_progress.finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_quiz_progress.finish_period, learner_quiz_progress.start_period), "%H:%i:%s") as time_difference'),
+
+                    'syllabus.topic_title',
+                    'syllabus.topic_id',
+                )
+                ->join('syllabus', 'learner_quiz_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.learner_course_id', $learner_course->learner_course_id)
+                ->get();
+
+                $learnerQuizCompletedPerformanceData = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.learner_quiz_progress_id',
+                    'learner_quiz_progress.course_id',
+                    'learner_quiz_progress.syllabus_id',
+                    'learner_quiz_progress.quiz_id',
+                    'learner_quiz_progress.learner_course_id',
+                    'learner_quiz_progress.status',
+                    'learner_quiz_progress.attempt',
+                    'learner_quiz_progress.score',
+                    'learner_quiz_progress.remarks',
+                    'learner_quiz_progress.start_period',
+                    'learner_quiz_progress.finish_period',
+                    DB::raw('TIME_FORMAT(TIMEDIFF(learner_quiz_progress.finish_period, learner_quiz_progress.start_period), "%H:%i:%s") as time_difference'),
+
+                    'syllabus.topic_title',
+                    'syllabus.topic_id',
+                )
+                ->join('syllabus', 'learner_quiz_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_quiz_progress.status', 'COMPLETED')
+                ->get();
+
+                $totalQuizTimeDifference = 0;
+                $numberOfQuizRows = count($learnerQuizCompletedPerformanceData);
+
+                foreach ($learnerQuizCompletedPerformanceData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalQuizTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                // Calculate average time difference in seconds
+                $averageQuizTimeDifference = ($numberOfQuizRows > 0) ? ($totalQuizTimeDifference / $numberOfQuizRows) : 0;
+
+                // Format the average time difference
+                $averageQuizTimeFormatted = gmdate("H:i:s", $averageQuizTimeDifference);
+
+
+
+                $data = [
+                'title' => 'Performance',
+                'learnerLessonPerformanceData' => $learnerLessonPerformanceData,
+                'learnerLessonCompletedPerformanceData' => $learnerLessonCompletedPerformanceData,
+                'averageLessonTimeFormatted' => $averageLessonTimeFormatted,
+                'learnerActivityPerformanceData' => $learnerActivityPerformanceData,
+                'learnerActivityCompletedPerformanceData' => $learnerActivityCompletedPerformanceData,
+                'averageActivityTimeFormatted' => $averageActivityTimeFormatted,
+                'learnerActivityCompletedOutputData' => $learnerActivityCompletedOutputData,
+                'learnerQuizPerformanceData' => $learnerQuizPerformanceData,
+                'learnerQuizCompletedPerformanceData' => $learnerQuizCompletedPerformanceData,
+                'averageQuizTimeFormatted' => $averageQuizTimeFormatted,
+                ];
+
+            return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/instructor');
+        }
+    }
 }
