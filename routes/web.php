@@ -247,3 +247,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/performances/course/{course}/coursePerformance', 'LearnerPerformanceController@coursePerformanceData');
     Route::get('/learner/performances/course/{course}/syllabusPerformance', 'LearnerPerformanceController@syllabusPerformanceData');
 });
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/instructor/discussions', 'InstructorDiscussionController@discussions');
+    Route::get('/instructor/discussions/create', 'InstructorDiscussionController@createDiscussion');
+    
+});

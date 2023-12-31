@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/discussion.css')}}">
+
 
     <title>{{ $title !== "" ? $title : 'Eskwela4EveryJuan'}}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -35,6 +37,31 @@
             <script src"" defer></script>
         @endforelse
     @endif
+
+
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+          width: 15px;
+        }
+      
+        /* Track */
+        ::-webkit-scrollbar-track {
+          box-shadow: inset 0 0 5px grey;
+          border-radius: 10px;
+        }
+      
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #00693e; /* Dartmouth Green */
+          border-radius: 10px;
+        }
+      
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #004026; /* Darker shade for hover */
+        }
+      </style>
 </head>
 <body class="min-h-full bg-mainwhitebg font-poppins">
     <x-message />

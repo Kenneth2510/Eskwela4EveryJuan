@@ -12,7 +12,7 @@
 
 <section class="w-full px-2 pt-[100px] mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12">
     <div  class="p-3 pb-4 overflow-auto bg-white rounded-lg shadow-lg overscroll-auto">
-        <a href="{{ url("/learner/dashboard") }}" class="my-2 bg-gray-300 rounded-full ">
+        <a href="{{ url("/learner/performances") }}" class="my-2 bg-gray-300 rounded-full ">
             <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
         </a>
         <h1 class="mx-5 text-xl font-normal md:text-3xl">
