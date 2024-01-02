@@ -20,10 +20,14 @@ $(document).ready(function() {
 
     function getThreadComments() {
         var url = baseUrl + "/comments";
-
+        var sortVal = $('#sortComments').val();
+ 
         $.ajax({
             type: "GET",
             url: url,
+            data: {
+                sortVal: sortVal
+            },
             success: function(response) {
                 console.log(response)
 
@@ -36,6 +40,9 @@ $(document).ready(function() {
         });
     }
 
+    $('#sortComments').on('click', function() {
+        getThreadComments();
+    })
 
     function formatCreatedAt(created_at) {
         const date = new Date(created_at);
@@ -240,6 +247,7 @@ $(document).ready(function() {
         }
 
         // Append the HTML to the DOM
+        $('#commentMainContainer').empty();
         $('#commentMainContainer').append(threadCommentsDisp);
 
         $('.attemptReplyBtn').on('click', function () {

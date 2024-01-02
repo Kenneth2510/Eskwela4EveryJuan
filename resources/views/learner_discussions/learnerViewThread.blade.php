@@ -78,9 +78,9 @@
                             <div class="" id="commentArea">
                                 <h1 class="text-xl">Comments</h1>
                                 <div class="mt-5" id="sortByArea">
-                                    <select name="" class="" id="sortComments">
+                                    <select name="" class="px-5 py-3 rounded-xl border-2 border-darthmouthgreen" id="sortComments">
                                         <option value="NEW">Most Recent</option>
-                                        <option value="TOP">Most Upvoted</option>
+                                        <option value="TOP" selected>Most Upvoted</option>
                                         <option value="OLD">Oldest</option>
                                     </select>
                                 </div>

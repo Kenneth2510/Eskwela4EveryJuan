@@ -54,12 +54,151 @@ use Carbon\Carbon;
 
 class InstructorDiscussionController extends Controller
 {
+
+    public function upvoteJuggling() {
+
+        try {
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
+
+            $last_randomized_datetime_object = DB::table('thread_upvotes')
+                ->select('last_randomized_datetime')
+                ->first();
+
+            $last_randomized_datetime = $last_randomized_datetime_object->last_randomized_datetime;
+
+
+            if (Carbon::parse($now)->diffInDays(Carbon::parse($last_randomized_datetime)) > 0) {
+                $threadUpvotesData = DB::table('thread_upvotes')
+                ->select(
+                    'thread_upvote_id',
+                    'thread_id',
+                    'base_upvote',
+                    'randomized_display_upvote',
+                    'last_randomized_datetime',
+                )
+                ->get();
+                
+
+                foreach ($threadUpvotesData as $threadUpvote) {
+                    
+                    $min = 100;
+                    $max = 9999;
+
+                    $randomNumber = rand($min, $max);
+
+                    DB::table('thread_upvotes')
+                    ->where('thread_upvote_id', $threadUpvote->thread_upvote_id)
+                    ->update([
+                        'randomized_display_upvote' => $randomNumber,
+                        'last_randomized_datetime' => $timestampString
+                    ]);
+                }
+
+
+                $threadCommentsUpvotesData = DB::table('thread_comment_upvotes')
+                ->select(
+                    'thread_comment_upvote_id',
+                    'thread_id',
+                    'thread_comment_id',
+                    'base_upvote',
+                    'randomized_display_upvote',
+                    'last_randomized_datetime',
+                )
+                ->get();
+                
+
+                foreach ($threadCommentsUpvotesData as $threadCommentUpvote) {
+                    
+                    $min = 100;
+                    $max = 9999;
+
+                    $randomNumber = rand($min, $max);
+
+                    DB::table('thread_comment_upvotes')
+                    ->where('thread_comment_upvote_id', $threadCommentUpvote->thread_comment_upvote_id)
+                    ->update([
+                        'randomized_display_upvote' => $randomNumber,
+                        'last_randomized_datetime' => $timestampString
+                    ]);
+                }
+
+
+                $threadCommentReplyUpvotesData = DB::table('thread_comment_reply_upvotes')
+                ->select(
+                    'thread_comment_reply_upvote_id',
+                    'thread_id',
+                    'thread_comment_id',
+                    'thread_comment_reply_id',
+                    'base_upvote',
+                    'randomized_display_upvote',
+                    'last_randomized_datetime',
+                )
+                ->get();
+                
+
+                foreach ($threadCommentReplyUpvotesData as $threadCommentReplyUpvote) {
+                    
+                    $min = 100;
+                    $max = 9999;
+
+                    $randomNumber = rand($min, $max);
+
+                    DB::table('thread_comment_reply_upvotes')
+                    ->where('thread_comment_reply_upvote_id', $threadCommentReplyUpvote->thread_comment_reply_upvote_id)
+                    ->update([
+                        'randomized_display_upvote' => $randomNumber,
+                        'last_randomized_datetime' => $timestampString
+                    ]);
+                }
+
+
+
+                $threadReplyReplyUpvotesData = DB::table('thread_reply_reply_upvotes')
+                ->select(
+                    'thread_reply_reply_upvote_id',
+                    'thread_id',
+                    'thread_comment_id',
+                    'thread_comment_reply_id',
+                    'thread_reply_reply_id',
+                    'base_upvote',
+                    'randomized_display_upvote',
+                    'last_randomized_datetime',
+                )
+                ->get();
+                
+
+                foreach ($threadReplyReplyUpvotesData as $threadReplyReplyUpvote) {
+                    
+                    $min = 100;
+                    $max = 9999;
+
+                    $randomNumber = rand($min, $max);
+
+                    DB::table('thread_reply_reply_upvotes')
+                    ->where('thread_reply_reply_upvote_id', $threadReplyReplyUpvote->thread_reply_reply_upvote_id)
+                    ->update([
+                        'randomized_display_upvote' => $randomNumber,
+                        'last_randomized_datetime' => $timestampString
+                    ]);
+                }
+
+
+            }
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
     public function discussions() {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
             
 
             try {
+
+                $this->upvoteJuggling();
                 
             $data = [
                 'title' => 'Performance',
@@ -386,11 +525,13 @@ class InstructorDiscussionController extends Controller
         }
     }
 
-    public function viewThreadComments(Thread $thread) {
+    public function viewThreadComments(Thread $thread, Request $request) {
         if (auth('instructor')->check()) {
             $instructor = session('instructor');
     
             try {
+                $sortVal = $request->input('sortVal');
+                // dd($sortVal);
                 $threadData = DB::table('thread_comments')
                 ->select(
                     'thread_comments.thread_comment_id',
@@ -413,11 +554,19 @@ class InstructorDiscussionController extends Controller
                 ->leftJoin('thread_comment_upvotes', 'thread_comment_upvotes.thread_comment_id', '=', 'thread_comments.thread_comment_id')
                 ->leftJoin('learner', 'learner.learner_id', '=', 'thread_comments.user_id')
                 ->leftJoin('instructor', 'instructor.instructor_id', '=', 'thread_comments.user_id')
-                ->where('thread_comments.thread_id', $thread->thread_id)
-                ->orderBy('thread_comment_upvotes.base_upvote', 'DESC')
-                ->get();
+                ->where('thread_comments.thread_id', $thread->thread_id);
+
+                if ($sortVal === 'TOP') {
+                    $threadData->orderBy('thread_comment_upvotes.base_upvote', 'DESC');
+                } elseif ($sortVal === 'NEW') {
+                    $threadData->orderBy('thread_comments.created_at', 'DESC');
+                } elseif ($sortVal === 'OLD') {
+                    $threadData->orderBy('thread_comments.created_at', 'ASC');
+                }
+
+                $threadComments = $threadData->get();
             
-            foreach ($threadData as $comment) {
+            foreach ($threadComments as $comment) {
                 $comment->replies = DB::table('thread_comment_replies')
                     ->select(
                         'thread_comment_replies.thread_comment_reply_id',
@@ -469,7 +618,7 @@ class InstructorDiscussionController extends Controller
             
             $data = [
                 'title' => 'Discussions',
-                'threadData' => $threadData,
+                'threadData' => $threadComments,
             ];
             
             return response()->json($data);
