@@ -283,19 +283,105 @@ $(document).ready(function() {
     
         if (isValid) {
             thread_content = content;
+            var community_id = $('#selectCommunity').val();
+
+            $('#loaderModal').removeClass('hidden');
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
             console.log(`type: ${selectedThreadContent}`);
             console.log(`thread_title: ${thread_title}`);
             console.log(`thread_content: ${thread_content}`);
 
             if(selectedThreadContent === 'PHOTO') {
-                alert('test')
+                var formData = new FormData();
+                var input = $('#uploadPhoto')[0];
+                var file = input.files[0];
+                
+                
+                    formData.append('photo', file);
+                    formData.append('thread_type', selectedThreadContent);
+                    formData.append('thread_title', thread_title);
+                    formData.append('community_id', community_id);
+                    formData.append('thread_content', thread_content);
+            
+                    var url = `${baseUrl}/post-photo`;
+            
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        success: function(response) {
+                            // Hide loader on success
+                        $('#loaderModal').addClass('hidden');
+
+                            // Handle success if needed
+                            if (response && response.redirect_url) {
+                                // Show success indicator (you can customize this based on your needs)
+                                $('#successModal').removeClass('hidden');
+
+                                // Redirect to the specified URL after a brief delay
+                                setTimeout(function () {
+                                    window.location.href = response.redirect_url;
+                                }, 1000); // Delay for 2 seconds (adjust as needed)
+                            }
+                        },
+                        error: function(error) {
+                            // Hide loader on error
+                            $('#loaderModal').addClass('hidden');
+                            $('#errorModal').removeClass('hidden');
+                            setTimeout(function () {
+                                $('#errorModal').addClass('hidden');
+                            }, 1000);
+                            
+                            console.log(error);
+                        }
+                    });
+            
             } else {
 
                 var url = `${baseUrl}/post`;
 
-                
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        thread_type: selectedThreadContent,
+                        thread_title: thread_title,
+                        thread_content: thread_content,
+                        community_id: community_id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        // Hide loader on success
+                        $('#loaderModal').addClass('hidden');
+
+                        // Handle success if needed
+                        if (response && response.redirect_url) {
+                            // Show success indicator (you can customize this based on your needs)
+                            $('#successModal').removeClass('hidden');
+
+                            // Redirect to the specified URL after a brief delay
+                            setTimeout(function () {
+                                window.location.href = response.redirect_url;
+                            }, 1000); // Delay for 2 seconds (adjust as needed)
+                        }
+                    },
+                    error: function(error) {
+                        // Hide loader on error
+                        $('#loaderModal').addClass('hidden');
+                        $('#errorModal').removeClass('hidden');
+                        console.log(error);
+                    }
+                });
             }
-            // Proceed with posting
+
         }
     });
     

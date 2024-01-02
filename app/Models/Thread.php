@@ -14,6 +14,11 @@ class Thread extends Model
 
     protected $fillable = [
         'thread_id',
-        'community_id'
+        'community_id',
+        'user_id',
+        'user_type',
     ];
+
+
+    
 }

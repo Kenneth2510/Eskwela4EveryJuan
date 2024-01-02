@@ -13,20 +13,13 @@ return new class extends Migration
     {
         Schema::create('thread', function (Blueprint $table) {
             $table->id('thread_id');
-            $table->timestamps();
-        });
-
-        Schema::create('thread_user', function (Blueprint $table) {
-            $table->id('thread_user_id');
-            $table->unsignedBigInteger('thread_id');
             $table->unsignedBigInteger('user_id');
             $table->string('user_type');
             $table->timestamps();
-
-            $table->foreign('thread_id')->references('thread_id')->on('thread')->onDelete('cascade')->onUpdate('cascade');
         });
 
-        Schema::create('thread_content', function (Blueprint $table) {
+
+        Schema::create('thread_contents', function (Blueprint $table) {
             $table->id('thread_content_id');
             $table->unsignedBigInteger('thread_id');
             $table->string('thread_type');
@@ -153,7 +146,7 @@ return new class extends Migration
         Schema::dropIfExists('thread_reply_replies');
         Schema::dropIfExists('thread_comment_replies');
         Schema::dropIfExists('thread_comments');
-        Schema::dropIfExists('thread_content');
+        Schema::dropIfExists('thread_contents');
         Schema::dropIfExists('thread_user');
         Schema::dropIfExists('threads');
     }

@@ -24,4 +24,6 @@ class ThreadComments extends Model
     {
         return $this->belongsTo(Thread::class, 'thread_id'); 
     }
+
+    
 }

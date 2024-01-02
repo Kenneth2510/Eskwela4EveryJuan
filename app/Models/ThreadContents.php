@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ThreadContent extends Model
+class ThreadContents extends Model
 {
     use HasFactory;
     protected $connection = 'mysql';
     protected $primaryKey = 'thread_content_id';
-    protected $table = 'thread_content';
+    protected $table = 'thread_contents';
 
     protected $fillable = [
        'thread_content_id',

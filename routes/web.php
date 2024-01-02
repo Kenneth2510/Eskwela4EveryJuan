@@ -251,6 +251,25 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/discussions', 'InstructorDiscussionController@discussions');
+    Route::get('/instructor/discussions/threads', 'InstructorDiscussionController@threadData');
     Route::get('/instructor/discussions/create', 'InstructorDiscussionController@createDiscussion');
-    
+
+    Route::post('/instructor/discussions/create/post', 'InstructorDiscussionController@postDiscussion');
+    Route::post('/instructor/discussions/create/post-photo', 'InstructorDiscussionController@postPhotoDiscussion');
+
+    Route::get('/instructor/discussions/thread/{thread}', 'InstructorDiscussionController@viewThread');
+    Route::get('/instructor/discussions/thread/{thread}/comments', 'InstructorDiscussionController@viewThreadComments');
+
+    Route::post('/instructor/discussions/thread/{thread}/comment', 'InstructorDiscussionController@postComment');
+    Route::post('/instructor/discussions/thread/{thread}/commentReply', 'InstructorDiscussionController@postCommentReply');
+    Route::post('/instructor/discussions/thread/{thread}/replyReply', 'InstructorDiscussionController@postReplyReply');
+
+    Route::post('/instructor/discussions/thread/{thread}/upvote', 'InstructorDiscussionController@upvoteThread');
+    Route::post('/instructor/discussions/thread/{thread}/downvote', 'InstructorDiscussionController@downvoteThread');
+    Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/upvote', 'InstructorDiscussionController@upvoteThreadComment');
+    Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/downvote', 'InstructorDiscussionController@downvoteThreadComment');
+    Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/upvote', 'InstructorDiscussionController@upvoteThreadCommentReply');
+    Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/downvote', 'InstructorDiscussionController@downvoteThreadCommentReply');
+    Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/upvote', 'InstructorDiscussionController@upvoteThreadReplyReply');
+    Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/downvote', 'InstructorDiscussionController@downvoteThreadReplyReply');
 });
