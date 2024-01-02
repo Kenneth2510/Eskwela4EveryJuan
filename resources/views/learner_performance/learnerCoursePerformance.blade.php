@@ -1,13 +1,7 @@
 @include('partials.header')
-<section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
-    <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-    <a href="#">
-        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-            Eskwela4EveryJuan
-        </span>
-    </a>
-</header>  
 
+<section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
+    @include('partials.instructorNav')
 @include('partials.learnerSidebar')
 
 <section class="w-full px-2 pt-[100px] mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12">

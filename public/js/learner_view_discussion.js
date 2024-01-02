@@ -207,11 +207,11 @@ $(document).ready(function() {
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                         `;
                                     }
 
                                     threadCommentsDisp += `
-                                    </div>
                                     <div data-thread-comment-id="${thread_comment_id}" data-thread-comment-reply-id="${thread_comment_reply_id}" class="mt-5 w-full replyReplyInputArea hidden" id="replyReplyInputArea_${thread_comment_reply_id}">
                                     <label for="replyReplyInput" class="text-lg">Your Reply:</label>
                                     <textarea name="" class="w-full h-[100px] p-3 rounded-lg replyReplyInput" id="replyReplyInput_${thread_comment_reply_id}" placeholder="reply"></textarea>

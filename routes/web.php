@@ -273,3 +273,30 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/upvote', 'InstructorDiscussionController@upvoteThreadReplyReply');
     Route::post('/instructor/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/downvote', 'InstructorDiscussionController@downvoteThreadReplyReply');
 });
+
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/learner/discussions', 'LearnerDiscussionController@discussions');
+    Route::get('/learner/discussions/threads', 'LearnerDiscussionController@threadData');
+
+    Route::get('/learner/discussions/create', 'LearnerDiscussionController@createDiscussion');
+    Route::post('/learner/discussions/create/post', 'LearnerDiscussionController@postDiscussion');
+    Route::post('/learner/discussions/create/post-photo', 'LearnerDiscussionController@postPhotoDiscussion');
+
+    Route::get('/learner/discussions/thread/{thread}', 'LearnerDiscussionController@viewThread');
+    Route::get('/learner/discussions/thread/{thread}/comments', 'LearnerDiscussionController@viewThreadComments');
+
+    Route::post('/learner/discussions/thread/{thread}/comment', 'LearnerDiscussionController@postComment');
+    Route::post('/learner/discussions/thread/{thread}/commentReply', 'LearnerDiscussionController@postCommentReply');
+    Route::post('/learner/discussions/thread/{thread}/replyReply', 'LearnerDiscussionController@postReplyReply');
+
+    Route::post('/learner/discussions/thread/{thread}/upvote', 'LearnerDiscussionController@upvoteThread');
+    Route::post('/learner/discussions/thread/{thread}/downvote', 'LearnerDiscussionController@downvoteThread');
+    Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/upvote', 'LearnerDiscussionController@upvoteThreadComment');
+    Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/downvote', 'LearnerDiscussionController@downvoteThreadComment');
+    Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/upvote', 'LearnerDiscussionController@upvoteThreadCommentReply');
+    Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/downvote', 'LearnerDiscussionController@downvoteThreadCommentReply');
+    Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/upvote', 'LearnerDiscussionController@upvoteThreadReplyReply');
+    Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/downvote', 'LearnerDiscussionController@downvoteThreadReplyReply');
+});
