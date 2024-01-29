@@ -61,7 +61,7 @@ $(document).ready(function(){
                 type: "GET",
                 url: url,
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
 
                     // var learnerCourseData = response[learnerCourseData]
                     var learnerCourseProgressData = response['learnerCourseProgressData']

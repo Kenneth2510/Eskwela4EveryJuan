@@ -7,6 +7,7 @@ use App\Models\Learner;
 use App\Models\Instructor;
 use App\Models\Course;
 use App\Models\Admin;
+use App\Models\session_log;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 class InstructorController extends Controller
@@ -103,6 +105,18 @@ class InstructorController extends Controller
         if ($securityCodeNumber === $instructorSecurityCode) {
             $request->session()->forget('instructor_authenticated');
 
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
+
+
+            $session_log_data = [
+                "session_user_id" => $instructor->instructor_id,
+                "session_user_type" => "INSTRUCTOR",
+                "session_in" => $timestampString,
+            ];
+
+            session_log::create($session_log_data);
+
             // $request->session()->regenerate();
             return redirect('/instructor/dashboard')->with('message', 'Authenticated Successfully');
         } 
@@ -111,6 +125,40 @@ class InstructorController extends Controller
 }
 
     public function logout(Request $request) {
+
+        $instructor = auth('instructor')->user();
+
+        $now = Carbon::now();
+        $timestampString = $now->toDateTimeString();
+    
+
+        $session_data = DB::table('session_logs')
+        ->where('session_user_id', $instructor->instructor_id)
+        ->where('session_user_type' , "INSTRUCTOR")
+        ->orderBy('session_log_id', 'DESC')
+        ->first();
+
+        if ($session_data) {
+
+            DB::table('session_logs')
+                ->where('session_log_id', $session_data->session_log_id)
+                ->where('session_user_id', $instructor->instructor_id)
+                ->where('session_user_type', "INSTRUCTOR")
+                ->update([
+                    "session_out" => $timestampString,
+                ]);
+
+            $sessionIn = Carbon::parse($session_data->session_in);
+            $sessionOut = $now;
+            $timeDifference = $sessionOut->diffInSeconds($sessionIn);
+        
+            DB::table('session_logs')
+                ->where('session_log_id', $session_data->session_log_id)
+                ->update([
+                    "time_difference" => $timeDifference,
+                ]);
+        }
+
         auth('instructor')->logout();
 
         $request->session()->invalidate();

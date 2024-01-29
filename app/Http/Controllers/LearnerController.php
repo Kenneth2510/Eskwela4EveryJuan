@@ -7,11 +7,13 @@ use App\Models\Business;
 use App\Models\Learner;
 use App\Models\Course;
 use App\Models\LearnerCourse;
+use App\Models\session_log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class LearnerController extends Controller
 {
@@ -102,6 +104,18 @@ class LearnerController extends Controller
         if ($securityCodeNumber === $learnerSecurityCode) {
             $request->session()->forget('learner_authenticated');
 
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
+
+
+            $session_log_data = [
+                "session_user_id" => $learner->learner_id,
+                "session_user_type" => "LEARNER",
+                "session_in" => $timestampString,
+            ];
+
+            session_log::create($session_log_data);
+
             // $request->session()->regenerate();
             return redirect('/learner/dashboard')->with('message', 'Authenticated Successfully');
         } 
@@ -111,6 +125,41 @@ class LearnerController extends Controller
 
 
     public function logout(Request $request) {
+
+        $learner = auth('learner')->user();
+
+        $now = Carbon::now();
+        $timestampString = $now->toDateTimeString();
+    
+
+        $session_data = DB::table('session_logs')
+        ->where('session_user_id', $learner->learner_id)
+        ->where('session_user_type' , "LEARNER")
+        ->orderBy('session_log_id', 'DESC')
+        ->first();
+
+        if ($session_data) {
+
+            DB::table('session_logs')
+                ->where('session_log_id', $session_data->session_log_id)
+                ->where('session_user_id', $learner->learner_id)
+                ->where('session_user_type', "LEARNER")
+                ->update([
+                    "session_out" => $timestampString,
+                ]);
+
+            $sessionIn = Carbon::parse($session_data->session_in);
+            $sessionOut = $now;
+            $timeDifference = $sessionOut->diffInSeconds($sessionIn);
+        
+            DB::table('session_logs')
+                ->where('session_log_id', $session_data->session_log_id)
+                ->update([
+                    "time_difference" => $timeDifference,
+                ]);
+        }
+
+
         auth('learner')->logout();
 
         $request->session()->invalidate();
