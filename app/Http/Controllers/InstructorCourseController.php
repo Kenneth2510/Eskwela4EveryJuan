@@ -64,7 +64,7 @@ class InstructorCourseController extends Controller
                     )
                 ->where('course.instructor_id', '=', $instructor['instructor_id'])
                 ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
-                ->orderBy("course.created_at", "ASC");
+                ->orderBy("course.created_at", "DESC");
 
                 $courses = $query->paginate(50);
                     // $courses = $query;
@@ -76,7 +76,42 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courses' , compact('instructor', 'courses'))->with('title', 'My Courses');
+        return view('instructor_course.courses' , compact('instructor', 'courses'))
+        ->with([
+            'title' => 'My Courses',
+            'scripts' => ['instructor_courses.js'],
+        ]);
+    }
+
+    public function searchCourse(Request $request) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+
+            $courseVal = $request->input('courseVal');
+
+            $searchCourse = DB::table('course')
+            ->select(
+                "course.course_id",
+                "course.course_name",
+                "course.course_code",
+                "instructor.instructor_lname",
+                "instructor.instructor_fname",
+                "instructor.profile_picture"
+            )
+            ->where('course.instructor_id', '=', $instructor['instructor_id'])
+            ->where('course.course_name', 'like', '%' . $courseVal . '%')
+            ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+            ->orderBy("course.created_at", "DESC")
+            ->get();
+
+            $data = [
+                'courses' => $searchCourse,
+            ];
+
+            return response()->json($data);
+        } else {
+            return redirect('/instructor');
+        }
     }
 
     
@@ -158,8 +193,107 @@ class InstructorCourseController extends Controller
 
             try {
                 $course = DB::table('course')
+                ->select(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_description',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                    'instructor.profile_picture',
+                )
+                ->join('instructor', 'course.instructor_id', '=',  'instructor.instructor_id')
                 ->where('course_id', $course->course_id)
                 ->first();
+
+                $syllabus = DB::table('syllabus')
+                ->select(
+                    'syllabus_id',
+                    'course_id',
+                    'topic_id',
+                    'topic_title',
+                    'category',
+                )
+                ->where('course_id', $course->course_id)
+                ->orderBy('topic_id')
+                ->get();
+
+                $totalLessonsDuration = DB::table('lessons')
+                ->select(
+                    DB::raw('SUM(duration) as total_duration')
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                $totalActivitiesDuration = DB::table('activities')
+                ->select(
+                    DB::raw('SUM(duration) as total_duration')
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                $totalQuizzesDuration = DB::table('quizzes')
+                ->select(
+                    DB::raw('SUM(duration) as total_duration')
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
+
+
+                $totalLessonsDuration = $totalLessonsDuration->total_duration ?? 0;
+                $totalActivitiesDuration = $totalActivitiesDuration->total_duration ?? 0;
+                $totalQuizzesDuration = $totalQuizzesDuration->total_duration ?? 0;
+
+
+                $totalCourseTime = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
+
+                $totalCourseTimeInSeconds = $totalCourseTime;
+
+                $hours = floor($totalCourseTimeInSeconds / 3600);
+                $minutes = floor(($totalCourseTimeInSeconds % 3600) / 60);
+                $seconds = $totalCourseTimeInSeconds % 60;
+
+
+                $formattedTotalCourseTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
+
+                $totalSyllabusCount = DB::table('syllabus')
+                ->where('course_id', $course->course_id)
+                ->count();
+
+                $totalLessonsCount = DB::table('lessons')
+                ->where('course_id', $course->course_id)
+                ->count();
+
+                $totalActivitiesCount = DB::table('activities')
+                ->where('course_id', $course->course_id)
+                ->count();
+
+                $totalQuizzesCount = DB::table('quizzes')
+                ->where('course_id', $course->course_id)
+                ->count();
+
+                $totalEnrolledCount = DB::table('learner_course')
+                ->where('course_id', $course->course_id)
+                ->count();
+
+                $courseEnrollees = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress.learner_course_progress_id',
+                    'learner_course_progress.learner_course_id',
+                    'learner_course_progress.learner_id',
+                    'learner_course_progress.course_id',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                    'learner.learner_email',
+                )
+                ->join('learner', 'learner.learner_id', '=', 'learner_course_progress.learner_id')
+                ->where('learner_course_progress.course_id', $course->course_id)
+                ->get();
 
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -172,10 +306,57 @@ class InstructorCourseController extends Controller
         return view('instructor_course.courseOverview', compact('course'))
         ->with([
             'title' => 'Course Overview',
-            'scripts' => ['instructor_course_manage.js'],
+            'scripts' => ['instructor_courseOverview.js'],
             'instructor' => $instructor,
+            'totalLessonsDuration' => $totalLessonsDuration,
+            'totalActivitiesDuration' => $totalActivitiesDuration,
+            'totalQuizzesDuration' => $totalQuizzesDuration,
+            'totalCourseTime' => $formattedTotalCourseTime,
+            'totalSyllabusCount' => $totalSyllabusCount,
+            'totalLessonsCount' => $totalLessonsCount,
+            'totalActivitiesCount' => $totalActivitiesCount,
+            'totalQuizzesCount' => $totalQuizzesCount,
+            'syllabus' => $syllabus,
+            'totalEnrolledCount' => $totalEnrolledCount,
+            'courseEnrollees' => $courseEnrollees,
         ]
         );
+    }
+
+    public function overViewNum(Course $course) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+
+            try{
+
+                $enrolleeProgress = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress_id',
+                    'learner_course_id',
+                    'learner_id',
+                    'course_id',
+                    'course_progress'
+                )
+                ->where('course_id', $course->course_id)
+                ->get();
+
+                $data = [
+                    'title' => 'Performance',    
+                    'enrolleeProgress' => $enrolleeProgress,          
+                ];
+                
+        
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/instructor');
+        }
     }
 
     public function manage_course(Request $request, Course $course) {

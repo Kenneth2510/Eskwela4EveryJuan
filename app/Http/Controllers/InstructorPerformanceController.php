@@ -83,6 +83,37 @@ class InstructorPerformanceController extends Controller
         ->with($data);
     }
 
+    public function sessionData() {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+
+            try{
+                $totalsPerDay = DB::table('session_logs')
+                ->select(DB::raw('DATE(session_in) as date'), DB::raw('SUM(time_difference) as total_seconds'))
+                ->where('session_user_id', $instructor->instructor_id)
+                ->where('session_user_type', 'INSTRUCTOR')
+                ->groupBy(DB::raw('DATE(session_in)'))
+                ->get();
+
+                $data = [
+                    'title' => 'Performance',
+                    'totalsPerDay' => $totalsPerDay,
+                ];
+                
+        
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/learner');
+        }
+    }
+
 
     public function totalCourseNum () {
         if (auth('instructor')->check()) {

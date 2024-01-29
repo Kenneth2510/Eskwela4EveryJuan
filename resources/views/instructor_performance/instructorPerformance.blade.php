@@ -130,6 +130,19 @@
                     </tbody>
                 </table>
             </div>
+
+
+            <hr class="border-t-2 border-gray-300 my-6">
+
+            <div class="flex justify-between">
+                <h1 class="mx-5 text-2xl font-semibold">Your session data</h1>
+            </div>
+
+            <div class="mt-5 flex justify-center" id="instructorSessionDataArea">
+                    <div class="mx-5 w-11/12 h-[350px] border-2 border-darthmouthgreen rounded-xl" id="instructorSessionGraphArea">
+                        <canvas id="instructorSessionGraph"></canvas>
+                    </div>
+            </div>
         </div>
     </section>
 @include('partials.instructorProfile')

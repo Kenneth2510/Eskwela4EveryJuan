@@ -63,7 +63,7 @@ $(document).ready(function() {
             const course_name = allInstructorCourses[i]['course_name'];
             const learnerCount = allInstructorCourses[i]['approvedLearnerCount'];
         
-            const percent = (learnerCount / totalLearnersCount) * 100
+            const percent = ((learnerCount / totalLearnersCount) * 100).toFixed(2);
 
             enrolledLearnersDisp += `
                 <tr class="my-5">
@@ -81,4 +81,6 @@ $(document).ready(function() {
         $('#enrollePercentArea').append(enrolledLearnersDisp);
         
     }
+
+    
 })

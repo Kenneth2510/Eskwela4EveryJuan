@@ -274,7 +274,7 @@
         $('#sidebar_half_btn').on('click', function() {
             $('#sidebar_full').addClass('hidden');
             $('#sidebar_half').removeClass('hidden');
-            $('#sidebar_full, #sidebar_half').css('width', '8%');
+            $('#sidebar_full, #sidebar_half').css('width', '5%');
         });
 
         $('#sidebar_full_btn').on('click', function() {

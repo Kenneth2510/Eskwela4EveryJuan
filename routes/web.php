@@ -123,9 +123,11 @@ Route::controller(AdminController::class)->group(function() {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/courses', 'InstructorCourseController@courses');
+    Route::get('/instructor/courses/searchCourse', 'InstructorCourseController@searchCourse');
     Route::get('/instructor/courses/create', 'InstructorCourseController@courseCreate');
     Route::post('/instructor/courses/create', 'InstructorCourseController@courseCreate_process');
     Route::get('/instructor/course/{course}', 'InstructorCourseController@overview');
+    Route::get('/instructor/course/{course}/overviewNum', 'InstructorCourseController@overviewNum');
     Route::get('/instructor/course/manage/{course}', 'InstructorCourseController@manage_course');
     Route::post('/instructor/course/manage/{course}', 'InstructorCourseController@update_course');
     Route::post('/instructor/course/delete/{course}', 'InstructorCourseController@delete_course');
@@ -193,6 +195,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/courses', 'LearnerCourseController@courses');
+    Route::get('/learner/courses/searchCourse', 'LearnerCourseController@searchCourse');
     Route::get('/learner/course/{course}', 'LearnerCourseController@overview');
     Route::post('/learner/course/enroll/{course}', 'LearnerCourseController@enroll_course');
     Route::post('/learner/course/unEnroll/{learnerCourse}', 'LearnerCourseController@unEnroll_course');
@@ -223,6 +226,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/performances', 'InstructorPerformanceController@performances');
+    Route::get('/instructor/performances/sessionData', 'InstructorPerformanceController@sessionData');
     Route::get('/instructor/performances/totalCourseNum', 'InstructorPerformanceController@totalCourseNum');
     Route::get('/instructor/performances/courseChartData', 'InstructorPerformanceController@courseChartData');
     Route::get('/instructor/performances/course/{course}', 'InstructorPerformanceController@coursePerformance');
