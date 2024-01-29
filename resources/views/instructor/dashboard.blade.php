@@ -1,6 +1,6 @@
 @include('partials.header')
     
-    <section class="flex flex-row w-full h-auto bg-mainwhitebg">
+    <section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
 
 
         @include('partials.instructorNav')
@@ -10,136 +10,104 @@
         {{-- SIDEBAR END --}}
 
         {{-- MAIN START --}}
-        <section class="relative w-full h-screen px-4 overflow-auto md:w-3/4 lg:w-9/12" id="insDashCont">
-            <div class="top-0 right-0 md:absolute z-1 pt-[110px] md:pt-[60px] ">
-                <x-dashboard.header
-                title="Dashboard"
-                name="search"
-                id="search"
-                placeholder="search..." />
-            
-                {{-- OVERVIEW START --}}
-                <div class="px-4 py-8 mx-4 mt-4 mb-4 border-2 rounded-lg shadow-lg">
-                    <h1 class="text-2xl font-semibold md:text-3xl">Overview</h1>
-                    
-                    <div class="flex flex-col mt-5 text-sm md:flex-wrap md:justify-evenly md:text-base lg:flex-row">
-                        <div class="h-56 p-4 my-5 font-medium bg-teal-400 shadow-lg rounded-xl md:h-auto">
-                            <h2 class="hidden my-3 text-2xl md:block">Number of Courses</h2>
-                            <div class="flex flex-col items-center">
-                                <svg class="w-20 h-20 bg-teal-600 rounded-3xl" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M41.5312 21.9062V11.75L22 1.59375L2.46875 11.75L22 21.9062L32.1562 17.2188V28.1562C32.1562 31.2812 27.4688 34.4062 22 34.4062C16.5312 34.4062 11.8438 31.2812 11.8438 28.1562V17.2188" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                <div class="flex flex-col items-center py-2">
-                                    <h1 class="text-5xl ">{{ $courseApproved }}</h1>
-                                    <p>Active Courses</p>
-                                </div>
-                            </div>
+        <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
+            <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
 
-                            <div class="py-4">  
-                                <h3>
-                                    Created Courses: <span>{{ $coursesCount }}</span>
-                                </h3>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col my-5 ">
-                            <div class="flex flex-col items-center my-1 shadow-lg bg-violet-400 rounded-xl md:flex-row">
-                                <svg class="w-16 h-16 p-2 m-4 rounded-lg bg-violet-600" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.875 4.30249C3.53437 3.60874 5.91375 2.86061 8.2275 2.62811C10.7213 2.37686 12.8363 2.74624 14.0625 4.03812V22.3119C12.3094 21.3181 10.0875 21.1812 8.03813 21.3875C5.82563 21.6125 3.59437 22.2519 1.875 22.9081V4.30249ZM15.9375 4.03812C17.1637 2.74624 19.2788 2.37686 21.7725 2.62811C24.0863 2.86061 26.4656 3.60874 28.125 4.30249V22.9081C26.4037 22.2519 24.1744 21.6106 21.9619 21.3894C19.9106 21.1812 17.6906 21.3162 15.9375 22.3119V4.03812ZM15 2.34311C13.1531 0.75499 10.4756 0.51874 8.03813 0.76249C5.19938 1.04937 2.33438 2.02249 0.549375 2.83437C0.385592 2.90885 0.246704 3.0289 0.149289 3.18018C0.051875 3.33145 4.98214e-05 3.50756 0 3.68749L0 24.3125C4.34287e-05 24.4693 0.0394446 24.6237 0.114595 24.7614C0.189744 24.8991 0.298241 25.0157 0.430145 25.1006C0.56205 25.1855 0.713146 25.2359 0.869594 25.2473C1.02604 25.2586 1.18284 25.2306 1.32563 25.1656C2.97938 24.4156 5.64375 23.5137 8.22563 23.2531C10.8675 22.9869 13.0819 23.4162 14.2688 24.8975C14.3566 25.007 14.4679 25.0954 14.5945 25.1561C14.721 25.2168 14.8596 25.2483 15 25.2483C15.1404 25.2483 15.279 25.2168 15.4055 25.1561C15.5321 25.0954 15.6434 25.007 15.7313 24.8975C16.9181 23.4162 19.1325 22.9869 21.7725 23.2531C24.3563 23.5137 27.0225 24.4156 28.6744 25.1656C28.8172 25.2306 28.974 25.2586 29.1304 25.2473C29.2869 25.2359 29.438 25.1855 29.5699 25.1006C29.7018 25.0157 29.8103 24.8991 29.8854 24.7614C29.9606 24.6237 30 24.4693 30 24.3125V3.68749C30 3.50756 29.9481 3.33145 29.8507 3.18018C29.7533 3.0289 29.6144 2.90885 29.4506 2.83437C27.6656 2.02249 24.8006 1.04937 21.9619 0.76249C19.5244 0.516865 16.8469 0.75499 15 2.34311Z" fill="#F8F8F8"/>
-                                </svg>
-                                <div class="flex flex-col items-center md:items-start">
-                                    <h1 class="text-2xl font-bold">35</h1>
-                                    <p>total lessons added</p>
-                                </div>
-                            </div>
-                            <div class="flex flex-col items-center my-1 shadow-lg bg-violet-400 rounded-xl md:flex-row ">
-                                <svg class="w-16 h-16 p-2 m-4 rounded-lg bg-violet-600" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.875 4.30249C3.53437 3.60874 5.91375 2.86061 8.2275 2.62811C10.7213 2.37686 12.8363 2.74624 14.0625 4.03812V22.3119C12.3094 21.3181 10.0875 21.1812 8.03813 21.3875C5.82563 21.6125 3.59437 22.2519 1.875 22.9081V4.30249ZM15.9375 4.03812C17.1637 2.74624 19.2788 2.37686 21.7725 2.62811C24.0863 2.86061 26.4656 3.60874 28.125 4.30249V22.9081C26.4037 22.2519 24.1744 21.6106 21.9619 21.3894C19.9106 21.1812 17.6906 21.3162 15.9375 22.3119V4.03812ZM15 2.34311C13.1531 0.75499 10.4756 0.51874 8.03813 0.76249C5.19938 1.04937 2.33438 2.02249 0.549375 2.83437C0.385592 2.90885 0.246704 3.0289 0.149289 3.18018C0.051875 3.33145 4.98214e-05 3.50756 0 3.68749L0 24.3125C4.34287e-05 24.4693 0.0394446 24.6237 0.114595 24.7614C0.189744 24.8991 0.298241 25.0157 0.430145 25.1006C0.56205 25.1855 0.713146 25.2359 0.869594 25.2473C1.02604 25.2586 1.18284 25.2306 1.32563 25.1656C2.97938 24.4156 5.64375 23.5137 8.22563 23.2531C10.8675 22.9869 13.0819 23.4162 14.2688 24.8975C14.3566 25.007 14.4679 25.0954 14.5945 25.1561C14.721 25.2168 14.8596 25.2483 15 25.2483C15.1404 25.2483 15.279 25.2168 15.4055 25.1561C15.5321 25.0954 15.6434 25.007 15.7313 24.8975C16.9181 23.4162 19.1325 22.9869 21.7725 23.2531C24.3563 23.5137 27.0225 24.4156 28.6744 25.1656C28.8172 25.2306 28.974 25.2586 29.1304 25.2473C29.2869 25.2359 29.438 25.1855 29.5699 25.1006C29.7018 25.0157 29.8103 24.8991 29.8854 24.7614C29.9606 24.6237 30 24.4693 30 24.3125V3.68749C30 3.50756 29.9481 3.33145 29.8507 3.18018C29.7533 3.0289 29.6144 2.90885 29.4506 2.83437C27.6656 2.02249 24.8006 1.04937 21.9619 0.76249C19.5244 0.516865 16.8469 0.75499 15 2.34311Z" fill="#F8F8F8"/>
-                                </svg>
-                                <div class="flex flex-col items-center md:items-start">
-                                    <h1 class="text-2xl font-bold">13</h1>
-                                    <p>total assignments added</p>
-                                </div>
-                            </div>
-                            <div class="flex flex-col items-center my-1 shadow-lg bg-violet-400 rounded-xl md:flex-row ">
-                                <svg class="w-16 h-16 p-2 m-4 rounded-lg bg-violet-600" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.875 4.30249C3.53437 3.60874 5.91375 2.86061 8.2275 2.62811C10.7213 2.37686 12.8363 2.74624 14.0625 4.03812V22.3119C12.3094 21.3181 10.0875 21.1812 8.03813 21.3875C5.82563 21.6125 3.59437 22.2519 1.875 22.9081V4.30249ZM15.9375 4.03812C17.1637 2.74624 19.2788 2.37686 21.7725 2.62811C24.0863 2.86061 26.4656 3.60874 28.125 4.30249V22.9081C26.4037 22.2519 24.1744 21.6106 21.9619 21.3894C19.9106 21.1812 17.6906 21.3162 15.9375 22.3119V4.03812ZM15 2.34311C13.1531 0.75499 10.4756 0.51874 8.03813 0.76249C5.19938 1.04937 2.33438 2.02249 0.549375 2.83437C0.385592 2.90885 0.246704 3.0289 0.149289 3.18018C0.051875 3.33145 4.98214e-05 3.50756 0 3.68749L0 24.3125C4.34287e-05 24.4693 0.0394446 24.6237 0.114595 24.7614C0.189744 24.8991 0.298241 25.0157 0.430145 25.1006C0.56205 25.1855 0.713146 25.2359 0.869594 25.2473C1.02604 25.2586 1.18284 25.2306 1.32563 25.1656C2.97938 24.4156 5.64375 23.5137 8.22563 23.2531C10.8675 22.9869 13.0819 23.4162 14.2688 24.8975C14.3566 25.007 14.4679 25.0954 14.5945 25.1561C14.721 25.2168 14.8596 25.2483 15 25.2483C15.1404 25.2483 15.279 25.2168 15.4055 25.1561C15.5321 25.0954 15.6434 25.007 15.7313 24.8975C16.9181 23.4162 19.1325 22.9869 21.7725 23.2531C24.3563 23.5137 27.0225 24.4156 28.6744 25.1656C28.8172 25.2306 28.974 25.2586 29.1304 25.2473C29.2869 25.2359 29.438 25.1855 29.5699 25.1006C29.7018 25.0157 29.8103 24.8991 29.8854 24.7614C29.9606 24.6237 30 24.4693 30 24.3125V3.68749C30 3.50756 29.9481 3.33145 29.8507 3.18018C29.7533 3.0289 29.6144 2.90885 29.4506 2.83437C27.6656 2.02249 24.8006 1.04937 21.9619 0.76249C19.5244 0.516865 16.8469 0.75499 15 2.34311Z" fill="#F8F8F8"/>
-                                </svg>
-                                <div class="flex flex-col items-center md:items-start">
-                                    <h1 class="text-2xl font-bold">11</h1>
-                                    <p>total quizzes added</p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="" id="welcome">
+                    <h1 class="text-4xl font-semibold">Welcome back, {{$instructor->instructor_fname}}!</h1>
+                </div>
 
-                        <div class="h-56 p-4 my-5 font-medium shadow-lg bg-sky-400 rounded-xl md:h-auto">
-                            <h2 class="hidden my-2 text-2xl md:block">Number of Learners</h2>
-                            <div class="flex flex-col items-center justify-evenly">
-                                <svg class="w-20 h-20 px-2 rounded-lg bg-sky-600"  viewBox="0 0 209 201" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M202.53 32.41L106.53 0.409983C104.888 -0.137475 103.112 -0.137475 101.47 0.409983L5.47 32.41C3.87705 32.941 2.49157 33.9598 1.50983 35.322C0.528097 36.6842 -0.000124423 38.3209 2.19836e-08 40V120C2.19836e-08 122.122 0.842854 124.157 2.34315 125.657C3.84344 127.157 5.87827 128 8 128C10.1217 128 12.1566 127.157 13.6569 125.657C15.1571 124.157 16 122.122 16 120V51.1L49.59 62.29C40.6656 76.708 37.8277 94.0784 41.6994 110.587C45.5711 127.096 55.8359 141.393 70.24 150.34C52.24 157.4 36.68 170.17 25.3 187.63C24.7082 188.51 24.2971 189.498 24.0906 190.538C23.8842 191.578 23.8865 192.649 24.0974 193.688C24.3084 194.727 24.7237 195.713 25.3193 196.59C25.915 197.467 26.679 198.217 27.567 198.797C28.455 199.376 29.4493 199.773 30.4921 199.964C31.5348 200.156 32.6053 200.138 33.6412 199.912C34.677 199.687 35.6577 199.257 36.5262 198.649C37.3946 198.041 38.1336 197.266 38.7 196.37C53.77 173.25 77.57 160 104 160C130.43 160 154.23 173.25 169.3 196.37C170.473 198.114 172.286 199.326 174.346 199.744C176.406 200.162 178.547 199.753 180.308 198.605C182.068 197.457 183.306 195.661 183.754 193.608C184.202 191.554 183.823 189.407 182.7 187.63C171.32 170.17 155.7 157.4 137.76 150.34C152.15 141.393 162.405 127.105 166.276 110.609C170.148 94.1122 167.319 76.7538 158.41 62.34L202.53 47.64C204.123 47.1093 205.509 46.0906 206.491 44.7284C207.473 43.3661 208.002 41.7293 208.002 40.05C208.002 38.3706 207.473 36.7339 206.491 35.3716C205.509 34.0094 204.123 32.9907 202.53 32.46V32.41ZM152 96C152.002 103.589 150.205 111.069 146.756 117.829C143.307 124.589 138.305 130.434 132.159 134.886C126.014 139.338 118.9 142.269 111.403 143.439C103.905 144.61 96.2364 143.986 89.0265 141.618C81.8166 139.251 75.2707 135.208 69.9259 129.821C64.5811 124.434 60.5897 117.857 58.2791 110.629C55.9685 103.4 55.4047 95.7273 56.6338 88.2389C57.863 80.7506 60.85 73.6604 65.35 67.55L101.47 79.55C103.112 80.0974 104.888 80.0974 106.53 79.55L142.65 67.55C148.728 75.7899 152.005 85.761 152 96ZM104 63.57L33.3 40L104 16.43L174.7 40L104 63.57Z" fill="white"/>
-                                </svg>
-                                <div class="flex flex-col items-center">
-                                    <h1 class="text-5xl">76</h1>
-                                    <p>Learners</p>
-                                    {{-- <p>Learners</p> --}}
-                                </div>
-                            </div>
+                <hr class="border-t-2 border-gray-300 my-6">
 
-                            <div class="py-4">
-                                <h3>Enrolled: <span>3</span></h3>
-                                <h3>Completers: <span>5</span></h3>
-                            </div>
-                        </div>
-                        
+                <h1 class="mx-5 text-2xl font-semibold">Overview</h1>
+
+                <div class="mx-10 mt-5 flex justify-between" id="overview_area">
+                    <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
+                        <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalCoursesText">#</h1>
+                        <p class="text-2xl mt-5  text-darthmouthgreen">Active Courses Managed</p>
+                    </div>
+                    <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalLearnersArea">
+                        <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalLearnersCountText">#</h1>
+                        <p class="text-2xl mt-5  text-darthmouthgreen">Learners Enrolled</p>
+                    </div>
+                    <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
+                        <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalSyllabusCountText">#</h1>
+                        <p class="text-2xl mt-5  text-darthmouthgreen">Topics Created</p>
                     </div>
                 </div>
 
-                {{-- OVERVIEW END --}}
 
-                {{-- MY COURSES START --}}
-                <div class="px-4 py-8 mx-4 mb-4 border-2 rounded-lg shadow-lg">
-                    <div class="flex flex-row items-center justify-between mb-8 text-darthmouthgreen">
-                        <h1 class="text-3xl font-semibold">My Courses</h1>
-                        <a class="font-medium underline underline-offset-2" href="">view all</a>
-                    </div>
 
-                    <table class="w-full text-base table-fixed">
-                        <thead class="text-xs">
-                            <th>Course Name</th>
-                            <th>Status</th>
-                            <th>Course Code</th>
-                            <th>Total Enrolled</th>
-                            <th>Total Completees</th>
-                        </thead>
+                <hr class="border-t-2 border-gray-300 my-6">
 
-                        <tbody class="text-center">
-                            @foreach ($courses as $course)
-                            @php
-                                $firstColor = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+                <div class="flex justify-between">
+                    <h1 class="mx-5 text-2xl font-semibold">Manage your courses</h1>
+                    <a href="{{ url('/instructor/courses') }}" class="text-lg mx-10">view all</a>
+                </div>
+              
 
-                                $firstColorRGB = sscanf($firstColor, "#%02x%02x%02x");
-                                $darkenedColor = sprintf("#%02x%02x%02x", $firstColorRGB[0] * 0.8, $firstColorRGB[1] * 0.8, $firstColorRGB[2] * 0.8);
-                            @endphp
-                                <tr class="">
-                                    <td class="flex flex-row items-center mb-4">
-                                        <div style="background-color: {{ $firstColor }}" class="hidden w-10 h-10 mx-2 bg-red-500 rounded-lg lg:block"></div>
-                                        <div>
-                                            <h1 class="">{{ $course->course_name }}</h1>
-                                            <h3 class="hidden text-xs opacity-50 lg:block">10 lessons</h3>
-                                        </div>
-                                    </td>
-                                    <td class="">
-                                        {{-- <svg class="w-4 h-4 mx-auto" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 14C28 21.732 21.732 28 14 28C6.268 28 0 21.732 0 14C0 6.268 6.268 0 14 0C21.732 0 28 6.268 28 14Z" fill="#00D26A"/>
-                                        </svg> --}}
-                                        <p class="mb-2">{{ $course->course_status }}</p>
-                                    </td>
-                                    <td>{{ $course->course_code}}</td>
-                                    <td>43</td>
-                                    <td>35/43</td>
-                                </tr>
-                            @endforeach
+                <div class="h-80 relative overflow-hidden px-20" id="courseCarouselArea">
+                    <button id="course_carousel_left_btn" class="mx-5 h-full absolute flex justify-center items-center left-0">
+                        <i class="fa-solid fa-angle-left text-2xl"></i>
+                    </button>
+                    <button id="course_carousel_right_btn" class="mx-5 h-full absolute flex justify-center items-center right-0">
+                        <i class="fa-solid fa-angle-right text-2xl"></i>
+                    </button>
+                    <div class="h-80 flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
+                        @foreach ($courses as $course)
+
+                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
+                            <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
+                                <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="">
+                            </div>
                             
-                        </tbody>
-                    </table>
+                            <div class="px-4">
+                                <h1 class="mb-2 overflow-hidden text-lg font-bold text-white whitespace-no-wrap">{{ $course->course_name }}</h1>
+        
+                                <div class="text-sm text-gray-100 ">
+                                    <p>{{ $course->course_code }}</p>
+                                    <h3>{{ $course->instructor_fname }} {{ $course->instructor_lname }}</h3>
+                                </div>
+                            </div>
+                            
+                            <a href="{{ url("/instructor/course/$course->course_id") }}" style="background-color: #00693e; right:0; bottom: 0;" class="absolute float-right mx-4 mb-3 rounded">
+                                <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+                            </a>
+                        </div>
+
+                        @endforeach
+                    </div>
                 </div>
+
+
+            
+            <hr class="border-t-2 border-gray-300 my-6">
+
+            <div class="flex justify-between">
+                <h1 class="mx-5 text-2xl font-semibold">Enrolled Learners</h1>
+                <a href="{{ url('/instructor/courses') }}" class="text-lg mx-10">view all</a>
             </div>
-            
-            
-            {{-- MY COURSES END --}}
+
+            <div class="mx-5 w-11/12" id="enrolledLearnersArea">
+                <table class="w-full mt-5">
+                    <thead class="text-left">
+                        <th class="text-lg">Course Name</th>
+                        <th class="text-lg">Number of Enrollees</th>
+                    </thead>
+                    <tbody id="enrollePercentArea">
+                        {{-- <tr>
+                            <td>Course 1</td>
+                            <td>
+                                <div class="h-7 rounded-xl" style="background: #9DB0A3" id="skill_bar">
+                                    <div class="h-7 relative bg-darthmouthgreen rounded-xl text-white text-center py-1" id="skill_per" per="70%" style="max-width: 70%">70%</div>
+                                </div>
+                            </td>
+                        </tr> --}}
+                    </tbody>
+                </table>
+            </div>
+
+            </div>
         </section>
         {{-- MAIN END --}}  
         

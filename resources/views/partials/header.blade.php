@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css')}}">
     <link rel="stylesheet" href="{{ asset('css/discussion.css')}}">
 
+    
+
 
     <title>{{ $title !== "" ? $title : 'Eskwela4EveryJuan'}}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -61,6 +63,23 @@
         ::-webkit-scrollbar-thumb:hover {
           background: #004026; /* Darker shade for hover */
         }
+
+
+                /* Set initial styles for sidebar */
+        #sidebar_full {
+            width: 23%;
+        }
+
+        #sidebar_half {
+            width: 8%;
+        }
+
+        /* Add transition for smooth width change */
+        /* #sidebar_full, #sidebar_half {
+            transition: width 2s ease;
+        } */
+
+
       </style>
 </head>
 <body class="min-h-full bg-mainwhitebg font-poppins">

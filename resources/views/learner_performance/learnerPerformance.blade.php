@@ -1,12 +1,6 @@
 @include('partials.header')
 <section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
-    <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-    <a href="#">
-        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-            Eskwela4EveryJuan
-        </span>
-    </a>
-</header>  
+
 
 @include('partials.learnerSidebar')
 
@@ -124,6 +118,18 @@
             
                 </tbody>
             </table>
+        </div>
+
+        <hr class="border-t-2 border-gray-300 my-6">
+
+        <div class="flex justify-between">
+            <h1 class="mx-5 text-2xl font-semibold">Your session data</h1>
+        </div>
+
+        <div class="mt-5 flex justify-center" id="learnerSessionDataArea">
+            <div class="mx-5 w-11/12 h-[350px] border-2 border-darthmouthgreen rounded-xl" id="learnerSessionGraphArea">
+                <canvas id="learnerSessionGraph"></canvas>
+            </div>
         </div>
 
 

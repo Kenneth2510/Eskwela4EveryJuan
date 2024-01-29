@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 
 class LearnerController extends Controller
@@ -307,6 +308,7 @@ class LearnerController extends Controller
                         'course.instructor_id',
                         'instructor.instructor_fname',
                         'instructor.instructor_lname',
+                        'instructor.profile_picture'
                     )
                     ->join('course', 'learner_course.course_id', '=', 'course.course_id')
                     ->join('instructor', 'course.instructor_id', '=', 'instructor.instructor_id')
@@ -320,8 +322,192 @@ class LearnerController extends Controller
                 dd($e->getMessage());
             }
     
-            return view('learner.dashboard', compact('learner', 'courses', 'enrolledCourses'))->with('title', 'Learner Dashboard');
+            return view('learner.dashboard', compact('learner', 'courses', 'enrolledCourses'))
+            ->with([
+                'title' => 'Learner Dashboard',
+                'scripts' => ['learner_dashboard.js'],
+            ]);
     
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function overviewNum() {
+        if (auth('learner')->check()) {
+            $learner = session('learner');
+
+            try{
+                $learnerCourseData = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress.learner_course_progress_id',
+                    'learner_course_progress.learner_course_id',
+                    'learner_course_progress.course_id',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+
+                    'course.course_name',
+                    'course.course_code',
+                    'course.instructor_id',
+
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                )
+                ->join('course', 'learner_course_progress.course_id', '=', 'course.course_id')
+                ->join('instructor', 'course.instructor_id', '=', 'instructor.instructor_id')
+                ->where('learner_course_progress.learner_id', $learner->learner_id)
+                ->get();
+
+                
+
+                $totalLearnerCourseCount = DB::table('learner_course_progress')
+                ->where('learner_course_progress.learner_id', $learner->learner_id)
+                ->count();
+
+                $totalLearnerApprovedCourseCount = DB::table('learner_course')
+                ->where('learner_course.learner_id', $learner->learner_id)
+                ->where('learner_course.status', 'Approved')
+                ->count();
+
+                $totalLearnerPendingCourseCount = DB::table('learner_course')
+                ->where('learner_course.learner_id', $learner->learner_id)
+                ->where('learner_course.status', 'Pending')
+                ->count();
+
+                $totalLearnerRejectedCourseCount = DB::table('learner_course')
+                ->where('learner_course.learner_id', $learner->learner_id)
+                ->where('learner_course.status', 'Rejected')
+                ->count();
+
+                $totalLearnerCourseCompleted = DB::table('learner_course_progress')
+                ->where('learner_course_progress.learner_id', $learner->learner_id)
+                ->where('learner_course_progress.course_progress', "COMPLETED")
+                ->count();
+
+                $totalDaysActive = DB::table('session_logs')
+                ->select(DB::raw('DATE(session_in) as date'))
+                ->where('session_user_id', $learner->learner_id)
+                ->where('session_user_type', 'LEARNER')
+                ->groupBy(DB::raw('DATE(session_in)'))
+                ->get()
+                ->count();
+
+
+                $totalCoursesLessonCount = 0;
+                $totalCoursesActivityCount = 0;
+                $totalCoursesQuizCount = 0;
+
+                $totalCoursesLessonCompletedCount = 0;
+                $totalCoursesActivityCompletedCount = 0;
+                $totalCoursesQuizCompletedCount = 0;
+
+                foreach ($learnerCourseData as $course) {
+
+                    $totalCoursesLessonCount += DB::table('learner_syllabus_progress')
+                    ->where('learner_id', $learner->learner_id)
+                    ->where('learner_course_id', $course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'LESSON')
+                    ->count();
+
+                    $totalCoursesActivityCount += DB::table('learner_syllabus_progress')
+                    ->where('learner_id', $learner->learner_id)
+                    ->where('learner_course_id', $course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'ACTIVITY')
+                    ->count();
+
+                    $totalCoursesQuizCount += DB::table('learner_syllabus_progress')
+                    ->where('learner_id', $learner->learner_id)
+                    ->where('learner_course_id', $course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'QUIZ')
+                    ->count();
+
+
+                    $totalCoursesLessonCompletedCount += DB::table('learner_syllabus_progress')
+                    ->where('learner_id', $learner->learner_id)
+                    ->where('learner_course_id', $course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'LESSON')
+                    ->where('status', 'COMPLETED')
+                    ->count();
+
+                    $totalCoursesActivityCompletedCount += DB::table('learner_syllabus_progress')
+                    ->where('learner_id', $learner->learner_id)
+                    ->where('learner_course_id', $course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'ACTIVITY')
+                    ->where('status', 'COMPLETED')
+                    ->count();
+
+                    $totalCoursesQuizCompletedCount += DB::table('learner_syllabus_progress')
+                    ->where('learner_id', $learner->learner_id)
+                    ->where('learner_course_id', $course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'QUIZ')
+                    ->where('status', 'COMPLETED')
+                    ->count();
+                }
+
+                $data = [
+                    'title' => 'Performance',
+                    'learnerCourseData' => $learnerCourseData,
+                    'totalLearnerCourseCount' => $totalLearnerCourseCount,
+                    'totalLearnerApprovedCourseCount' => $totalLearnerApprovedCourseCount,
+                    'totalLearnerPendingCourseCount' => $totalLearnerPendingCourseCount,
+                    'totalLearnerRejectedCourseCount' => $totalLearnerRejectedCourseCount,
+                    'totalCoursesLessonCount' => $totalCoursesLessonCount,
+                    'totalCoursesActivityCount' => $totalCoursesActivityCount,
+                    'totalCoursesQuizCount' => $totalCoursesQuizCount,
+                    'totalCoursesLessonCompletedCount' => $totalCoursesLessonCompletedCount,
+                    'totalCoursesActivityCompletedCount' => $totalCoursesActivityCompletedCount,
+                    'totalCoursesQuizCompletedCount' => $totalCoursesQuizCompletedCount,
+                    'totalDaysActive' => $totalDaysActive,
+                    'totalLearnerCourseCompleted' => $totalLearnerCourseCompleted,
+                ];
+                
+        
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function sessionData() {
+        if (auth('learner')->check()) {
+            $learner = session('learner');
+
+            try{
+                $totalsPerDay = DB::table('session_logs')
+                ->select(DB::raw('DATE(session_in) as date'), DB::raw('SUM(time_difference) as total_seconds'))
+                ->where('session_user_id', $learner->learner_id)
+                ->where('session_user_type', 'LEARNER')
+                ->groupBy(DB::raw('DATE(session_in)'))
+                ->get();
+
+                $data = [
+                    'title' => 'Performance',
+                    'totalsPerDay' => $totalsPerDay,
+                ];
+                
+        
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
         } else {
             return redirect('/learner');
         }

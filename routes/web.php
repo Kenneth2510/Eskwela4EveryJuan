@@ -37,6 +37,8 @@ Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner/register', 'register');
     Route::post('/learner/register', 'register_process');
     Route::get('/learner/dashboard', 'dashboard');
+    Route::get('/learner/dashboard/overviewNum', 'overviewNum');
+    Route::get('/learner/dashboard/sessionData', 'sessionData');
     Route::get('/learner/settings', 'settings');
 
     Route::get('/learner/register1', 'register1');
@@ -54,6 +56,7 @@ Route::controller(InstructorController::class)->group(function() {
     Route::post('/instructor/logout', 'logout');
     Route::get('/instructor/register', 'register');
     Route::get('/instructor/dashboard', 'dashboard');
+    Route::get('/instructor/dashboard/overviewNum', 'overviewNum');
     Route::get('/instructor/register', 'register1');
     Route::post('/instructor/register', 'register_process');
     Route::get('/instructor/settings', 'settings');
@@ -241,6 +244,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/performances', 'LearnerPerformanceController@performances');
+    Route::get('/learner/performances/sessionData', 'LearnerPerformanceController@sessionData');
     Route::get('/learner/performances/totalEnrolledCourses', 'LearnerPerformanceController@enrolledCoursesPerformances');
     Route::get('/learner/performances/enrolledCoursesData', 'LearnerPerformanceController@enrolledCoursesPerformancesData');
     Route::get('/learner/performances/course/{course}', 'LearnerPerformanceController@coursePerformance');

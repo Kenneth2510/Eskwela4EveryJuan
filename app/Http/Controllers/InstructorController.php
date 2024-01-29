@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 
 class InstructorController extends Controller
@@ -275,24 +276,176 @@ class InstructorController extends Controller
             ->where('instructor_id', $instructor->instructor_id)
             ->count();
 
-            $courses = Course::where('instructor_id', $instructor->instructor_id)->limit(3)->get();
+            // $courses = Course::where('instructor_id', $instructor->instructor_id)->limit(3)->get();
 
+            $courses = DB::table('course')
+            ->select(
+                'course.course_id',
+                'course.course_name',
+                'course.course_code',
+                'course.course_status',
+                'course.course_difficulty',
+                'course.instructor_id',
+
+                'instructor.instructor_fname',
+                'instructor.instructor_lname',
+            )
+            ->join('instructor', 'course.instructor_id', '=', 'instructor.instructor_id')
+            ->where('course.instructor_id', $instructor->instructor_id)
+            ->get();
+
+            // dd($courses);
 
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
        
 
-        return view('instructor.dashboard', compact('instructor', 'courses', 'coursesCount', 'courseApproved'))->with('title', 'Instructor Dashboard');
+        return view('instructor.dashboard', compact('instructor'))
+        ->with([
+            'title' => 'Instructor Dashboard',
+            'scripts' => ['instructor_dashboard.js'],
+            'courses' => $courses,
+            'coursesCount' => $coursesCount,
+            'courseApproved'=>$courseApproved,
+        ]);
     }
 
-    // public function courses(){
-    //     return view('instructor.courses')->with('title', 'Instructor Courses');
-    // }
+    public function overviewNum() {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
 
-    // public function courseCreate(){
-    //     return view('instructor.coursesCreate')->with('title', 'Create Course');
-    // }
+            try {
+
+                $totalCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->count();
+
+                $totalPendingCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Pending')
+                ->count();
+
+                $totalApprovedCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Approved')
+                ->count();
+
+                $totalRejectedCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Rejected')
+                ->count();
+
+                $allInstructorCourses = DB::table('course')
+                ->select(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_description',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.created_at',
+                    'course.updated_at',
+                    DB::raw('COUNT(learner_course.learner_course_id) as learnerCount'),
+                    DB::raw('COUNT(CASE WHEN learner_course.status = "Approved" THEN learner_course.learner_course_id END) as approvedLearnerCount')
+                )
+                ->join('learner_course', 'learner_course.course_id', '=', 'course.course_id')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->groupBy(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_description',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.created_at',
+                    'course.updated_at'
+                )
+                ->get();
+
+
+
+
+                $totalLearnersCount = 0;
+                $totalPendingLearnersCount = 0;
+                $totalApprovedLearnersCount = 0;
+                $totalRejectedLearnersCount = 0;
+
+                $totalSyllabusCount = 0;
+                $totalLessonsCount = 0;
+                $totalActivitiesCount = 0;
+                $totalQuizzesCount = 0;
+
+                foreach ($allInstructorCourses as $course) {
+
+                    $totalLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->count();
+
+                    $totalPendingLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->where('status', 'Pending')
+                    ->count();
+
+                    $totalApprovedLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->where('status', 'Approved')
+                    ->count();
+
+                    $totalRejectedLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->where('status', 'Rejected')
+                    ->count();
+
+                    $totalSyllabusCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->count();
+
+                    $totalLessonsCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'LESSON')
+                    ->count();
+
+                    $totalActivitiesCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'ACTIVITY')
+                    ->count();
+
+                    $totalQuizzesCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'QUIZ')
+                    ->count();
+                }
+
+                $data = [
+                    'title' => 'Performance',
+                    'scripts' => ['instructor_performance.js'],
+                    'totalCourseNum' => $totalCourseNum,
+                    'allInstructorCourses' => $allInstructorCourses,
+                    'totalLearnersCount' => $totalLearnersCount,
+                    'totalPendingLearnersCount' => $totalPendingLearnersCount,
+                    'totalApprovedLearnersCount' => $totalApprovedLearnersCount,
+                    'totalRejectedLearnersCount' => $totalRejectedLearnersCount,
+                    'totalSyllabusCount' => $totalSyllabusCount,
+                    'totalLessonsCount' => $totalLessonsCount,
+                    'totalActivitiesCount' => $totalActivitiesCount,
+                    'totalQuizzesCount' => $totalQuizzesCount,
+                    'totalPendingCourseNum' => $totalPendingCourseNum,
+                    'totalApprovedCourseNum' => $totalApprovedCourseNum,
+                    'totalRejectedCourseNum' => $totalRejectedCourseNum,
+                ];
+
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+            }
+
+        } else {
+            return redirect('/instructor');
+        }
+
+
+    }
 
     public function settings(){
 
@@ -384,11 +537,6 @@ class InstructorController extends Controller
         }
     
         return redirect('/instructor/settings')->with('message', 'Profile picture updated successfully');
-    }
-
-
-    public function quiz() {
-        return view('instructor_course.courseQuiz')->with(['title'=>'Quiz', 'scripts'=>['instructorQuiz.js']]);
     }
    
 
