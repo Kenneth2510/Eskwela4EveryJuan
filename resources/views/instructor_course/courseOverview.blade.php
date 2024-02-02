@@ -23,6 +23,20 @@
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+                
+                
+                    <h4 class="flex items-center mt-10 text-xl">
+                        Approval Status: 
+                        @if ($course->course_status === 'Approved')
+                        <div class="w-5 h-5 mx-2 rounded-full bg-darthmouthgreen"></div>
+                    @elseif ($course->course_status ==='Pending')
+                        <div class="w-5 h-5 mx-2 bg-yellow-500 rounded-full"></div>
+                    @else
+                        <div class="w-5 h-5 mx-2 bg-red-500 rounded-full"></div>
+                    @endif
+                    
+                    {{$course->course_status}}
+                    </h4>
                 </div>
                 <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
                     <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">

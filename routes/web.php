@@ -126,6 +126,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/courses/searchCourse', 'InstructorCourseController@searchCourse');
     Route::get('/instructor/courses/create', 'InstructorCourseController@courseCreate');
     Route::post('/instructor/courses/create', 'InstructorCourseController@courseCreate_process');
+    Route::post('/instructor/course/upload/files/{course}', 'InstructorCourseController@courseCreateUploadFiles');
+
+
     Route::get('/instructor/course/{course}', 'InstructorCourseController@overview');
     Route::get('/instructor/course/{course}/overviewNum', 'InstructorCourseController@overviewNum');
     Route::post('/instructor/course/{course}/editCourseDetails', 'InstructorCourseController@editCourseDetails');

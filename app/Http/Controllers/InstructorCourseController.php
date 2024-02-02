@@ -185,6 +185,35 @@ class InstructorCourseController extends Controller
     }
 
 
+    public function courseCreateUploadFiles(Course $course, Request $request) {
+        $request->validate([
+            'file' => 'required|mimes:pdf,doc,docx|max:2048',
+        ]);
+    
+        $file = $request->file('file');
+        $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+        $fileName = time() . ' - ' . $course->course_name . ' - ' . $file->getClientOriginalName();
+        $folderPath = 'courses/' . $folderName . '/documents';
+    
+        // Create the course-specific folder if it doesn't exist
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
+    
+        $filePath = $file->storeAs($folderPath, $fileName, 'public');
+
+        if (!$filePath) {
+            // Handle the error, log it, or return a response
+        session()->flash('message', 'File could not be uploaded.');
+            return redirect()->back()->with('error', 'File could not be uploaded.');
+        }
+
+    
+        session()->flash('message', 'File Uploaded Successfully');
+        return redirect()->back()->with('success', 'File uploaded successfully');
+    }
+
+
     
     public function overview(Course $course){
         if (auth('instructor')->check()) {
