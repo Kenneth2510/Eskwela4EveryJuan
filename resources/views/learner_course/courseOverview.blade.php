@@ -12,55 +12,57 @@
         <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
     </a>
 
-    <div class="relative z-0 pb-4 border rounded-lg shadow-lg text-black">
-        <div class="mx-3 px-5 flex justify-between" id="courseInfo">
+    <div class="relative z-0 pb-4 text-black border rounded-lg shadow-lg">
+        <div class="flex justify-between px-5 mx-3" id="courseInfo">
             <div class="" id="courseInfo_left">
                 <h1 class="text-6xl font-semibold">{{$course->course_name}}</h1>
                 <h4 class="text-4xl">{{$course->course_code}}</h4>
-                <h4 class="text-xl mt-10">Course Level: {{$course->course_difficulty}}</h4>
+                <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
                 <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
-                <h4 class="text-xl mt-3">Total  Units: {{$totalSyllabusCount}}</h4>
-                <h4 class="text-xl pl-5"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
-                <h4 class="text-xl pl-5"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
-                <h4 class="text-xl pl-5"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+                <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4>
+                <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
+                <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
+                <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
 
 
                 @if ($isEnrolled)
-                <h4 class="text-xl mt-10 flex items-center">Enrollment Status: 
+                <h4 class="flex items-center mt-10 text-xl">Enrollment Status: 
                     @if ($isEnrolled->status === 'Approved')
-                        <div class="mx-2 w-5 h-5 bg-darthmouthgreen rounded-full"></div>
+                        <div class="w-5 h-5 mx-2 rounded-full bg-darthmouthgreen"></div>
                     @elseif ($isEnrolled->status ==='Pending')
-                        <div class="mx-2 w-5 h-5 bg-yellow-500 rounded-full"></div>
+                        <div class="w-5 h-5 mx-2 bg-yellow-500 rounded-full"></div>
                     @else
-                        <div class="mx-2 w-5 h-5 bg-red-500 rounded-full"></div>
+                        <div class="w-5 h-5 mx-2 bg-red-500 rounded-full"></div>
                     @endif
                  {{$isEnrolled->status}}</h4>
-                 <h4 class="text-xl mt-10 flex items-center">Your Progress: {{$isEnrolled->course_progress}}</h4>
+                 @if ($courseProgress)
+                 <h4 class="flex items-center mt-10 text-xl">Your Progress: {{$courseProgress->course_progress}}</h4>
+                 @endif
                 @endif
                 
 
             </div>
-            <div class="flex flex-col justify-between items-center mr-10" id="courseInfo_right">
-                <img class="mb-10 my-4 rounded-full w-40 h-40 lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
+            <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
+                <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
                 <div class="flex flex-col">
                     @if($isEnrolled)
-                    <a href="{{ url("/learner/course/manage/$course->course_id/overview") }}" id="" class="my-1 px-5 py-3 text-xl rounded-xl bg-darthmouthgreen text-white hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen text-center">Enter</a>
+                    <a href="{{ url("/learner/course/manage/$course->course_id/overview") }}" id="" class="px-5 py-3 my-1 text-xl text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
 
-                    <button id="unenrollBtn" class="my-1 px-5 py-3 text-xl rounded-xl bg-red-600 text-white hover:bg-white hover:text-red-600 hover:border-2 hover:border-red-600">Unenroll</button>
+                    <button id="unenrollBtn" class="px-5 py-3 my-1 text-xl text-white bg-red-600 rounded-xl hover:bg-white hover:text-red-600 hover:border-2 hover:border-red-600">Unenroll</button>
                     @else
-                    <button id="enrollBtn" data-course-id="{{$course->course_id}}" class="my-1 px-5 py-3 text-xl rounded-xl bg-darthmouthgreen text-white hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enroll Now</button>
+                    <button id="enrollBtn" data-course-id="{{$course->course_id}}" class="px-5 py-3 my-1 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enroll Now</button>
                     @endif
                     
-                    <button id="viewDetailsBtn" class="my-1 px-5 py-3 text-lg rounded-xl bg-darthmouthgreen text-white hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">View Details</button>    
+                    <button id="viewDetailsBtn" class="px-5 py-3 my-1 text-lg text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">View Details</button>    
                 </div>
             </div>
         </div>
     </div>
 
     
-    <hr class="border-t-2 border-gray-300 my-6">
+    <hr class="my-6 border-t-2 border-gray-300">
 
-    <div class="mt-5 flex justify-between" id="enrolledData">
+    <div class="flex justify-between mt-5" id="enrolledData">
         <div class="w-7/12 h-[100px]" id="totalEnrollees">
             <h1 class="mt-10 text-2xl text-center">
                 <span class="text-6xl font-semibold text-darthmouthgreen">
@@ -69,7 +71,7 @@
                 Learners Enrolled
             </h1>
         </div>
-        <div class="px-10 w-5/12 flex justify-between items-center" id="learnerProgressData">
+        <div class="flex items-center justify-between w-5/12 px-10" id="learnerProgressData">
             <div class="mx-1" id="progressPercent">
                 <h1 class="mt-10 text-2xl text-center">
                     <span class="text-6xl font-semibold text-darthmouthgreen">
@@ -89,9 +91,9 @@
         </div>
     </div>
 
-    <hr class="border-t-2 border-gray-300 my-6">
+    <hr class="my-6 border-t-2 border-gray-300">
 
-    <div class="flex justify-between mt-10 px-5 relative z-0 pb-4 border rounded-lg shadow-lg text-black" id="courseDescAndTopics">
+    <div class="relative z-0 flex justify-between px-5 pb-4 mt-10 text-black border rounded-lg shadow-lg" id="courseDescAndTopics">
         <div class="w-7/12 overflow-y-auto h-[400px]" id="courseDesc">
             <h1 class="text-4xl font-semibold">Course Description</h1>
             <div class="whitespace-pre-line">
@@ -102,11 +104,11 @@
             <h1 class="text-4xl font-semibold">Course Topics</h1>
             @foreach ($syllabus as $topic)
                 @if ($topic->category === "LESSON")
-                    <h4 class="text-lg px-5 pt-5"><i class="fa-regular fa-file text-darthmouthgreen text-2xl "></i> - {{$topic->topic_title}}</h4>
+                    <h4 class="px-5 pt-5 text-lg"><i class="text-2xl fa-regular fa-file text-darthmouthgreen "></i> - {{$topic->topic_title}}</h4>
                 @elseif ($topic->category === "ACTIVITY")
-                    <h4 class="text-lg px-5 pt-5"><i class="fa-regular fa-clipboard text-darthmouthgreen text-2xl "></i> - {{$topic->topic_title}}</h4>
+                    <h4 class="px-5 pt-5 text-lg"><i class="text-2xl fa-regular fa-clipboard text-darthmouthgreen "></i> - {{$topic->topic_title}}</h4>
                 @elseif ($topic->category === "QUIZ")
-                    <h4 class="text-lg px-5 pt-5"><i class="fa-regular fa-pen-to-square text-darthmouthgreen text-2xl "></i> - {{$topic->topic_title}}</h4>
+                    <h4 class="px-5 pt-5 text-lg"><i class="text-2xl fa-regular fa-pen-to-square text-darthmouthgreen "></i> - {{$topic->topic_title}}</h4>
                 @endif
             @endforeach
         </div>
@@ -118,11 +120,11 @@
         <div class="">
             <h1 class="text-4xl font-semibold">Your Progress</h1>
             <div class="mt-3 h-7 rounded-xl" style="background: #9DB0A3" id="skill_bar">
-                <div class="h-7 relative bg-darthmouthgreen rounded-xl text-white text-center py-1" id="skill_per" per="{{$progressPercent}}%" style="max-width: {{$progressPercent}}%">{{$progressPercent}}%</div>
+                <div class="relative py-1 text-center text-white h-7 bg-darthmouthgreen rounded-xl" id="skill_per" per="{{$progressPercent}}%" style="max-width: {{$progressPercent}}%">{{$progressPercent}}%</div>
             </div>    
         </div>
         
-        <div class="mx-5 px-5">
+        <div class="px-5 mx-5">
             <table class="w-full mt-5">
                 <thead class="text-left">
                     <th class="text-lg">Topic</th>
@@ -146,7 +148,7 @@
 @include('partials.learnerProfile')
 </section>
 
-<div id="enrollCourseModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
+<div id="enrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelEnroll">
@@ -160,13 +162,13 @@
 
         <div class="flex justify-center w-full mt-5">
             <button id="enrollCourse" data-course-id="{{$course->course_id}}" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enroll Now</button>
-            <button id="" class="cancelEnroll px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+            <button id="" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelEnroll hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
         </div>
     </div>
 </div>
 
 
-<div id="unenrollCourseModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
+<div id="unenrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelUnenroll">
@@ -181,7 +183,7 @@
         <div class="flex justify-center w-full mt-5">
             @if ($isEnrolled)
             <button id="unenrollCourse" data-learner-course-id="{{ $isEnrolled->learner_course_id }}" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Unenroll Now</button>
-            <button id="" class="cancelUnenroll px-5 py-3 mx-2 mt-4 text-white bg-gray-500 rounded-lg hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500">Cancel</button>
+            <button id="" class="px-5 py-3 mx-2 mt-4 text-white bg-gray-500 rounded-lg cancelUnenroll hover:bg-white hover:text-gray-500 hover:border-2 hover:border-gray-500">Cancel</button>
             @endif
         </div>
     </div>
@@ -189,8 +191,8 @@
 
 
 
-<div id="courseDetailsModal" class="hidden fixed top-0 left-0 ml-10 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg">
+<div id="courseDetailsModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+    <div class="p-4 bg-white rounded-lg shadow-lg modal-content">
         <div class="flex justify-end w-full">
             <button class="closeCourseDetailsModal">
                 <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
@@ -198,10 +200,10 @@
         </div>
         <div class="flex" id="content"> <div class="py-10 w-[200px] h-[700px] bg-darthmouthgreen" id="courseDetailsDirectory">
             <ul>
-                <li class="w-full flex items-center justify-center font-semibold px-5 py-3 h-24 text-center text-white hover:bg-white text-xl hover:text-darthmouthgreen bg-darthmouthgreen" id="courseDetailsBtn">Course Details</li>
-                <li class="w-full flex items-center justify-center font-semibold px-5 py-3 h-24 text-center text-white hover:bg-white text-xl hover:text-darthmouthgreen bg-darthmouthgreen" id="learnersEnrolledBtn">Learners Enrolled</li>
-                <li class="w-full flex items-center justify-center font-semibold px-5 py-3 h-24 text-center text-white hover:bg-white text-xl hover:text-darthmouthgreen bg-darthmouthgreen" id="gradesheetBtn">Gradesheet</li>
-                <li class="w-full flex items-center justify-center font-semibold px-5 py-3 h-24 text-center text-white hover:bg-white text-xl hover:text-darthmouthgreen bg-darthmouthgreen" id="courseFilesBtn">Course Files</li>
+                <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseDetailsBtn">Course Details</li>
+                <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="learnersEnrolledBtn">Learners Enrolled</li>
+                <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="gradesheetBtn">Gradesheet</li>
+                <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseFilesBtn">Course Files</li>
             </ul>
         </div>
 
@@ -210,29 +212,29 @@
 
             <div class="flex justify-between h-[700px]" id="courseInfoArea">
 
-                <div class="mx-10 py-5 w-4/5" id="courseInfo_left">
+                <div class="w-4/5 py-5 mx-10" id="courseInfo_left">
                     <h1 class="text-6xl font-semibold">{{$course->course_name}}</h1>
                     <h4 class="text-4xl">{{$course->course_code}}</h4>
-                    <h4 class="text-xl mt-10">Course Level: {{$course->course_difficulty}}</h4>
+                    <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
                     <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
-                    <h4 class="text-xl mt-3">Total  Units: {{$totalSyllabusCount}}</h4>
-                    <h4 class="text-xl pl-5"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
-                    <h4 class="text-xl pl-5"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
-                    <h4 class="text-xl pl-5"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
-                    <h4 class="text-xl mt-10">Course Description</h4>
+                    <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+                    <h4 class="mt-10 text-xl">Course Description</h4>
                     <div class="whitespace-pre-line w-full overflow-y-auto h-[200px]">
                         {{$course->course_description}}
                     </div>
                 </div>
-                <div class="w-1/5 flex flex-col justify-center items-center" id="courseInfo_right">
-                    <img class="mb-10 my-4 rounded-full w-40 h-40 lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
+                <div class="flex flex-col items-center justify-center w-1/5" id="courseInfo_right">
+                    <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
                     <h4 class="text-xl">{{$course->instructor_fname}} {{$course->instructor_lname}}</h4>
                     <h4 class="text-xl">INSTRUCTOR</h4>
                 </div>
             </div>
 
 
-            <div class="mx-5 py-5 hidden" id="learnersEnrolledArea">
+            <div class="hidden py-5 mx-5" id="learnersEnrolledArea">
                 <h1 class="text-4xl font-semibold">Learners Enrolled</h1>
                 
                 <div class="m-5 px-5 overflow-auto h-[600px]">
@@ -267,7 +269,7 @@
             </div>
 
 
-            <div class="mx-5 py-5 hidden" id="gradesheetArea">
+            <div class="hidden py-5 mx-5" id="gradesheetArea">
                 <h1 class="text-4xl font-semibold">Your Grades</h1>
                 <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
                     <table class="table-fixed">
@@ -332,12 +334,12 @@
             </div>
 
 
-            <div class="mx-5 py-5 hidden" id="filesArea">
+            <div class="hidden py-5 mx-5" id="filesArea">
                 <h1 class="text-4xl font-semibold">Your Files</h1>
                 <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
                     <table class="table-fixed">
                         <thead class="w-full text-left">
-                            <th class="text-xl w-1/2">File</th>
+                            <th class="w-1/2 text-xl">File</th>
                             <th class="w-1/3"></th>
                             <th class="w-1/3"></th>
                         </thead>
@@ -347,10 +349,10 @@
                                 <tr>
                                     <td class="py-3">{{ basename($file) }}</td>
                                     <td>
-                                        <a href="{{ Storage::url("$file") }}" target="_blank" class="px-5 py-3 rounded-xl bg-darthmouthgreen text-white hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">View File</a>
+                                        <a href="{{ Storage::url("$file") }}" target="_blank" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">View File</a>
                                     </td>  
                                     <td>
-                                        <a href="{{ Storage::url($file) }}" class="px-5 py-3 rounded-xl bg-darthmouthgreen text-white hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen" download>Download</a>
+                                        <a href="{{ Storage::url($file) }}" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen" download>Download</a>
                                     </td>                                  
                                 </tr>
                             @endforeach

@@ -122,21 +122,19 @@
                 </div>
             </div>
 
-            <button id="editActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$activityInfo->syllabus_id}}" data-topic_id="{{$activityInfo->topic_id}}">Edit</button>
-            <div class="hidden" id="editActivity_clickedBtns">
-                <button id="saveActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
-                {{-- <button id="cancelActivityBtn" class="w-32 px-5 py-3 mx-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button> --}}
+            <div class="flex justify-between">
+                <button id="editActivityBtn" class="w-1/2 h-16 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$activityInfo->syllabus_id}}" data-topic_id="{{$activityInfo->topic_id}}">Edit</button>
+                <div class="hidden w-1/2 h-16 mx-5" id="editActivity_clickedBtns">
+                    <button id="saveActivityBtn" class="w-full h-16 px-5 py-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
+                </div>
+                <button id="viewResponseActivity" class="w-1/2 h-16 px-5 py-3 mx-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$activityInfo->syllabus_id}}" data-topic_id="{{$activityInfo->topic_id}}">View Responses</button>
+
             </div>
-            <x-forms.primary-button 
-            color="darthmouthgreen" 
-            name="View Responses" 
-            type="button" 
-            class="text-white " 
-            id="viewResponseActivity"/>
+            
         </div>
     </section>
 
-    <x-modal >
+    {{-- <x-modal >
         <div class="flex flex-col">
             <div class="flex flex-row">
                 <x-forms.primary-button 
@@ -156,9 +154,51 @@
             class="mt-4" 
             id="closeAct"/>
         </div>
-    </x-modal>
+    </x-modal> --}}
 
     @include('partials.instructorProfile')
 </section>
 
+<div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div class="w-3/5 p-4 bg-white rounded-lg shadow-lg modal-content">
+
+        <div class="flex justify-end w-full">
+            <button class="exitResponsesModalBtn">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+
+        <h1 class="text-2xl font-bold ">View All Responses</h1>
+        
+        <div id="responsesContent" class="mt-5 overflow-y-auto">
+            <table class="w-full">
+                <thead class="text-white bg-darthmouthgreen">
+                    <th class="w-1/12">Enrollee ID</th>
+                    <th class="w-1/12">Learner ID</th>
+                    <th class="w-2/12">Name</th>
+                    <th class="w-1/12">Attempt</th>
+                    <th class="w-2/12">Attempt Taken</th>
+                    <th class="w-1/12">Score</th>
+                    <th class="w-2/12">Status</th>
+                    <th class="w-1/12">Mark</th>
+                    <th class="w-1/12"></th>
+                </thead>
+
+                <tbody id="responsesRowDataArea" class="">  
+                    {{-- <tr class="text-center">
+                        <td class="py-5 my-3">1</td>
+                        <td>Kenneth Timblaco</td>
+                        <td>1</td>
+                        <td>December 10, 2023</td>
+                        <td>5/6</td>
+                        <td>
+                            <button class="px-5 py-3 text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">View</button>
+                        </td>
+                    </tr> --}}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
 @include('partials.footer')

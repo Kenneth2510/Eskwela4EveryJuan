@@ -2,12 +2,13 @@ $(document).ready(() => {
     $("#viewResponseActivity").on("click", (e) => {
         e.preventDefault();
         
-        $("#selectTypeParent").removeClass("hidden");
+        // $("#selectTypeParent").removeClass("hidden");
+        $('#responsesModal').removeClass('hidden');
         activityOutputData();
     });
 
-    $("#closeAct").on("click", () => {
-        $("#selectTypeParent").addClass("hidden");
+    $(".exitResponsesModalBtn").on("click", () => {
+        $("#responsesModal").addClass("hidden");
     });
 
     let isAppended = false;
@@ -48,43 +49,43 @@ $(document).ready(() => {
         var syllabusID = $('#studentsList').data('syllabus-id')
         var topicID = $('#studentsList').data('topic-id')
         // console.log(isAppended);
-        if (!isAppended) {
-            const studentsList = $(
-                `<button class="flex flex-row items-center" id="backToDefault">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
-                        <p>Go back</p>
-                    </button>
-                    <h1 class="mt-4 mb-2 text-xl font-medium">Learner Responses</h1>
-                            <table class="w-full text-center table-fixed">
-                               <thead>
-                                   <tr>
-                                       <th class="w-1/12">Enrollee ID</th>
-                                       <th class="w-1/12">Learner ID</th>
-                                       <th class="w-2/12">Name</th>
-                                       <th class="w-1/12">Attempt</th>
-                                       <th class="w-2/12">Attempt Taken</th>
-                                       <th class="w-1/12">Score</th>
-                                       <th class="w-2/12">Status</th>
-                                       <th class="w-1/12">Mark</th>
-                                       <th class="w-1/12"></th>
-                                   </tr>
-                               </thead>
-                               <tbody id="learnerActivityData">
+        // if (!isAppended) {
+        //     const studentsList = $(
+        //         `<button class="flex flex-row items-center" id="backToDefault">
+        //                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+        //                 <p>Go back</p>
+        //             </button>
+        //             <h1 class="mt-4 mb-2 text-xl font-medium">Learner Responses</h1>
+        //                     <table class="w-full text-center table-fixed">
+        //                        <thead>
+        //                            <tr>
+        //                                <th class="w-1/12">Enrollee ID</th>
+        //                                <th class="w-1/12">Learner ID</th>
+        //                                <th class="w-2/12">Name</th>
+        //                                <th class="w-1/12">Attempt</th>
+        //                                <th class="w-2/12">Attempt Taken</th>
+        //                                <th class="w-1/12">Score</th>
+        //                                <th class="w-2/12">Status</th>
+        //                                <th class="w-1/12">Mark</th>
+        //                                <th class="w-1/12"></th>
+        //                            </tr>
+        //                        </thead>
+        //                        <tbody id="learnerActivityData">
                                    
-                               </tbody>
-                           </table>`,
-            );
-            // studentsList
-            //     .find('td[class="float-right"]')
-            //     .html(
-            //         '<button class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2" type="button" id=""><h1>visit</h1></button>',
-            //     );
+        //                        </tbody>
+        //                    </table>`,
+        //     );
+        //     // studentsList
+        //     //     .find('td[class="float-right"]')
+        //     //     .html(
+        //     //         '<button class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2" type="button" id=""><h1>visit</h1></button>',
+        //     //     );
 
-            $("#studentsList").append(studentsList);
+        //     $("#studentsList").append(studentsList);
 
-            let criteria_total_score = activityData[0]['total_score']
+        //     let criteria_total_score = activityData[0]['total_score']
 
-            isAppended = true;
+        //     isAppended = true;
 
             learnerRowData = ``;
             for (let i = 0; i < learnerActivityContent.length; i++) {
@@ -98,6 +99,8 @@ $(document).ready(() => {
                 const mark = learnerActivityContent[i]['mark'];
                 const updated_at = learnerActivityContent[i]['updated_at'];
 
+/* The above code is a JavaScript code snippet. It is checking the value of the variable "status" and
+assigning a corresponding value to the variable "dispStatus". */
                 if(status == "NOT YET STARTED") {
                     dispStatus = "NOT YET STARTED"
                 } else if (status == "IN PROGRESS") {
@@ -106,9 +109,9 @@ $(document).ready(() => {
                     dispStatus = "COMPLETED";
                 }
 
-                // if(total_score == null) {
-                //     total_score = "no score yet";
-                // }
+                if(total_score == null) {
+                    total_score = "no score yet";
+                }
 
                 learnerRowData += `
                     <tr>
@@ -131,18 +134,18 @@ $(document).ready(() => {
                 `;
             }
 
-            $('#learnerActivityData').empty();
-            $('#learnerActivityData').append(learnerRowData);
+            $('#responsesRowDataArea').empty();
+            $('#responsesRowDataArea').append(learnerRowData);
 
 
                               
 
-            $(document).on("click", "#backToDefault", () => {
-                $("#defaultView").removeClass("hidden");
-                studentsList.remove();
-                isAppended = false;
-            });
-        }
+        //     $(document).on("click", "#backToDefault", () => {
+        //         $("#defaultView").removeClass("hidden");
+        //         studentsList.remove();
+        //         isAppended = false;
+        //     });
+        // }
     }
 
     $("#viewStudents").on("click", () => {

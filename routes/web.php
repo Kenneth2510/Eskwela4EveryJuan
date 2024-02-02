@@ -138,7 +138,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     // Route::get('/instructor/course/manage/{course}', 'InstructorCourseController@manage_course');
     // Route::post('/instructor/course/manage/{course}', 'InstructorCourseController@update_course');
-    // Route::post('/instructor/course/delete/{course}', 'InstructorCourseController@delete_course');
+    Route::post('/instructor/course/{course}/delete', 'InstructorCourseController@delete_course');
 
     Route::post('/instructor/course/create/syllabus/{course}', 'InstructorCourseController@create_syllabus');
 
@@ -152,6 +152,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     // lesson management
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}', 'InstructorCourseController@view_lesson');
     Route::get('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/json', 'InstructorCourseController@lesson_content_json');
+    Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/addCompletionTime', 'InstructorCourseController@addCompletionTime');
 
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson_id}', 'InstructorCourseController@update_lesson_title');
     Route::post('/instructor/course/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/picture', 'InstructorCourseController@update_lesson_picture');

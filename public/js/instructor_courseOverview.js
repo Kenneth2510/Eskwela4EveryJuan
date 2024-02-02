@@ -296,4 +296,40 @@ $(document).ready(function() {
     $('.cancelAdd').on('click', function() {
         $('#addNewFileModal').addClass('hidden')
     })
+
+
+    $('#deleteCourseBtn').on('click', function() {
+        $('#deleteCourseModal').removeClass('hidden')
+    })
+
+    
+    $('.cancelDelete').on('click', function() {
+        $('#deleteCourseModal').addClass('hidden')
+    })
+
+
+    $('#confirmDeleteCourseBtn').on('click', function() {
+        var courseID = $(this).data("course-id");
+        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
+
+        $.ajax({
+            type: 'POST',
+            url: '/instructor/course/' + courseID + '/delete/',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                if (response && response.redirect_url) {
+                    window.location.href = response.redirect_url;
+                } else {
+                
+                }
+            },
+            error: function (xhr, status, error) {
+
+                console.log(xhr.responseText);
+            }
+        });
+    })
+
 })

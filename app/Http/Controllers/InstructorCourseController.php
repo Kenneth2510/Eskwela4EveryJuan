@@ -41,6 +41,7 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\File;
 use Dompdf\Dompdf;
 use Carbon\Carbon;
 
@@ -186,6 +187,12 @@ class InstructorCourseController extends Controller
 
 
     public function courseCreateUploadFiles(Course $course, Request $request) {
+        $instructor = session('instructor');
+
+        if($instructor['status'] !== 'Approved') {
+            session()->flash('message', 'Account is not yet Approved');
+            return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+        } else {
         $request->validate([
             'file' => 'required|mimes:pdf,doc,docx|max:2048',
         ]);
@@ -209,8 +216,17 @@ class InstructorCourseController extends Controller
         }
 
     
-        session()->flash('message', 'File Uploaded Successfully');
-        return redirect()->back()->with('success', 'File uploaded successfully');
+        session()->flash('message', 'Course created Successfully');
+
+        $response = [
+            'message' => 'Course created successfully',
+            'redirect_url' => '/instructor/courses',
+            'course_id' => $course->course_id,
+        ];
+
+        return response()->json($response);
+    }
+        
     }
 
 
@@ -562,6 +578,8 @@ class InstructorCourseController extends Controller
     {
         $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
         $filePath = "public/courses/{$folderName}/documents/{$fileName}";
+
+        
     
         if (Storage::exists($filePath)) {
             // Delete the file
@@ -697,24 +715,38 @@ class InstructorCourseController extends Controller
 
     public function delete_course(Course $course) {
         $instructor = session('instructor');
-
-        if($instructor['status'] !== 'Approved') {
+    
+        if ($instructor['status'] !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
-        } else {
-            try {
-                $course->delete();
+        }
+    
+        if ($course->course_status === 'Approved') {
+            session()->flash('message', 'Cannot delete an Approved course.');
+            return response()->json(['message' => 'Cannot delete an Approved course.', 'redirect_url' => '/instructor/courses']);
+        }
+    
+        try {
+            $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+            $folderPath = public_path("courses/{$folderName}");
 
+            // Delete files in the 'documents' folder
+            Storage::deleteDirectory("courses/{$folderName}");
 
-                session()->flash('message', 'Course deleted Successfully');
-                return response()->json(['message' => 'Course deleted successfully', 'redirect_url' => "/instructor/courses"]);
-                
-            
-            } catch (ValidationException $e) {
-                // dd($e->getMessage());
-                $errors = $e->validator->errors();        
-                return response()->json(['errors' => $errors], 422);
+            // Delete the course folder
+            if (File::exists($folderPath)) {
+                File::deleteDirectory($folderPath);
             }
+    
+            // Delete the course record
+            $course->delete();
+    
+            session()->flash('message', 'Course deleted Successfully');
+            return response()->json(['message' => 'Course deleted successfully', 'redirect_url' => "/instructor/courses"]);
+    
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+            return response()->json(['errors' => $errors], 422);
         }
     }
 
@@ -1137,6 +1169,7 @@ class InstructorCourseController extends Controller
                             'topic_id',
                             'lesson_title',
                             'picture',
+                            'duration',
                         )
                         ->where('course_id', $course->course_id)
                         ->where('syllabus_id', $syllabus->syllabus_id)
@@ -1167,6 +1200,11 @@ class InstructorCourseController extends Controller
                             ->where('lesson_id', $lessonInfo->lesson_id)
                             ->orderBy('lesson_content_order', 'ASC')
                             ->get();
+
+                            $durationInSeconds = $lessonInfo->duration;
+                            $hours = floor($durationInSeconds / 3600);
+                            $minutes = floor(($durationInSeconds % 3600) / 60);
+                            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
                             }
 
 
@@ -1194,6 +1232,7 @@ class InstructorCourseController extends Controller
                         'syllabus' => $response['syllabus'],
                         'lessonInfo' => $lessonInfo,
                         'lessonContent' => $lessonContent,
+                        'formattedDuration' => $formattedDuration,
                         // 'instructor' => $response['instructor'],
                     ]);
 
@@ -1227,6 +1266,7 @@ class InstructorCourseController extends Controller
                             'topic_id',
                             'lesson_title',
                             'picture',
+                            'duration',
                         )
                         ->where('course_id', $course->course_id)
                         ->where('syllabus_id', $syllabus->syllabus_id)
@@ -1247,7 +1287,10 @@ class InstructorCourseController extends Controller
                         ->orderBy('lesson_content_order', 'ASC')
                         ->get();
 
-
+                        $durationInSeconds = $lessonInfo->duration;
+                        $hours = floor($durationInSeconds / 3600);
+                        $minutes = floor(($durationInSeconds % 3600) / 60);
+                        $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
                 $response = $this->course_content($course);
 
 
@@ -1261,6 +1304,7 @@ class InstructorCourseController extends Controller
                 'syllabus' => $response['syllabus'],
                 'lessonInfo' => $lessonInfo,
                 'lessonContent' => $lessonContent,
+                'formattedDuration' => $formattedDuration,
                 ];
 
                 return response()->json($data);
@@ -1274,6 +1318,26 @@ class InstructorCourseController extends Controller
     } else {
         return redirect('/instructor');
     }
+    }
+
+    public function addCompletionTime(Course $course, Syllabus $syllabus, $topic_id, Request $request) {
+        try {
+            $timeDuration = $request->input('secondsTimeCompletion');
+
+            DB::table('lessons')
+            ->where('course_id', $course->course_id)
+            ->where('syllabus_id', $syllabus->syllabus_id)
+            ->where('topic_id', $topic_id)
+            ->update([
+                'duration' => $timeDuration
+            ]);
+
+            return response()->json(['message' => 'Estimated Time of Completion Added']);
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
     }
 
     public function update_lesson_title(Course $course, Syllabus $syllabus, Request $request, $topic_id, $lesson_id) {

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var baseUrl = window.location.href;
 
     tinymce.init({  
      selector: '#insertLessonContent',  
@@ -1036,5 +1037,40 @@ $('#save_lesson_btn').on('click', function(e) {
                 console.log('Error:', error);
             }
         });
+    })
+
+
+    $('#saveEstTimeCompletion').on('click', function() {
+        var hours = parseInt($('#hours').val()) || 0;
+        var minutes = parseInt($('#minutes').val()) || 0; 
+
+        var totalSeconds = (hours * 60 * 60) + (minutes * 60);
+    
+        var url = baseUrl + '/addCompletionTime'
+
+        var timeCompletion = {
+            'secondsTimeCompletion': totalSeconds,
+
+        }
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: timeCompletion,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                console.log("success");
+                location.reload();
+                // console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    
     })
 });

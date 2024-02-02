@@ -273,18 +273,31 @@ class LearnerCourseController extends Controller
                 'learner_course.course_id',
                 'learner_course.status',
                 'learner_course.created_at',
-                'learner_course_progress.course_progress',
+                // 'learner_course_progress.course_progress',
                 )
-                ->join('learner_course_progress' , 'learner_course_progress.learner_course_id' , '=' , 'learner_course.learner_course_id')
+                // ->join('learner_course_progress' , 'learner_course_progress.learner_course_id' , '=' , 'learner_course.learner_course_id')
                 ->join('course', 'learner_course.course_id', '=', 'course.course_id')
                 ->where('learner_course.learner_id', '=', $learner->learner_id)
                 ->where('learner_course.course_id', '=', $course->course_id)
                 ->first();
-
+                    // dd($isEnrolled);
                 $totalLessonsDuration = $totalLessonsDuration->total_duration ?? 0;
                 $totalActivitiesDuration = $totalActivitiesDuration->total_duration ?? 0;
                 $totalQuizzesDuration = $totalQuizzesDuration->total_duration ?? 0;
 
+                if($isEnrolled) {
+                    $courseProgress = DB::table('learner_course_progress')
+                    ->select(
+                        'learner_course_progress_id',
+                        'learner_course_id',
+                        'course_progress',
+                        'start_period',
+                        'finish_period',
+                    )
+                    ->where('learner_course_id', $isEnrolled->learner_course_id)
+                    ->first();
+                }
+         
 
                 $totalCourseTime = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
 
@@ -417,30 +430,57 @@ class LearnerCourseController extends Controller
             // Get all files in the specified directory
             $courseFiles = Storage::files($directory);
 
-            // dd($files);
-                $data = [
-                    'title' => 'Course Overview',
-                    'scripts' => ['learner_courseOverview.js'],
-                    'totalLessonsDuration' => $totalLessonsDuration,
-                    'totalActivitiesDuration' => $totalActivitiesDuration,
-                    'totalQuizzesDuration' => $totalQuizzesDuration,
-                    'totalCourseTime' => $formattedTotalCourseTime,
-                    'totalSyllabusCount' => $totalSyllabusCount,
-                    'totalLessonsCount' => $totalLessonsCount,
-                    'totalActivitiesCount' => $totalActivitiesCount,
-                    'totalQuizzesCount' => $totalQuizzesCount,
-                    'syllabus' => $syllabus,
-                    'totalEnrolledCount' => $totalEnrolledCount,
-                    'totalLearnerTime' => $formattedTotalLearnerCourseTime,
-                    'syllabusProgress' => $syllabusProgress,
-                    'syllabusProgressCompleted' => $syllabusProgressCompleted,
-                    'progressPercent' => round($progressPercent, 2),
-                    'enrollees' => $enrollees,
-                    'gradesheet' => $gradeWithQuizData,
-                    'activitySyllabus' => $activitySyllabusData,
-                    'quizSyllabus' => $quizSyllabusData,
-                    'courseFiles' => $courseFiles,
-                ];
+
+                if($isEnrolled) {
+                    $data = [
+                        'title' => 'Course Overview',
+                        'scripts' => ['learner_courseOverview.js'],
+                        'totalLessonsDuration' => $totalLessonsDuration,
+                        'totalActivitiesDuration' => $totalActivitiesDuration,
+                        'totalQuizzesDuration' => $totalQuizzesDuration,
+                        'totalCourseTime' => $formattedTotalCourseTime,
+                        'totalSyllabusCount' => $totalSyllabusCount,
+                        'totalLessonsCount' => $totalLessonsCount,
+                        'totalActivitiesCount' => $totalActivitiesCount,
+                        'totalQuizzesCount' => $totalQuizzesCount,
+                        'syllabus' => $syllabus,
+                        'totalEnrolledCount' => $totalEnrolledCount,
+                        'totalLearnerTime' => $formattedTotalLearnerCourseTime,
+                        'syllabusProgress' => $syllabusProgress,
+                        'syllabusProgressCompleted' => $syllabusProgressCompleted,
+                        'progressPercent' => round($progressPercent, 2),
+                        'enrollees' => $enrollees,
+                        'gradesheet' => $gradeWithQuizData,
+                        'activitySyllabus' => $activitySyllabusData,
+                        'quizSyllabus' => $quizSyllabusData,
+                        'courseFiles' => $courseFiles,
+                        'courseProgress' => $courseProgress,
+                    ];
+                } else {
+                    $data = [
+                        'title' => 'Course Overview',
+                        'scripts' => ['learner_courseOverview.js'],
+                        'totalLessonsDuration' => $totalLessonsDuration,
+                        'totalActivitiesDuration' => $totalActivitiesDuration,
+                        'totalQuizzesDuration' => $totalQuizzesDuration,
+                        'totalCourseTime' => $formattedTotalCourseTime,
+                        'totalSyllabusCount' => $totalSyllabusCount,
+                        'totalLessonsCount' => $totalLessonsCount,
+                        'totalActivitiesCount' => $totalActivitiesCount,
+                        'totalQuizzesCount' => $totalQuizzesCount,
+                        'syllabus' => $syllabus,
+                        'totalEnrolledCount' => $totalEnrolledCount,
+                        'totalLearnerTime' => $formattedTotalLearnerCourseTime,
+                        'syllabusProgress' => $syllabusProgress,
+                        'syllabusProgressCompleted' => $syllabusProgressCompleted,
+                        'progressPercent' => round($progressPercent, 2),
+                        'enrollees' => $enrollees,
+                        'gradesheet' => $gradeWithQuizData,
+                        'activitySyllabus' => $activitySyllabusData,
+                        'quizSyllabus' => $quizSyllabusData,
+                        'courseFiles' => $courseFiles,
+                    ];
+                }
                 
 
                 return view('learner_course.courseOverview', compact('course', 'learner', 'isEnrolled'))
@@ -495,6 +535,49 @@ class LearnerCourseController extends Controller
             $learner = session('learner');
 
             try {
+
+                $learnerActivityOutput = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id'
+                )
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->get();
+
+                foreach($learnerActivityOutput as $activityOutput) {
+                    DB::table('learner_activity_criteria_score')
+                    ->where('learner_activity_output_id' , $activityOutput->learner_activity_output_id)
+                    ->delete();
+                }
+
+                DB::table('learner_activity_output')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+
+                DB::table('learner_activity_progress')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+                
+                
+                DB::table('learner_quiz_progress')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+
+                DB::table('learner_quiz_output')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+
+                DB::table('learner_lesson_progress')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+
+                DB::table('learner_syllabus_progress')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+
+                DB::table('learner_course_progress')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->delete();
+
                 $learnerCourse->delete();
 
                 session()->flash('message', 'Course unenrolled Successfully');

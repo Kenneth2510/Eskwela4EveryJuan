@@ -116,6 +116,18 @@
                             </button>
                         </div>
                     </div>
+                    <div id="estimatedCompletionTime" class="">
+                        <h1 class="my-5 text-xl font-semibold">Estimated Time to Finish</h1>
+                        <label for="hours" class="mr-5 text-lg">Hours:</label>
+                        <input type="text" id="hours" name="hours" class="w-1/12 py-1 text-center border border-darthmouthgreen rounded-xl" placeholder="0" value="{{ isset($formattedDuration) ? explode(':', $formattedDuration)[0] : '' }}" required>
+                    
+                        <label class="mx-5 text-lg" for="minutes">Minutes:</label>
+                        <input type="text" id="minutes" class="w-1/12 py-1 text-center border border-darthmouthgreen rounded-xl" name="minutes" placeholder="0" value="{{ isset($formattedDuration) ? explode(':', $formattedDuration)[1] : '' }}" required>
+                        <br>
+                        <button id="saveEstTimeCompletion" class="px-5 py-3 mt-3 text-white bg-darthmouthgreen rounded-xl hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen hover:bg-white">Save</button>
+                    </div>
+                    
+                    <hr class="my-6 border-t-2 border-gray-300">
                 </div>
                 
                 

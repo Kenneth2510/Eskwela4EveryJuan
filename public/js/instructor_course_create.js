@@ -295,6 +295,8 @@ $(document).ready(function () {
                             // If no files selected, redirect to the specified URL
                             window.location.href = response.redirect_url;
                         }
+                    } else {
+                        window.location.href = response.redirect_url;
                     }
                 },
             });

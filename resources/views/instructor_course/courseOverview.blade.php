@@ -163,6 +163,9 @@
                     <div class="whitespace-pre-line w-full overflow-y-auto h-[180px]" id="courseDescription">
                         {{$course->course_description}}
                     </div>
+                    <div class="">
+                        <button id="deleteCourseBtn" data-course-id="{{ $course->course_id }}" class="px-5 py-3 text-white bg-red-600 hover:bg-white hover:text-red-600 hover:border-2 hover:border-red-600 rounded-xl">Delete Course</button>
+                    </div>
                 
                 </div>
                 <div class="flex flex-col items-center justify-center w-1/5" id="courseInfo_right">
@@ -374,4 +377,26 @@
         </form>
     </div>
 </div>
+
+<div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+        <div class="flex justify-end w-full">
+            <button class="cancelDelete">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+        
+        <div class="text-center">
+            <p class="mb-4 text-xl font-semibold">Are you sure you want to delete this course?</p>
+            <p class="text-gray-600">This action cannot be undone.</p>
+        </div>
+        
+        <div class="flex justify-center w-full mt-5">
+            <button type="button" data-course-id="{{ $course->course_id }}" id="confirmDeleteCourseBtn" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Delete Course</button>
+            <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelDelete hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+        </div>
+      
+    </div>
+</div>
+
 @include('partials.footer')
