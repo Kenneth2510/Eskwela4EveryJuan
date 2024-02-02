@@ -202,7 +202,7 @@
                             
                             {{-- <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-line">{{$lesson->lesson_content}}</p> --}}
                    
-                            <div class="contentArea text-xl font-normal lesson_content_input_disp mt-5 px-5" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
+                            <div class="px-5 mt-5 text-xl font-normal contentArea lesson_content_input_disp" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
                             {{-- <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea> --}}
                             
                             @if ($lesson->video_url !== null)
@@ -270,8 +270,8 @@
 
 <div class="hidden">
 <!-- start-generate-pdf -->
-<h1>{{$course->course_name}}</h1>
-<h3>{{$course->course_code}}</h3>
+<h1 class="text-6xl font-bold">{{$course->course_name}}</h1>
+<h3 class="text-2xl font-semibold">{{$course->course_code}}</h3>
 <h3>{{$course->course_difficulty}}</h3>
 <h3>{{$course->course_status}}</h3>
 <hr>
@@ -434,7 +434,7 @@
 
 
     
-    <div id="editLessonContentModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="editLessonContentModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
             <div class="flex justify-end w-full">
                 <button class="closeEditLessonContentModal">
@@ -463,13 +463,13 @@
     
             <div class="flex justify-center w-full mt-5">
                 <button id="confirmEditLessonContentBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="" class="closeEditLessonContentModal px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+                <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeEditLessonContentModal">Cancel</button>
             </div>
         </div>
     </div>
 
 
-    <div id="addLessonContentUrlModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="addLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
             <div class="flex justify-end w-full">
                 <button class="closeAddLessonContentUrlModal">
@@ -484,12 +484,12 @@
         
             <div class="flex justify-center w-full mt-5">
                 <button id="confirmAddLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="cancelAddLessonContentUrlBtn" class="closeAddLessonContentUrlModal px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+                <button id="cancelAddLessonContentUrlBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeAddLessonContentUrlModal">Cancel</button>
             </div>
         </div>
     </div>
 
-    {{-- <div id="editLessonContentUrlModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75">
+    {{-- <div id="editLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
             <div class="flex justify-end w-full">
                 <button class="closeEditLessonContentUrlModal">
@@ -504,7 +504,7 @@
 
             <div class="flex justify-center w-full mt-5">
                 <button id="confirmEditLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="" class="closeEditLessonContentUrlModal px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+                <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeEditLessonContentUrlModal">Cancel</button>
             </div>
         </div>
     </div> --}}

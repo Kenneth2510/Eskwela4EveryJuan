@@ -290,10 +290,137 @@ class InstructorCourseController extends Controller
                     'learner.learner_fname',
                     'learner.learner_lname',
                     'learner.learner_email',
+                    'learner_course.status',
+                    'learner_course.created_at',
                 )
+                ->join('learner_course', 'learner_course.learner_course_id', '=', 'learner_course_progress.learner_course_id')
                 ->join('learner', 'learner.learner_id', '=', 'learner_course_progress.learner_id')
                 ->where('learner_course_progress.course_id', $course->course_id)
                 ->get();
+
+
+                $gradeData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'learner_course.created_at',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=', 'learner_course.learner_course_id')
+                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                ->where('learner_course.course_id', $course->course_id);
+
+            $gradeWithActivityData = $gradeData->get();
+
+            foreach ($gradeWithActivityData as $key => $activityData) {
+                $activityData->activities = DB::table('learner_activity_output')
+                    ->select(
+                        'learner_activity_output.activity_id',
+                        'learner_activity_output.activity_content_id',
+                        'activities.activity_title',
+                        DB::raw('COALESCE(ROUND(AVG(IFNULL(attempts.total_score, 0)), 2), 0) as average_score')
+                    )
+                    ->leftJoin('activities', 'activities.activity_id', '=', 'learner_activity_output.activity_id')
+                    ->leftJoin(
+                        DB::raw('(SELECT learner_activity_output_id, AVG(total_score) as total_score FROM learner_activity_output GROUP BY learner_activity_output_id) as attempts'),
+                        'attempts.learner_activity_output_id',
+                        '=',
+                        'learner_activity_output.learner_activity_output_id'
+                    )
+                    ->where('learner_activity_output.course_id', $course->course_id)
+                    ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
+                    ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
+                    ->get();
+
+                // Retrieve quiz data for the current learner
+                $activityData->quizzes = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.quiz_id',
+                    'quizzes.quiz_title',
+                    DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_quiz_progress.score, 0)), 2), 0) as average_score')
+                )
+                ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.learner_course_id', $activityData->learner_course_id)
+                ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
+                ->get();
+
+                // Add the updated $activityData back to the main array
+                $gradeWithActivityData[$key] = $activityData;
+            }
+
+            // dd($gradeWithActivityData);
+            // Now, $gradeWithActivityData contains the desired structure
+
+                $activitySyllabusData = DB::table('activities')
+                ->select(
+                    'activity_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id',
+                    'activity_title'
+                )
+                ->where('course_id', $course->course_id)
+                ->orderBy('topic_id',  'asc')
+                ->get();
+    
+                $quizSyllabusData = DB::table('quizzes')
+                ->select(
+                    'quiz_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id',
+                    'quiz_title'
+                )
+                ->where('course_id', $course->course_id)
+                ->orderBy('topic_id',  'asc')
+                ->get();
+
+                            // $folderName = "{$course->course_id} {$course->course_name}";
+            $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+
+            // $directoryPath = "/public/courses/{$folderName}/lesson_1.pdf";
+
+            // // $courseFiles = Storage::disk('public')->files($folderName);
+
+            // $courseFiles = Storage::files($directoryPath);
+            // $courseFiles = Storage::allFiles($directoryPath);
+
+            $directory = "public/courses/$folderName/documents";
+            
+
+            // Get all files in the specified directory
+            $courseFiles = Storage::files($directory);
+
+                $data = [
+                    'title' => 'Course Overview',
+                    'scripts' => ['instructor_courseOverview.js'],
+                    'instructor' => $instructor,
+                    'totalLessonsDuration' => $totalLessonsDuration,
+                    'totalActivitiesDuration' => $totalActivitiesDuration,
+                    'totalQuizzesDuration' => $totalQuizzesDuration,
+                    'totalCourseTime' => $formattedTotalCourseTime,
+                    'totalSyllabusCount' => $totalSyllabusCount,
+                    'totalLessonsCount' => $totalLessonsCount,
+                    'totalActivitiesCount' => $totalActivitiesCount,
+                    'totalQuizzesCount' => $totalQuizzesCount,
+                    'syllabus' => $syllabus,
+                    'totalEnrolledCount' => $totalEnrolledCount,
+                    'courseEnrollees' => $courseEnrollees,
+                    'gradesheet' => $gradeWithActivityData,
+                    'activitySyllabus' => $activitySyllabusData,
+                    'quizSyllabus' => $quizSyllabusData,
+                    'courseFiles' => $courseFiles,
+                ];
+
+                // dd($courseEnrollees);
+
+                return view('instructor_course.courseOverview', compact('course'))
+                ->with($data);
 
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -303,24 +430,7 @@ class InstructorCourseController extends Controller
             return redirect('/instructor');
         }
 
-        return view('instructor_course.courseOverview', compact('course'))
-        ->with([
-            'title' => 'Course Overview',
-            'scripts' => ['instructor_courseOverview.js'],
-            'instructor' => $instructor,
-            'totalLessonsDuration' => $totalLessonsDuration,
-            'totalActivitiesDuration' => $totalActivitiesDuration,
-            'totalQuizzesDuration' => $totalQuizzesDuration,
-            'totalCourseTime' => $formattedTotalCourseTime,
-            'totalSyllabusCount' => $totalSyllabusCount,
-            'totalLessonsCount' => $totalLessonsCount,
-            'totalActivitiesCount' => $totalActivitiesCount,
-            'totalQuizzesCount' => $totalQuizzesCount,
-            'syllabus' => $syllabus,
-            'totalEnrolledCount' => $totalEnrolledCount,
-            'courseEnrollees' => $courseEnrollees,
-        ]
-        );
+
     }
 
     public function overViewNum(Course $course) {
@@ -356,6 +466,82 @@ class InstructorCourseController extends Controller
 
         } else {
             return redirect('/instructor');
+        }
+    }
+
+    public function editCourseDetails(Course $course, Request $request) {
+        if (auth('instructor')->check()) {
+            $instructor = session('instructor');
+
+            try{
+
+                $courseData = $request->validate([
+                    'course_name' => ['required'],
+                    'course_description' => ['required'],
+                ]);
+
+                $course->update($courseData);
+
+                session()->flash('message', 'Course updated Successfully');
+                return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/$course->course_id"]);
+                
+            
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/instructor');
+        }
+    }
+
+    public function add_file(Course $course, Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:pdf,doc,docx|max:2048',
+        ]);
+    
+        $file = $request->file('file');
+        $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+        $fileName = time() . ' - ' . $course->course_name . ' - ' . $file->getClientOriginalName();
+        $folderPath = 'courses/' . $folderName . '/documents';
+    
+        // Create the course-specific folder if it doesn't exist
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
+    
+        $filePath = $file->storeAs($folderPath, $fileName, 'public');
+
+        if (!$filePath) {
+            // Handle the error, log it, or return a response
+        session()->flash('message', 'File could not be uploaded.');
+            return redirect()->back()->with('error', 'File could not be uploaded.');
+        }
+
+    
+        session()->flash('message', 'File Uploaded Successfully');
+        return redirect()->back()->with('success', 'File uploaded successfully');
+    }
+    
+
+
+    public function delete_file(Course $course, Request $request, $fileName)
+    {
+        $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+        $filePath = "public/courses/{$folderName}/documents/{$fileName}";
+    
+        if (Storage::exists($filePath)) {
+            // Delete the file
+            Storage::delete($filePath);
+    
+            session()->flash('message', 'File Deleted Successfully');
+            return redirect()->back()->with('success', 'File deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'File not found');
         }
     }
 
@@ -464,7 +650,6 @@ class InstructorCourseController extends Controller
                 $courseData = $request->validate([
                     'course_name' => ['required'],
                     'course_description' => ['required'],
-                    'course_difficulty' => ['required'],
                 ]);
 
                 $course->update($courseData);
@@ -1126,7 +1311,7 @@ class InstructorCourseController extends Controller
             $folderName = "{$course->course_id} {$course->course_name}";
             $folderName = Str::slug($folderName, '_');
             $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
-            $folderPath = "courses/" .$folderName;
+            $folderPath = 'courses/' . $folderName . '/pictures';
 
             $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
 
@@ -1270,7 +1455,7 @@ class InstructorCourseController extends Controller
             $folderName = "{$course->course_id} {$course->course_name}";
             $folderName = Str::slug($folderName, '_');
             $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
-            $folderPath = "courses/" .$folderName;
+            $folderPath = 'courses/' . $folderName . '/pictures';
 
             $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
 
@@ -1414,11 +1599,13 @@ class InstructorCourseController extends Controller
         $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
 
         // Generate a unique filename for the PDF (you can customize this)
-        $filename = 'lesson_' . $lessonInfo->lesson_id . '.pdf';
+        $filename = time() . '-' . $course->course_name .'lesson_' . $lessonInfo->lesson_id . '.pdf';
 
         // Define the folder path based on the course name
-        $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
-        $folderPath = 'courses/' . $folderName;
+        // $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
+        $folderName = "{$course->course_id} {$course->course_name}";
+        $folderName = Str::slug($folderName, '_');
+        $folderPath = 'courses/' . $folderName . '/documents';
 
         // Check if the file already exists
         if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
@@ -1443,6 +1630,7 @@ class InstructorCourseController extends Controller
 
         // Generate the PDF
         $pdf = $dompdf->output();
+
 
         // Store the new PDF in the public directory within the course-specific folder
         Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);

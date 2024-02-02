@@ -167,7 +167,8 @@ $(document).ready(function() {
                 datasets: [{
                     data: dataValues,
                     borderColor: '#00693e',
-                    fill: false,
+                    fill: true,
+                    lineTension: 0,
                 }]
             },
             options: {

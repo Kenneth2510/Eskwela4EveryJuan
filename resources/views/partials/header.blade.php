@@ -29,7 +29,13 @@
 
     <script src="https://cdn.tiny.cloud/1/tu1cijjt9ribhv45aa09w924q0rsgb4nrij1ixwt0tnjt0ql/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+    <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+
     
     @if (isset($scripts))
         @forelse ($scripts as $script)

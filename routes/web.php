@@ -128,9 +128,15 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/courses/create', 'InstructorCourseController@courseCreate_process');
     Route::get('/instructor/course/{course}', 'InstructorCourseController@overview');
     Route::get('/instructor/course/{course}/overviewNum', 'InstructorCourseController@overviewNum');
-    Route::get('/instructor/course/manage/{course}', 'InstructorCourseController@manage_course');
-    Route::post('/instructor/course/manage/{course}', 'InstructorCourseController@update_course');
-    Route::post('/instructor/course/delete/{course}', 'InstructorCourseController@delete_course');
+    Route::post('/instructor/course/{course}/editCourseDetails', 'InstructorCourseController@editCourseDetails');
+    Route::post('/instructor/course/{course}/generate_pdf', 'InstructorCourseController@generate_pdf');
+    Route::post('/instructor/course/{course}/add_file', 'InstructorCourseController@add_file');
+    Route::get('/instructor/course/{course}/delete_file/{fileName}', 'InstructorCourseController@delete_file');
+
+    // Route::get('/instructor/course/manage/{course}', 'InstructorCourseController@manage_course');
+    // Route::post('/instructor/course/manage/{course}', 'InstructorCourseController@update_course');
+    // Route::post('/instructor/course/delete/{course}', 'InstructorCourseController@delete_course');
+
     Route::post('/instructor/course/create/syllabus/{course}', 'InstructorCourseController@create_syllabus');
 
     Route::get('/instructor/course/content/{course}', 'InstructorCourseController@display_course_syllabus_view');

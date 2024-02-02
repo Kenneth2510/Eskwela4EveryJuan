@@ -156,6 +156,22 @@ class LearnerCourseController extends Controller
                 ->where('course_id', $course->course_id)
                 ->first();
 
+                $enrollees = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'learner_course.status',
+                    'learner_course.created_at',
+                    'learner_course_progress.course_progress',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                    'learner.learner_email',
+                )
+                ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=' , 'learner_course.learner_course_id')
+                ->join('learner', 'learner.learner_id',  '=', 'learner_course.learner_id')
+                ->where('learner_course.course_id' , $course->course_id)
+                ->get();
+
                 $syllabus = DB::table('syllabus')
                 ->select(
                     'syllabus_id',
@@ -256,7 +272,10 @@ class LearnerCourseController extends Controller
                 'learner_course.learner_course_id',
                 'learner_course.course_id',
                 'learner_course.status',
-                'learner_course.created_at')
+                'learner_course.created_at',
+                'learner_course_progress.course_progress',
+                )
+                ->join('learner_course_progress' , 'learner_course_progress.learner_course_id' , '=' , 'learner_course.learner_course_id')
                 ->join('course', 'learner_course.course_id', '=', 'course.course_id')
                 ->where('learner_course.learner_id', '=', $learner->learner_id)
                 ->where('learner_course.course_id', '=', $course->course_id)
@@ -299,6 +318,135 @@ class LearnerCourseController extends Controller
 
                 $progressPercent = ($syllabusProgressCompleted / $totalSyllabusCount) * 100;
 
+
+                $gradeData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'learner_course.created_at',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=', 'learner_course.learner_course_id')
+                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_id', $learner->learner_id);
+            
+                $gradeWithActivityData = $gradeData->get();
+                
+                foreach ($gradeWithActivityData as $activityData) {
+                    $activityData->activities = DB::table('learner_activity_output')
+                        ->select(
+                            'learner_activity_output.activity_id',
+                            'learner_activity_output.activity_content_id',
+                            'activities.activity_title',
+                            DB::raw('COALESCE(ROUND(AVG(IFNULL(attempts.total_score, 0)), 2), 0) as average_score')
+                        )
+                        ->leftJoin('activities', 'activities.activity_id', '=', 'learner_activity_output.activity_id')
+                        ->leftJoin(
+                            DB::raw('(SELECT learner_activity_output_id, AVG(total_score) as total_score FROM learner_activity_output GROUP BY learner_activity_output_id) as attempts'),
+                            'attempts.learner_activity_output_id',
+                            '=',
+                            'learner_activity_output.learner_activity_output_id'
+                        )
+                        ->where('learner_activity_output.course_id', $course->course_id)
+                        ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
+                        ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
+                        ->get();
+                }
+                
+                $gradeWithQuizData = $gradeWithActivityData;
+                
+                foreach ($gradeWithQuizData as $quizData) {
+                    $quizData->quizzes = DB::table('learner_quiz_progress')
+                        ->select(
+                            'learner_quiz_progress.quiz_id',
+                            'quizzes.quiz_title',
+                            DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_quiz_progress.score, 0)), 2), 0) as average_score')
+                        )
+                        ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
+                        ->where('learner_quiz_progress.course_id', $course->course_id)
+                        ->where('learner_quiz_progress.learner_course_id', $quizData->learner_course_id)
+                        ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
+                        ->get();
+                }
+            
+
+            $activitySyllabusData = DB::table('activities')
+            ->select(
+                'activity_id',
+                'course_id',
+                'syllabus_id',
+                'topic_id',
+                'activity_title'
+            )
+            ->where('course_id', $course->course_id)
+            ->orderBy('topic_id',  'asc')
+            ->get();
+
+            $quizSyllabusData = DB::table('quizzes')
+            ->select(
+                'quiz_id',
+                'course_id',
+                'syllabus_id',
+                'topic_id',
+                'quiz_title'
+            )
+            ->where('course_id', $course->course_id)
+            ->orderBy('topic_id',  'asc')
+            ->get();
+
+            // dd($gradeWithQuizData);
+
+            // $folderName = "{$course->course_id} {$course->course_name}";
+            $folderName = "{$course->course_name}";
+            $folderName = Str::slug($folderName, '_');
+
+            // $directoryPath = "/public/courses/{$folderName}/lesson_1.pdf";
+
+            // // $courseFiles = Storage::disk('public')->files($folderName);
+
+            // $courseFiles = Storage::files($directoryPath);
+            // $courseFiles = Storage::allFiles($directoryPath);
+
+            $directory = "public/courses/$folderName";
+
+            // Get all files in the specified directory
+            $courseFiles = Storage::files($directory);
+
+            // dd($files);
+                $data = [
+                    'title' => 'Course Overview',
+                    'scripts' => ['learner_courseOverview.js'],
+                    'totalLessonsDuration' => $totalLessonsDuration,
+                    'totalActivitiesDuration' => $totalActivitiesDuration,
+                    'totalQuizzesDuration' => $totalQuizzesDuration,
+                    'totalCourseTime' => $formattedTotalCourseTime,
+                    'totalSyllabusCount' => $totalSyllabusCount,
+                    'totalLessonsCount' => $totalLessonsCount,
+                    'totalActivitiesCount' => $totalActivitiesCount,
+                    'totalQuizzesCount' => $totalQuizzesCount,
+                    'syllabus' => $syllabus,
+                    'totalEnrolledCount' => $totalEnrolledCount,
+                    'totalLearnerTime' => $formattedTotalLearnerCourseTime,
+                    'syllabusProgress' => $syllabusProgress,
+                    'syllabusProgressCompleted' => $syllabusProgressCompleted,
+                    'progressPercent' => round($progressPercent, 2),
+                    'enrollees' => $enrollees,
+                    'gradesheet' => $gradeWithQuizData,
+                    'activitySyllabus' => $activitySyllabusData,
+                    'quizSyllabus' => $quizSyllabusData,
+                    'courseFiles' => $courseFiles,
+                ];
+                
+
+                return view('learner_course.courseOverview', compact('course', 'learner', 'isEnrolled'))
+                ->with($data);
+    
+
             } catch (\Exception $e) {
                 dd($e->getMessage());
             }
@@ -307,26 +455,7 @@ class LearnerCourseController extends Controller
             return redirect('/learner');
         }
 
-        return view('learner_course.courseOverview', compact('course', 'learner', 'isEnrolled'))
-        ->with([
-            'title' => 'Course Overview',
-            'scripts' => ['learner_courseOverview.js'],
-            'totalLessonsDuration' => $totalLessonsDuration,
-            'totalActivitiesDuration' => $totalActivitiesDuration,
-            'totalQuizzesDuration' => $totalQuizzesDuration,
-            'totalCourseTime' => $formattedTotalCourseTime,
-            'totalSyllabusCount' => $totalSyllabusCount,
-            'totalLessonsCount' => $totalLessonsCount,
-            'totalActivitiesCount' => $totalActivitiesCount,
-            'totalQuizzesCount' => $totalQuizzesCount,
-            'syllabus' => $syllabus,
-            'totalEnrolledCount' => $totalEnrolledCount,
-            'totalLearnerTime' => $formattedTotalLearnerCourseTime,
-            'syllabusProgress' => $syllabusProgress,
-            'syllabusProgressCompleted' => $syllabusProgressCompleted,
-            'progressPercent' => round($progressPercent, 2),
-        ]);
-    
+        
     }
 
     public function enroll_course(Course $course) {
