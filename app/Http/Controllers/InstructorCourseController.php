@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
 use Dompdf\Dompdf;
 use Carbon\Carbon;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 
 class InstructorCourseController extends Controller
@@ -1403,7 +1404,8 @@ class InstructorCourseController extends Controller
 
             $folderName = "{$course->course_id} {$course->course_name}";
             $folderName = Str::slug($folderName, '_');
-            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName() . '.png';
+            $fileName = Str::slug($fileName, '-');
             $folderPath = 'courses/' . $folderName . '/pictures';
 
             $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
@@ -1547,7 +1549,8 @@ class InstructorCourseController extends Controller
 
             $folderName = "{$course->course_id} {$course->course_name}";
             $folderName = Str::slug($folderName, '_');
-            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureData['picture']->getClientOriginalName();
+            $pictureName = Str::slug(str_replace(' ', '', $pictureData['picture']->getClientOriginalName()), '-');
+            $fileName = time() . ' - '. $course->course_name . ' - ' . $pictureName . '.png';
             $folderPath = 'courses/' . $folderName . '/pictures';
 
             $filePath = $pictureData['picture']->storeAs($folderPath, $fileName, 'public');
@@ -1644,7 +1647,8 @@ class InstructorCourseController extends Controller
         
         // Retrieve the data from the session
         $lessonData = session('lesson_data');
-    
+        dd($lessonData);
+        // dd($lessonData);
         if (!$lessonData) {
             // Handle the case where the session data is not found
             return response('Session data not found', 500);
@@ -1663,8 +1667,7 @@ class InstructorCourseController extends Controller
         $activityCount = $courseData['activityCount'];
         $quizCount = $courseData['quizCount'];
 
-        // You can now use $lessonInfo and $lessonContent to generate your PDF
-        // ...
+        
 
         // Render the view with the Blade template
         $html = view('instructor_course.courseLesson', compact('instructor'))
@@ -1681,58 +1684,47 @@ class InstructorCourseController extends Controller
             ])
             ->render();
 
-        // Find the markers in your HTML
-        $startMarker = '<!-- start-generate-pdf -->';
-        $endMarker = '<!-- end-generate-pdf -->';
-    
-        // Find the positions of the markers
-        $startPos = strpos($html, $startMarker);
-        $endPos = strpos($html, $endMarker);
+          // Find the positions of the markers
+          $startMarker = '<!-- start-generate-pdf -->';
+          $endMarker = '<!-- end-generate-pdf -->';
+          $startPos = strpos($html, $startMarker);
+          $endPos = strpos($html, $endMarker);
+  
+          // Extract the content between the markers
+          $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
+  
+          // Generate a unique filename for the PDF (you can customize this)
+          $filename = $course->course_name . 'lesson_' . $lessonInfo->lesson_id . '.pdf';
+  
+          // Define the folder path based on the course name
+          $folderName = "{$course->course_id} {$course->course_name}";
+          $folderName = Str::slug($folderName, '_');
+          $folderPath = 'courses/' . $folderName . '/documents';
+  
+          // Check if the file already exists
+          if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
+              // If it exists, delete the old file
+              Storage::disk('public')->delete($folderPath . '/' . $filename);
+          }
+  
+          $extractedHtml = str_replace('\\', '/', $extractedHtml);
 
-        $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
-
-        // Generate a unique filename for the PDF (you can customize this)
-        $filename = time() . '-' . $course->course_name .'lesson_' . $lessonInfo->lesson_id . '.pdf';
-
-        // Define the folder path based on the course name
-        // $folderName = Str::slug($course->course_name, '_'); // Converts course name to a URL-friendly format
-        $folderName = "{$course->course_id} {$course->course_name}";
-        $folderName = Str::slug($folderName, '_');
-        $folderPath = 'courses/' . $folderName . '/documents';
-
-        // Check if the file already exists
-        if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
-            // If it exists, delete the old file
-            Storage::disk('public')->delete($folderPath . '/' . $filename);
-        }
-
-        // Configure Dompdf
-        $dompdf = new Dompdf();
-        $dompdf->set_option('isHtml5ParserEnabled', true);
-        $dompdf->set_option('isPhpEnabled', true);
-        $dompdf->set_option('isCssEnabled', true);
-
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($extractedHtml);
-
-        // (Optional) Set paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the PDF
-        $dompdf->render();
-
-        // Generate the PDF
-        $pdf = $dompdf->output();
-
-
-        // Store the new PDF in the public directory within the course-specific folder
-        Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
-
-        // Generate the URL to the stored PDF
-        $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
-
-        // Provide a download link to the user
-        return response()->json(['pdf_url' => $pdfUrl]);
+          // Set options for Snappy PDF
+          $options = [
+              'no-images' => false, // Allow inclusion of images
+              'footer-right' => '[page] of [topage]',
+          ];
+          
+          // Generate the PDF using Snappy PDF
+          $pdf = SnappyPdf::loadHTML($extractedHtml)->setOptions($options)->output();
+          // Store the new PDF in the public directory within the course-specific folder
+          Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
+  
+          // Generate the URL to the stored PDF
+          $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
+  
+          // Provide a download link to the user
+          return response()->json(['pdf_url' => $pdfUrl]);
     } else {
         // Handle authentication failure
         return response('Unauthorized', 401);

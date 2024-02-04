@@ -88,51 +88,59 @@ $(document).ready(() => {
         //     isAppended = true;
 
             learnerRowData = ``;
-            for (let i = 0; i < learnerActivityContent.length; i++) {
-                const enrollee_id = learnerActivityContent[i]['learner_course_id'];
-                const learner_id = learnerActivityContent[i]['learner_id'];
-                const learner_fname = learnerActivityContent[i]['learner_fname'];
-                const learner_lname = learnerActivityContent[i]['learner_lname'];
-                const total_score = learnerActivityContent[i]['total_score'];
-                const status = learnerActivityContent[i]['status'];
-                const attempt = learnerActivityContent[i]['attempt'];
-                const mark = learnerActivityContent[i]['mark'];
-                const updated_at = learnerActivityContent[i]['updated_at'];
 
-/* The above code is a JavaScript code snippet. It is checking the value of the variable "status" and
-assigning a corresponding value to the variable "dispStatus". */
-                if(status == "NOT YET STARTED") {
-                    dispStatus = "NOT YET STARTED"
-                } else if (status == "IN PROGRESS") {
-                    dispStatus = "TO BE CHECKED";
-                } else {
-                    dispStatus = "COMPLETED";
+            if(learnerActivityContent.length === 0) {
+                learnerRowData = `
+                <tr>
+                    <td colspan="9" class="text-center">No data available</td>
+                </tr>
+            `;
+            } else {
+                for (let i = 0; i < learnerActivityContent.length; i++) {
+                    const enrollee_id = learnerActivityContent[i]['learner_course_id'];
+                    const learner_id = learnerActivityContent[i]['learner_id'];
+                    const learner_fname = learnerActivityContent[i]['learner_fname'];
+                    const learner_lname = learnerActivityContent[i]['learner_lname'];
+                    const total_score = learnerActivityContent[i]['total_score'];
+                    const status = learnerActivityContent[i]['status'];
+                    const attempt = learnerActivityContent[i]['attempt'];
+                    const mark = learnerActivityContent[i]['mark'];
+                    const updated_at = learnerActivityContent[i]['updated_at'];
+    
+                    if(status == "NOT YET STARTED") {
+                        dispStatus = "NOT YET STARTED"
+                    } else if (status == "IN PROGRESS") {
+                        dispStatus = "TO BE CHECKED";
+                    } else {
+                        dispStatus = "COMPLETED";
+                    }
+    
+                    if(total_score == null) {
+                        total_score = "no score yet";
+                    }
+    
+                    learnerRowData += `
+                        <tr>
+                            <td>${enrollee_id}</td>
+                            <td>${learner_id}</td>
+                            <td>${learner_fname} ${learner_lname}</td>
+                            <td>${attempt}</td>
+                            <td>${updated_at}</td>
+                            <td>${total_score}/${criteria_total_score}</td>
+                            <td>${dispStatus}</td>
+                            <td>${mark}</td>
+                            <td class="float-right">
+                                <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}/${attempt}" 
+                                class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-darthmouthgreen hover:bg-green-650 md:h-12 py-2"  
+                                data-learner-course-id="${enrollee_id}">
+                                    <h1>visit</h1>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
                 }
-
-                if(total_score == null) {
-                    total_score = "no score yet";
-                }
-
-                learnerRowData += `
-                    <tr>
-                        <td>${enrollee_id}</td>
-                        <td>${learner_id}</td>
-                        <td>${learner_fname} ${learner_lname}</td>
-                        <td>${attempt}</td>
-                        <td>${updated_at}</td>
-                        <td>${total_score}/${criteria_total_score}</td>
-                        <td>${dispStatus}</td>
-                        <td>${mark}</td>
-                        <td class="float-right">
-                            <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}/${attempt}" 
-                            class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-darthmouthgreen hover:bg-green-650 md:h-12 py-2"  
-                            data-learner-course-id="${enrollee_id}">
-                                <h1>visit</h1>
-                            </a>
-                        </td>
-                    </tr>
-                `;
             }
+      
 
             $('#responsesRowDataArea').empty();
             $('#responsesRowDataArea').append(learnerRowData);

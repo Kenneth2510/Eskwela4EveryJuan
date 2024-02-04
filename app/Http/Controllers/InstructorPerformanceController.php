@@ -64,6 +64,16 @@ class InstructorPerformanceController extends Controller
                 ->orderBy("course.created_at", "ASC")
                 ->get();
 
+                $data = [
+                    'title' => 'Performance',
+                    'scripts' => ['instructor_performance.js'],
+                    'courses' => $courses,
+                ];
+        
+                // dd($data);
+                return view('instructor_performance.instructorPerformance' , compact('instructor', 'courses'))
+                ->with($data);
+
             } catch (\Exception $e) {
                 dd($e->getMessage());
             }
@@ -72,15 +82,7 @@ class InstructorPerformanceController extends Controller
             return redirect('/instructor');
         }
 
-        $data = [
-            'title' => 'Performance',
-            'scripts' => ['instructor_performance.js'],
-            'courses' => $courses,
-        ];
 
-        // dd($data);
-        return view('instructor_performance.instructorPerformance' , compact('instructor', 'courses'))
-        ->with($data);
     }
 
     public function sessionData() {
@@ -150,10 +152,10 @@ class InstructorPerformanceController extends Controller
                     'course.course_difficulty',
                     'course.created_at',
                     'course.updated_at',
-                    DB::raw('COUNT(learner_course.learner_course_id) as learnerCount'),
-                    DB::raw('COUNT(CASE WHEN learner_course.status = "Approved" THEN learner_course.learner_course_id END) as approvedLearnerCount')
+                    DB::raw('COALESCE(COUNT(learner_course.learner_course_id), 0) as learnerCount'),
+                    DB::raw('COALESCE(COUNT(CASE WHEN learner_course.status = "Approved" THEN learner_course.learner_course_id END), 0) as approvedLearnerCount')
                 )
-                ->join('learner_course', 'learner_course.course_id', '=', 'course.course_id')
+                ->leftJoin('learner_course', 'learner_course.course_id', '=', 'course.course_id')
                 ->where('instructor_id', $instructor->instructor_id)
                 ->groupBy(
                     'course.course_id',
@@ -166,9 +168,8 @@ class InstructorPerformanceController extends Controller
                     'course.updated_at'
                 )
                 ->get();
-
-
-
+            
+            // dd($allInstructorCourses);
 
                 $totalLearnersCount = 0;
                 $totalPendingLearnersCount = 0;
@@ -238,6 +239,8 @@ class InstructorPerformanceController extends Controller
                     'totalApprovedCourseNum' => $totalApprovedCourseNum,
                     'totalRejectedCourseNum' => $totalRejectedCourseNum,
                 ];
+
+                // dd($data);
         
                 return response()->json($data);
             } catch (ValidationException $e) {

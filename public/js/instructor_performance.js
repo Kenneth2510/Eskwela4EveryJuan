@@ -28,7 +28,7 @@ $(document).ready(function() {
             type: "GET",
             url: url,
             success: function(response) {
-                console.log(response)
+                // console.log(response)
 
                 totalCourseNum = response['totalCourseNum']
                 totalPendingCourseNum = response['totalPendingCourseNum']
@@ -282,6 +282,7 @@ $(document).ready(function() {
                 </td>
             </tr>
             `
+            
         }
 
         $('.rowCourseDataArea').empty();

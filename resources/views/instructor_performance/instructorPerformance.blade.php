@@ -117,7 +117,7 @@
                     </thead>
 
                     <tbody class="rowCourseDataArea mt-5">
-                        <tr class="rowCourseData my-5 text-center">
+                        {{-- <tr class="rowCourseData my-5 text-center">
                             <td class="mt-5 py-5">Sample 1</td>
                             <td>jrkh90</td>
                             <td>10/13</td>
@@ -126,7 +126,7 @@
                             <td>
                                 <a href="" method="GET" class="bg-darthmouthgreen hover:bg-green-950 text-white rounded-xl px-5 py-3">View</a>
                             </td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
