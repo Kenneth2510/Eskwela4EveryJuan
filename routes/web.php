@@ -51,10 +51,15 @@ Route::controller(LearnerController::class)->group(function() {
 Route::controller(InstructorController::class)->group(function() {
     Route::get('/instructor', 'index');
     Route::post('/instructor/login', 'login_process');
+    Route::get('/instructor/forgot', 'forgot_password');
+    Route::post('/instructor/reset', 'reset');
+    Route::get('/instructor/reset_password', 'reset_password');
+    Route::post('/instructor/reset_password_process/{token}', 'reset_password_process');
     Route::get('/instructor/authenticate', 'login_authentication');
     Route::post('/instructor/authenticate', 'authenticate_instructor');
     Route::post('/instructor/logout', 'logout');
     Route::get('/instructor/register', 'register');
+    Route::get('/instructor/wait', 'wait');
     Route::get('/instructor/dashboard', 'dashboard');
     Route::get('/instructor/dashboard/overviewNum', 'overviewNum');
     Route::get('/instructor/register', 'register1');
@@ -317,4 +322,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/downvote', 'LearnerDiscussionController@downvoteThreadCommentReply');
     Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/upvote', 'LearnerDiscussionController@upvoteThreadReplyReply');
     Route::post('/learner/discussions/thread/{thread}/comment/{thread_comment}/reply/{thread_comment_reply}/reply/{thread_reply_reply}/downvote', 'LearnerDiscussionController@downvoteThreadReplyReply');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/send', 'MailController@index');
 });

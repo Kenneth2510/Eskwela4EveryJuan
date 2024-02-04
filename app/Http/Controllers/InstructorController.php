@@ -20,7 +20,8 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
 
 class InstructorController extends Controller
 {
@@ -42,31 +43,188 @@ class InstructorController extends Controller
     public function login_process(Request $request) {
         
         $instructorData = $request->validate([
-            "instructor_username" =>  ['required'],
-            "password" =>  ['required'],
+            "instructor_username" =>  ['required', 'string'],
+            "password" =>  ['required', 'string'],
+        ], [
+            'instructor_username.required' => 'Username is required.',
+            'password.required' => 'Password is required.',
         ]);
-
+    
         if (auth('instructor')->attempt($instructorData)) {
             $instructor = auth('instructor')->user();
             $instructor = Instructor::find($instructor->instructor_id);
-            // dd($instructor);
-
+    
             if($instructor) {
                 $request->session()->put("instructor", $instructor);
-                // dd(session('instructor'));
                 $request->session()->put("instructor_authenticated", true);
-                // dd($request->session()->get("instructor_authenticated"));
             }
-            
-            // $request->session()->regenerate();
-    
+        
             return redirect('/instructor/authenticate')->with('message', "Welcome Back");
         }
-
-        
-        return back()->withErrors(['instructor_username' => 'Login Failed'])->withInput($request->except('password'));
-
+    
+        return back()->withErrors([
+            'instructor_username' => 'Login failed. Please check your credentials and try again.',
+            'password' => 'Login failed. Please check your credentials and try again.'
+        ])->withInput($request->except('password'));
     }
+
+
+    public function forgot_password() {
+        return view('instructor.forgot')
+        ->with([
+            'title'=> 'Forgot Password',
+            'scripts' => [''],
+        ]);
+    }
+
+    public function reset(Request $request)
+    {
+        $email = $request->input('email');
+    
+        // Check if the email exists in the 'instructor' table
+        $instructor = DB::table('instructor')
+            ->select(
+                'instructor_id',
+                'instructor_username',
+                'instructor_fname',
+                'instructor_lname',
+                'instructor_email',
+            )
+            ->where('instructor_email', '=', $email)
+            ->first();
+    
+        if (!$instructor) {
+            return response()->json(['message' => 'Instructor not found'], 404);
+        }
+    
+        // Generate a random token
+        $token = Str::random(60);
+    
+        // Store the token in the 'password_resets' table
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $instructor->instructor_email],
+            ['email' => $instructor->instructor_email, 'token' => $token, 'created_at' => now()]
+        );
+    
+        // Send password reset email
+        $data = [
+            'subject' => 'Password Reset Request',
+            'body' => "Hello! \n \n
+    
+    We received a request to reset your password. If you did not make this request, please ignore this email.\n
+    
+    To reset your password, click the link below:\n
+    
+    [Reset Password](http://127.0.0.1:8000/instructor/reset_password?token=$token)\n
+    
+    If the link doesn't work, copy and paste the following URL into your browser:\n
+    
+    http://127.0.0.1:8000/instructor/reset_password?token=$token\n
+    
+    This link will expire in 1 hour for security reasons.\n
+    
+    Thank you for using our platform!",
+        ];
+    
+        try {
+            // Create an instance of MailNotify
+            $mailNotify = new MailNotify($data);
+    
+            // Call the to() method on the instance, not statically on the class
+            Mail::to($instructor->instructor_email)->send($mailNotify);
+    
+            // return response()->json(['message' => 'Password reset email sent successfully']);
+            return view('instructor.login')
+            ->with([
+                'title'=> 'Instructor Login',
+                'scripts' => ['instructorLogin.js'],
+                'message' => 'Password reset email sent successfully',
+            ]);
+    
+        } catch (\Exception $th) {
+            dd($th);
+            return response()->json(['message' => 'Error in sending email']);
+        }
+    }
+    
+    public function reset_password(Request $request) {
+
+        $token = $request->input('token');
+
+        $passwordResetToken = DB::table('password_reset_tokens')
+        ->select(
+            'created_at',
+            'email',
+            'token'
+        )
+        ->where('token', $token)
+        ->first();
+
+        $instructor = DB::table('instructor')
+        ->select(
+            'instructor_id',
+            'instructor_username',
+            'instructor_fname',
+            'instructor_lname',
+            'instructor_email',
+        )
+        ->where('instructor_email', $passwordResetToken->email)
+        ->first();
+
+        return view('instructor.reset')
+        ->with([
+            'title'=> 'Reset Password',
+            'scripts' => [''],
+            'instructor' =>  $instructor,
+            'token' => $passwordResetToken,
+        ]);
+    }
+
+    public function reset_password_process($token, Request $request) {
+        $passwordResetToken = DB::table('password_reset_tokens')
+            ->select('created_at', 'email', 'token')
+            ->where('token', $token)
+            ->first();
+    
+        if (!$passwordResetToken) {
+            // Token not found or expired
+            return redirect()->route('login')->withErrors(['email' => 'Invalid or expired token.']);
+        }
+    
+        $tokenCreatedAt = \Carbon\Carbon::parse($passwordResetToken->created_at);
+        $currentDateTime = now();
+    
+        if ($tokenCreatedAt->diffInMinutes($currentDateTime) > 60) {
+            // Token has expired
+            return redirect('/instructor')->withErrors(['email' => 'The password reset link has expired.']);
+        }
+    
+        // Check if the new password and confirmation match
+        $newPassword = $request->input('password');
+        $confirmPassword = $request->input('password_confirmation');
+    
+        if ($newPassword != $confirmPassword) {
+            // Passwords don't match
+            return redirect('/instructor')->withErrors(['password' => 'The new password and confirmation do not match.']);
+        }
+    
+        // Hash the new password before updating
+        $hashedPassword = bcrypt($newPassword);
+    
+        // Update the password for the instructor
+        DB::table('instructor')
+            ->where('instructor_email', $passwordResetToken->email)
+            ->update(['password' => $hashedPassword]);
+    
+        // Optionally, you may want to invalidate the token after using it
+        DB::table('password_reset_tokens')
+            ->where('token', $token)
+            ->delete();
+    
+        // Redirect to a success page or login page
+        return redirect('/instructor')->with('status', 'Password successfully changed.');
+    }
+    
 
     public function login_authentication(Request $request) {
         if (!$request->session()->has('instructor_authenticated')) {
@@ -80,13 +238,12 @@ class InstructorController extends Controller
     }
 
     public function authenticate_instructor(Request $request) {
-
         if (!$request->session()->has('instructor_authenticated')) {
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             return redirect(route('instructor.login'))->withErrors(['instructor_username' => 'Authentication Required']);
         }
-            // dd($request);
+    
         $codeNumber = $request->validate([
             "security_code_1" => ['required', 'numeric'],
             "security_code_2" => ['required', 'numeric'],
@@ -95,35 +252,62 @@ class InstructorController extends Controller
             "security_code_5" => ['required', 'numeric'],
             "security_code_6" => ['required', 'numeric'],
         ]);
-
+    
         $securityCodeNumber = implode('', $codeNumber);
-
         $instructor = auth('instructor')->user();
         $instructorSecurityCode = $instructor->instructor_security_code;
-
-
-
+    
+        // Check if security code is correct
         if ($securityCodeNumber === $instructorSecurityCode) {
             $request->session()->forget('instructor_authenticated');
-
+    
             $now = Carbon::now();
             $timestampString = $now->toDateTimeString();
-
-
+    
             $session_log_data = [
                 "session_user_id" => $instructor->instructor_id,
                 "session_user_type" => "INSTRUCTOR",
                 "session_in" => $timestampString,
             ];
-
+    
             session_log::create($session_log_data);
+    
+            // Clear unnecessary session data
+            $request->session()->forget('auth_attempts');
 
-            // $request->session()->regenerate();
-            return redirect('/instructor/dashboard')->with('message', 'Authenticated Successfully');
-        } 
+            // dd($instructor);
+            if($instructor->status === 'Approved') {
+                return redirect('/instructor/dashboard')->with('message', 'Authenticated Successfully');
+            } else {
+                return redirect('/instructor/wait')->with('message', 'Authenticated Successfully');
+            }
+    
+        } else {
+            // Increment the authentication attempts counter
+            $attempts = $request->session()->get('auth_attempts', 0) + 1;
+            $request->session()->put('auth_attempts', $attempts);
+            
+            $remainingAttempts = 5 - $attempts;
+    
+            if ($attempts >= 5) {
+                // If 5 unsuccessful attempts, destroy the session
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect('/instructor/login')->withErrors(['instructor_username' => 'Too many incorrect attempts. Session destroyed.']);
+            }
+    
+            return back()->withErrors(['security_code' => 'Invalid Security Code'])->with('remaining_attempts', $remainingAttempts);
+        }
+    }
 
-        return back()->withErrors(['security_code' => 'Invalid Security Code']);
-}
+    public function wait() {
+        return view('instructor.wait')
+        ->with([
+            'title'=> 'Instructor Pending',
+            'scripts' => [''],
+        ]);
+    }
+    
 
     public function logout(Request $request) {
 

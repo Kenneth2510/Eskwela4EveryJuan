@@ -29,7 +29,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
 
 class AdminController extends Controller
 {
@@ -617,6 +618,30 @@ public function login_process(Request $request) {
 
         try {
             $instructor->update(['status' => 'Approved']);  
+
+            $data = [
+                'subject' => 'Your Instructor Account Approval',
+                'body' => 'Hello! Your instructor account has been successfully approved by the admin. You can now log in using the link below:
+            
+                [Instructor Login](http://127.0.0.1:8000/instructor)
+            
+                Thank you for joining our platform!',
+            ];
+            
+
+            try {
+                // Create an instance of MailNotify
+                $mailNotify = new MailNotify($data);
+    
+                // Call the to() method on the instance, not statically on the class
+                Mail::to($instructor->instructor_email)->send($mailNotify);
+                
+                // return response()->json(['Great! check your mail box']);
+    
+            } catch (\Exception $th) {
+                dd($th);
+                return response()->json(['Error in sending email']);
+            }
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
