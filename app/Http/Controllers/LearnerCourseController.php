@@ -38,8 +38,8 @@ use Carbon\Carbon;
 class LearnerCourseController extends Controller
 {
     public function courses (){
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             // dd($instructor);
 
             try {
@@ -98,8 +98,8 @@ class LearnerCourseController extends Controller
 
 
     public function searchCourse(Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             $courseVal = $request->input('courseVal');
 
@@ -135,8 +135,8 @@ class LearnerCourseController extends Controller
 
     public function overview(Course $course) {
  
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             // dd($instructor);
 
             try {
@@ -499,8 +499,8 @@ class LearnerCourseController extends Controller
     }
 
     public function enroll_course(Course $course) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             if($learner->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
@@ -531,8 +531,8 @@ class LearnerCourseController extends Controller
 
     public function unEnroll_course(LearnerCourse $learnerCourse) {
         // dd($learnerCourse);
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             try {
 
@@ -594,8 +594,8 @@ class LearnerCourseController extends Controller
     }
 
     public function manage_course(Request $request, Course $course) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             // dd($instructor);
 
             try {
@@ -699,8 +699,8 @@ class LearnerCourseController extends Controller
     }
 
     public function course_overview(Course $course) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             // dd($learner);
 
 
@@ -856,8 +856,8 @@ class LearnerCourseController extends Controller
     }
 
     public function view_lesson(Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 // if (!function_exists('getRandomColor')) {
                 //     function getRandomColor() {
@@ -968,8 +968,8 @@ class LearnerCourseController extends Controller
     }
 
     public function finish_lesson(Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 $currentLessonStatus = DB::table('learner_lesson_progress')
                     ->where('learner_course_id' , $learner_course->learner_course_id)
@@ -1039,8 +1039,8 @@ class LearnerCourseController extends Controller
     
 
     public function view_activity(Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 // if (!function_exists('getRandomColor')) {
                 //     function getRandomColor() {
@@ -1234,8 +1234,8 @@ class LearnerCourseController extends Controller
     }
 
     public function answer_activity(Course $course, LearnerCourse $learner_course, Syllabus $syllabus, $attempt) {
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
 
                 
@@ -1460,8 +1460,8 @@ class LearnerCourseController extends Controller
     }
 
     public function submit_answer(Course $course, LearnerCourse $learner_course, Syllabus $syllabus,$attempt, Activities $activity, ActivityContents $activity_content , Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 $activityData =([
                     // 'learner_course_id' => $learner_course->learner_course_id,
@@ -1561,8 +1561,8 @@ class LearnerCourseController extends Controller
 
     public function view_quiz(Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
 
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 // if (!function_exists('getRandomColor')) {
                 //     function getRandomColor() {
@@ -1675,8 +1675,8 @@ class LearnerCourseController extends Controller
 
     public function answer_quiz(Course $course, LearnerCourse $learner_course, Syllabus $syllabus, $attempt) {
 
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 // if (!function_exists('getRandomColor')) {
                 //     function getRandomColor() {
@@ -2238,8 +2238,8 @@ class LearnerCourseController extends Controller
 
 
     public function view_output (Course $course, LearnerCourse $learner_course, Syllabus $syllabus, $attempt) {
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
 
                 // if (!function_exists('getRandomColor')) {
@@ -2463,8 +2463,8 @@ class LearnerCourseController extends Controller
 
     public function reattempt_answer_quiz (Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
 
-        if (auth('learner')->check()) {
-            $learner = session('learner'); 
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
             try {
                 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')

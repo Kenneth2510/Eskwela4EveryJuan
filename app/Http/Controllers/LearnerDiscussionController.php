@@ -193,8 +193,8 @@ class LearnerDiscussionController extends Controller
 
 
     public function discussions() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
 
             try {
@@ -226,8 +226,8 @@ class LearnerDiscussionController extends Controller
 
     public function threadData()
     {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $threadsData = DB::table('thread')
@@ -283,8 +283,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function createDiscussion() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
 
             try {
@@ -320,8 +320,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function postDiscussion(Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
             $thread_type = $request->input('thread_type');
             $thread_title = $request->input('thread_title');
@@ -383,8 +383,8 @@ class LearnerDiscussionController extends Controller
     
     
     public function postPhotoDiscussion(Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
             $thread_type = $request->input('thread_type');
             $thread_title = $request->input('thread_title');
@@ -467,8 +467,8 @@ class LearnerDiscussionController extends Controller
 
 
     public function viewThread(Thread $thread) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
 
             try {
@@ -530,8 +530,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function viewThreadComments(Thread $thread, Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
 
@@ -640,8 +640,8 @@ class LearnerDiscussionController extends Controller
     
 
     public function upvoteThread(Thread $thread) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $threadUpvoteData = DB::table('thread_upvotes')
@@ -683,8 +683,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function downvoteThread(Thread $thread) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $threadUpvoteData = DB::table('thread_upvotes')
@@ -727,8 +727,8 @@ class LearnerDiscussionController extends Controller
     
 
     public function postComment(Thread $thread, Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $thread_comment = $request->input('thread_comment');
@@ -777,8 +777,8 @@ class LearnerDiscussionController extends Controller
 
 
     public function postCommentReply(Thread $thread, Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $thread_comment_id = $request->input('thread_comment_id');
@@ -831,8 +831,8 @@ class LearnerDiscussionController extends Controller
 
 
     public function postReplyReply(Thread $thread, Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $thread_comment_id = $request->input('thread_comment_id');
@@ -889,8 +889,8 @@ class LearnerDiscussionController extends Controller
 
 
     public function upvoteThreadComment(Thread $thread, ThreadComments $thread_comment) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
 
@@ -935,8 +935,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function downvoteThreadComment(Thread $thread, ThreadComments $thread_comment) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 $threadCommentUpvoteData = DB::table('thread_comment_upvotes')
@@ -980,8 +980,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function upvoteThreadCommentReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
 
@@ -1028,8 +1028,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function downvoteThreadCommentReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
 
@@ -1077,8 +1077,8 @@ class LearnerDiscussionController extends Controller
 
 
     public function upvoteThreadReplyReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply, ThreadReplyReplies $thread_reply_reply) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
 
@@ -1127,8 +1127,8 @@ class LearnerDiscussionController extends Controller
     }
 
     public function downvoteThreadReplyReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply, ThreadReplyReplies $thread_reply_reply) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
 

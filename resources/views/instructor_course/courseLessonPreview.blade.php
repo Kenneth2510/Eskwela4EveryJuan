@@ -198,8 +198,20 @@
                     </div>
                     @if ($lesson->video_url !== null)
                     <div class="lesson-video">
-                        {!! $lesson->video_url !!}
+                        <h4>Videos embedded:</h4>
+                        {{-- Extract the video ID from the iframe src attribute --}}
+                        @php
+                            $urlParts = parse_url($lesson->video_url);
+                            $query = $urlParts['query'] ?? '';
+                            parse_str($query, $queryParts);
+                            $videoId = $queryParts['v'] ?? '';
+                            $videoUrl = "https://www.youtube.com/watch?v=$videoId";
+                        @endphp
+                    
+                        <p>{{ $videoUrl }}</p>
                     </div>
+                    
+                    
                     @endif
                 </div>
                 @empty

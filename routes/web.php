@@ -5,6 +5,9 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LearnerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +133,21 @@ Route::controller(AdminController::class)->group(function() {
 
 // Route::get('/instructor/courses', 'App\Http\Controllers\InstructorCourseController@courses');
 // Route::get('/instructor/courses/create', 'App\Http\Controllers\InstructorCourseController@courseCreate');
+Route::get('storage/{folder}/{filename}', function ($folder, $filename) {
+    $path = storage_path("app/public/{$folder}/{$filename}");
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+})->where('filename', '.*'); 
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/instructor/courses', 'InstructorCourseController@courses');

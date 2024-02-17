@@ -43,8 +43,8 @@ use App\Http\Controllers\DateTime;
 class LearnerPerformanceController extends Controller
 {
     public function performances() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
 
             try {
@@ -91,8 +91,8 @@ class LearnerPerformanceController extends Controller
     }
 
     public function enrolledCoursesPerformances() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             try{
                 $learnerCourseData = DB::table('learner_course_progress')
@@ -385,8 +385,8 @@ class LearnerPerformanceController extends Controller
 
 
     public function sessionData() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             try{
                 $totalsPerDay = DB::table('session_logs')
@@ -417,8 +417,8 @@ class LearnerPerformanceController extends Controller
 
 
     public function coursePerformance(Course $course) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
 
             try {
@@ -483,8 +483,8 @@ class LearnerPerformanceController extends Controller
     }
 
     public function coursePerformanceData(Course $course) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
             try {
 
@@ -672,8 +672,8 @@ class LearnerPerformanceController extends Controller
     }
 
     public function syllabusPerformanceData(Course $course) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
             try {
                 $learnercourse = DB::table('learner_course')
