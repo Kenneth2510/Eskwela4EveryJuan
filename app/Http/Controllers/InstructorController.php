@@ -22,53 +22,57 @@ use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
+use Illuminate\Support\Facades\Cache;
 
 class InstructorController extends Controller
 {
     public function index() {
-        if (auth('instructor')->check()) {
-            $instructor = session('instructor');
-            return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
-            // return back();
-        } else {
-        return view('instructor.login')
-        ->with([
+        if (session()->has('instructor')) {
+            return redirect('/instructor/dashboard');
+        }
+    
+        return view('instructor.login')->with([
             'title'=> 'Instructor Login',
             'scripts' => ['instructorLogin.js'],
         ]);
-        }
-
     }
 
+    
     public function login_process(Request $request) {
-        
-        $instructorData = $request->validate([
-            "instructor_username" =>  ['required', 'string'],
-            "password" =>  ['required', 'string'],
+        $request->validate([
+            "instructor_username" => ['required', 'string'],
+            "password" => ['required', 'string'],
         ], [
             'instructor_username.required' => 'Username is required.',
             'password.required' => 'Password is required.',
         ]);
     
-        if (auth('instructor')->attempt($instructorData)) {
-            $instructor = auth('instructor')->user();
-            $instructor = Instructor::find($instructor->instructor_id);
+        $username = $request->input('instructor_username');
+        $password = $request->input('password');
+        $remember = $request->has('remember');
     
-            if($instructor) {
-                $request->session()->put("instructor", $instructor);
-                $request->session()->put("instructor_authenticated", true);
-            }
-        
+        if (empty($username) || empty($password)) {
+            return back()->withErrors([
+                'instructor_username' => 'Username is required.',
+                'password' => 'Password is required.',
+            ])->withInput($request->except('password'));
+        }
+    
+        $instructorData = DB::table('instructor')
+            ->where('instructor_username', $username)
+            ->first();
+    
+        if ($instructorData && Hash::check($password, $instructorData->password)) {
+            Cache::put('instructor_authenticated', $instructorData->instructor_id);
             return redirect('/instructor/authenticate')->with('message', "Welcome Back");
         }
     
         return back()->withErrors([
-            'instructor_username' => 'Login failed. Please check your credentials and try again.',
-            'password' => 'Login failed. Please check your credentials and try again.'
-        ])->withInput($request->except('password'));
+            'instructor_username_login' => 'Login failed. Please check your credentials and try again.',
+            'password_login' => 'Login failed. Please check your credentials and try again.'
+        ])->withInput($request->except('password'))->withInput(['instructor_username' => $username]);
     }
-
-
+    
     public function forgot_password() {
         return view('instructor.forgot')
         ->with([
@@ -227,22 +231,25 @@ class InstructorController extends Controller
     
 
     public function login_authentication(Request $request) {
-        if (!$request->session()->has('instructor_authenticated')) {
-            return redirect(route('instructor.login'))->withErrors(['instructor_username' => 'Authentication Required']);
+        if (!Cache::has('instructor_authenticated')) {
+            return redirect('/instructor')->withErrors(['instructor_username' => 'Authentication Required']);
         }
-
-        
-        // dd($request->session()->get('instructor_authenticated'));
+    
         return view('instructor.authenticate')->with('title', 'Instructor Login');
-
     }
-
+    
+    
+    
     public function authenticate_instructor(Request $request) {
-        if (!$request->session()->has('instructor_authenticated')) {
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect(route('instructor.login'))->withErrors(['instructor_username' => 'Authentication Required']);
+        $instructorId = Cache::get('instructor_authenticated');
+    
+        if (!$instructorId) {
+            return redirect('/instructor')->withErrors(['instructor_username' => 'Authentication Required']);
         }
+    
+        $instructor = DB::table('instructor')
+            ->where('instructor_id', $instructorId)
+            ->first();
     
         $codeNumber = $request->validate([
             "security_code_1" => ['required', 'numeric'],
@@ -254,51 +261,49 @@ class InstructorController extends Controller
         ]);
     
         $securityCodeNumber = implode('', $codeNumber);
-        $instructor = auth('instructor')->user();
         $instructorSecurityCode = $instructor->instructor_security_code;
     
         // Check if security code is correct
         if ($securityCodeNumber === $instructorSecurityCode) {
-            $request->session()->forget('instructor_authenticated');
-    
-            $now = Carbon::now();
-            $timestampString = $now->toDateTimeString();
-    
+            // Log the session
             $session_log_data = [
                 "session_user_id" => $instructor->instructor_id,
                 "session_user_type" => "INSTRUCTOR",
-                "session_in" => $timestampString,
+                "session_in" => now()->toDateTimeString(),
             ];
-    
             session_log::create($session_log_data);
     
-            // Clear unnecessary session data
-            $request->session()->forget('auth_attempts');
-
-            // dd($instructor);
-            if($instructor->status === 'Approved') {
+            // Create the session
+            session()->put('instructor', $instructor);
+    
+            // Clear unnecessary cache data
+            Cache::forget('auth_attempts');
+    
+            if ($instructor->status === 'Approved') {
                 return redirect('/instructor/dashboard')->with('message', 'Authenticated Successfully');
             } else {
                 return redirect('/instructor/wait')->with('message', 'Authenticated Successfully');
             }
-    
         } else {
             // Increment the authentication attempts counter
-            $attempts = $request->session()->get('auth_attempts', 0) + 1;
-            $request->session()->put('auth_attempts', $attempts);
-            
+            $attempts = Cache::get('auth_attempts', 0) + 1;
+            Cache::put('auth_attempts', $attempts);
+    
             $remainingAttempts = 5 - $attempts;
     
             if ($attempts >= 5) {
-                // If 5 unsuccessful attempts, destroy the session
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
+                // If 5 unsuccessful attempts, destroy the cache
+                Cache::forget('instructor_authenticated');
+                Cache::forget('auth_attempts');
+    
                 return redirect('/instructor/login')->withErrors(['instructor_username' => 'Too many incorrect attempts. Session destroyed.']);
             }
     
             return back()->withErrors(['security_code' => 'Invalid Security Code'])->with('remaining_attempts', $remainingAttempts);
         }
     }
+    
+    
 
     public function wait() {
         return view('instructor.wait')
@@ -311,12 +316,15 @@ class InstructorController extends Controller
 
     public function logout(Request $request) {
 
-        $instructor = auth('instructor')->user();
+        // $instructor = auth('instructor')->user();
+
+        $instructor = session('instructor');
+
 
         $now = Carbon::now();
         $timestampString = $now->toDateTimeString();
-    
 
+  
         $session_data = DB::table('session_logs')
         ->where('session_user_id', $instructor->instructor_id)
         ->where('session_user_type' , "INSTRUCTOR")
@@ -343,6 +351,8 @@ class InstructorController extends Controller
                     "time_difference" => $timeDifference,
                 ]);
         }
+        Cache::forget('instructor_authenticated');
+        Cache::forget('instructor');
 
         auth('instructor')->logout();
 
@@ -447,12 +457,18 @@ class InstructorController extends Controller
     }
 
     public function dashboard(){
-
-        if (auth('instructor')->check()) {
-            $instructor = session('instructor');
-        } else {
+        if (!session()->has('instructor')) {
             return redirect('/instructor');
         }
+    
+        // Retrieve the instructor data from the session
+        $instructor = session('instructor');
+
+        $instructorId = Cache::get('instructor_authenticated');
+        $instructor = DB::table('instructor')
+            ->where('instructor_id', $instructorId)
+            ->first();
+
 
         try {
             $coursesCount = Course::where('instructor_id', $instructor->instructor_id)->count();
@@ -496,7 +512,7 @@ class InstructorController extends Controller
     }
 
     public function overviewNum() {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
 
             try {
@@ -634,7 +650,7 @@ class InstructorController extends Controller
     public function settings(){
 
         
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             // dd($instructor);
 
@@ -649,7 +665,7 @@ class InstructorController extends Controller
     }
 
     public function update_info(Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             // dd($instructor);
 
@@ -692,7 +708,7 @@ class InstructorController extends Controller
     }
 
     public function update_profile(Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
         } else {
             return redirect('/instructor');

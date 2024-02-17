@@ -31,11 +31,16 @@ Route::controller(UserController::class)->group(function() {
 Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner', 'index');
     Route::post('/learner/login', 'login_process');
+    Route::get('/learner/forgot', 'forgot_password');
+    Route::post('/learner/reset', 'reset');
+    Route::get('/learner/reset_password', 'reset_password');
+    Route::post('/learner/reset_password_process/{token}', 'reset_password_process');
     Route::get('/learner/authenticate', 'login_authentication');
     Route::post('/learner/authenticate', 'authenticate_learner');
     Route::post('/learner/logout', 'logout');
     Route::get('/learner/register', 'register');
     Route::post('/learner/register', 'register_process');
+    Route::get('/learner/wait', 'wait');
     Route::get('/learner/dashboard', 'dashboard');
     Route::get('/learner/dashboard/overviewNum', 'overviewNum');
     Route::get('/learner/dashboard/sessionData', 'sessionData');

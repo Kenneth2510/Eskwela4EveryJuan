@@ -50,7 +50,7 @@ use Barryvdh\Snappy\Facades\SnappyPdf;
 class InstructorCourseController extends Controller
 {
     public function courses(){
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -64,7 +64,7 @@ class InstructorCourseController extends Controller
                         "instructor.instructor_fname",
                         "instructor.profile_picture"
                     )
-                ->where('course.instructor_id', '=', $instructor['instructor_id'])
+                ->where('course.instructor_id', '=', $instructor->instructor_id)
                 ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
                 ->orderBy("course.created_at", "DESC");
 
@@ -86,7 +86,7 @@ class InstructorCourseController extends Controller
     }
 
     public function searchCourse(Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
 
             $courseVal = $request->input('courseVal');
@@ -100,7 +100,7 @@ class InstructorCourseController extends Controller
                 "instructor.instructor_fname",
                 "instructor.profile_picture"
             )
-            ->where('course.instructor_id', '=', $instructor['instructor_id'])
+            ->where('course.instructor_id', '=', $instructor->instructor_id)
             ->where('course.course_name', 'like', '%' . $courseVal . '%')
             ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
             ->orderBy("course.created_at", "DESC")
@@ -118,7 +118,7 @@ class InstructorCourseController extends Controller
 
     
     public function courseCreate(){
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             // dd($instructor);
 
@@ -137,7 +137,7 @@ class InstructorCourseController extends Controller
     public function courseCreate_process(Request $request) {
         $instructor = session('instructor');
 
-        if($instructor['status'] !== 'Approved') {
+        if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         } else {
@@ -149,7 +149,7 @@ class InstructorCourseController extends Controller
                 ]);
 
                 $courseData['course_code'] = Str::random(6);
-                $courseData['instructor_id'] = $instructor['instructor_id'];
+                $courseData['instructor_id'] = $instructor->instructor_id;
     
                 
                 $course = Course::create($courseData);
@@ -190,7 +190,7 @@ class InstructorCourseController extends Controller
     public function courseCreateUploadFiles(Course $course, Request $request) {
         $instructor = session('instructor');
 
-        if($instructor['status'] !== 'Approved') {
+        if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         } else {
@@ -233,7 +233,7 @@ class InstructorCourseController extends Controller
 
     
     public function overview(Course $course){
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             // dd($instructor);
 
@@ -480,7 +480,7 @@ class InstructorCourseController extends Controller
     }
 
     public function overViewNum(Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
 
             try{
@@ -516,7 +516,7 @@ class InstructorCourseController extends Controller
     }
 
     public function editCourseDetails(Course $course, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
 
             try{
@@ -594,7 +594,7 @@ class InstructorCourseController extends Controller
     }
 
     public function manage_course(Request $request, Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             // dd($instructor);
 
@@ -690,7 +690,7 @@ class InstructorCourseController extends Controller
     public function update_course(Course $course, Request $request) {
         $instructor = session('instructor');
 
-        if($instructor['status'] !== 'Approved') {
+        if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         } else {
@@ -717,7 +717,7 @@ class InstructorCourseController extends Controller
     public function delete_course(Course $course) {
         $instructor = session('instructor');
     
-        if ($instructor['status'] !== 'Approved') {
+        if ($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         }
@@ -808,11 +808,11 @@ class InstructorCourseController extends Controller
 
 
     public function display_course_syllabus_view(Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -862,10 +862,10 @@ class InstructorCourseController extends Controller
         }
     }
     public function course_content_json (Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
-        if($instructor['status'] !== 'Approved') {
+        if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         } else {
@@ -897,7 +897,7 @@ class InstructorCourseController extends Controller
     }
     public function course_content(Course $course) {
         $instructor = session('instructor');
-        if($instructor['status'] !== 'Approved') {
+        if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         } else {
@@ -1152,11 +1152,11 @@ class InstructorCourseController extends Controller
     public function view_lesson(Course $course, Syllabus $syllabus, $topic_id) {
 
 
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -1251,10 +1251,10 @@ class InstructorCourseController extends Controller
     }
 
     public function lesson_content_json (Course $course, Syllabus $syllabus, $topic_id) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
-        if($instructor['status'] !== 'Approved') {
+        if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
         } else {
@@ -1735,11 +1735,11 @@ class InstructorCourseController extends Controller
     
     // for course activity
     public function view_activity(Course $course, Syllabus $syllabus, $topic_id) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -1882,10 +1882,10 @@ class InstructorCourseController extends Controller
     }
 
     public function activity_content_json(Course $course, Syllabus $syllabus, $topic_id) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -2094,7 +2094,7 @@ class InstructorCourseController extends Controller
     }
 
     public function view_learner_activity_response(Course $course, Syllabus $syllabus, $topic_id, LearnerCourse $learner_course, $attempt) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
 
             try {
@@ -2248,7 +2248,7 @@ class InstructorCourseController extends Controller
     }
 
     public function learnerResponse_overallScore($learner_activity_output, $learner_course, $activity, $activity_content, $attempt, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -2398,7 +2398,7 @@ class InstructorCourseController extends Controller
     
 
     public function learnerResponse_criteriaScore ($learner_activity_output, $learner_course,  $activity, $activity_content, $attempt, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -2549,11 +2549,11 @@ class InstructorCourseController extends Controller
     }
 
     public function view_quiz(Course $course, Syllabus $syllabus, $topic_id) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -2648,11 +2648,11 @@ class InstructorCourseController extends Controller
     }
 
     public function quiz_info_json (Course $course, Syllabus $syllabus, $topic_id) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -2871,7 +2871,7 @@ class InstructorCourseController extends Controller
     }
 
     public function quiz_content (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -2982,7 +2982,7 @@ class InstructorCourseController extends Controller
 
 
     public function quiz_content_json (Course $course, Syllabus $syllabus, $topic_id, Quizzes $quiz) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -3249,11 +3249,11 @@ class InstructorCourseController extends Controller
 
     public function view_learner_output(Course $course, Syllabus $syllabus, $topic_id, LearnerQuizProgress $learner_quiz_progress) {
 
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
@@ -3379,11 +3379,11 @@ class InstructorCourseController extends Controller
 
     public function view_learner_output_json(Course $course, Syllabus $syllabus, $topic_id, LearnerQuizProgress $learner_quiz_progress) {
 
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $instructor = session('instructor');
-            if($instructor['status'] !== 'Approved') {
+            if($instructor->status !== 'Approved') {
                 session()->flash('message', 'Account is not yet Approved');
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {

@@ -319,11 +319,38 @@ public function login_process(Request $request) {
 
         try {
             $learner->update(['status' => 'Approved']);  
+
+            $data = [
+                'subject' => 'Your Learner Account Approval',
+                'body' => 'Hello! Your learner account has been successfully approved by the admin. You can now log in using the link below:
+            
+                [Learner Login](http://127.0.0.1:8000/learner)
+            
+                Thank you for joining our platform!',
+            ];
+            
+
+            try {
+                // Create an instance of MailNotify
+                $mailNotify = new MailNotify($data);
+    
+                // Call the to() method on the instance, not statically on the class
+                Mail::to($learner->learner_email)->send($mailNotify);
+                
+                // return response()->json(['Great! check your mail box']);
+    
+            } catch (\Exception $th) {
+                dd($th);
+                return response()->json(['Error in sending email']);
+            }
+
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
         return redirect()->back()->with('message' , 'Learner Status successfully changed');
     }
+
 
     public function rejectLearner(Learner $learner)
     {

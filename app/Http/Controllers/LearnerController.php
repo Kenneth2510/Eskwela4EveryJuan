@@ -15,15 +15,17 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
+use Illuminate\Support\Facades\Cache;
 
 class LearnerController extends Controller
 {
     public function index() {
 
-        if (auth('learner')->check()) {
-            $learner = session('learner');
-            // return redirect('/instructor/dashboard')->with('title', 'Instructor Dashboard');
-            return back();
+        if (session()->has('learner')) {
+            return redirect('/learner/dashboard');
+        
         } else {
         return view('learner.login')
         ->with([
@@ -41,37 +43,220 @@ class LearnerController extends Controller
         $learnerData = $request->validate([
             "learner_username" =>  ['required'],
             "password" =>  ['required'],
+        ], [
+            'learner_username.required' => 'Username is required.',
+            'password.required' => 'Password is required.',
         ]);
 
-        // dd($learnerData);
-
-        if (auth('learner')->attempt($learnerData)) {
-            $learner = auth('learner')->user();
-            $learner = Learner::find($learner->learner_id);
-            // dd($instructor);
-
-            if($learner) {
-                $request->session()->put("learner", $learner);
-                // dd(session('instructor'));
-                $request->session()->put("learner_authenticated", true);
-                // dd($request->session()->get("instructor_authenticated"));
-            }
-            
-            // $request->session()->regenerate();
+        $username = $request->input('learner_username');
+        $password = $request->input('password');
+        $remember = $request->has('remember');
     
+        if (empty($username) || empty($password)) {
+            return back()->withErrors([
+                'learner_username' => 'Username is required.',
+                'password' => 'Password is required.',
+            ])->withInput($request->except('password'));
+        }
+
+        // if (auth('learner')->attempt($learnerData)) {
+        //     $learner = auth('learner')->user();
+        //     $learner = Learner::find($learner->learner_id);
+        //     // dd($instructor);
+
+        //     if($learner) {
+        //         $request->session()->put("learner", $learner);
+        //         // dd(session('instructor'));
+        //         $request->session()->put("learner_authenticated", true);
+        //         // dd($request->session()->get("instructor_authenticated"));
+        //     }
+            
+        //     // $request->session()->regenerate();
+    
+        //     return redirect('/learner/authenticate')->with('message', "Welcome Back");
+        // }
+
+        $learnerData = DB::table('learner')
+        ->where('learner_username', $username)
+        ->first();
+
+        if ($learnerData && Hash::check($password, $learnerData->password)) {
+            Cache::put('learner_authenticated', $learnerData->learner_id);
             return redirect('/learner/authenticate')->with('message', "Welcome Back");
         }
 
         
-        return back()->withErrors(['learner_username' => 'Login Failed'])->withInput($request->except('password'));
+        return back()->withErrors([
+            'learner_username_login' => 'Login failed. Please check your credentials and try again.',
+            'password_login' => 'Login failed. Please check your credentials and try again.'
+        ])->withInput($request->except('password'))->withInput(['learner_username' => $username]);
+    }
 
+
+    public function forgot_password() {
+        return view('learner.forgot')
+        ->with([
+            'title'=> 'Forgot Password',
+            'scripts' => [''],
+        ]);
+    }
+
+
+    public function reset(Request $request)
+    {
+        $email = $request->input('email');
+    
+        // Check if the email exists in the 'instructor' table
+        $learner = DB::table('learner')
+            ->select(
+                'learner_id',
+                'learner_username',
+                'learner_fname',
+                'learner_lname',
+                'learner_email',
+            )
+            ->where('learner_email', '=', $email)
+            ->first();
+    
+        if (!$learner) {
+            return response()->json(['message' => 'Learner not found'], 404);
+        }
+    
+        // Generate a random token
+        $token = Str::random(60);
+    
+        // Store the token in the 'password_resets' table
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $learner->learner_email],
+            ['email' => $learner->learner_email, 'token' => $token, 'created_at' => now()]
+        );
+    
+        // Send password reset email
+        $data = [
+            'subject' => 'Password Reset Request',
+            'body' => "Hello! \n \n
+    
+    We received a request to reset your password. If you did not make this request, please ignore this email. \n \n
+    
+    To reset your password, click the link below:\n \n
+    
+    [Reset Password](http://127.0.0.1:8000/learner/reset_password?token=$token) \n \n
+    
+    If the link doesn't work, copy and paste the following URL into your browser: \n \n
+    
+    http://127.0.0.1:8000/learner/reset_password?token=$token \n \n
+    
+    This link will expire in 1 hour for security reasons. \n \n
+    
+    Thank you for using our platform!",
+        ];
+    
+        try {
+            // Create an instance of MailNotify
+            $mailNotify = new MailNotify($data);
+    
+            // Call the to() method on the instance, not statically on the class
+            Mail::to($learner->learner_email)->send($mailNotify);
+    
+            // return response()->json(['message' => 'Password reset email sent successfully']);
+            return view('learner.login')
+            ->with([
+                'title'=> 'Learner Login',
+                'scripts' => ['instructorLogin.js'],
+                'message' => 'Password reset email sent successfully',
+            ]);
+    
+        } catch (\Exception $th) {
+            dd($th);
+            return response()->json(['message' => 'Error in sending email']);
+        }
+    }
+
+
+    public function reset_password(Request $request) {
+
+        $token = $request->input('token');
+
+        $passwordResetToken = DB::table('password_reset_tokens')
+        ->select(
+            'created_at',
+            'email',
+            'token'
+        )
+        ->where('token', $token)
+        ->first();
+
+        $learner = DB::table('learner')
+        ->select(
+            'learner_id',
+            'learner_username',
+            'learner_fname',
+            'learner_lname',
+            'learner_email',
+        )
+        ->where('learner_email', $passwordResetToken->email)
+        ->first();
+
+        return view('learner.reset')
+        ->with([
+            'title'=> 'Reset Password',
+            'scripts' => [''],
+            'learner' =>  $learner,
+            'token' => $passwordResetToken,
+
+        ]);
+    }
+
+
+    public function reset_password_process($token, Request $request) {
+        $passwordResetToken = DB::table('password_reset_tokens')
+            ->select('created_at', 'email', 'token')
+            ->where('token', $token)
+            ->first();
+    
+        if (!$passwordResetToken) {
+            // Token not found or expired
+            return redirect()->route('login')->withErrors(['email' => 'Invalid or expired token.']);
+        }
+    
+        $tokenCreatedAt = \Carbon\Carbon::parse($passwordResetToken->created_at);
+        $currentDateTime = now();
+    
+        if ($tokenCreatedAt->diffInMinutes($currentDateTime) > 60) {
+            // Token has expired
+            return redirect('/learner')->withErrors(['email' => 'The password reset link has expired.']);
+        }
+    
+        // Check if the new password and confirmation match
+        $newPassword = $request->input('password');
+        $confirmPassword = $request->input('password_confirmation');
+    
+        if ($newPassword != $confirmPassword) {
+            // Passwords don't match
+            return redirect('/learner')->withErrors(['password' => 'The new password and confirmation do not match.']);
+        }
+    
+        // Hash the new password before updating
+        $hashedPassword = bcrypt($newPassword);
+    
+        // Update the password for the instructor
+        DB::table('learner')
+            ->where('learner_email', $passwordResetToken->email)
+            ->update(['password' => $hashedPassword]);
+    
+        // Optionally, you may want to invalidate the token after using it
+        DB::table('password_reset_tokens')
+            ->where('token', $token)
+            ->delete();
+    
+        // Redirect to a success page or login page
+        return redirect('/learner')->with('status', 'Password successfully changed.');
     }
 
     public function login_authentication(Request $request) {
-        if (!$request->session()->has('learner_authenticated')) {
-            return redirect(route('learner.login'))->withErrors(['learner_username' => 'Authentication Required']);
+        if (!Cache::has('learner_authenticated')) {
+            return redirect('/learner')->withErrors(['learner_username' => 'Authentication Required']);
         }
-
         
         // dd($request->session()->get('instructor_authenticated'));
         return view('learner.authenticate')->with('title', 'Learner Login');
@@ -80,11 +265,15 @@ class LearnerController extends Controller
 
     public function authenticate_learner(Request $request) {
 
-        if (!$request->session()->has('learner_authenticated')) {
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect(route('learner.login'))->withErrors(['learner_username' => 'Authentication Required']);
+        $learnerId = Cache::get('learner_authenticated');
+    
+        if (!$learnerId) {
+            return redirect('/learner')->withErrors(['learner_username' => 'Authentication Required']);
         }
+
+        $learner = DB::table('learner')
+        ->where('learner_id', $learnerId)
+        ->first();
             // dd($request);
         $codeNumber = $request->validate([
             "security_code_1" => ['required', 'numeric'],
@@ -96,38 +285,63 @@ class LearnerController extends Controller
         ]);
 
         $securityCodeNumber = implode('', $codeNumber);
-
-        $learner = auth('learner')->user();
         $learnerSecurityCode = $learner->learner_security_code;
 
 
 
         if ($securityCodeNumber === $learnerSecurityCode) {
-            $request->session()->forget('learner_authenticated');
-
-            $now = Carbon::now();
-            $timestampString = $now->toDateTimeString();
-
-
+            // Log the session
             $session_log_data = [
                 "session_user_id" => $learner->learner_id,
                 "session_user_type" => "LEARNER",
-                "session_in" => $timestampString,
+                "session_in" => now()->toDateTimeString(),
             ];
-
             session_log::create($session_log_data);
+    
+            // Create the session
+            session()->put('learner', $learner);
+    
+            // Clear unnecessary cache data
+            Cache::forget('auth_attempts');
+    
+            if ($learner->status === 'Approved') {
+                return redirect('/learner/dashboard')->with('message', 'Authenticated Successfully');
+            } else {
+                return redirect('/learner/wait')->with('message', 'Authenticated Successfully');
+            }
+        } else {
+            // Increment the authentication attempts counter
+            $attempts = Cache::get('auth_attempts', 0) + 1;
+            Cache::put('auth_attempts', $attempts);
+    
+            $remainingAttempts = 5 - $attempts;
+    
+            if ($attempts >= 5) {
+                // If 5 unsuccessful attempts, destroy the cache
+                Cache::forget('learner_authenticated');
+                Cache::forget('auth_attempts');
+    
+                return redirect('/learner/login')->withErrors(['learner_username' => 'Too many incorrect attempts. Session destroyed.']);
+            }
+    
+            return back()->withErrors(['security_code' => 'Invalid Security Code'])->with('remaining_attempts', $remainingAttempts);
+        }
 
-            // $request->session()->regenerate();
-            return redirect('/learner/dashboard')->with('message', 'Authenticated Successfully');
-        } 
 
-        return back()->withErrors(['security_code' => 'Invalid Security Code']);
     }
 
 
+    public function wait() {
+        return view('learner.wait')
+        ->with([
+            'title'=> 'Learner Pending',
+            'scripts' => [''],
+        ]);
+    }
+
     public function logout(Request $request) {
 
-        $learner = auth('learner')->user();
+        $learner = session('learner');
 
         $now = Carbon::now();
         $timestampString = $now->toDateTimeString();
@@ -268,8 +482,8 @@ class LearnerController extends Controller
     }
 
     public function dashboard() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
     
             try {
                 // Get the courses the learner is enrolled in
@@ -334,8 +548,8 @@ class LearnerController extends Controller
     }
 
     public function overviewNum() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             try{
                 $learnerCourseData = DB::table('learner_course_progress')
@@ -483,8 +697,8 @@ class LearnerController extends Controller
     }
 
     public function sessionData() {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
 
             try{
                 $totalsPerDay = DB::table('session_logs')
@@ -515,8 +729,8 @@ class LearnerController extends Controller
 
     public function settings() {
 
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             // dd($learner);
 
             $business = Business::where('learner_id', $learner->learner_id)->first();
@@ -532,8 +746,8 @@ class LearnerController extends Controller
     }
 
     public function update_info(Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             // dd($learner);
 
             // dd($request);
@@ -594,8 +808,8 @@ class LearnerController extends Controller
     }
 
     public function update_profile(Request $request) {
-        if (auth('learner')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
         } else {
             return redirect('/learner');
         }

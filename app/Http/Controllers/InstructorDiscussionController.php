@@ -55,153 +55,153 @@ use Carbon\Carbon;
 class InstructorDiscussionController extends Controller
 {
 
-    public function upvoteJuggling() {
+    // public function upvoteJuggling() {
 
-        try {
-            $now = Carbon::now();
-            $timestampString = $now->toDateTimeString();
+    //     try {
+    //         $now = Carbon::now();
+    //         $timestampString = $now->toDateTimeString();
 
-            $last_randomized_datetime_object = DB::table('thread_upvotes')
-                ->select('last_randomized_datetime')
-                ->first();
+    //         $last_randomized_datetime_object = DB::table('thread_upvotes')
+    //             ->select('last_randomized_datetime')
+    //             ->first();
 
-            $last_randomized_datetime = $last_randomized_datetime_object->last_randomized_datetime;
+    //         $last_randomized_datetime = $last_randomized_datetime_object->last_randomized_datetime;
 
+    //         if($last_randomized_datetime_object) {
+    //             $last_randomized_datetime = $last_randomized_datetime_object->last_randomized_datetime;
+    
+    //             if (Carbon::parse($now)->diffInDays(Carbon::parse($last_randomized_datetime)) > 0) {
+    //                 $threadUpvotesData = DB::table('thread_upvotes')
+    //                 ->select(
+    //                     'thread_upvote_id',
+    //                     'thread_id',
+    //                     'base_upvote',
+    //                     'randomized_display_upvote',
+    //                     'last_randomized_datetime',
+    //                 )
+    //                 ->get();
+                    
+    
+    //                 foreach ($threadUpvotesData as $threadUpvote) {
+                        
+    //                     $min = 100;
+    //                     $max = 9999;
+    
+    //                     $randomNumber = rand($min, $max);
+    
+    //                     DB::table('thread_upvotes')
+    //                     ->where('thread_upvote_id', $threadUpvote->thread_upvote_id)
+    //                     ->update([
+    //                         'randomized_display_upvote' => $randomNumber,
+    //                         'last_randomized_datetime' => $timestampString
+    //                     ]);
+    //                 }
 
-            if (Carbon::parse($now)->diffInDays(Carbon::parse($last_randomized_datetime)) > 0) {
-                $threadUpvotesData = DB::table('thread_upvotes')
-                ->select(
-                    'thread_upvote_id',
-                    'thread_id',
-                    'base_upvote',
-                    'randomized_display_upvote',
-                    'last_randomized_datetime',
-                )
-                ->get();
+    //                 $threadCommentsUpvotesData = DB::table('thread_comment_upvotes')
+    //             ->select(
+    //                 'thread_comment_upvote_id',
+    //                 'thread_id',
+    //                 'thread_comment_id',
+    //                 'base_upvote',
+    //                 'randomized_display_upvote',
+    //                 'last_randomized_datetime',
+    //             )
+    //             ->get();
                 
 
-                foreach ($threadUpvotesData as $threadUpvote) {
+    //             foreach ($threadCommentsUpvotesData as $threadCommentUpvote) {
                     
-                    $min = 100;
-                    $max = 9999;
+    //                 $min = 100;
+    //                 $max = 9999;
 
-                    $randomNumber = rand($min, $max);
+    //                 $randomNumber = rand($min, $max);
 
-                    DB::table('thread_upvotes')
-                    ->where('thread_upvote_id', $threadUpvote->thread_upvote_id)
-                    ->update([
-                        'randomized_display_upvote' => $randomNumber,
-                        'last_randomized_datetime' => $timestampString
-                    ]);
-                }
+    //                 DB::table('thread_comment_upvotes')
+    //                 ->where('thread_comment_upvote_id', $threadCommentUpvote->thread_comment_upvote_id)
+    //                 ->update([
+    //                     'randomized_display_upvote' => $randomNumber,
+    //                     'last_randomized_datetime' => $timestampString
+    //                 ]);
+    //             }
 
 
-                $threadCommentsUpvotesData = DB::table('thread_comment_upvotes')
-                ->select(
-                    'thread_comment_upvote_id',
-                    'thread_id',
-                    'thread_comment_id',
-                    'base_upvote',
-                    'randomized_display_upvote',
-                    'last_randomized_datetime',
-                )
-                ->get();
+    //             $threadCommentReplyUpvotesData = DB::table('thread_comment_reply_upvotes')
+    //             ->select(
+    //                 'thread_comment_reply_upvote_id',
+    //                 'thread_id',
+    //                 'thread_comment_id',
+    //                 'thread_comment_reply_id',
+    //                 'base_upvote',
+    //                 'randomized_display_upvote',
+    //                 'last_randomized_datetime',
+    //             )
+    //             ->get();
                 
 
-                foreach ($threadCommentsUpvotesData as $threadCommentUpvote) {
+    //             foreach ($threadCommentReplyUpvotesData as $threadCommentReplyUpvote) {
                     
-                    $min = 100;
-                    $max = 9999;
+    //                 $min = 100;
+    //                 $max = 9999;
 
-                    $randomNumber = rand($min, $max);
+    //                 $randomNumber = rand($min, $max);
 
-                    DB::table('thread_comment_upvotes')
-                    ->where('thread_comment_upvote_id', $threadCommentUpvote->thread_comment_upvote_id)
-                    ->update([
-                        'randomized_display_upvote' => $randomNumber,
-                        'last_randomized_datetime' => $timestampString
-                    ]);
-                }
+    //                 DB::table('thread_comment_reply_upvotes')
+    //                 ->where('thread_comment_reply_upvote_id', $threadCommentReplyUpvote->thread_comment_reply_upvote_id)
+    //                 ->update([
+    //                     'randomized_display_upvote' => $randomNumber,
+    //                     'last_randomized_datetime' => $timestampString
+    //                 ]);
+    //             }
 
 
-                $threadCommentReplyUpvotesData = DB::table('thread_comment_reply_upvotes')
-                ->select(
-                    'thread_comment_reply_upvote_id',
-                    'thread_id',
-                    'thread_comment_id',
-                    'thread_comment_reply_id',
-                    'base_upvote',
-                    'randomized_display_upvote',
-                    'last_randomized_datetime',
-                )
-                ->get();
+
+    //             $threadReplyReplyUpvotesData = DB::table('thread_reply_reply_upvotes')
+    //             ->select(
+    //                 'thread_reply_reply_upvote_id',
+    //                 'thread_id',
+    //                 'thread_comment_id',
+    //                 'thread_comment_reply_id',
+    //                 'thread_reply_reply_id',
+    //                 'base_upvote',
+    //                 'randomized_display_upvote',
+    //                 'last_randomized_datetime',
+    //             )
+    //             ->get();
                 
 
-                foreach ($threadCommentReplyUpvotesData as $threadCommentReplyUpvote) {
+    //             foreach ($threadReplyReplyUpvotesData as $threadReplyReplyUpvote) {
                     
-                    $min = 100;
-                    $max = 9999;
+    //                 $min = 100;
+    //                 $max = 9999;
 
-                    $randomNumber = rand($min, $max);
+    //                 $randomNumber = rand($min, $max);
 
-                    DB::table('thread_comment_reply_upvotes')
-                    ->where('thread_comment_reply_upvote_id', $threadCommentReplyUpvote->thread_comment_reply_upvote_id)
-                    ->update([
-                        'randomized_display_upvote' => $randomNumber,
-                        'last_randomized_datetime' => $timestampString
-                    ]);
-                }
+    //                 DB::table('thread_reply_reply_upvotes')
+    //                 ->where('thread_reply_reply_upvote_id', $threadReplyReplyUpvote->thread_reply_reply_upvote_id)
+    //                 ->update([
+    //                     'randomized_display_upvote' => $randomNumber,
+    //                     'last_randomized_datetime' => $timestampString
+    //                 ]);
+    //             }
+    //         }
+    //         }
 
-
-
-                $threadReplyReplyUpvotesData = DB::table('thread_reply_reply_upvotes')
-                ->select(
-                    'thread_reply_reply_upvote_id',
-                    'thread_id',
-                    'thread_comment_id',
-                    'thread_comment_reply_id',
-                    'thread_reply_reply_id',
-                    'base_upvote',
-                    'randomized_display_upvote',
-                    'last_randomized_datetime',
-                )
-                ->get();
-                
-
-                foreach ($threadReplyReplyUpvotesData as $threadReplyReplyUpvote) {
-                    
-                    $min = 100;
-                    $max = 9999;
-
-                    $randomNumber = rand($min, $max);
-
-                    DB::table('thread_reply_reply_upvotes')
-                    ->where('thread_reply_reply_upvote_id', $threadReplyReplyUpvote->thread_reply_reply_upvote_id)
-                    ->update([
-                        'randomized_display_upvote' => $randomNumber,
-                        'last_randomized_datetime' => $timestampString
-                    ]);
-                }
-
-
-            }
-
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-    }
+    //     } catch (\Exception $e) {
+    //         dd($e->getMessage());
+    //     }
+    // }
 
     public function discussions() {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
             try {
 
-                $this->upvoteJuggling();
+                // $this->upvoteJuggling();
                 
             $data = [
-                'title' => 'Performance',
+                'title' => 'Discussion',
                 'scripts' => ['instructor_discussion.js'],
 
             ];
@@ -224,7 +224,7 @@ class InstructorDiscussionController extends Controller
 
     public function threadData()
     {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -281,7 +281,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function createDiscussion() {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -297,7 +297,7 @@ class InstructorDiscussionController extends Controller
 
                 
             $data = [
-                'title' => 'Performance',
+                'title' => 'Discussion',
                 'scripts' => ['instructor_create_discussion.js'],
                 'courses' => $courseData,
             ];
@@ -316,7 +316,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function postDiscussion(Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $thread_type = $request->input('thread_type');
@@ -379,7 +379,7 @@ class InstructorDiscussionController extends Controller
     
     
     public function postPhotoDiscussion(Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             $thread_type = $request->input('thread_type');
@@ -463,7 +463,7 @@ class InstructorDiscussionController extends Controller
 
 
     public function viewThread(Thread $thread) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -526,7 +526,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function viewThreadComments(Thread $thread, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -634,7 +634,7 @@ class InstructorDiscussionController extends Controller
     
 
     public function upvoteThread(Thread $thread) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -677,7 +677,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function downvoteThread(Thread $thread) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -721,7 +721,7 @@ class InstructorDiscussionController extends Controller
     
 
     public function postComment(Thread $thread, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -771,7 +771,7 @@ class InstructorDiscussionController extends Controller
 
 
     public function postCommentReply(Thread $thread, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -825,7 +825,7 @@ class InstructorDiscussionController extends Controller
 
 
     public function postReplyReply(Thread $thread, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -883,7 +883,7 @@ class InstructorDiscussionController extends Controller
 
 
     public function upvoteThreadComment(Thread $thread, ThreadComments $thread_comment) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -929,7 +929,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function downvoteThreadComment(Thread $thread, ThreadComments $thread_comment) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -974,7 +974,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function upvoteThreadCommentReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -1022,7 +1022,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function downvoteThreadCommentReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -1071,7 +1071,7 @@ class InstructorDiscussionController extends Controller
 
 
     public function upvoteThreadReplyReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply, ThreadReplyReplies $thread_reply_reply) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {
@@ -1121,7 +1121,7 @@ class InstructorDiscussionController extends Controller
     }
 
     public function downvoteThreadReplyReply(Thread $thread, ThreadComments $thread_comment, ThreadCommentReplies $thread_comment_reply, ThreadReplyReplies $thread_reply_reply) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
     
             try {

@@ -45,7 +45,7 @@ class InstructorPerformanceController extends Controller
     
 
     public function performances() {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -59,7 +59,7 @@ class InstructorPerformanceController extends Controller
                         "instructor.instructor_fname",
                         "instructor.profile_picture"
                     )
-                ->where('course.instructor_id', '=', $instructor['instructor_id'])
+                ->where('course.instructor_id', '=', $instructor->instructor_id)
                 ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
                 ->orderBy("course.created_at", "ASC")
                 ->get();
@@ -86,7 +86,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function sessionData() {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
 
             try{
@@ -118,7 +118,7 @@ class InstructorPerformanceController extends Controller
 
 
     public function totalCourseNum () {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try{
@@ -257,7 +257,7 @@ class InstructorPerformanceController extends Controller
 
 
     public function courseChartData(Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try{
@@ -399,6 +399,22 @@ class InstructorPerformanceController extends Controller
                             'totalRejectedCourseNum' => $totalRejectedCourseNum
                             ];
                     } else {
+                        $data = [
+                            'title' => 'Performance',
+                            'scripts' => ['instructor_performance.js'],
+                            'courseData' => $courseData,
+                            'totalLearnersCount' => $totalLearnersCount,
+                            'totalPendingLearnersCount' => $totalPendingLearnersCount,
+                            'totalApprovedLearnersCount' => $totalApprovedLearnersCount,
+                            'totalRejectedLearnersCount' => $totalRejectedLearnersCount,
+                            'totalSyllabusCount' => $totalSyllabusCount,
+                            'totalLessonsCount' => $totalLessonsCount,
+                            'totalActivitiesCount' => $totalActivitiesCount,
+                            'totalQuizzesCount' => $totalQuizzesCount,'totalCourseNum' => $totalCourseNum,
+                            'totalPendingCourseNum' => $totalPendingCourseNum,
+                            'totalApprovedCourseNum' => $totalApprovedCourseNum,
+                            'totalRejectedCourseNum' => $totalRejectedCourseNum
+                            ];
                     }
                     
 
@@ -420,7 +436,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function coursePerformance(Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -434,7 +450,7 @@ class InstructorPerformanceController extends Controller
                         "instructor.instructor_fname",
                         "instructor.profile_picture"
                     )
-                ->where('course.instructor_id', '=', $instructor['instructor_id'])
+                ->where('course.instructor_id', '=', $instructor->instructor_id)
                 ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
                 ->orderBy("course.created_at", "ASC")
                 ->where('course.course_id', $course->course_id)
@@ -472,7 +488,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function selectedCoursePerformance(Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -542,7 +558,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function learnerCourseData(Course $course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -595,7 +611,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function learnerSyllabusData(Course $course, Request $request) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -704,7 +720,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function courseSyllabusPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -783,7 +799,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function courseSyllabusLessonPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -874,7 +890,7 @@ class InstructorPerformanceController extends Controller
 
 
     public function courseSyllabusActivityPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -1017,7 +1033,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function courseSyllabusActivityScoresPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -1079,7 +1095,7 @@ class InstructorPerformanceController extends Controller
 
 
     public function courseSyllabusQuizPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -1216,7 +1232,7 @@ class InstructorPerformanceController extends Controller
 
 
     public function courseSyllabusQuizScoresPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -1258,7 +1274,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function courseSyllabusQuizContentOutputPerformance(Course $course, Syllabus $syllabus) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -1339,7 +1355,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function learnerCoursePerformance(Course $course, LearnerCourse $learner_course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
 
@@ -1353,7 +1369,7 @@ class InstructorPerformanceController extends Controller
                         "instructor.instructor_fname",
                         "instructor.profile_picture"
                     )
-                ->where('course.instructor_id', '=', $instructor['instructor_id'])
+                ->where('course.instructor_id', '=', $instructor->instructor_id)
                 ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
                 ->orderBy("course.created_at", "ASC")
                 ->where('course.course_id', $course->course_id)
@@ -1422,7 +1438,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function learnerCourseOverallPerformance(Course $course, LearnerCourse $learner_course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
@@ -1601,7 +1617,7 @@ class InstructorPerformanceController extends Controller
     }
 
     public function learnerCourseSyllabusPerformance(Course $course, LearnerCourse $learner_course) {
-        if (auth('instructor')->check()) {
+        if (session()->has('instructor')) {
             $instructor = session('instructor');
             
             try {
