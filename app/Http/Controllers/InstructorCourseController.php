@@ -1638,98 +1638,175 @@ class InstructorCourseController extends Controller
             return response()->json(['errors' => $errors], 422);
         }
     }
-
-
-    public function lesson_generate_pdf(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson)
-{
-    if (auth('instructor')->check()) {
-        $instructor = session('instructor');
-        
-        // Retrieve the data from the session
-        $lessonData = session('lesson_data');
-        dd($lessonData);
-        // dd($lessonData);
-        if (!$lessonData) {
-            // Handle the case where the session data is not found
-            return response('Session data not found', 500);
-        }
     
-        // Extract the data you need from the session
-        $lessonInfo = $lessonData['lessonInfo'];
-        $lessonContent = $lessonData['lessonContent'];
-        $title = 'Course Lesson';
-        $scripts = ['instructor_lesson_manage.js'];
-        $courseData = $lessonData['courseData'];
+    public function view_lesson_pdf(Course $course, Syllabus $syllabus, $topic_id) {
 
-        $course = $courseData['course'];
-        $syllabus = $courseData['syllabus'];
-        $lessonCount = $courseData['lessonCount'];
-        $activityCount = $courseData['activityCount'];
-        $quizCount = $courseData['quizCount'];
 
-        
+        if (session()->has('instructor')) {
+            $instructor = session('instructor');
+            
+            $instructor = session('instructor');
+            if($instructor->status !== 'Approved') {
+                session()->flash('message', 'Account is not yet Approved');
+                return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+            } else {
+                try {
 
-        // Render the view with the Blade template
-        $html = view('instructor_course.courseLesson', compact('instructor'))
-            ->with([
-                'title' => $title,
-                'scripts' => $scripts,
-                'lessonCount' => $lessonCount,
-                'activityCount' => $activityCount,
-                'quizCount' => $quizCount,
-                'course' => $course,
-                'syllabus' => $syllabus,
-                'lessonInfo' => $lessonInfo,
-                'lessonContent' => $lessonContent,
-            ])
-            ->render();
+                    $lessonInfo = DB::table('lessons')
+                        ->select(
+                            'lesson_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id',
+                            'lesson_title',
+                            'picture',
+                            'duration',
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('topic_id', $topic_id)
+                        ->first();
+                            // dd($lessonInfo);
 
-          // Find the positions of the markers
-          $startMarker = '<!-- start-generate-pdf -->';
-          $endMarker = '<!-- end-generate-pdf -->';
-          $startPos = strpos($html, $startMarker);
-          $endPos = strpos($html, $endMarker);
-  
-          // Extract the content between the markers
-          $extractedHtml = substr($html, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
-  
-          // Generate a unique filename for the PDF (you can customize this)
-          $filename = $course->course_name . 'lesson_' . $lessonInfo->lesson_id . '.pdf';
-  
-          // Define the folder path based on the course name
-          $folderName = "{$course->course_id} {$course->course_name}";
-          $folderName = Str::slug($folderName, '_');
-          $folderPath = 'courses/' . $folderName . '/documents';
-  
-          // Check if the file already exists
-          if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
-              // If it exists, delete the old file
-              Storage::disk('public')->delete($folderPath . '/' . $filename);
-          }
-  
-          $extractedHtml = str_replace('\\', '/', $extractedHtml);
+                            if ($lessonInfo === null) {
+                                // Set $activityContent to null or an empty array if it's appropriate
+                                $lessonContent = null; // or $activityContent = [];
+                            
+                                // You can also provide a message to indicate that no data was found
+                                session()->flash('message', 'Please Save the Syllabus First');
+                                return redirect("/instructor/course/content/$course->course_id");
 
-          // Set options for Snappy PDF
-          $options = [
-              'no-images' => false, // Allow inclusion of images
-              'footer-right' => '[page] of [topage]',
-          ];
-          
-          // Generate the PDF using Snappy PDF
-          $pdf = SnappyPdf::loadHTML($extractedHtml)->setOptions($options)->output();
-          // Store the new PDF in the public directory within the course-specific folder
-          Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
-  
-          // Generate the URL to the stored PDF
-          $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
-  
-          // Provide a download link to the user
-          return response()->json(['pdf_url' => $pdfUrl]);
-    } else {
-        // Handle authentication failure
-        return response('Unauthorized', 401);
+                            } else {
+                                // Fetch $activityContent as you normally would
+                                $lessonContent = DB::table('lesson_content')
+                            ->select(
+                                'lesson_content_id',
+                                'lesson_id',
+                                'lesson_content_title',
+                                'lesson_content',
+                                'lesson_content_order',
+                                'picture',
+                                'video_url'
+                            )
+                            ->where('lesson_id', $lessonInfo->lesson_id)
+                            ->orderBy('lesson_content_order', 'ASC')
+                            ->get();
+
+                            $durationInSeconds = $lessonInfo->duration;
+                            $hours = floor($durationInSeconds / 3600);
+                            $minutes = floor(($durationInSeconds % 3600) / 60);
+                            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
+                            }
+
+
+                    
+
+                                // dd($lessonContent);
+
+                    $response = $this->course_content($course);
+
+                    session(['lesson_data' => [
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'courseData' => $response,
+                        'instructor' => $instructor,
+                        'title' => 'Course Lesson',
+                    ]]);
+
+                    return view('instructor_course.courseLessonPreview', compact('instructor'))->with([
+                        'title' => 'Course Lesson',
+                        'scripts' => ['instructor_lesson_manage.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'formattedDuration' => $formattedDuration,
+                        // 'instructor' => $response['instructor'],
+                    ]);
+
+                } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+            
+                    return response()->json(['errors' => $errors], 422);
+                }
+            }
+        } else {
+            return redirect('/instructor');
+        }
+
+        // return view('instructor_course.courseLesson')->with('title', 'Course Lesson');
     }
-}
+    public function lesson_generate_pdf(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson)
+    {
+        if (session()->has('instructor')) {
+            $instructor = session('instructor');
+            
+            // Retrieve the data from the session
+            $lessonData = session('lesson_data');
+            
+            if (!$lessonData) {
+                // Handle the case where the session data is not found
+                return response('Session data not found', 500);
+            }
+        
+            // Extract the data you need from the session
+            $lessonInfo = $lessonData['lessonInfo'];
+            $lessonContent = $lessonData['lessonContent'];
+            $title = 'Course Lesson';
+            $scripts = ['instructor_lesson_manage.js'];
+            $courseData = $lessonData['courseData'];
+    
+            $course = $courseData['course'];
+            $syllabus = $courseData['syllabus'];
+            $lessonCount = $courseData['lessonCount'];
+            $activityCount = $courseData['activityCount'];
+            $quizCount = $courseData['quizCount'];
+    
+            // Render the view with the Blade template
+            $html = view('instructor_course.courseLessonPreview', compact('instructor'))
+                ->with([
+                    'title' => $title,
+                    'scripts' => $scripts,
+                    'lessonCount' => $lessonCount,
+                    'activityCount' => $activityCount,
+                    'quizCount' => $quizCount,
+                    'course' => $course,
+                    'syllabus' => $syllabus,
+                    'lessonInfo' => $lessonInfo,
+                    'lessonContent' => $lessonContent,
+                ])
+                ->render();
+    
+            // Generate a unique filename for the PDF
+            $filename = $course->course_name . '_lesson_' . $lessonInfo->lesson_id . '.pdf';
+    
+            // Generate the PDF using Snappy PDF
+            // $pdf = SnappyPdf::loadHTML($html)->output();
+            $pdf = SnappyPdf::loadHTML($html)
+            ->setOption('zoom', 0.8) // Set the scale factor to 80%
+            ->output();
+            
+            // Define the folder path based on the course name
+            $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+            $folderPath = 'courses/' . $folderName . '/documents';
+    
+            // Store the new PDF in the public directory within the course-specific folder
+            Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
+    
+            // Generate the URL to the stored PDF
+            $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
+    
+            // Provide a download link to the user
+            return response()->json(['pdf_url' => $pdfUrl]);
+        } else {
+            // Handle authentication failure
+            return response('Unauthorized', 401);
+        }
+    }
+    
 
 
     

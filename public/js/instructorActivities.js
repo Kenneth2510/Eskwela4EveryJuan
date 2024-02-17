@@ -766,7 +766,7 @@ $(document).ready(() => {
         scoreInput.prop('disabled', false);
         $('.addNewCriteria').addClass('hidden');
         // Add event handlers for the new Save and Delete buttons
-        saveButton.on('click', function() {
+        $('.saveNewCriteriaBtn').on('click', function() {
             const criteriaTitle = $(this).closest('tr').find('.addNewCriteriaTitle').val();
             const criteriaScore = $(this).closest('tr').find('.addNewCriteriaScore').val();
 
@@ -796,7 +796,7 @@ $(document).ready(() => {
             $('.editCriteria_clickedBtn').removeClass('hidden');
         });
 
-        deleteButton.on('click', function() {
+        $('.deleteNewCriteriaBtn').on('click', function() {
             // Handle deleting the new row if needed
             newRow.remove();
             
