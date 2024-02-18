@@ -344,6 +344,7 @@ $(document).ready(function() {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         if(i + 1 == syllabusData.length){
@@ -366,6 +367,7 @@ $(document).ready(function() {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         if(i + 1 == syllabusData.length){

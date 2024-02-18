@@ -23,6 +23,10 @@ use App\Models\LearnerQuizProgress;
 use App\Models\LearnerActivityOutput;
 use App\Models\LearnerActivityCriteriaScore;
 use App\Models\LearnerQuizOutputs;
+use App\Models\LearnerPreAssessmentProgress;
+use App\Models\LearnerPreAssessmentOutput;
+use App\Models\LearnerPostAssessmentProgress;
+use App\Models\LearnerPostAssessmentOutput;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -801,8 +805,23 @@ class LearnerCourseController extends Controller
                     }
                 }
 
+                $preAssessmentStatus = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status'
+                )
+                ->where('learner_course_id', $learnerCourseData->learner_course_id)
+                ->first();
 
-                
+
+                $postAssessmentStatus = DB::table('learner_post_assessment_progress')
+                ->select(
+                    'learner_post_assessment_progress_id',
+                    'status'
+                )
+                ->where('learner_course_id', $learnerCourseData->learner_course_id)
+                ->first();
+
 
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -823,6 +842,8 @@ class LearnerCourseController extends Controller
             'lessonCount' => $lessonCount,
             'activityCount' => $activityCount,
             'quizCount' => $quizCount,
+            'preAssessmentData' => $preAssessmentStatus,
+            'postAssessmentData' => $postAssessmentStatus,
         ]);
     }
 
@@ -855,27 +876,699 @@ class LearnerCourseController extends Controller
 
     }
 
+
+
+    public function pre_assessment(Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+
+                $courseData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.instructor_id',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                )
+                ->join('course', 'learner_course.course_id', 'course.course_id')
+                ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+                ->where('learner_course.course_id', $course->course_id)
+                ->first();
+
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status',
+                    'max_duration',
+                    'score',
+                    'remarks',
+                    'start_period',
+                    'finish_period',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                $data = [
+                    'title' => 'Course Lesson',
+                    'scripts' => ['/learner_pre_assessment.js'],
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
+                    'learnerCourseData' => $courseData,
+                    'preAssessmentData' => $preAssessmentData,
+                ];
+
+                return view('learner_course.coursePreAssessment', compact('learner'))
+                ->with($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function answer_pre_assessment (Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+
+           
+                $courseData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.instructor_id',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                )
+                ->join('course', 'learner_course.course_id', 'course.course_id')
+                ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+                ->where('learner_course.course_id', $course->course_id)
+                ->first();
+
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status',
+                    'max_duration',
+                    'score',
+                    'remarks',
+                    'start_period',
+                    'finish_period',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->first();
+
+
+                    $now = Carbon::now();
+                    $timestampString = $now->toDateTimeString();
+
+                DB::table('learner_pre_assessment_progress')
+                ->where('learner_pre_assessment_progress_id', $preAssessmentData->learner_pre_assessment_progress_id)
+                ->update([
+                    'start_period' => $timestampString,
+                    'status' => 'IN PROGRESS',
+                ]);
+
+
+                    // if($preAssessmentData->status === 'COMPLETED') {
+                    //     session()->flash('message', 'You have already finished your Pre Assessment');
+                    //     return redirect('/learner/course/content/'.$course->id.'/'.$learner_course->id.'/pre_assessment')->with('error', 'You have already finished your Pre Assessment');
+
+                    // } else {
+
+                        $learnerPreAssessmentOutputData = DB::table('learner_pre_assessment_output')
+                        ->select(
+                            'learner_pre_assessment_output_id',
+                            'question_id',
+                            'syllabus_id',
+                        )
+                        ->where('learner_course_id', $learner_course->learner_course_id)
+                        ->where('course_id', $course->course_id)
+                        ->get();
+
+
+                        if($learnerPreAssessmentOutputData->isEmpty()) {
+                          
+                            $questionNumbersPerLesson = DB::table('lessons')
+                            ->select(
+                                'lesson_title',
+                                'duration',
+                                'syllabus_id',
+                                DB::raw('(SELECT SUM(duration) FROM lessons WHERE course_id = ' . $course->course_id . ') AS total_duration'),
+                                DB::raw('((duration / (SELECT SUM(duration) FROM lessons WHERE course_id = ' . $course->course_id . ')) * 100) AS percentage'),
+                                DB::raw('ROUND(25 * (duration / (SELECT SUM(duration) FROM lessons WHERE course_id = ' . $course->course_id . ')), 0) AS item_number')
+                            )
+                            ->where('course_id', $course->course_id)
+                            ->get();
+                        
+                        
+
+                            $assessmentQuestions = [];
+
+                            foreach ($questionNumbersPerLesson as $questionsPerLesson) {
+
+                                $questions = DB::table('questions')
+                                   ->select(
+                                    'question_id',
+                                    'syllabus_id',
+                                    'question',
+                                    'category'
+                                    )
+                                    ->where('course_id', $course->course_id)
+                                    ->where('syllabus_id', $questionsPerLesson->syllabus_id)
+                                    ->inRandomOrder()
+                                    ->limit($questionsPerLesson->item_number)
+                                    ->get();
+
+                                    $assessmentQuestions = array_merge($assessmentQuestions, $questions->toArray());
+                            }
+
+                            // dd($assessmentQuestions);
+                        foreach($assessmentQuestions as $content) {
+                            
+                            $outputData = [
+                                'learner_course_id' => $courseData->learner_course_id,
+                                'learner_id' => $courseData->learner_id,
+                                'course_id' => $courseData->course_id,
+                                'question_id' => $content->question_id,
+                                'syllabus_id' => $content->syllabus_id
+                            ];
+
+                            LearnerPreAssessmentOutput::create($outputData);
+                        }
+                            
+
+                        $preAssessmentOutputData = DB::table('learner_pre_assessment_output')
+                        ->select(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers')
+                        )
+                        ->join('questions', 'learner_pre_assessment_output.question_id', '=', 'questions.question_id')
+                        ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                        ->where('learner_pre_assessment_output.course_id', $courseData->course_id)
+                        ->where('learner_pre_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->groupBy(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            'questions.question_id'
+                        )
+                        ->get();
+                    
+                        
+                    } else {
+                        $preAssessmentOutputData = DB::table('learner_pre_assessment_output')
+                        ->select(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers')
+                        )
+                        ->join('questions', 'learner_pre_assessment_output.question_id', '=', 'questions.question_id')
+                        ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                        ->where('learner_pre_assessment_output.course_id', $courseData->course_id)
+                        ->where('learner_pre_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->groupBy(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            'questions.question_id'
+                        )
+                        ->get();
+
+                    }
+                // }
+    
+
+                $data = [
+                    'title' => 'Course Lesson',
+                    'scripts' => ['/learner_pre_assessment.js'],
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
+                    'learnerCourseData' => $courseData,
+                    'preAssessmentData' => $preAssessmentData,
+                    'preAssessmentOutputData' => $preAssessmentOutputData,
+                ];
+
+                // dd($data);
+
+                return view('learner_course.coursePreAssessmentAnswer', compact('learner'))
+                ->with($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function answer_pre_assessment_json(Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+
+           
+                $courseData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.instructor_id',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                )
+                ->join('course', 'learner_course.course_id', 'course.course_id')
+                ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+                ->where('learner_course.course_id', $course->course_id)
+                ->first();
+
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status',
+                    'max_duration',
+                    'score',
+                    'remarks',
+                    'start_period',
+                    'finish_period',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->first();
+
+
+                        $preAssessmentOutputData = DB::table('learner_pre_assessment_output')
+                        ->select(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers')
+                        )
+                        ->join('questions', 'learner_pre_assessment_output.question_id', '=', 'questions.question_id')
+                        ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                        ->where('learner_pre_assessment_output.course_id', $courseData->course_id)
+                        ->where('learner_pre_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->groupBy(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            'questions.question_id'
+                        )
+                        ->get();
+    
+
+                $data = [
+                    'title' => 'Course Lesson',
+                    'scripts' => ['/learner_pre_assessment.js'],
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
+                    'learnerCourseData' => $courseData,
+                    'preAssessmentData' => $preAssessmentData,
+                    'preAssessmentOutputData' => $preAssessmentOutputData,
+                ];
+
+                // dd($data);
+
+                // return view('learner_course.coursePreAssessmentAnswer', compact('learner'))
+                // ->with($data);
+
+                return response()->json($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function submit_pre_assessment(Course $course, LearnerCourse $learner_course, Request $request) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+
+            $learner_pre_assessment_output_id = $request->input('learner_pre_assessment_output_id');
+            $question_id = $request->input('question_id');
+
+            $answer = $request->input('answer');
+
+            DB::table('learner_pre_assessment_output')
+            ->where('learner_pre_assessment_output_id', $learner_pre_assessment_output_id)
+            ->where('question_id', $question_id)
+            ->where('learner_course_id', $learner_course->learner_course_id)
+            ->update([
+                'answer' => $answer
+            ]);
+
+
+            $this->check_pre_assessment_answer($learner_pre_assessment_output_id, $question_id, $answer);
+
+
+
+            // Return the counts in the response
+            $data = [
+            'message' => 'Learner Quiz Output submitted successfully',
+            ];
+
+
+            return response()->json($data);
+
+            } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+        
+                return response()->json(['errors' => $errors], 422);
+            }
+        }
+    }
+    
+
+    public function check_pre_assessment_answer($learner_pre_assessment_output_id, $question_id, $answer) {
+        try {
+            // If $answer is null, set isCorrect to 0
+            $answerValue = $answer !== null
+                ? DB::table('question_answer')
+                    ->select('isCorrect')
+                    ->where('question_id', $question_id)
+                    ->where('answer', $answer)
+                    ->first()
+                : (object) ['isCorrect' => 0];
+
+                $isCorrect = $answerValue !== null ? $answerValue->isCorrect : 0;
+    
+                DB::table('learner_pre_assessment_output')
+                ->where('learner_pre_assessment_output_id', $learner_pre_assessment_output_id)
+                ->where('question_id', $question_id)
+                ->update([
+                    'isCorrect' => $isCorrect
+                ]);
+    
+            // Return the correctness status
+            return $answerValue !== null ? $answerValue->isCorrect : 0;
+
+    
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+    
+
+    public function score_pre_assessment (Course $course, LearnerCourse $learner_course, Request $request) {
+        
+        try {
+            $learner_pre_assessment_output_id = $request->input('learner_pre_assessment_output_id');
+            $question_id = $request->input('question_id');
+
+            // total items of the quiz
+            $totalCount = DB::table('learner_pre_assessment_output')
+            ->where('course_id', $course->course_id)
+            ->where('learner_course_id', $learner_course->learner_course_id)
+            ->count();
+
+            // score of the learner
+            $scoreCount = DB::table('learner_pre_assessment_output')
+            ->where('isCorrect', 1)
+            ->where('course_id', $course->course_id)
+            ->where('learner_course_id', $learner_course->learner_course_id)
+            ->count();
+            
+            $scorePercentage = ($scoreCount / $totalCount) * 100;
+
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
+            // update the score and status
+            DB::table('learner_pre_assessment_progress')
+            ->where('course_id', $course->course_id)
+            ->where('learner_course_id', $learner_course->learner_course_id)
+            ->update([
+                'status' => "COMPLETED",
+                'score' => $scoreCount,
+                'remarks' => $scorePercentage >= 90 ? 'Excellent' : ($scorePercentage >= 80 ? 'Very Good' : ($scorePercentage >= 70 ? 'Good' : ($scorePercentage >= 60 ? 'Satisfactory' : 'Needs Improvement'))),
+                'finish_period' => $timestampString,
+
+            ]);
+
+          
+
+            
+            session()->flash('message', 'Learner Pre Assessment Scored successfully');
+
+            $data = [
+                'message' => 'Learner Pre Assessment Scored successfully',
+                'redirect_url' => "/learner/course/content/$course->course_id/$learner_course->learner_course_id/pre_assessment",
+                ];
+    
+    
+                return response()->json($data);
+    
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            return response()->json(['errors' => $errors], 422);
+        }
+    }   
+
+    
+    public function view_output_pre_assessment(Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+
+           
+                $courseData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.instructor_id',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                )
+                ->join('course', 'learner_course.course_id', 'course.course_id')
+                ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+                ->where('learner_course.course_id', $course->course_id)
+                ->first();
+
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status',
+                    'max_duration',
+                    'score',
+                    'remarks',
+                    'start_period',
+                    'finish_period',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->first();
+
+
+                    $now = Carbon::now();
+                    $timestampString = $now->toDateTimeString();
+
+        
+                        $preAssessmentOutputData = DB::table('learner_pre_assessment_output')
+                        ->select(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'learner_pre_assessment_output.answer',
+                            'learner_pre_assessment_output.isCorrect',
+                            'questions.question',
+                            'questions.category',
+                            DB::raw('JSON_ARRAYAGG(question_answer.answer) as answers')
+                        )
+                        ->join('questions', 'learner_pre_assessment_output.question_id', '=', 'questions.question_id')
+                        ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                        ->where('learner_pre_assessment_output.course_id', $courseData->course_id)
+                        ->where('learner_pre_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->groupBy(
+                            'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                            'learner_pre_assessment_output.learner_course_id',
+                            'learner_pre_assessment_output.course_id',
+                            'learner_pre_assessment_output.question_id',
+                            'learner_pre_assessment_output.syllabus_id',
+                            'questions.question',
+                            'questions.category',
+                            'questions.question_id'
+                        )
+                        ->get();
+
+                    
+
+                $data = [
+                    'title' => 'Course Pre Assessment',
+                    'scripts' => ['/learner_pre_assessment_output.js'],
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
+                    'learnerCourseData' => $courseData,
+                    'preAssessmentData' => $preAssessmentData,
+                    'preAssessmentOutputData' => $preAssessmentOutputData,
+                ];
+
+                // dd($data);
+
+                return view('learner_course.coursePreAssessmentOutput', compact('learner'))
+                ->with($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
+    public function view_output_pre_assessment_json(Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+
+           
+                $courseData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.instructor_id',
+                    'instructor.instructor_fname',
+                    'instructor.instructor_lname',
+                )
+                ->join('course', 'learner_course.course_id', 'course.course_id')
+                ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+                ->where('learner_course.course_id', $course->course_id)
+                ->first();
+
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status',
+                    'max_duration',
+                    'score',
+                    'remarks',
+                    'start_period',
+                    'finish_period',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->first();
+
+
+                    $now = Carbon::now();
+                    $timestampString = $now->toDateTimeString();
+
+                    $correctAnswerSubquery = DB::table('question_answer')
+                    ->select('question_id', DB::raw('JSON_ARRAYAGG(answer) as correct_answer'))
+                    ->where('isCorrect', 1)
+                    ->groupBy('question_id');
+        
+                    $preAssessmentOutputData = DB::table('learner_pre_assessment_output')
+                    ->select(
+                        'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                        'learner_pre_assessment_output.learner_course_id',
+                        'learner_pre_assessment_output.course_id',
+                        'learner_pre_assessment_output.question_id',
+                        'learner_pre_assessment_output.syllabus_id',
+                        'learner_pre_assessment_output.answer',
+                        'learner_pre_assessment_output.isCorrect',
+                        'questions.question',
+                        'questions.category',
+                        DB::raw('JSON_ARRAYAGG(question_answer.answer) as all_choices'),
+                        DB::raw('correct_answers.correct_answer')
+                    )
+                    ->join('questions', 'learner_pre_assessment_output.question_id', '=', 'questions.question_id')
+                    ->leftJoinSub($correctAnswerSubquery, 'correct_answers', function ($join) {
+                        $join->on('questions.question_id', '=', 'correct_answers.question_id');
+                    })
+                    ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                    ->where('learner_pre_assessment_output.course_id', $courseData->course_id)
+                    ->where('learner_pre_assessment_output.learner_course_id', $courseData->learner_course_id)
+                    ->groupBy(
+                        'learner_pre_assessment_output.learner_pre_assessment_output_id',
+                        'learner_pre_assessment_output.learner_course_id',
+                        'learner_pre_assessment_output.course_id',
+                        'learner_pre_assessment_output.question_id',
+                        'learner_pre_assessment_output.syllabus_id',
+                        'questions.question',
+                        'questions.category',
+                        'correct_answers.correct_answer'
+                    )
+                    ->get();
+
+
+                    
+
+                $data = [
+                    'title' => 'Course Pre Assessment',
+                    'scripts' => ['/learner_pre_assessment_output.js'],
+                    'mainBackgroundCol' => '#00693e',
+                    'darkenedColor' => '#00693e',
+                    'learnerCourseData' => $courseData,
+                    'preAssessmentData' => $preAssessmentData,
+                    'preAssessmentOutputData' => $preAssessmentOutputData,
+                ];
+
+                // // dd($data);
+
+                // return view('learner_course.coursePreAssessmentOutput', compact('learner'))
+                // ->with($data);
+                return response()->json($data);
+    
+
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+            
+                return response()->json(['errors' => $errors], 422);
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
     public function view_lesson(Course $course, LearnerCourse $learner_course, Syllabus $syllabus) {
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
-                // if (!function_exists('getRandomColor')) {
-                //     function getRandomColor() {
-                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //     }
-                // }
-                
-                // // Generate a random color for mainBackgroundCol
-                // $mainBackgroundCol = getRandomColor();
-    
-                // // Darken the mainBackgroundCol
-                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-    
-                // // Darken the mainBackgroundCol further for darkenedColor
-                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status'
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->first();
 
+                if($preAssessmentData->status == 'NOT YET STARTED') {
+                    session()->flash('message', 'Please Accomplish the Pre Assessment first');
+                    return back()->withInput()->withErrors('Please Accomplish the Pre Assessment first');
+
+                }
 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
                 ->select(
@@ -954,8 +1647,6 @@ class LearnerCourseController extends Controller
         } else {
             return redirect('/learner');
         }
-
-
         return view('learner_course.courseLesson', compact('learner'))
         ->with([
             'title' => 'Course Lesson',
@@ -1058,7 +1749,19 @@ class LearnerCourseController extends Controller
                 // // Darken the mainBackgroundCol further for darkenedColor
                 // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status'
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->first();
 
+                if($preAssessmentData->status == 'NOT YET STARTED') {
+                    session()->flash('message', 'Please Accomplish the Pre Assessment first');
+                    return back()->withInput()->withErrors('Please Accomplish the Pre Assessment first');
+
+                }
                 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')
                 ->select(
@@ -1579,6 +2282,21 @@ class LearnerCourseController extends Controller
     
                 // // Darken the mainBackgroundCol further for darkenedColor
                 // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+
+
+                $preAssessmentData = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'learner_pre_assessment_progress_id',
+                    'status'
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->first();
+
+                if($preAssessmentData->status == 'NOT YET STARTED') {
+                    session()->flash('message', 'Please Accomplish the Pre Assessment first');
+                    return back()->withInput()->withErrors('Please Accomplish the Pre Assessment first');
+
+                }
 
 
                 $learnerSyllabusProgressData = DB::table('learner_syllabus_progress')

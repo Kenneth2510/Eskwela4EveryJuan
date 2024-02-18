@@ -924,6 +924,7 @@ $('#save_lesson_btn').on('click', function(e) {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         if(i + 1 == lessonData.length){
@@ -947,6 +948,7 @@ $('#save_lesson_btn').on('click', function(e) {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         if(i + 1 == lessonData.length){
@@ -973,6 +975,7 @@ $('#save_lesson_btn').on('click', function(e) {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         location.reload();

@@ -971,85 +971,69 @@ class InstructorCourseController extends Controller
         }
     }
 
-    public function update_syllabus(Course $course, Request $request) {
-
+    public function update_syllabus(Course $course, Request $request)
+    {
         try {
-
             $syllabusData = $request->validate([
                 'topic_id' => ['required'],
                 'topic_title' => ['required'],
                 'category' => ['required'],
             ]);
-
+    
             Syllabus::where('syllabus_id', $request->input('syllabus_id'))
-                        ->where('course_id', $course->course_id)
-                        ->update($syllabusData);
-
-            $syllabus = DB::table('syllabus')
-                        ->select(
-                            'syllabus_id',
-                            'course_id',
-                            'topic_id',
-                            'topic_title',
-                            'category'
-                        )
-                        ->where('syllabus_id', $request->input('syllabus_id'))
-                        ->where('course_id', $course->course_id)
-                        ->first();
-
-             if($syllabusData['category'] == 'LESSON') {
-
-            $lessonData = [
-                'syllabus_id'=> $syllabus->syllabus_id,
-                'course_id' => $syllabus->course_id,
-                'topic_id' => $syllabus->topic_id,
-                'lesson_title' => $syllabus->topic_title,
-            ];
-
-            // $lesson = Lessons::create($lessonData);
-
-            $lesson = Lessons::where('syllabus_id', $request->input('syllabus_id'))
-                        ->where('course_id', $course->course_id)
-                        ->update($lessonData);
-
-        } else if($syllabusData['category'] == 'ACTIVITY') {
-            $activityData = [
-                'syllabus_id'=> $syllabus->syllabus_id,
-                'course_id' => $syllabus->course_id,
-                'topic_id' => $syllabus->topic_id,
-                'activity_title' => $syllabus->topic_title,
-            ];
-
-            // $activity = Activities::create($activityData);
-
-            $activity = Activities::where('syllabus_id', $request->input('syllabus_id'))
-                        ->where('course_id', $course->course_id)
-                        ->update($activityData);
-        } else {
-            $quizData = [
-                'syllabus_id'=> $syllabus->syllabus_id,
-                'course_id' => $syllabus->course_id,
-                'topic_id' => $syllabus->topic_id,
-                'quiz_title' => $syllabus->topic_title,
-            ];
-
-            // $quiz = Quizzes::create($quizData);
-
-            $quiz = Quizzes::where('syllabus_id', $request->input('syllabus_id'))
-                        ->where('course_id', $course->course_id)
-                        ->update($quizData);
-        }
-
+                ->where('course_id', $course->course_id)
+                ->update($syllabusData);
+    
+            $syllabus = Syllabus::where('syllabus_id', $request->input('syllabus_id'))
+                ->where('course_id', $course->course_id)
+                ->first();
+    
+            if ($syllabusData['category'] == 'LESSON') {
+                $lessonData = [
+                    'syllabus_id' => $syllabus->syllabus_id,
+                    'course_id' => $syllabus->course_id,
+                    'topic_id' => $syllabus->topic_id,
+                    'lesson_title' => $syllabus->topic_title,
+                ];
+    
+                Lessons::updateOrCreate(
+                    ['syllabus_id' => $syllabus->syllabus_id, 'course_id' => $syllabus->course_id],
+                    $lessonData
+                );
+            } elseif ($syllabusData['category'] == 'ACTIVITY') {
+                $activityData = [
+                    'syllabus_id' => $syllabus->syllabus_id,
+                    'course_id' => $syllabus->course_id,
+                    'topic_id' => $syllabus->topic_id,
+                    'activity_title' => $syllabus->topic_title,
+                ];
+    
+                Activities::updateOrCreate(
+                    ['syllabus_id' => $syllabus->syllabus_id, 'course_id' => $syllabus->course_id],
+                    $activityData
+                );
+            } else {
+                $quizData = [
+                    'syllabus_id' => $syllabus->syllabus_id,
+                    'course_id' => $syllabus->course_id,
+                    'topic_id' => $syllabus->topic_id,
+                    'quiz_title' => $syllabus->topic_title,
+                ];
+    
+                Quizzes::updateOrCreate(
+                    ['syllabus_id' => $syllabus->syllabus_id, 'course_id' => $syllabus->course_id],
+                    $quizData
+                );
+            }
+    
             session()->flash('message', 'Syllabus updated Successfully');
             return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id"]);
-                        
-                    
-            } catch (ValidationException $e) {
-                // dd($e->getMessage());
-                $errors = $e->validator->errors();        
-                return response()->json(['errors' => $errors], 422);
-            }
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+            return response()->json(['errors' => $errors], 422);
+        }
     }
+    
 
     public function update_syllabus_add_new(Course $course, Request $request) {
         try {
@@ -1783,15 +1767,19 @@ class InstructorCourseController extends Controller
             // Generate a unique filename for the PDF
             $filename = $course->course_name . '_lesson_' . $lessonInfo->lesson_id . '.pdf';
     
-            // Generate the PDF using Snappy PDF
-            // $pdf = SnappyPdf::loadHTML($html)->output();
-            $pdf = SnappyPdf::loadHTML($html)
-            ->setOption('zoom', 0.8) // Set the scale factor to 80%
-            ->output();
-            
             // Define the folder path based on the course name
             $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
             $folderPath = 'courses/' . $folderName . '/documents';
+    
+            // Check if the file already exists in storage and delete it
+            if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
+                Storage::disk('public')->delete($folderPath . '/' . $filename);
+            }
+    
+            // Generate the PDF using Snappy PDF
+            $pdf = SnappyPdf::loadHTML($html)
+            ->setOption('zoom', 0.8) // Set the scale factor to 80%
+            ->output();
     
             // Store the new PDF in the public directory within the course-specific folder
             Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
@@ -1800,6 +1788,7 @@ class InstructorCourseController extends Controller
             $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
     
             // Provide a download link to the user
+            session()->flash('message', 'Course Lesson updated');
             return response()->json(['pdf_url' => $pdfUrl]);
         } else {
             // Handle authentication failure
@@ -3122,6 +3111,7 @@ class InstructorCourseController extends Controller
                 ->join('syllabus', 'syllabus.syllabus_id', '=', 'questions.syllabus_id')
                 ->leftJoin('question_answer', 'question_answer.question_id', '=', 'quiz_content.question_id')
                 ->where('quiz_content.course_id', $course->course_id)
+                ->where('quiz_id', $quizInfo->quiz_id)
                 ->groupBy(
                     'quiz_content.quiz_content_id',
                     'quiz_content.syllabus_id',

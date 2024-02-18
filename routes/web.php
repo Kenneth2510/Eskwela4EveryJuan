@@ -242,6 +242,15 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/manage/{course}/overview', 'LearnerCourseController@course_overview');
     Route::get('/learner/course/manage/{course}/view_syllabus', 'LearnerCourseController@view_syllabus');
 
+    Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment', 'LearnerCourseController@pre_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment/answer', 'LearnerCourseController@answer_pre_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment/answer/json', 'LearnerCourseController@answer_pre_assessment_json');
+    Route::post('/learner/course/content/{course}/{learner_course}/pre_assessment/answer/submit', 'LearnerCourseController@submit_pre_assessment');
+    Route::post('/learner/course/content/{course}/{learner_course}/pre_assessment/answer/score', 'LearnerCourseController@score_pre_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment/view_output', 'LearnerCourseController@view_output_pre_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment/view_output/json', 'LearnerCourseController@view_output_pre_assessment_json');
+    
+
     Route::get('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}', 'LearnerCourseController@view_lesson');
     Route::post('/learner/course/content/{course}/{learner_course}/lesson/{syllabus}/finish', 'LearnerCourseController@finish_lesson');
 
@@ -259,6 +268,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/view_output/{attempt}/json', 'LearnerCourseController@view_output_json');
     Route::get('/learner/course/content/{course}/{learner_course}/quiz/{syllabus}/reattempt', 'LearnerCourseController@reattempt_answer_quiz');
     
+
+    
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment', 'LearnerCourseController@post_assessment');
     // // })->middleware('web');
 });
 

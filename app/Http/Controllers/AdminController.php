@@ -18,6 +18,10 @@ use App\Models\Lessons;
 use App\Models\Activities;
 use App\Models\Quizzes;
 use App\Models\LessonContents;
+use App\Models\LearnerPreAssessmentProgress;
+use App\Models\LearnerPreAssessmentOutput;
+use App\Models\LearnerPostAssessmentProgress;
+use App\Models\LearnerPostAssessmentOutput;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -1165,6 +1169,15 @@ public function login_process(Request $request) {
 
             // LearnerCourseProgress::create($courseProgressData);
             LearnerCourseProgress::firstOrCreate($courseProgressData);
+
+            $learnerAssessmentData = [
+                "learner_course_id" => $learnerCourse->learner_course_id,
+                "learner_id" => $learnerCourse->learner_id,
+                "course_id" => $learnerCourse->course_id,
+            ];
+
+            LearnerPreAssessmentProgress::create($learnerAssessmentData);
+            LearnerPostAssessmentProgress::create($learnerAssessmentData);
 
             $syllabusData = DB::table('syllabus')
             ->select(
