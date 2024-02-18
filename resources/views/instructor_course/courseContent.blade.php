@@ -98,7 +98,7 @@
                     <a href="{{ url("/instructor/course/content/$course->course_id") }}">content</a>
                 </div>
                 {{-- overview --}}
-                <div class="mb-8">
+                <div class="w-full mb-8">
                     <div class="flex items-center justify-between my-4 border-b-2 border-seagreen">
                         <div class="flex items-center my-3">
                             <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30 "><path d="m787-145 28-28-75-75v-112h-40v128l87 87Zm-587 25q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v268q-19-9-39-15.5t-41-9.5v-243H200v560h242q3 22 9.5 42t15.5 38H200Zm0-120v40-560 243-3 280Zm80-40h163q3-21 9.5-41t14.5-39H280v80Zm0-160h244q32-30 71.5-50t84.5-27v-3H280v80Zm0-160h400v-80H280v80ZM720-40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Z"/></svg>
@@ -106,7 +106,7 @@
                             <h1 class="mx-3 text-2xl font-semibold">General Overview</h1>
                         </div>
                     </div>
-                    <p class="px-4 text-justify">{{ $course->course_description }}</p>
+                    <p class="px-4 text-justify" style="white-space: pre-wrap">{{ $course->course_description }}</p>
                 </div>
                 
                 {{-- views --}}
@@ -159,7 +159,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                         </a>
                         @else
-                        <a style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        <a href="{{url("/instructor/course/content/$course->course_id/$topic->syllabus_id/quiz/$topic->topic_id")}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
                     onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
                             <div class="flex items-center">
                                 <svg width="40" height="40" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -210,7 +210,7 @@
             
         </div>
         <div id="syllabusModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px]">
+            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px] overflow-y-auto">
                 <div class="flex justify-end w-full">
                     <button id="removeModalBtn">
                         <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>

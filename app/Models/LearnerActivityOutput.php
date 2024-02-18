@@ -22,6 +22,9 @@ class LearnerActivityOutput extends Model
         'answer',
         'total_score',
         'remarks',
+        'max_attempt',
+        'attempt',
+        'mark',
     ];
 
     public function learner_course_id()

@@ -17,7 +17,8 @@ class LearnerActivityCriteriaScore extends Model
         'learner_activity_output_id',
         'activity_content_criteria_id',
         'activity_content_id',
-        'score'
+        'score',
+        'attempt'
     ];
 
     public function activity_content_criteria()

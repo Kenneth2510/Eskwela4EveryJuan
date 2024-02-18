@@ -18,7 +18,9 @@ class LearnerLessonProgress extends Model
         'course_id',
         'syllabus_id',
         'lesson_id',
-        'status'
+        'status',
+        'start_period',
+        'finish_period',
     ];
 
     public function learner_course_id()

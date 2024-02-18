@@ -1,12 +1,6 @@
 @include('partials.header')
 <section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
-    <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-    <a href="#">
-        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-            Eskwela4EveryJuan
-        </span>
-    </a>
-</header>  
+
 
 @include('partials.learnerSidebar')
 
@@ -38,7 +32,7 @@
                     <h1 class="mx-2 text-2xl font-semibold">{{$syllabus->activity_title}}</h1>
                 </div>
                 <div class="text-right">
-                    <p class="text-2xl font-semibold">Overall Total Score: </p>
+                    <p class="text-2xl font-semibold">Your Score: </p>
                     @if ($activityOutput)
                         <p class="px-10 text-4xl">{{$activityOutput->total_score ?? 'N/A'}} / {{$activity->total_score ?? 'N/A'}}</p>
                     @else
@@ -53,7 +47,7 @@
                     <h3 class="my-2 text-xl font-medium">Instructions:</h3>
                 </div>
 
-                <p style="white-space: pre">{{ $activity->activity_instructions }}</p>
+                <p style="white-space: pre-wrap">{{ $activity->activity_instructions }}</p>
      
                 {{-- <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions h-[200px]" disabled>{{$activity->activity_instructions}}</textarea> --}}
 
@@ -101,22 +95,21 @@
             </div>
           
         </div>
-
+        <!--scorearea-->
         <div class="w-full px-5">
             <h3 class="w-full my-2 text-2xl font-semibold border-b-4 border-green-900">Your Answer:</h3>
             
             @if ($activityOutput && $activityOutput->answer)
-                <textarea name="" style="white-space: pre" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black" readonly>{{$activityOutput->answer}}</textarea>
+                <textarea name="" style="white-space: pre-wrap" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black" readonly>{{$activityOutput->answer}}</textarea>
             @else
-                <textarea id="activity_answer" name="activity_answer" style="white-space: pre" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black"></textarea>
+                <textarea id="activity_answer" name="activity_answer" style="white-space: pre-wrap" class="mt-5 px-5 py-5 h-[300px] w-full rounded-xl border-2 border-black"></textarea>
             @endif
         </div>
     
-
         <div class="px-5 my-10">
             <h3 class="my-2 text-2xl font-medium">Instructor's Remarks:</h3>
-            @if ($activityOutput)
-        <p style="white-space: pre" class="px-5">{{ $activityOutput->remarks }}</p>
+        @if ($activityOutput)
+        <p style="white-space: pre-wrap" class="px-5">{{ $activityOutput->remarks }}</p>
         @else
         @endif
         </div>
@@ -153,6 +146,7 @@
             data-syllabus-id="{{$activity->syllabus_id}}"
             data-activity-id="{{$activity->activity_id}}"
             data-activity-content-id="{{$activity->activity_content_id}}"
+            data-attempt="{{$activityOutput->attempt}}"
             class="px-4 py-2 text-white rounded-md bg-darthmouthgreen">Submit</button>
         </div>
     </div>

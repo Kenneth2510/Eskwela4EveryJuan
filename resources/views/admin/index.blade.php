@@ -9,12 +9,12 @@
             <div class="relative pr-15">
                 <text class="font-semibold leading-none text-black text-7xl">Eskwela4EveryJuan</text>
                 <p class="pt-5 text-2xl font-normal text-black">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
-        
+            </div>
 
-                <div class="relative mt-12">
+                {{-- <div class="relative mt-12">
                     <button id="showloginadmin" class="px-16 py-6 text-2xl font-medium text-white rounded-full bg-seagreen hover:bg-green-800">Sign In</button>
 
-            </div>
+            </div> --}}
         </div>
     
         <div id="adminlogin" class="relative right-0 w-2/4 h-full py-16 ml-24 transition-opacity duration-100">
@@ -23,7 +23,7 @@
                 
                 <div class="relative w-4/5">
                     @error('admin_username')
-                    <p class="p-1 mt-2 text-xs text-red-500">
+                    <p class="p-1 mt-2 text-lg text-red-500">
                         {{$message}}
                     </p>
                     @enderror
@@ -41,6 +41,7 @@
                     </div>
                 </div>
             </form>
+        </div>
         </div>
     
     </section>

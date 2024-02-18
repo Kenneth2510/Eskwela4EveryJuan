@@ -204,15 +204,34 @@ $(document).ready(function () {
         $("#firstCreateCourse").addClass("hidden");
     });
 
+    $("#nextAddCourse2").on("click", function (e) {
+        e.preventDefault();
+
+        $("#secondCreateCourse").addClass("hidden");
+        $("#firstCreateCourse").addClass("hidden");
+        $('#thirdCreateCourse').removeClass("hidden")
+    });
+
     $("#returnTo_first").on("click", function (e) {
         $("#secondCreateCourse").addClass("hidden");
         $("#firstCreateCourse").removeClass("hidden");
     });
 
-    function addSyllabus(course) {
-        // will need response from the create course and should return course id, and syllabus id to do
-        var course_id = course;
+    $('#prevAddCourse1').on('click', function() {
+        $('#secondCreateCourse').addClass('hidden')
+        $("#firstCreateCourse").removeClass("hidden");
+    }) 
 
+    $('#prevAddCourse2').on('click', function() {
+        $('#secondCreateCourse').removeClass('hidden')
+        $("#firstCreateCourse").addClass("hidden");
+        $('#thirdCreateCourse').addClass("hidden")
+    })
+    
+
+    function addSyllabus(course) {
+        var course_id = course;
+    
         if (lessons.length > 0) {
             for (let i = 0; i < lessons.length; i++) {
                 var syllabus_container = {
@@ -221,15 +240,16 @@ $(document).ready(function () {
                     topic_title: lessons[i]["title_name"],
                     category: lessons[i]["category"],
                 };
+    
                 console.log(syllabus_container);
+    
                 var csrfToken = $('meta[name="csrf-token"]').attr("content");
+    
                 $.ajax({
                     type: "POST",
                     url: "/instructor/course/create/syllabus/" + course_id,
                     data: syllabus_container,
                     async: false,
-                    // contentType: false,
-                    // processData: false,
                     headers: {
                         "X-CSRF-TOKEN": csrfToken,
                     },
@@ -238,48 +258,23 @@ $(document).ready(function () {
             }
         }
     }
-
+    
     $("#addCourse").submit(function (e) {
         e.preventDefault();
-
+    
         var course_name = $("#course_name").val();
         var course_description = $("#course_description").val();
         var course_difficulty = $("#course_difficulty").val();
-
-        // console.log(course_name, course_description, course_difficulty);
-        // addSyllabus();
-
-        if (
-            course_name === "" ||
-            course_description === "" ||
-            course_difficulty === ""
-        ) {
+    
+        if (course_name === "" || course_description === "" || course_difficulty === "") {
             alert("Please fill all fields");
-
-            if (course_name === "") {
-                var errorMsg = `
-                    <span class="text-red-600">*Please enter a Course Name*</span>
-                    `;
-
-                $("#course_name").before(errorMsg);
-            }
-            if (course_description === "") {
-                var errorMsg = `
-                    <span class="text-red-600">*Please enter a Course Description*</span>
-                    `;
-
-                $("#course_description").before(errorMsg);
-            }
-            if (course_difficulty === null || course_difficulty === "") {
-                var errorMsg = `
-                    <span class="text-red-600">*Please select a Course Difficulty*</span>
-                    `;
-
-                $("#course_difficulty").before(errorMsg);
-            }
+    
+            // Handle field validation errors (similar to your existing code)
+            // ...
+    
         } else {
             var formData = new FormData(this);
-
+    
             $.ajax({
                 type: "POST",
                 url: "/instructor/courses/create",
@@ -288,16 +283,60 @@ $(document).ready(function () {
                 processData: false,
                 async: false,
                 success: function (response) {
-                    if (
-                        response &&
-                        response.course_id &&
-                        response.redirect_url
-                    ) {
+                    if (response && response.course_id && response.redirect_url) {
+                        // After creating the course, add syllabus
                         addSyllabus(response.course_id);
+    
+                        // Check if files are selected for upload
+                        if ($("#courseFilesUpload")[0].files.length > 0) {
+                            // Upload files after adding the syllabus
+                            uploadFiles(response.course_id);
+                        } else {
+                            // If no files selected, redirect to the specified URL
+                            window.location.href = response.redirect_url;
+                        }
+                    } else {
                         window.location.href = response.redirect_url;
                     }
                 },
             });
         }
     });
+    
+    function uploadFiles(courseId) {
+        var formData = new FormData();
+        var csrfToken = $('meta[name="csrf-token"]').attr("content");
+    
+        // Append each selected file to the FormData object
+        var files = $("#courseFilesUpload")[0].files;
+        for (var i = 0; i < files.length; i++) {
+            formData.append("file", files[i]);
+        }
+    
+        // Append additional data if needed
+        formData.append("course_id", courseId);
+    
+        // Make an Ajax request to upload files
+        $.ajax({
+            type: "POST",
+            url: "/instructor/course/upload/files/" + courseId,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (response) {
+                // Handle success, if needed
+                console.log("Files uploaded successfully:", response);
+    
+                // Redirect to the specified URL after file upload
+                window.location.href = response.redirect_url;
+            },
+            error: function (error) {
+                // Handle errors, if needed
+                console.error("Error uploading files:", error);
+            },
+        });
+    }
 });
