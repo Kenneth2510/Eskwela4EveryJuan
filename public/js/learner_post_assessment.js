@@ -20,8 +20,8 @@ getLearnerAssessmentData();
             success: function(response) {
                 console.log(response);
 
-                durationVal = response['preAssessmentData']['max_duration'];
-                assessmentLearnerQuestions = response['preAssessmentOutputData'];
+                durationVal = response['postAssessmentData']['max_duration'];
+                assessmentLearnerQuestions = response['postAssessmentOutputData'];
                 // console.log(assessmentLearnerQuestions);
 
                 displayLearnerAssessmentData(assessmentLearnerQuestions);
@@ -59,7 +59,7 @@ getLearnerAssessmentData();
         $('#isAnsweredMeter').empty();
     
         for (let i = 0; i < assessmentLearnerQuestions.length; i++) {
-            const learner_pre_assessment_output_id = assessmentLearnerQuestions[i]['learner_pre_assessment_output_id'];
+            const learner_post_assessment_output_id = assessmentLearnerQuestions[i]['learner_post_assessment_output_id'];
             const syllabus_id = assessmentLearnerQuestions[i]['syllabus_id'];
             const course_id = assessmentLearnerQuestions[i]['course_id'];
             const question_id = assessmentLearnerQuestions[i]['question_id'];
@@ -73,7 +73,7 @@ getLearnerAssessmentData();
 
 
             const learnerAnswerRowData = {
-                learner_pre_assessment_output_id: learner_pre_assessment_output_id,
+                learner_post_assessment_output_id: learner_post_assessment_output_id,
                 syllabus_id: syllabus_id,
                 course_id: course_id,
                 question_id: question_id,

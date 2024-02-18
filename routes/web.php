@@ -271,6 +271,12 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     
     Route::get('/learner/course/content/{course}/{learner_course}/post_assessment', 'LearnerCourseController@post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/answer', 'LearnerCourseController@answer_post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/answer/json', 'LearnerCourseController@answer_post_assessment_json');
+    Route::post('/learner/course/content/{course}/{learner_course}/post_assessment/answer/submit', 'LearnerCourseController@submit_post_assessment');
+    Route::post('/learner/course/content/{course}/{learner_course}/post_assessment/answer/score', 'LearnerCourseController@score_post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/view_output', 'LearnerCourseController@view_output_post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/view_output/json', 'LearnerCourseController@view_output_post_assessment_json');
     // // })->middleware('web');
 });
 
