@@ -2,12 +2,13 @@ $(document).ready(() => {
     $("#viewResponseActivity").on("click", (e) => {
         e.preventDefault();
         
-        $("#selectTypeParent").removeClass("hidden");
+        // $("#selectTypeParent").removeClass("hidden");
+        $('#responsesModal').removeClass('hidden');
         activityOutputData();
     });
 
-    $("#closeAct").on("click", () => {
-        $("#selectTypeParent").addClass("hidden");
+    $(".exitResponsesModalBtn").on("click", () => {
+        $("#responsesModal").addClass("hidden");
     });
 
     let isAppended = false;
@@ -48,91 +49,111 @@ $(document).ready(() => {
         var syllabusID = $('#studentsList').data('syllabus-id')
         var topicID = $('#studentsList').data('topic-id')
         // console.log(isAppended);
-        if (!isAppended) {
-            const studentsList = $(
-                `<button class="flex flex-row items-center" id="backToDefault">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
-                        <p>Go back</p>
-                    </button>
-                    <h1 class="mt-4 mb-2 text-xl font-medium">Learner Responses</h1>
-                            <table class="w-full text-center table-fixed">
-                               <thead>
-                                   <tr>
-                                       <th>Enrollee ID</th>
-                                       <th>Learner ID</th>
-                                       <th>Name</th>
-                                       <th>Score</th>
-                                       <th>Status</th>
-                                   </tr>
-                               </thead>
-                               <tbody id="learnerActivityData">
+        // if (!isAppended) {
+        //     const studentsList = $(
+        //         `<button class="flex flex-row items-center" id="backToDefault">
+        //                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+        //                 <p>Go back</p>
+        //             </button>
+        //             <h1 class="mt-4 mb-2 text-xl font-medium">Learner Responses</h1>
+        //                     <table class="w-full text-center table-fixed">
+        //                        <thead>
+        //                            <tr>
+        //                                <th class="w-1/12">Enrollee ID</th>
+        //                                <th class="w-1/12">Learner ID</th>
+        //                                <th class="w-2/12">Name</th>
+        //                                <th class="w-1/12">Attempt</th>
+        //                                <th class="w-2/12">Attempt Taken</th>
+        //                                <th class="w-1/12">Score</th>
+        //                                <th class="w-2/12">Status</th>
+        //                                <th class="w-1/12">Mark</th>
+        //                                <th class="w-1/12"></th>
+        //                            </tr>
+        //                        </thead>
+        //                        <tbody id="learnerActivityData">
                                    
-                               </tbody>
-                           </table>`,
-            );
-            // studentsList
-            //     .find('td[class="float-right"]')
-            //     .html(
-            //         '<button class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2" type="button" id=""><h1>visit</h1></button>',
-            //     );
+        //                        </tbody>
+        //                    </table>`,
+        //     );
+        //     // studentsList
+        //     //     .find('td[class="float-right"]')
+        //     //     .html(
+        //     //         '<button class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2" type="button" id=""><h1>visit</h1></button>',
+        //     //     );
 
-            $("#studentsList").append(studentsList);
+        //     $("#studentsList").append(studentsList);
 
-            let criteria_total_score = activityData[0]['total_score']
+        //     let criteria_total_score = activityData[0]['total_score']
 
-            isAppended = true;
+        //     isAppended = true;
 
             learnerRowData = ``;
-            for (let i = 0; i < learnerActivityContent.length; i++) {
-                const enrollee_id = learnerActivityContent[i]['learner_course_id'];
-                const learner_id = learnerActivityContent[i]['learner_id'];
-                const learner_fname = learnerActivityContent[i]['learner_fname'];
-                const learner_lname = learnerActivityContent[i]['learner_lname'];
-                const total_score = learnerActivityContent[i]['total_score'];
-                const status = learnerActivityContent[i]['status'];
 
-                if(status == "NOT YET STARTED") {
-                    dispStatus = "NOT YET STARTED"
-                } else if (status == "IN PROGRESS") {
-                    dispStatus = "TO BE CHECKED";
-                } else {
-                    dispStatus = "COMPLETED";
+            if(learnerActivityContent.length === 0) {
+                learnerRowData = `
+                <tr>
+                    <td colspan="9" class="text-center">No data available</td>
+                </tr>
+            `;
+            } else {
+                for (let i = 0; i < learnerActivityContent.length; i++) {
+                    const enrollee_id = learnerActivityContent[i]['learner_course_id'];
+                    const learner_id = learnerActivityContent[i]['learner_id'];
+                    const learner_fname = learnerActivityContent[i]['learner_fname'];
+                    const learner_lname = learnerActivityContent[i]['learner_lname'];
+                    const total_score = learnerActivityContent[i]['total_score'];
+                    const status = learnerActivityContent[i]['status'];
+                    const attempt = learnerActivityContent[i]['attempt'];
+                    const mark = learnerActivityContent[i]['mark'];
+                    const updated_at = learnerActivityContent[i]['updated_at'];
+    
+                    if(status == "NOT YET STARTED") {
+                        dispStatus = "NOT YET STARTED"
+                    } else if (status == "IN PROGRESS") {
+                        dispStatus = "TO BE CHECKED";
+                    } else {
+                        dispStatus = "COMPLETED";
+                    }
+    
+                    if(total_score == null) {
+                        total_score = "no score yet";
+                    }
+    
+                    learnerRowData += `
+                        <tr>
+                            <td>${enrollee_id}</td>
+                            <td>${learner_id}</td>
+                            <td>${learner_fname} ${learner_lname}</td>
+                            <td>${attempt}</td>
+                            <td>${updated_at}</td>
+                            <td>${total_score}/${criteria_total_score}</td>
+                            <td>${dispStatus}</td>
+                            <td>${mark}</td>
+                            <td class="float-right">
+                                <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}/${attempt}" 
+                                class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-darthmouthgreen hover:bg-green-650 md:h-12 py-2"  
+                                data-learner-course-id="${enrollee_id}">
+                                    <h1>visit</h1>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
                 }
-
-                // if(total_score == null) {
-                //     total_score = "no score yet";
-                // }
-
-                learnerRowData += `
-                    <tr>
-                        <td>${enrollee_id}</td>
-                        <td>${learner_id}</td>
-                        <td>${learner_fname} ${learner_lname}</td>
-                        <td>${total_score}/${criteria_total_score}</td>
-                        <td>${dispStatus}</td>
-                        <td class="float-right">
-                            <a href="/instructor/course/content/${courseID}/${syllabusID}/activity/${topicID}/${enrollee_id}" 
-                            class="flex flex-row items-center justify-center p-4 m-2 rounded-lg shadow-lg bg-amber-400 hover:bg-amber-500 md:h-12 py-2"  
-                            data-learner-course-id="${enrollee_id}">
-                                <h1>visit</h1>
-                            </a>
-                        </td>
-                    </tr>
-                `;
             }
+      
 
-            $('#learnerActivityData').empty();
-            $('#learnerActivityData').append(learnerRowData);
+            $('#responsesRowDataArea').empty();
+            $('#responsesRowDataArea').append(learnerRowData);
 
 
                               
 
-            $(document).on("click", "#backToDefault", () => {
-                $("#defaultView").removeClass("hidden");
-                studentsList.remove();
-                isAppended = false;
-            });
-        }
+        //     $(document).on("click", "#backToDefault", () => {
+        //         $("#defaultView").removeClass("hidden");
+        //         studentsList.remove();
+        //         isAppended = false;
+        //     });
+        // }
     }
 
     $("#viewStudents").on("click", () => {
@@ -298,9 +319,104 @@ $(document).ready(() => {
                     </div>
                 `           
             } else {
+                // activityContent_disp += `
+                // <p>No instructions given</p>
+                // `
+
                 activityContent_disp += `
-                <p>No instructions given</p>
-                `
+                <div class="flex flex-row items-center">
+                        <h3 class="my-2 text-xl font-medium">Instructions:</h3>
+                        <button id="" class="editInstructionsBtn hidden">
+                            <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        </button>
+                        
+                    </div>
+          
+                    
+                    <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions h-[200px]" disabled></textarea>
+                    <div class="hidden mt-3 editInstructions_clickedBtn">
+                        <button data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-3 text-white bg-green-600 saveInstructionsBtn hover:bg-green-900 rounded-xl">Save</button>
+                        <button class="px-3 py-3 text-white bg-red-600 cancelInstructionsBtn hover:bg-red-900 rounded-xl">Cancel</button>
+                    </div>
+
+                    <div class="flex flex-row items-center mt-5">
+                        <h3 class="my-2 text-xl font-medium">Criteria:</h3>
+                        <button id="" class="editCriteriaBtn hidden">
+                            <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        </button>
+                        
+                    </div>
+                    <table class="rounded-xl">
+                        <thead class="text-xl text-white bg-green-700 rounded-xl">
+                            <th class="w-2/5">Criteria</th>
+                            <th class="w-1/5">Score</th>
+                            <th class="w-1/5"></th>
+                        </thead>
+                        <tbody>`;
+                        if(activityCriteriaData !== null) {
+          
+                            for (let x = 0; x < activityCriteriaData.length; x++) {
+                                const activity_content_criteria_id = activityCriteriaData[x]['activity_content_criteria_id'];
+                                const activity_content_id = activityCriteriaData[x]['activity_content_id'];
+                                const criteria_title = activityCriteriaData[x]['criteria_title'];
+                                const score = activityCriteriaData[x]['score'];
+
+                                
+                                    activityContent_disp += `
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="criteriaTitle_input" value="${criteria_title}" disabled>
+                                        </td>
+                                        <td class="flex justify-end">
+                                            <input type="text" class="criteriaScore_input flex text-center" value="${score}" disabled></td>
+                                        <td>
+                                            <button class="hidden px-3 py-1 mx-2 font-semibold text-white bg-green-600 rounded-xl editRowCriteriaBtn hover:bg-green-900">Edit</button>
+                                            <div class="hidden flex edit_btns">
+                                            
+                                                <button data-activity-content-criteria-id="${activity_content_criteria_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl saveRowCriteriaBtn hover:bg-green-900">Save</button>
+
+                                                <button data-activity-content-criteria-id="${activity_content_criteria_id}" data-activity-content-id="${activity_content_id}" class="px-3 py-1 mx-2 font-semibold text-white bg-red-600 rounded-xl deleteRowCriteriaBtn hover:bg-red-900">Delete</button>
+
+                                                <button class=" px-3 py-1 mx-2 font-semibold text-white bg-red-600 rounded-xl cancelRowCriteriaBtn hover:bg-red-900">Cancel</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    `
+                                }
+                            } else {
+                                activityContent_disp += `
+                                <tr>
+                                    <td rowspan="3">No Criterias Found</td>
+                                </tr>
+                                `
+                            }
+                            
+                        
+                activityContent_disp += `
+                </tbody>
+                    </table>
+                    <button id="" data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="addNewCriteria hidden px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl hover:bg-green-900">Add Criteria</button>
+                    <div class="editCriteria_clickedBtn hidden mt-3" id=""> 
+                        <button id="" data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" class="saveCriteriaBtn text-2xl px-7 py-5 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
+                        <button id="" class="cancelCriteriaBtn text-2xl px-7 py-5 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="">
+                        <button id="" class="hidden editTotalScore">
+                            <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                        </button>
+                        <p class="text-2xl font-semibold">Overall Total Score: </p>
+                        <input type="number" id="" class="overallScore_input w-full text-4xl" value="${total_score}" disabled>
+                        
+                        <p class="px-10 text-4xl">/ ${total_score}</p>
+                        <div class="editTotalScore_clickedBtn hidden mt-3" id=""> 
+                            <button data-activity-id="${activity_id}" data-activity-content-id="${activity_content_id}" id="" class="saveTotalScoreBtn px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Score</button>
+                            <button id="" class="cancelTotalScoreBtn px-5 py-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
+                        </div>
+                    </div>
+                `           
             }
             
             
@@ -586,6 +702,7 @@ $(document).ready(() => {
                         console.log(error);
                     }
                 });
+                criteriaCounter++;
         } 
         }
         // console.log(totalCriteriaScore);
@@ -649,7 +766,7 @@ $(document).ready(() => {
         scoreInput.prop('disabled', false);
         $('.addNewCriteria').addClass('hidden');
         // Add event handlers for the new Save and Delete buttons
-        saveButton.on('click', function() {
+        $('.saveNewCriteriaBtn').on('click', function() {
             const criteriaTitle = $(this).closest('tr').find('.addNewCriteriaTitle').val();
             const criteriaScore = $(this).closest('tr').find('.addNewCriteriaScore').val();
 
@@ -679,7 +796,7 @@ $(document).ready(() => {
             $('.editCriteria_clickedBtn').removeClass('hidden');
         });
 
-        deleteButton.on('click', function() {
+        $('.deleteNewCriteriaBtn').on('click', function() {
             // Handle deleting the new row if needed
             newRow.remove();
             

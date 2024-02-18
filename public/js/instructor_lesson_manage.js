@@ -1,22 +1,44 @@
 $(document).ready(function() {
+    var baseUrl = window.location.href;
+
+    tinymce.init({  
+     selector: '#insertLessonContent',  
+     width: 730
+    }); 
+
+    tinymce.init({  
+        selector: '#insertEditLessonContent',  
+        width: 730
+    }); 
+    
+    // tinymce.init({  
+    //     selector: 'textarea#lesson_content_id',  
+    //     width: 500  
+    //    }); 
+    
     var lessonData = {};
     // console.log(lessonData)
     // Select all <p> elements with the class .lesson_content_input_disp
-    var pElements = $('.lesson_content_input_disp');
+    // var pElements = $('.lesson_content_input_disp');
     var iElements = $('.lesson_content_input');
         
     // Use the filter function to select only those with newline characters
-    var pElementsWithNewlines = pElements.filter(function() {
-        return $(this).text().includes('\n');
-    });
+    // var pElementsWithNewlines = pElements.filter(function() {
+    //     return $(this).text().includes('\n');
+    // });
 
     var iElementsWithNewlines = iElements.filter(function() {
         return $(this).text().includes('\n');
     });
     
     // Apply white-space: pre to the selected elements
-    pElementsWithNewlines.css('white-space', 'pre');
+    // pElementsWithNewlines.css('white-space', 'pre');
     iElementsWithNewlines.css('white-space', 'pre');
+
+
+
+
+
     // overall edit button
     $('#editLessonBtn').on('click', function(e) {
         e.preventDefault();
@@ -28,7 +50,16 @@ $(document).ready(function() {
         $('.edit_lesson_content').removeClass('hidden');
 
         $('#lessonAddContent').removeClass('hidden');
+    
+        // Scroll to the target element after all the changes have been made
+        const targetOffset = $("#lesson_title_area").offset().top;
 
+        // Debugging: Output the target offset to the console
+        console.log("Target Offset:", targetOffset);
+    
+        $('html, body').animate({
+            scrollTop: targetOffset
+        }, 1000);
 
         const courseID = $(this).data('course-id');
         const syllabusID = $(this).data('syllabus-id');
@@ -45,18 +76,25 @@ $(document).ready(function() {
             url: "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/json",
             dataType: 'json',
             success: function (response){
+
                 // console.log(response)
                 lessonData = response['lessonContent']
-                // console.log(lessonData)
+                console.log(lessonData)
                 reDisplayLesson(lessonData);
             },
             error: function(error) {
                 console.log(error);
             }
       })
+
+
+
+
     });
 
     function reDisplayLesson(lessonData) {
+
+
         var displayLesson = ``;
 
         const baseUrl = window.location.protocol + '//' + window.location.host;
@@ -72,63 +110,91 @@ $(document).ready(function() {
             const lesson_content = lessonData[i]['lesson_content'];
             const lesson_content_order = lessonData[i]['lesson_content_order'];
             const picture = lessonData[i]['picture'];
+            const video_url = lessonData[i]['video_url'];
             
             const pic_url = baseUrl + '/storage/' + picture;
 
             displayLesson += `
-                <div data-content-order="${lesson_content_order}" class="px-10 lesson_content_area my-2 mb-8 w-full">
-                    <button class="edit_lesson_content hidden">
-                        <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
-                    </button>
-                    
-                    <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
-                    
-                    <p class="lesson_content_input_disp text-xl w-[90%] min-w-[90%] max-w-[90%]" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};">${lesson_content}</p>
-                    <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[90%] min-w-[90%] max-w-[90%] h-32" style="white-space: ${lesson_content.includes('\n') ? 'pre' : 'normal'};" disabled>${lesson_content}</textarea>
+    <div data-content-order="${lesson_content_order}" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class="px-10 lesson_content_area  my-2 mb-8 w-full">
+        <button class="edit_lesson_content hidden">
+            <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                <path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/>
+            </svg>
+        </button>
+        
+        <input type="text" class="lesson_content_title_input text-2xl font-bold border-none w-10/12" disabled name="lesson_content_title_input" id="" value="${lesson_content_title}">
+        
+        ${picture !== null ? `
+        <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+            <div class="w-full h-[400px] overflow-hidden rounded-lg">
+                <img src="${pic_url}" class="object-contain w-full h-full" alt="">
+            </div>
+        </div>
+        
+        <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Change Photo
+            </button>
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
+                Delete Photo
+            </button>
+        </div>
+        ` 
+        : `
+        <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Add Photo
+            </button>
+        </div>
+        `}
 
-                    
-                    ${picture !== null ? `
-                    <div id="lesson_content_img" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
-                        <div class="w-full h-[400px] overflow-hidden rounded-lg">
-                            <img src="${pic_url}" class="object-contain w-full h-full" alt="">
-                        </div>
-                    </div>
-                    
-                    
-                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
-                            Change Photo
-                        </button>
+        <div class="contentArea text-xl font-normal lesson_content_input_disp mt-5 px-5" style="white-space: pre-wrap">${lesson_content}</div>
 
+        <div id="" style="position: relative; top: 75%;" class="edit_content_btnArea my-2  hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class="edit_content_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Edit Content
+            </button>
+        </div>
+        
 
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
-                            Delete Photo
-                        </button>
-                    </div>
-                    ` 
-                    
-                    : `
-                    
-                    <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_picture_btns hidden flex justify-end">
-                        <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_picture_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
-                            Add Photo
-                        </button>
-                    </div>
-                    `}
-                    
-                    <div class="edit_lesson_content_btns hidden flex w-full justify-end">
-                        <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="save_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900" >
-                            Save
-                        </button>
-                        <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="delete_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-800">
-                            Delete
-                        </button>
-                        <button id="" class="cancel_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900" >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            `;
+        ${video_url !== null ? `
+        <div id="lesson_content_url" class="flex justify-center w-full h-[400px] my-4 rounded-lg shadow">
+            <div class="url_embed_area w-full h-[400px] flex justify-center overflow-hidden rounded-lg">
+                ${video_url}
+            </div>
+        </div>
+        
+        <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_url_btns hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_url_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Change url
+            </button>
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" delete_lesson_content_url_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
+                Delete url
+            </button>
+        </div>
+        ` 
+        : `
+        <div id="" style="position: relative; top: 75%;" class="my-2 edit_lesson_content_url_btns hidden flex justify-end">
+            <button id="" data-lesson-content-id="${lesson_content_id}" data-lesson-id="${lesson_id}" class=" add_lesson_content_url_btn mr-3 flex text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Add Video from url
+            </button>
+        </div>
+        `}
+
+        
+        <div class="edit_lesson_content_btns hidden flex w-full justify-end">
+            <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="save_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-green-600 hover:bg-green-900">
+                Save
+            </button>
+            <button data-content-order="${lesson_content_order}" data-lesson-id="${lesson_id}" data-lesson-content-id="${lesson_content_id}" id="" class="delete_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-800">
+                Delete
+            </button>
+            <button id="" class="cancel_lesson_content_btn mx-1 text-white rounded-xl py-3 px-5 bg-red-600 hover:bg-red-900">
+                Cancel
+            </button>
+        </div>
+    </div>
+`;
         }
             $('#main_content_area').empty();
             $('#main_content_area').append(displayLesson);
@@ -148,12 +214,6 @@ $(document).ready(function() {
         console.log(lessonData)
 
 
-        // var pElement = $('.lesson_content_input_disp');
-
-        // // Check if the content contains newline characters
-        // if (pElement.text().includes('\n')) {
-        //     pElement.css('white-space', 'pre');
-        // }
 
         $('.add_lesson_content_picture_btn').on('click', function(e) {
             e.preventDefault()
@@ -273,19 +333,27 @@ $(document).ready(function() {
     $('.edit_lesson_content').on('click', function(e) {
         e.preventDefault();
         const lesson_content_area = $(this).closest('.lesson_content_area')
-        const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');
-        const lesson_content = lesson_content_area.find('.lesson_content_input');
+        const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');        
+        const lesson_content_btn = lesson_content_area.find('.edit_content_btnArea');
+        const lesson_content = lesson_content_area.find('.contentArea'); 
         const lesson_content_disp = lesson_content_area.find('.lesson_content_input_disp');
         const lesson_content_picture = lesson_content_area.find('.edit_lesson_content_picture_btns')
 
+
+        // var content = tinyMCE.get("lesson_content_input").getContent();
+
+        // const lessonContent = content;
+
         lesson_content_disp.addClass('hidden');
         lesson_content.removeClass('hidden');
-        lesson_content_title.prop('disabled', false).focus;
-        lesson_content.prop('disabled', false);
         lesson_content_picture.removeClass('hidden');
+        lesson_content_btn.removeClass('hidden');
 
         lesson_content_area.find('.edit_lesson_content_btns').removeClass('hidden');
-        lesson_content_area.find('.edit_lesson_content').addClass('hidden');
+        lesson_content_area.find('.edit_lesson_content').removeClass('hidden');
+        lesson_content_area.find('.edit_lesson_content_url_btns').removeClass('hidden');
+
+      
     })
 
     $('.cancel_lesson_content_btn').on('click', function(e) {
@@ -294,34 +362,236 @@ $(document).ready(function() {
         const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');
         const lesson_content = lesson_content_area.find('.lesson_content_input');
         const lesson_content_picture = lesson_content_area.find('.edit_lesson_content_picture_btns')
+        const lesson_content_btn = lesson_content_area.find('.edit_content_btnArea');
 
-        lesson_content_title.prop('disabled', true);
-        lesson_content.prop('disabled', true);
+
 
         lesson_content_area.find('.edit_lesson_content_btns').addClass('hidden');
         lesson_content_area.find('.edit_lesson_content').removeClass('hidden');
         lesson_content_picture.addClass('hidden');
+        lesson_content_btn.addClass('hidden');
     })
+
+    $('.edit_content_btn').on('click', function(e) {
+        e.preventDefault();
+    
+        const lesson_content_area = $(this).closest('.lesson_content_area');
+        const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');
+        const lesson_content = lesson_content_area.find('.contentArea');
+    
+        const contentOrder = lesson_content_area.data('content-order');
+        $('#confirmEditLessonContentBtn').data('content-order', contentOrder);
+    
+        const lesson_content_title_val = lesson_content_title.val();
+        const html_lesson_content = lesson_content.html();
+    
+        // Assuming you have initialized TinyMCE on your textarea with id "insertEditLessonContent"
+        const editor = tinymce.get('insertEditLessonContent');
+    
+        // Set the content in the TinyMCE editor
+        editor.setContent(html_lesson_content);
+        $('#insertEditLessonContentTitle').val(lesson_content_title_val);
+        // Show the modal
+        $('#editLessonContentModal').removeClass('hidden');
+    });
+    
+    
+    $('.closeEditLessonContentModal').on('click' , function(e) {
+        e.preventDefault();
+    
+        // Assuming you have initialized TinyMCE on your textarea with id "insertEditLessonContent"
+        const editor = tinymce.get('insertEditLessonContent');
+    
+        // Clear the content in the TinyMCE editor
+        editor.setContent('');
+    
+        // Hide the modal
+        $('#editLessonContentModal').addClass('hidden');
+    });
+
+    $('#confirmEditLessonContentBtn').on('click', function(e) {
+        e.preventDefault();
+    
+        // Get the content order from the button's data attribute
+        let contentOrder = $(this).data('content-order');
+    
+        // Get the updated content from the TinyMCE editor
+        var content = tinyMCE.get("insertEditLessonContent").getContent();
+    
+        // Find the corresponding lesson_content_area based on the content order
+        var lessonContentArea = $(`.lesson_content_area[data-content-order="${contentOrder}"]`);
+    
+        // Update the contentArea div inside the found lesson_content_area
+        lessonContentArea.find('.contentArea').html(content);
+    
+        // Close the modal or perform other actions as needed
+        $('#editLessonContentModal').addClass('hidden');
+    });
+    
+
+    $('.add_lesson_content_url_btn').on('click', function (e) {
+        e.preventDefault();
+    
+        const lesson_content_area = $(this).closest('.lesson_content_area');
+        const urlEmbedArea = lesson_content_area.find('.url_embed_area');
+        const contentOrder = lesson_content_area.data('content-order');
+        const lessonContentId = lesson_content_area.data('lesson-content-id');
+        $('#confirmAddLessonContentUrlBtn').attr('data-content-order', contentOrder);
+        $('#confirmAddLessonContentUrlBtn').attr('data-lesson-content-id', lessonContentId);
+    
+        const html_urlEmbedArea = urlEmbedArea.html();
+    
+        // Check if there is HTML content in url_embed_area
+        if (html_urlEmbedArea !== '') {
+            // If there is content, set it in the insertAddLessonContentUrl input
+            $('#insertAddLessonContentUrl').val(html_urlEmbedArea);
+        } else {
+            // If no content, clear the input
+            $('#insertAddLessonContentUrl').val('');
+        }
+    
+        $('#addLessonContentUrlModal').removeClass('hidden');
+    });
+    
+    
+    $('#cancelAddLessonContentUrlBtn').on('click', function (e) {
+        e.preventDefault();
+        $('#addLessonContentUrlModal').addClass('hidden');
+    });
+    
+    $('#confirmAddLessonContentUrlBtn').on('click', function (e) {
+        e.preventDefault();
+    
+        const contentOrder = parseInt($(this).data('content-order'));
+        const lessonContentId = parseInt($(this).data('lesson-content-id'));
+        const lessonID = lessonData[0]['lesson_id'];
+
+        const embed_url = $('#insertAddLessonContentUrl').val();
+    
+        const rowData = {
+            video_url: embed_url
+        }
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        const baseUrl = window.location.href;
+        const url = baseUrl +"/title/"+ lessonID +"/store_video_url/"+ lessonContentId;
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: rowData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                // alert('Upload successful!');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                alert('error uploading file')
+                console.log('Error:', error);
+            }
+        });
+
+        // $('#addLessonContentUrlModal').addClass('hidden');
+    });
+
+
+    $('.delete_lesson_content_url_btn').on('click', function(e) {
+        e.preventDefault();
+
+        const lesson_content_area = $(this).closest('.lesson_content_area');
+
+        const contentOrder = lesson_content_area.data('content-order');
+        const lessonContentId = lesson_content_area.data('lesson-content-id');
+        const lessonId = lesson_content_area.data('lesson-id');
+        $('#confirmDelete_lessonContentUrl').attr('data-content-order', contentOrder);
+        $('#confirmDelete_lessonContentUrl').attr('data-lesson-content-id', lessonContentId);
+        $('#confirmDelete_lessonContentUrl').attr('data-lesson-id', lessonId);
+
+        $('#deleteLessonContentUrlModal').removeClass('hidden');
+    })
+
+    $('#cancelDelete_lessonContentUrl').on('click', function(e) {
+        e.preventDefault();
+
+        $('#deleteLessonContentUrlModal').addClass('hidden');
+    })
+    
+    $('#confirmDelete_lessonContentUrl').on('click', function(e) {
+            e.preventDefault();
+
+            const contentOrder = parseInt($(this).data('content-order'));
+            const lessonContentId = parseInt($(this).data('lesson-content-id'));
+            const lessonId = parseInt($(this).data('lesson-id'));
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            const baseUrl = window.location.href;
+            const url = baseUrl +"/title/"+ lessonId +"/delete_url/"+ lessonContentId;
+    
+            // console.log(url)
+            $.ajax({
+                type: "POST",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    // Handle success if needed
+                    // console.log(response);
+                    // $('#deleteLessonContentModal').addClass('hidden');
+                    // reDisplayLesson(lessonData)
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        })
+    
+
+
+
+
+
+
+
+
+
+
+
 
     $('.save_lesson_content_btn').on('click',function(e){
         e.preventDefault();
 
         const lesson_content_area = $(this).closest('.lesson_content_area')
         const lesson_content_title = lesson_content_area.find('.lesson_content_title_input');
-        const lesson_content = lesson_content_area.find('.lesson_content_input');
+        const lesson_content = lesson_content_area.find('.contentArea'); 
 
         const lesson_content_title_val = lesson_content_title.val();
-        const lesson_content_val = lesson_content.val();
+
+        const html_lesson_content = lesson_content.html();
 
         const lessonID = $(this).data('lesson-id');
         const lessonContentID = $(this).data('lesson-content-id');
 
+
         const updatedValues = {
             'lesson_content_title': lesson_content_title_val,
-            'lesson_content': lesson_content_val,
+            'lesson_content': html_lesson_content,
         }
 
+        // console.log(updatedValues);
+        const lessonContentIndex = lessonData.findIndex(content => content.lesson_content_id === lessonContentID);
 
+        if (lessonContentIndex !== -1) {
+            lessonData[lessonContentIndex].lesson_content_title = updatedValues.lesson_content_title;
+            lessonData[lessonContentIndex].lesson_content = updatedValues.lesson_content;
+        }
+
+        console.log(lessonData);
         if(!/^none\d+$/.test(lessonContentID)) {
             const url = "/instructor/course/content/lesson/"+ lessonID +"/title/"+lessonContentID;
 
@@ -348,11 +618,14 @@ $(document).ready(function() {
 
         
 
-        lesson_content_title.prop('disabled', true);
-        lesson_content.prop('disabled', true);
+        // lesson_content_title.prop('disabled', true);
+        // lesson_content.prop('disabled', true);
 
         lesson_content_area.find('.edit_lesson_content_btns').addClass('hidden');
+        lesson_content_area.find('.edit_content_btnArea').addClass('hidden');
+        lesson_content_area.find('.edit_lesson_content_picture_btns').addClass('hidden');
         lesson_content_area.find('.edit_lesson_content').removeClass('hidden');
+
     })
 
     $('.delete_lesson_content_btn').on('click', function(e) {
@@ -417,68 +690,91 @@ $(document).ready(function() {
         $('#deleteLessonContentModal').addClass('hidden');
     })
 
-    // edit button for the lesson title
+    var originalLessonTitle;
+
     $('#edit_lesson_title').on('click', function(e) {
         e.preventDefault();
-        $('#lesson_title').prop('disabled', false).focus();
-
+    
+        // Find the contenteditable div
+        var lessonTitleDiv = $('#lesson_title_area').find('[contenteditable="false"]');
+    
+        // Store the original lesson title content
+        originalLessonTitle = lessonTitleDiv.text();
+    
+        // Enable editing by setting contenteditable to true
+        lessonTitleDiv.prop('contenteditable', true).focus();
+    
+        // Show the edit buttons and hide the original edit button
         $('#edit_lesson_btns').removeClass('hidden');
         $('#edit_lesson_picture_btns').removeClass('hidden');
-
-        $('#edit_lesson_title').addClass('hidden');
-    })
-
+        $(this).addClass('hidden');
+    });
+    
+    // Cancel editing the lesson title
     $('#cancel_lesson_btn').on('click', function(e) {
         e.preventDefault();
-        $('#lesson_title').prop('disabled', true);
-
+        // console.log(originalLessonTitle);
+        // Find the contenteditable div
+        var lessonTitleDiv = $('#lesson_title_area').find('[contenteditable="true"]');
+    
+        // Revert to the original lesson title content
+        lessonTitleDiv.text(originalLessonTitle);
+    
+        // Disable editing by setting contenteditable to false
+        lessonTitleDiv.prop('contenteditable', false);
+    
+        // Hide the edit buttons and show the original edit button
         $('#edit_lesson_btns').addClass('hidden');
         $('#edit_lesson_picture_btns').addClass('hidden');
-    
         $('#edit_lesson_title').removeClass('hidden');
-    })
+    });
 
-    // save changes in the lesson title
-    $('#save_lesson_btn').on('click', function(e) {
-        e.preventDefault();
-        // save changes in lesson title
-        const updatedLessonTitle = $('#lesson_title').val();
+// Save changes in the lesson title
+$('#save_lesson_btn').on('click', function(e) {
+    e.preventDefault();
 
-        var syllabusID = $(this).data('syllabus-id');
-        var lessonID = $(this).data('lesson-id');
+    // Find the contenteditable div
+    var lessonTitleDiv = $('#lesson_title_area [contenteditable="true"]');
 
-        
-        var courseID = $(this).data('course-id');
-        var syllabusID = $(this).data('syllabus-id');
-        var topicID = $(this).data('topic_id');
+    // Save changes in lesson title
+    const updatedLessonTitle = lessonTitleDiv.text();
+    console.log(updatedLessonTitle);
 
-        var url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/title/"+ lessonID;
+    // Rest of your code remains the same
+    var syllabusID = $(this).data('syllabus-id');
+    var lessonID = $(this).data('lesson-id');
+    
+    var courseID = $(this).data('course-id');
+    var topicID = $(this).data('topic_id');
 
-        var updated_value = {
-            'lesson_title': updatedLessonTitle,
-            'topic_title': updatedLessonTitle,
+    var url = "/instructor/course/content/" + courseID + "/" + syllabusID + "/lesson/" + topicID + "/title/" + lessonID;
+
+    var updated_value = {
+        'lesson_title': updatedLessonTitle,
+        'topic_title': updatedLessonTitle,
+    }
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: updated_value,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        success: function(response) {
+            // Handle success if needed
+            console.log("success");
+            location.reload();
+            console.log(response);
+        },
+        error: function(error) {
+            console.log(error);
         }
+    });
+});
 
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: updated_value,
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            success: function(response) {
-                // Handle success if needed
-                console.log("success");
-                location.reload();
-                console.log(response);
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    })
 
     
 
@@ -506,7 +802,10 @@ $(document).ready(function() {
 
         const chosenLocation = $('#insertLocation').val();
         const lessonContentTitle = $('#insertLessonContentTitle').val();
-        const lessonContent = $('#insertLessonContent').val();
+
+        var content = tinyMCE.get("insertLessonContent").getContent();
+
+        const lessonContent = content;
 
         const lessonID = $(this).data('lesson-id');
 
@@ -582,6 +881,15 @@ $(document).ready(function() {
     // save all
     $('#saveEditBtn').on('click', function(e){
         e.preventDefault();
+
+            // Check if the request is already in progress
+            if ($(this).data('request-in-progress')) {
+                return;
+            }
+
+            // Set the flag to indicate that the request is in progress
+            $(this).data('request-in-progress', true);
+
         // save all data
         const lessonID = $(this).data('lesson-id')
         const courseID = $(this).data('course-id')
@@ -616,6 +924,7 @@ $(document).ready(function() {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         if(i + 1 == lessonData.length){
@@ -639,6 +948,7 @@ $(document).ready(function() {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         if(i + 1 == lessonData.length){
@@ -665,6 +975,7 @@ $(document).ready(function() {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
+                    async: false,
                     success: function(response) {
                         // Handle success if needed
                         location.reload();
@@ -729,5 +1040,40 @@ $(document).ready(function() {
                 console.log('Error:', error);
             }
         });
+    })
+
+
+    $('#saveEstTimeCompletion').on('click', function() {
+        var hours = parseInt($('#hours').val()) || 0;
+        var minutes = parseInt($('#minutes').val()) || 0; 
+
+        var totalSeconds = (hours * 60 * 60) + (minutes * 60);
+    
+        var url = baseUrl + '/addCompletionTime'
+
+        var timeCompletion = {
+            'secondsTimeCompletion': totalSeconds,
+
+        }
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: timeCompletion,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                console.log("success");
+                location.reload();
+                // console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    
     })
 });

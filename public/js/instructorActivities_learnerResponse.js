@@ -1,33 +1,19 @@
-$(document).ready(function() {
+var criteriaData = [];
 
-    $('#addScoreBtn').on('click', function(e) {
-        e.preventDefault();
-
-        $('.criteriaScore').prop('disabled', false).focus();
-        $('#remarks_area').removeClass('hidden');
-
-        $('#returnBtn').addClass('hidden');
-        $('#addScoreBtn').addClass('hidden');
+    function initializeCriteriaData() {
+        $('.criteriaScore').each(function () {
+            var enteredValue = parseFloat($(this).val()) || 0;
+            var activityContentCriteriaID = $(this).data('activity-content-criteria-id');
+            var learnerActivityCriteriaScoreID = $(this).data('learner-activity-criteria-score-id');
+    
+            criteriaData.push({
+                activityContentCriteriaID: activityContentCriteriaID,
+                learnerActivityCriteriaScoreID: learnerActivityCriteriaScoreID,
+                score: enteredValue
+            });
+        });
         
-        $('#cancelScoreBtn').removeClass('hidden');
-        $('#submitScoreBtn').removeClass('hidden');
-    })
-
-    $('#cancelScoreBtn').on('click', function(e) {
-        e.preventDefault();
-
-        $('.criteriaScore').prop('disabled', true);
-        $('#remarks_area').addClass('hidden');
-
-        $('#returnBtn').removeClass('hidden');
-        $('#addScoreBtn').removeClass('hidden');
-        
-        $('#cancelScoreBtn').addClass('hidden');
-        $('#submitScoreBtn').addClass('hidden');
-    })
-
-
-    var criteriaData = [];
+    }
 
     function handleCriteriaInput() {
         // Get the entered value as a number
@@ -64,6 +50,46 @@ $(document).ready(function() {
             });
         }
     }
+
+
+
+
+$(document).ready(function() {
+
+    initializeCriteriaData();
+
+
+
+    $('#addScoreBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('.criteriaScore').prop('disabled', false).focus();
+        $('#remarks').prop('disabled', false);
+        // $('#remarks_area').removeClass('hidden');
+
+        $('#returnBtn').addClass('hidden');
+        $('#addScoreBtn').addClass('hidden');
+        
+        $('#cancelScoreBtn').removeClass('hidden');
+        $('#submitScoreBtn').removeClass('hidden');
+    })
+
+    $('#cancelScoreBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('.criteriaScore').prop('disabled', true);
+        $('#remarks').prop('disabled', false);
+        // $('#remarks_area').addClass('hidden');
+
+        $('#returnBtn').removeClass('hidden');
+        $('#addScoreBtn').removeClass('hidden');
+        
+        $('#cancelScoreBtn').addClass('hidden');
+        $('#submitScoreBtn').addClass('hidden');
+    })
+
+
+    
     
 
 function updateOverallTotalScore() {
@@ -123,6 +149,7 @@ $('#confirmSubmit').on('click', function (e) {
     var learnerCourseID = $(this).data('learner-course-id');
     var activityID = $(this).data('activity-id');
     var activityContentID = $(this).data('activity-content-id');
+    var attempt = $(this).data('attempt');
 
     var remarks = $('#remarks').val();
 
@@ -131,7 +158,7 @@ $('#confirmSubmit').on('click', function (e) {
         total_score: overallScoreInput
     }
 
-    var url = `/instructor/course/content/activity/${learnerActivityOutputID}/${learnerCourseID}/${activityID}/${activityContentID}`;
+    var url = `/instructor/course/content/activity/${learnerActivityOutputID}/${learnerCourseID}/${activityID}/${activityContentID}/${attempt}`;
 
     // console.log(url);
     // console.log(remarks);
@@ -147,7 +174,7 @@ $('#confirmSubmit').on('click', function (e) {
         success: function(response) {
             // window.location.reload();
             console.log(response)
-            addLearnerOutputCriteriaScore(learnerActivityOutputID, learnerCourseID, activityID, activityContentID);
+            addLearnerOutputCriteriaScore(learnerActivityOutputID, learnerCourseID, activityID, activityContentID, attempt);
             // alert('done');
         },
         error: function(error) {
@@ -156,9 +183,12 @@ $('#confirmSubmit').on('click', function (e) {
     });
 });
 
-function addLearnerOutputCriteriaScore(learnerActivityOutputID, learnerCourseID, activityID, activityContentID) {
+function addLearnerOutputCriteriaScore(learnerActivityOutputID, learnerCourseID, activityID, activityContentID, attempt) {
     console.log(criteriaData);
-
+    // console.log('learner_activity_output: ' + learnerActivityOutputID);
+    // console.log('learner_course: ' + learnerCourseID);
+    // console.log('activity: ' + activityID);
+    // console.log('activity_content: ' + activityContentID);
     // Capture the current URL
     var currentUrl = window.location.href;
     console.log("Current URL:", currentUrl);
@@ -170,7 +200,7 @@ function addLearnerOutputCriteriaScore(learnerActivityOutputID, learnerCourseID,
     var urlSuffix = currentUrl.substring(instructorIndex);
     console.log("URL suffix:", urlSuffix);
 
-    var url = `/instructor/course/content/activity/${learnerActivityOutputID}/${learnerCourseID}/${activityID}/${activityContentID}/criteria`;
+    var url = `/instructor/course/content/activity/${learnerActivityOutputID}/${learnerCourseID}/${activityID}/${activityContentID}/${attempt}/criteria_score`;
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     var promises = [];

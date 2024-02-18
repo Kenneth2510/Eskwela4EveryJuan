@@ -33,6 +33,7 @@ $(document).ready(function() {
         var syllabusID = $(this).data('syllabus-id');
         var activityID = $(this).data('activity-id');
         var activityContentID = $(this).data('activity-content-id');
+        var attemptID = $(this).data('attempt');
 
 
         console.log('learnerCourse ' , learnerCourseID)
@@ -49,7 +50,7 @@ $(document).ready(function() {
         
         if(answer !== null && answer !== "") {
             var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
-            var url = "/learner/course/content/"+ courseID +"/"+ learnerCourseID +"/activity/"+ syllabusID +"/answer/"+ activityID +"/" + activityContentID; 
+            var url = "/learner/course/content/"+ courseID +"/"+ learnerCourseID +"/activity/"+ syllabusID +"/answer/"+ attemptID + "/" + activityID +"/" + activityContentID; 
 
             $.ajax({
                 type: 'POST',

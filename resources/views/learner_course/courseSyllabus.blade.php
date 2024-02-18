@@ -1,12 +1,6 @@
 @include('partials.header')
 <section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
-    <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-seagreen">
-    <a href="#">
-        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-mainwhitebg">
-            Eskwela4EveryJuan
-        </span>
-    </a>
-</header>  
+
 
 @include('partials.learnerSidebar')
 
@@ -15,21 +9,25 @@
                   
 
             @php
-            if (!function_exists('getRandomColor')) {
-                function getRandomColor() {
-                return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                }
-            }
+            // if (!function_exists('getRandomColor')) {
+            //     function getRandomColor() {
+            //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+            //     }
+            // }
             
-            // Generate a random color for mainBackgroundCol
-            $mainBackgroundCol = getRandomColor();
+            // // Generate a random color for mainBackgroundCol
+            // $mainBackgroundCol = getRandomColor();
 
-            // Darken the mainBackgroundCol
-            $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-            $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
+            // // Darken the mainBackgroundCol
+            // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
+            // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
 
-            // Darken the mainBackgroundCol further for darkenedColor
-            $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+            // // Darken the mainBackgroundCol further for darkenedColor
+            // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+            
+            $mainBackgroundCol = '#00592e';
+            $darkenedColor = '#00592e';
+            
             @endphp
 
    
@@ -103,7 +101,7 @@
                             <h1 class="mx-3 text-2xl font-semibold">General Overview</h1>
                         </div>
                     </div>
-                    <p class="px-4 text-justify">{{ $course->course_description }}</p>
+                    <p class="px-4 text-justify" style="white-space: pre-wrap">{{ $course->course_description }}</p>
                 </div>
                 
                 {{-- views --}}
@@ -119,6 +117,19 @@
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                     </button>
+
+                    <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">Pre Assessment</h1>
+                    <a href="{{url("/learner/course/content/$course->course_id/$learnerCourse->learner_course_id/pre_assessment")}}" 
+                        style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 text-white rounded-lg shadow-lg bg-seagreen">
+                        <div class="flex items-center">
+
+                                <i class="text-4xl fa-solid fa-bullseye"  style="color: #ffffff;"></i>
+                                
+                            <h1 class="mx-5 text-xl font-medium">Start Pre Assessment Exam</h1>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+                    </a>
 
                     <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">Course Content</h1>
 
@@ -231,15 +242,40 @@
                         <p>No content added</p>
                     @endforelse
 
-                
+                    <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">Post Assessment</h1>
+                    @if($postAssessmentData->status == "LOCKED")
+                    <h1 style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
+                        <div class="flex items-center">
+                            <svg width="40" height="40" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M26.6391 8.59801L21.402 3.36207C21.2278 3.18792 21.0211 3.04977 20.7936 2.95551C20.5661 2.86126 20.3223 2.81274 20.076 2.81274C19.8297 2.81274 19.5859 2.86126 19.3584 2.95551C19.1308 3.04977 18.9241 3.18792 18.75 3.36207L4.29962 17.8125C4.12475 17.9859 3.98611 18.1924 3.89176 18.42C3.79741 18.6475 3.74922 18.8915 3.75001 19.1379V24.375C3.75001 24.8722 3.94755 25.3492 4.29918 25.7008C4.65081 26.0524 5.12773 26.25 5.62501 26.25H10.8621C11.1084 26.2508 11.3525 26.2026 11.58 26.1082C11.8075 26.0139 12.014 25.8752 12.1875 25.7004L21.9926 15.8964L22.4004 17.5254L18.0879 21.8367C17.912 22.0124 17.8131 22.2509 17.813 22.4995C17.8129 22.7482 17.9116 22.9867 18.0873 23.1627C18.2631 23.3386 18.5015 23.4375 18.7502 23.4376C18.9988 23.4377 19.2374 23.339 19.4133 23.1632L24.1008 18.4757C24.2154 18.3613 24.2985 18.2191 24.3418 18.063C24.3851 17.9069 24.3873 17.7423 24.3481 17.5851L23.5395 14.3496L26.6391 11.25C26.8132 11.0758 26.9514 10.8691 27.0456 10.6416C27.1399 10.4141 27.1884 10.1702 27.1884 9.92398C27.1884 9.67772 27.1399 9.43387 27.0456 9.20635C26.9514 8.97884 26.8132 8.77212 26.6391 8.59801ZM5.62501 21.0129L8.98712 24.375H5.62501V21.0129ZM11.25 23.9871L6.0129 18.75L15.9375 8.82535L21.1746 14.0625L11.25 23.9871ZM22.5 12.7371L17.2641 7.49996L20.0766 4.68746L25.3125 9.92457L22.5 12.7371Z" fill="white"/>
+                                </svg>
+                                
+                            <h1 class="mx-5 text-xl font-medium">Finish your Final Assessment</h1>
+                        </div>
+                        <i class="pr-3 text-2xl fa-solid fa-lock" style="color: #ffffff;"></i>
+                    </h1>
+                @else 
+                    <a href="{{url("/learner/course/content/$course->course_id/$learnerCourse->learner_course_id/post_assessment")}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
+                        <div class="flex items-center">
+                          
+                            <i class="text-4xl fa-solid fa-bullseye"  style="color: #ffffff;"></i>
+                                
+                            <h1 class="mx-5 text-xl font-medium">Finish your Final Assessment</h1>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+                    </a>
+                @endif
 
                   
+                <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">View your Gradesheet</h1>
                 </div>
             </div>
             
         </div>
         <div id="syllabusModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px]">
+            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px] overflow-y-auto">
                 <div class="flex justify-end w-full">
                     <button id="removeModalBtn">
                         <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>

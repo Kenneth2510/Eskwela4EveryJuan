@@ -18,6 +18,10 @@ use App\Models\Lessons;
 use App\Models\Activities;
 use App\Models\Quizzes;
 use App\Models\LessonContents;
+use App\Models\LearnerPreAssessmentProgress;
+use App\Models\LearnerPreAssessmentOutput;
+use App\Models\LearnerPostAssessmentProgress;
+use App\Models\LearnerPostAssessmentOutput;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +32,9 @@ use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
 
 class AdminController extends Controller
 {
@@ -43,30 +49,32 @@ class AdminController extends Controller
 }
 
 
-    public function login_process(Request $request) {
-        $adminData = $request->validate([
-            "admin_username" => ['required'],
-            "password" => ['required']
-        ]);
-    
-        if (auth('admin')->attempt($adminData)) {
+public function login_process(Request $request) {
+    $adminData = $request->validate([
+        "admin_username" => ['required'],
+        "password" => ['required']
+    ]);
 
-            $admin = auth('admin')->user();
-            // dd($admin);
+    // Use the "admin" guard to attempt the login
+    if (auth('admin')->attempt($adminData)) {
+        $admin = auth('admin')->user();
 
-            $admin = Admin::find($admin->admin_id);
+        // It's not necessary to fetch the user again using Admin::find
+        // The authenticated user is already available in $admin variable
 
-            if($admin) {
-                $request->session()->put('admin' , $admin);
-            }
+        // Store the authenticated admin in the session
+        $request->session()->put('admin', $admin);
 
-            $request->session()->regenerate();
-    
-            return redirect('/admin/dashboard')->with('message', "Welcome Back");
-        }
-    
-        return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+        // Regenerate the session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        return redirect('/admin/dashboard')->with('message', "Welcome Back");
     }
+
+    // If authentication fails, redirect back with errors
+    return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+}
+
     
     public function logout(Request $request) {
         auth('admin')->logout();
@@ -315,11 +323,38 @@ class AdminController extends Controller
 
         try {
             $learner->update(['status' => 'Approved']);  
+
+            $data = [
+                'subject' => 'Your Learner Account Approval',
+                'body' => 'Hello! Your learner account has been successfully approved by the admin. You can now log in using the link below:
+            
+                [Learner Login](http://127.0.0.1:8000/learner)
+            
+                Thank you for joining our platform!',
+            ];
+            
+
+            try {
+                // Create an instance of MailNotify
+                $mailNotify = new MailNotify($data);
+    
+                // Call the to() method on the instance, not statically on the class
+                Mail::to($learner->learner_email)->send($mailNotify);
+                
+                // return response()->json(['Great! check your mail box']);
+    
+            } catch (\Exception $th) {
+                dd($th);
+                return response()->json(['Error in sending email']);
+            }
+
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
         return redirect()->back()->with('message' , 'Learner Status successfully changed');
     }
+
 
     public function rejectLearner(Learner $learner)
     {
@@ -614,6 +649,30 @@ class AdminController extends Controller
 
         try {
             $instructor->update(['status' => 'Approved']);  
+
+            $data = [
+                'subject' => 'Your Instructor Account Approval',
+                'body' => 'Hello! Your instructor account has been successfully approved by the admin. You can now log in using the link below:
+            
+                [Instructor Login](http://127.0.0.1:8000/instructor)
+            
+                Thank you for joining our platform!',
+            ];
+            
+
+            try {
+                // Create an instance of MailNotify
+                $mailNotify = new MailNotify($data);
+    
+                // Call the to() method on the instance, not statically on the class
+                Mail::to($instructor->instructor_email)->send($mailNotify);
+                
+                // return response()->json(['Great! check your mail box']);
+    
+            } catch (\Exception $th) {
+                dd($th);
+                return response()->json(['Error in sending email']);
+            }
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -1093,17 +1152,32 @@ class AdminController extends Controller
     // add learner course progress, learner syllabus progress, lesson, activity,quiz progress
     public function approve_learner_course(LearnerCourse $learnerCourse) {
         try {
+            
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
             // dd($learnerCourse);
-            $learnerCourse->update(['status' => 'Approved']);  
+            $learnerCourse->update([
+                'status' => 'Approved',
+            ]);  
 
             $courseProgressData = [
                 "learner_course_id" => $learnerCourse->learner_course_id,
                 "learner_id" => $learnerCourse->learner_id,
-                "course_id" => $learnerCourse->course_id
+                "course_id" => $learnerCourse->course_id,
+                "start_period" => $timestampString,
             ];
 
             // LearnerCourseProgress::create($courseProgressData);
             LearnerCourseProgress::firstOrCreate($courseProgressData);
+
+            $learnerAssessmentData = [
+                "learner_course_id" => $learnerCourse->learner_course_id,
+                "learner_id" => $learnerCourse->learner_id,
+                "course_id" => $learnerCourse->course_id,
+            ];
+
+            LearnerPreAssessmentProgress::create($learnerAssessmentData);
+            LearnerPostAssessmentProgress::create($learnerAssessmentData);
 
             $syllabusData = DB::table('syllabus')
             ->select(
@@ -1116,6 +1190,8 @@ class AdminController extends Controller
             ->where('course_id', $learnerCourse->course_id)
             ->orderBy('topic_id', 'ASC')
             ->get();
+
+            // dd($syllabusData);
 
             // $syllabusDataLength = count($syllabusData);
         
@@ -1170,9 +1246,10 @@ class AdminController extends Controller
                         )
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('course_id', $learnerCourse->course_id)
-                        ->where('topic_id', $syllabus->topic_id)
+                        // ->where('topic_id', $syllabus->topic_id)
                         ->first();
 
+                        // dd($activityData);
                         $rowActivityData = [
                             "learner_course_id" => $learnerCourse->learner_course_id,
                             "learner_id" => $learnerCourse->learner_id,
@@ -1196,7 +1273,7 @@ class AdminController extends Controller
                         )
                         ->where('syllabus_id', $syllabus->syllabus_id)
                         ->where('course_id', $learnerCourse->course_id)
-                        ->where('topic_id', $syllabus->topic_id)
+                        // ->where('topic_id', $syllabus->topic_id)
                         ->first();
 
                         $rowQuizData = [
@@ -1289,7 +1366,31 @@ class AdminController extends Controller
                         ->where('course_id', $learnerCourse->course_id)
                         ->delete();
 
+            $learnerActivityOutput = DB::table('learner_activity_output')
+            ->select(
+                'learner_activity_output_id'
+            )
+            ->where('learner_course_id', $learnerCourse->learner_course_id)
+            ->where('course_id', $learnerCourse->course_id)
+            ->get();
+
+            foreach ($learnerActivityOutput as $activityOutput) {
+                DB::table('learner_activity_criteria_score')
+                ->where('learner_activity_output_id', $activityOutput->learner_activity_output_id)
+                ->delete();
+            }
+            DB::table('learner_activity_output')
+                            ->where('learner_course_id', $learnerCourse->learner_course_id)
+                            ->where('course_id', $learnerCourse->course_id)
+                            ->delete();
+                    
             DB::table('learner_activity_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->delete();
+
+            DB::table('learner_quiz_progress')
                         ->where('learner_course_id', $learnerCourse->learner_course_id)
                         ->where('learner_id', $learnerCourse->learner_id)
                         ->where('course_id', $learnerCourse->course_id)

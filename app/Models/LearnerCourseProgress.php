@@ -16,7 +16,9 @@ class LearnerCourseProgress extends Model
         'learner_course_id',
         'learner_id',
         'course_id',
-        'course_progress'
+        'course_progress',
+        'start_period',
+        'finish_period'
     ];
 
     public function learner_course_id()

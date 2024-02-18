@@ -2,6 +2,22 @@ $(document).ready(function() {
     // {{ url("/learner/course/content/$syllabus->course_id/$syllabus->learner_course_id/lesson/$syllabus->syllabus_id/finish") }}
 
     $('#finishLessonBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('#finishLessonModal').removeClass('hidden');
+    })
+
+    $('.cancelFinishLessonBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('#finishLessonModal').addClass('hidden');
+    })
+
+
+
+
+
+    $('#confirmFinishLessonBtn').on('click', function(e) {
         
         var courseID = $(this).data('course-id');
         var learnerCourseID = $(this).data('learner-course-id');
@@ -30,4 +46,5 @@ $(document).ready(function() {
             }
       })
     })
+
 })

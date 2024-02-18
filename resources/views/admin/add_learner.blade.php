@@ -241,7 +241,7 @@
                         <h4 class="w-32 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">SecurityCode</h4>
                         <div class="">
                             <label for="learner_security_code" class="hidden">SecurityCode</label>
-                            <input type="password" maxlength="6" name="learner_security_code" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Security Code">
+                            <input type="password" maxlength="6" minlength="6" name="learner_security_code" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Security Code">
                             @error('learner_security_code')
                             <p class="p-1 mt-2 text-xs text-red-500">
                                 {{$message}}
