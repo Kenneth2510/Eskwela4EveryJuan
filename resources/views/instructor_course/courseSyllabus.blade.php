@@ -14,9 +14,16 @@
                 <h1 class="w-1/2 text-xl font-semibold">Business Administration</h1>
                 <p>Instructor 1</p>
                 <p class="opacity-50">000000</p>
-                <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
+                <div class="flex justify-end">
+                    <x-forms.primary-button
+                    color="white"
+                    name="Edit"
+                    id="addLesson_now"/>
+                </div>
+
+                {{-- <button class="absolute bottom-0 right-0 w-16 py-2 m-2 text-black rounded bg-mainwhitebg">
                     <h1>Edit</h1>
-                </button>
+                </button> --}}
             </div>
 
             {{-- main content --}}
@@ -48,7 +55,7 @@
 
                         <table class="table-fixed ">
                             <thead>
-                                <th>Lesson</th>
+                                <th>Name</th>
                                 <th>Topic</th>
                             </thead>
                             <tbody class="text-center">
@@ -82,9 +89,17 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <button class="self-center w-1/2 py-4 mt-4 text-white rounded-lg shadow-lg bg-seagreen">
-                            <h1>Add New Lesson</h1>
-                        </button>
+                        <div class="flex justify-center w-full">
+                            <x-forms.primary-button
+                            color="seagreen"
+                            name="Add Content"
+                            class="text-mainwhitebg"
+                            id="lessonAddContent"/>
+                        </div>
+                        
+                        {{-- <button class="self-center w-1/2 py-4 mt-4 text-white rounded-lg shadow-lg bg-seagreen">
+                            <h1>Add Content</h1>
+                        </button> --}}
                     </div>
                 </div>
             </div>
@@ -92,24 +107,32 @@
     </section>
     
     
-    <div class="fixed z-50 flex items-center w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
+    {{-- <div class="fixed z-50 flex items-center hidden w-full h-screen bg-white bg-opacity-50" aria-hidden="true" id="lessonNewContent">
         <div class="relative w-full h-auto pt-8 m-auto mx-4 rounded shadow-lg bg-seagreen" id="lessonChildContent">
-            <h1 class="text-xl font-medium text-center text-white">Lesson</h1>
+            <h1 class="text-xl font-medium text-center text-white">Add New Content</h1>
+            <div class="flex flex-col m-4">
+                <select class="h-8 px-2 rounded" name="" id="">
+                    <option value="" disabled selected>--select lesson/quiz/assignment--</option>
+                    <option value="">Lesson 1</option>
+                    <option value="">Quiz 1</option>
+                </select>
+            </div>
             <div class="flex flex-col m-4">
                 <input class="h-8 px-2 rounded" type="text" placeholder="Enter Title">
             </div>
-
             <div class="m-4">
                 <textarea class="w-full h-32 px-2 rounded resize-none" name="" id=""  placeholder="Enter Content"></textarea>
             </div>
 
             <div class="flex items-center justify-end mx-4 mb-4">
-                <button class="px-4 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg" id="lessonNewContentCloseBtn">
+                <x-forms.secondary-button name="Close" id="lessonNewContentCloseBtn"/>
+                {{-- <button class="px-4 py-2 mx-1 bg-gray-300 rounded-lg shadow-lg" id="lessonNewContentCloseBtn">
                     <h1>Close</h1>
-                </button>
-                <button class="w-16 py-2 mx-1 text-white rounded-lg shadow-lg bg-darthmouthgreen">
+                </button> --}}
+                {{-- <button class="w-16 py-2 mx-1 text-white rounded-lg shadow-lg bg-darthmouthgreen">
                     <h1>Save</h1>
-                </button>
+                </button> --}}
+                <x-forms.primary-button color="amber" name="Save"/>
             </div>
         </div>
     </div>

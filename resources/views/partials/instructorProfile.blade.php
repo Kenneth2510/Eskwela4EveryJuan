@@ -8,9 +8,12 @@
                     <div class="">
                         <div class="flex flex-row items-center justify-between px-4">
                             <h1 class="text-2xl font-semibold">Profile</h1>
-                            <button class="hidden w-8 h-8 rounded bg-seagreen lg:block">
-                                <svg class="mx-auto fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
-                            </button>
+                            <a href="{{ url('/instructor/settings') }}">
+                                <button class="hidden w-8 h-8 rounded bg-seagreen lg:block" id="editProfile">
+                                    <svg class="mx-auto fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
+                                </button>
+                            </a>
+                            
                         </div>
                         
 

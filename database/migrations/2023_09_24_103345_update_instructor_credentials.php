@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('instructor', function (Blueprint $table) {
-            $table->longText('instructor_credentials')->default(null)->change();
-        });
-    }
+    // public function up(): void
+    // {
+    //     Schema::table('instructor', function (Blueprint $table) {
+    //         $table->longText('instructor_credentials')->default(null)->change();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        //
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down(): void
+    // {
+    //     //
+    // }
 };

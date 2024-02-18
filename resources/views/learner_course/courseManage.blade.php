@@ -41,18 +41,30 @@
                 </div>
             </div>
         </div>
-        <div class="w-full flex items-center">
+        <div class="flex items-center w-full">
             @if ($isEnrolled !== null)
-                <a href="" id="startBtn" class="w-32 h-10 m-2 py-2 px-6 rounded-full bg-seagreen hover:bg-green-800">
+                <a href="" id="startBtn" class="w-32 h-10 px-6 py-2 m-2 rounded-full bg-seagreen hover:bg-green-800">
                     Start Now
                 </a>
-                <button type="button" id="unenrollBtn" class="w-32 h-10 m-2 rounded-full bg-red-600 hover:bg-red-800">
+                <x-forms.primary-button
+                color="red"
+                name="Unenroll" 
+                type="button"
+                class="bg-red-600 hover:bg-red-700"
+                id="unenrollBtn"/>
+                {{-- <button type="button" id="unenrollBtn" class="w-32 h-10 m-2 bg-red-600 rounded-full hover:bg-red-800">
                     Unenroll
-                </button>
+                </button> --}}
             @else
-                <button type="button" id="enrollBtn" class="w-32 h-10 m-2 rounded-full bg-seagreen hover:bg-green-800">
+                <x-forms.primary-button
+                color="seagreen"
+                name="Enroll Now"
+                type="button"
+                class="hover:bg-green-800"
+                id="enrollBtn"/>
+                {{-- <button type="button" id="enrollBtn" class="w-32 h-10 m-2 rounded-full bg-seagreen hover:bg-green-800">
                     <h1>Enroll Now</h1>
-                </button>
+                </button> --}}
             @endif
         </div>
         
@@ -62,29 +74,49 @@
     </div>
     @if($isEnrolled !== null)
 
-    <div id="unenrollCourseModal" class="hidden z-30 fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+    <div id="unenrollCourseModal" class="fixed top-0 left-0 z-30 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
         <form id="unenrollCourse" data-learner_course-id="{{ $isEnrolled->learner_course_id }}">
             @csrf
-            <div class="bg-white p-5 rounded-lg text-center">
+            <div class="p-5 text-center bg-white rounded-lg">
                 <p>Are you sure you want to unenroll the course?</p>
-                <button type="submit" id="confirmUnenroll" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">
+                <x-forms.primary-button
+                color="red"
+                name="Unenroll"
+                class="bg-red-600 hover:bg-red-700"
+                id="confirmUnenroll"/>
+                <x-forms.primary-button
+                color="gray"
+                name="Cancel" 
+                type="button"
+                id="cancelUnenroll"/>
+                {{-- <button type="submit" id="confirmUnenroll" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">
                     Unenroll
                 </button>
-                <button type="button" id="cancelUnenroll" class="px-4 py-2 bg-gray-400 rounded-md m-2 text-gray-700">
+                <button type="button" id="cancelUnenroll" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">
                     Cancel
-                </button>
+                </button> --}}
             </div>
         </form>
     </div>
 
     @else 
-    <div id="enrollCourseModal" class="hidden z-30 fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50"> 
+    <div id="enrollCourseModal" class="fixed top-0 left-0 z-30 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50"> 
         <form id="enrollCourse" action="" data-course-id="{{$course->course_id}}">
             @csrf
-            <div class="bg-white p-5 rounded-lg text-center">
+            <div class="p-5 text-center bg-white rounded-lg">
                 <p>Are you sure you want to Enroll course?</p>
-                <button type="submit" id="confirmEnroll" class="px-4 py-2 bg-green-600 text-white rounded-md m-2">Confirm</button>
-                <button id="cancelEnroll" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                <x-forms.primary-button
+                color="green"
+                name="Confirm" 
+                class="bg-green-600 hover:bg-green-700"
+                id="confirmEnroll"/>
+                <x-forms.primary-button
+                color="gray"
+                name="Cancel" 
+                type="button"
+                id="cancelEnroll"/>
+                {{-- <button type="submit" id="confirmEnroll" class="px-4 py-2 m-2 text-white bg-green-600 rounded-md">Confirm</button>
+                <button id="cancelEnroll" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button> --}}
             </div>
         </form>
     </div>
@@ -105,67 +137,67 @@
             </button>
         </div>
 
-        <div class="mt-5 rounded-lg flex">
-            <div id="side_items" class="w-1/6 h-full rounded-lg bg-green-700 h-">
-                <ul class="px-5 py-5 text-white text-xl font-medium">
-                    <li id="display_info_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-book-open text-3xl pr-2"></i>
+        <div class="flex mt-5 rounded-lg">
+            <div id="side_items" class="w-1/6 h-full bg-green-700 rounded-lg h-">
+                <ul class="px-5 py-5 text-xl font-medium text-white">
+                    <li id="display_info_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-book-open"></i>
                             Course Info
                     </li>
-                    <li id="enrolled_learners_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-users text-3xl pr-2"></i>
+                    <li id="enrolled_learners_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-users"></i>
                             Enrolled Learners
                     </li>
-                    <li id="enrollment_summary_btn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-book text-3xl pr-2"></i>
+                    <li id="enrollment_summary_btn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-book"></i>
                             Enrollment Summary
                     </li>
-                    <li class="w-full py-3 rounded-xl px-2 mt-2">
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl">
                       
                     </li>
-                    <li class="w-full py-3 rounded-xl px-2 mt-2">
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl">
                       
                     </li>
                 </ul>
             </div>
             
-            <div id="content_area" class=" w-5/6 m-5 overflow-y-auto">
+            <div id="content_area" class="w-5/6 m-5 overflow-y-auto ">
                 <div id="learner_course_info" class="">
-                    <h1 class="text-2xl font-semibold border-black border-b-2">Course Information</h1>
+                    <h1 class="text-2xl font-semibold border-b-2 border-black">Course Information</h1>
 
                     <form id="updateCourse" name="updateCourse" data-course-id="{{ $course->course_id }}">
                         @csrf
                         <div id="info" class="mt-5 overflow-y-auto">
                             <div class="flex">
                                 <div class="w-2/5">
-                                    <div class="flex justify-normal my-2">
-                                        <label for="" class="text-lg w-2/6">Course ID:</label>
-                                        <input type="text" value="{{ $course->course_id }}" class="text-lg w-4/6" disabled>
+                                    <div class="flex my-2 justify-normal">
+                                        <label for="" class="w-2/6 text-lg">Course ID:</label>
+                                        <input type="text" value="{{ $course->course_id }}" class="w-4/6 text-lg" disabled>
                                     </div>
-                                    <div class="flex justify-normal my-2 ">
-                                        <label for="course_name" class="text-lg w-2/6">Course Name:</label>
-                                        <input type="text" id="course_name" name="course_name" value="{{ $course->course_name }}" class="text-lg  w-4/6" disabled>
+                                    <div class="flex my-2 justify-normal ">
+                                        <label for="course_name" class="w-2/6 text-lg">Course Name:</label>
+                                        <input type="text" id="course_name" name="course_name" value="{{ $course->course_name }}" class="w-4/6 text-lg" disabled>
                                     </div>
-                                    <div class="flex justify-normal my-2 ">
-                                        <label for="" class="text-lg w-2/6">Course Code:</label>
-                                        <input type="text" value="{{ $course->course_code }}" class="text-lg  w-4/6" disabled>
+                                    <div class="flex my-2 justify-normal ">
+                                        <label for="" class="w-2/6 text-lg">Course Code:</label>
+                                        <input type="text" value="{{ $course->course_code }}" class="w-4/6 text-lg" disabled>
                                     </div>
                                 </div>
                                 
                                 <div class="w-2/5 mx-5">
-                                    <div class="flex justify-normal my-1 ">
-                                        <h1 class="text-lg w-2/6">Course Status:</h1>
+                                    <div class="flex my-1 justify-normal ">
+                                        <h1 class="w-2/6 text-lg">Course Status:</h1>
                                         @if ($course->course_status == 'Approved')
-                                        <p class="px-5 py-2 rounded-full bg-green-600">Approved</p>
+                                        <p class="px-5 py-2 bg-green-600 rounded-full">Approved</p>
                                         @elseif ($course->course_status == 'Pending')
-                                        <p class="px-5 py-2 rounded-full bg-yellow-400">Pending</p>
+                                        <p class="px-5 py-2 bg-yellow-400 rounded-full">Pending</p>
                                         @else
-                                        <p class="px-5 py-2 rounded-full bg-red-600">Rejected</p>
+                                        <p class="px-5 py-2 bg-red-600 rounded-full">Rejected</p>
                                         @endif
                                         
                                     </div>
-                                    <div class="flex justify-normal my-1 py-1">
-                                        <label for="" class="text-lg w-2/5">Course Difficulty:</label>
+                                    <div class="flex py-1 my-1 justify-normal">
+                                        <label for="" class="w-2/5 text-lg">Course Difficulty:</label>
                                         <select name="course_difficulty" id="course_difficulty" class="w-2/5" disabled>
                                             <option value="" {{ $course->course_difficulty == '' ? 'selected' : '' }}>--select an option--</option>
                                             <option value="Beginner" {{ $course->course_difficulty == 'Beginner' ? 'selected': '' }}>Beginner</option>
@@ -183,8 +215,8 @@
 
                             <div class="mt-1">
                                 <h1>Course Description</h1>
-                                {{-- <p class=" h-24 overflow-y-auto">{{ $course->course_description }}</p> --}}
-                                <textarea name="course_description" id="course_description" class="max-h-24 h-24 max-w-full w-full" disabled>{{ $course->course_description }}</textarea>
+                                {{-- <p class="h-24 overflow-y-auto ">{{ $course->course_description }}</p> --}}
+                                <textarea name="course_description" id="course_description" class="w-full h-24 max-w-full max-h-24" disabled>{{ $course->course_description }}</textarea>
                             </div>
 
                         </div>
@@ -194,7 +226,7 @@
 
 
                 <div id="learner_enrolled_learners" class="hidden">
-                    <h1 class="text-2xl font-semibold border-black border-b-2">Enrolled Learner</h1>
+                    <h1 class="text-2xl font-semibold border-b-2 border-black">Enrolled Learner</h1>
 
                     <form id="enrolleeForm" data-course-id="{{$course->course_id}}"  action="/learner/course/manage/{{$course->course_id}}" method="GET">
                         <div class="flex items-center">
@@ -253,7 +285,7 @@
                                     <td>{{$enrollee->created_at}}</td>
                                     <td>{{$enrollee->status}}</td>
                                     <td>
-                                        {{-- <button class="px-5 py-2 rounded-2xl bg-green-500 hover:bg-green-700">
+                                        {{-- <button class="px-5 py-2 bg-green-500 rounded-2xl hover:bg-green-700">
                                             view
                                         </button> --}}
                                     </td>
@@ -268,10 +300,10 @@
                     </div>
                 </div>
 
-                <div id="enrollment_summary" class="overflow-y-auto hidden">
-                    <h1 class="text-2xl font-semibold border-black border-b-2">Course Summary</h1>
+                <div id="enrollment_summary" class="hidden overflow-y-auto">
+                    <h1 class="text-2xl font-semibold border-b-2 border-black">Course Summary</h1>
 
-                    <div class="flex justify-normal mt-3">
+                    <div class="flex mt-3 justify-normal">
                         <div class="w-2/5">
                             <h1>Course Name: {{ $course->course_name }}</h1>
                             <h1>Course ID: {{ $course->course_id }}</h1>
@@ -283,11 +315,11 @@
                             <div class="flex">
                                 <h1>Course Status: </h1>
                                 @if ($course->course_status == 'Approved')
-                               <p class="px-5 py-2 rounded-full bg-green-600">Approved</p>
+                               <p class="px-5 py-2 bg-green-600 rounded-full">Approved</p>
                                @elseif ($course->course_status == 'Pending')
-                               <p class="px-5 py-2 rounded-full bg-yellow-400">Pending</p>
+                               <p class="px-5 py-2 bg-yellow-400 rounded-full">Pending</p>
                                @else
-                               <p class="px-5 py-2 rounded-full bg-red-600">Rejected</p>
+                               <p class="px-5 py-2 bg-red-600 rounded-full">Rejected</p>
                                @endif
                             </div>
                             
@@ -302,42 +334,42 @@
                     
                     <div class="mt-3">
                         <h1>Course Description</h1>
-                        <p class=" h-24 overflow-y-auto">{{ $course->course_description }}</p>
+                        <p class="h-24 overflow-y-auto ">{{ $course->course_description }}</p>
                     </div>
 
-                    {{-- <div class="justify-end flex">
-                        <button type="button" id="unenrollBtn2" class="w-32 h-10 m-2 rounded-full bg-red-600 hover:bg-red-800">
+                    {{-- <div class="flex justify-end">
+                        <button type="button" id="unenrollBtn2" class="w-32 h-10 m-2 bg-red-600 rounded-full hover:bg-red-800">
                             Unenroll
                         </button>
                     </div>
 
                     
-                    <div id="unenrollCourseModal2" class="hidden z-30 fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                    <div id="unenrollCourseModal2" class="fixed top-0 left-0 z-30 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
                         <form id="unenrollCourse2" data-learner_course-id="{{ $isEnrolled->learner_course_id }}">
                             @csrf
-                            <div class="bg-white p-5 rounded-lg text-center">
+                            <div class="p-5 text-center bg-white rounded-lg">
                                 <p>Are you sure you want to unenroll the course?</p>
-                                <button type="submit" id="confirmUnenroll2" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">
+                                <button type="submit" id="confirmUnenroll2" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">
                                     Unenroll
                                 </button>
-                                <button type="button" id="cancelUnenroll2" class="px-4 py-2 bg-gray-400 rounded-md m-2 text-gray-700">
+                                <button type="button" id="cancelUnenroll2" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">
                                     Cancel
                                 </button>
                             </div>
                         </form>
                     </div> --}}
 
-                    {{-- <div class="justify-end flex">
-                        <button id="showDeleteModal" class="px-5 py-5 text-xl rounded-xl bg-red-600 hover:bg-red-700">Delete Course</button>
+                    {{-- <div class="flex justify-end">
+                        <button id="showDeleteModal" class="px-5 py-5 text-xl bg-red-600 rounded-xl hover:bg-red-700">Delete Course</button>
                     </div>
                     
-                    <div id="deleteCourseModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                    <div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
                         <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}">
                             @csrf
-                            <div class="bg-white p-5 rounded-lg text-center">
+                            <div class="p-5 text-center bg-white rounded-lg">
                                 <p>Are you sure you want to delete this course?</p>
-                                <button type="submit" id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">Confirm</button>
-                                <button id="cancelDelete" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                                <button type="submit" id="confirmDelete" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+                                <button id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
                             </div>
                         </form>
                         

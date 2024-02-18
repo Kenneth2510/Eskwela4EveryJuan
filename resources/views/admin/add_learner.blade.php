@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div id="AD002_LA_maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
+    <div id="AD002_LA_maincontainer" class="relative max-h-full px-5 py-5 bg-white shadow-2xl mt-7 rounded-2xl">
         <div class="mb-5">
             <a href="/admin/learners" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>

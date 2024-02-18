@@ -17,7 +17,7 @@
            
             <div id="personinfo" class="relative w-4/5 mx-auto mt-10">
                 <div id="Registertitle" class="relative w-full mx-auto my-14">
-                    <text class="text-5xl font-bold text-black">Create an Account</text>
+                    <h1 class="text-5xl font-bold text-black">Create an Account</h1>
                     <p class="mt-2 text-lg font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
                 </div>
                 <div class="flex justify-around my-5">
@@ -124,7 +124,7 @@
 
             <div id="businessinfo" class="relative hidden w-4/5 mx-auto mt-10">
                 <div id="Registertitle" class="relative w-full mx-auto my-14">
-                    <text class="text-5xl font-bold text-black">About your Business</text>
+                    <h1 class="text-5xl font-bold text-black">About your Business</h1>
                     <p class="mt-2 text-lg font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
                 </div>
 
@@ -207,7 +207,7 @@
 
             <div id="securityCodeForm" class="relative hidden w-4/5 mx-auto mt-10">
                 <div id="Registertitle" class="relative w-full mx-auto my-14">
-                    <text class="text-5xl font-bold text-black">About your Business</text>
+                    <h1 class="text-5xl font-bold text-black">About your Business</h1>
                     <p class="mt-2 text-lg font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
                 </div>
 

@@ -130,7 +130,7 @@ $(document).ready(function() {
         })
     
    
-        $('#showCourseManageModal').on('click', function(e) {
+        $('.showCourseManageModal').on('click', function(e) {
             e.preventDefault();
 
             $('#L_courseManageModal').removeClass('hidden');
@@ -144,6 +144,7 @@ $(document).ready(function() {
                 contentType: 'application/json', // Set content type to JSON
                 processData: false,
                 success: function(data) {
+                    console.log(data);
                     displayCourseAndEnrolleeData(data);
                 },
                 error: function(error) {
@@ -203,9 +204,6 @@ $(document).ready(function() {
                             <td>`+ l_created_at +`</td>
                             <td>`+ status +`</td>
                             <td>
-                              <button class="px-5 py-2 rounded-2xl bg-green-500 hover:bg-green-700">
-                                    view
-                                </button>
                             </td>
                         </tr>
                     `;
@@ -290,8 +288,10 @@ $(document).ready(function() {
                                 
                             </div>
                             <div class="w-2/5">
-                                <h1>Enrollee ID: `+ isEnrolled['learner_course_id'] +`</h1>
-                                <h1>Enrolled on: `+ isEnrolled['created_at'] +`</h1>
+                            ${isEnrolled ? `
+                            <h1>Enrollee ID: ${isEnrolled['learner_course_id']}</h1>
+                            <h1>Enrolled on: ${isEnrolled['created_at']}</h1>
+                        ` : ''}
                                 <h1>Course Created at: `+ created_at +`</h1>
                                 <h1>Course Updated at: ` + updated_at + `</h1>
                             </div>

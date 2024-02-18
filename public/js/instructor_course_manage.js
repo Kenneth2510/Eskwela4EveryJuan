@@ -172,29 +172,44 @@ $(document).ready(function() {
         courseSummaryDisp += `
         <h1 class="text-2xl font-semibold border-black border-b-2">Course Summary</h1>
         <div class="flex justify-normal mt-3">
-                                <div class="w-2/5">
-                                    <h1>Course Name: `+ course_name +`</h1>
-                                    <h1>Course ID: `+ course_id +`</h1>
-                                    <h1>Course Code: `+ course_code +`</h1>
-                                </div>
-                                <div class="w-2/5">
-                                    <h1>Instructor: `+ instructor_fname +` `+ instructor_lname +`</h1>
-                                    <h1>Course Difficulty: `+ course_difficulty +`</h1>
-                                    <div id="course_status2" class="flex">
-                                        <h1>Course Status: </h1>
-                                    </div>
-                                    
-                                </div>
-                                <div class="w-2/5">
-                                    <h1>Created at: `+ created_at +`</h1>
-                                    <h1>Updated at: `+ updated_at +`</h1>
-                                </div>
-                            </div>
+            <div class="w-2/5">
+                <h1>Course Name: `+ course_name +`</h1>
+                <h1>Course ID: `+ course_id +`</h1>
+                <h1>Course Code: `+ course_code +`</h1>
+            </div>
+            <div class="w-2/5">
+                <h1>Instructor: `+ instructor_fname +` `+ instructor_lname +`</h1>
+                <h1>Course Difficulty: `+ course_difficulty +`</h1>
+                <div id="course_status2" class="flex">
+                    <h1>Course Status: </h1>
+                </div>
+            </div>
+            <div class="w-2/5">
+                <h1>Created at: `+ created_at +`</h1>
+                <h1>Updated at: `+ updated_at +`</h1>
+            </div>
+        </div>
                             
-                            <div class="mt-3">
-                                <h1>Course Description</h1>
-                                <p class=" h-24 overflow-y-auto">`+ course_description +`</p>
-                            </div>
+        <div class="mt-3">
+            <h1>Course Description</h1>
+            <p class=" h-24 overflow-y-auto">`+ course_description +`</p>
+        </div>
+
+        <div class="justify-end flex">
+            <button type="button" id="showDeleteModal" class="px-5 py-5 text-xl rounded-xl bg-red-600 hover:bg-red-700">Delete Course</button>
+        </div>
+                        
+        <div id="deleteCourseModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+            <form id="deleteCourse" action="GET">
+                @csrf
+                <div class="bg-white p-5 rounded-lg text-center">
+                    <p>Are you sure you want to delete this course?</p>
+                    <button type="submit" id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md m-2">Confirm</button>
+                    <button type="button" id="cancelDelete" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                </div>
+            </form>
+            
+        </div>
         `;
         
         $('#course_summary').empty();
@@ -355,7 +370,41 @@ $(document).ready(function() {
         
         $("#deleteCourse").attr("data-course-id", course_id);
 
-
+        $("#showDeleteModal").click(function () {
+            $("#deleteCourseModal").removeClass("hidden");
+        });
+    
+        $("#cancelDelete").click(function () {
+            $("#deleteCourseModal").addClass("hidden");
+        });
+    
+    
+    
+    
+        $("#deleteCourse").submit(function (e) {
+            e.preventDefault();
+            var courseID = $(this).data("course-id");
+            var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
+    
+            $.ajax({
+                type: 'POST',
+                url: '/instructor/course/delete/' + courseID,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    if (response && response.redirect_url) {
+                        window.location.href = response.redirect_url;
+                    } else {
+                    
+                    }
+                },
+                error: function (xhr, status, error) {
+    
+                    console.log(xhr.responseText);
+                }
+            });
+        });
      
     }
 
@@ -469,8 +518,6 @@ $(document).ready(function() {
                 }
             })
         }
-
-        
     })
 
 
@@ -478,39 +525,5 @@ $(document).ready(function() {
 
 
 
-    $("#showDeleteModal").click(function () {
-        $("#deleteCourseModal").removeClass("hidden");
-    });
-
-    $("#cancelDelete").click(function () {
-        $("#deleteCourseModal").addClass("hidden");
-    });
-
-
-
-
-    $("#deleteCourse").submit(function (e) {
-        e.preventDefault();
-        var courseID = $(this).data("course-id");
-        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
-
-        $.ajax({
-            type: 'POST',
-            url: '/instructor/course/delete/' + courseID,
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            success: function (response) {
-                if (response && response.redirect_url) {
-                    window.location.href = response.redirect_url;
-                } else {
-                
-                }
-            },
-            error: function (xhr, status, error) {
-
-                console.log(xhr.responseText);
-            }
-        });
-    });
+    
 })

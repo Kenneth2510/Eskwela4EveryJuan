@@ -211,15 +211,23 @@
                     </div>
                     
                     <div class="grid h-auto grid-flow-col grid-cols-1 my-10 text-black place-items-end">
-                        <button type="button" class="flex flex-row items-center justify-center w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500" id="editBtn">
-                            Edit
-                        </button>
-
-                        <a id="cancelBtn" href="" class="flex flex-row items-center justify-center hidden w-24 h-10 mx-5 bg-red-400 rounded-lg hover:bg-red-500 md:h-12 md:w-40">Cancel</a>
+                        <x-forms.primary-button
+                        color="amber"
+                        name="Edit"
+                        id="editBtn"/>
                         
-                        <button type="submit" id="updateBtn" class="flex flex-row items-center justify-center hidden w-24 h-10 rounded-lg bg-amber-400 hover:bg-amber-500 md:h-12 md:w-40" id="editBtn">
-                            Save Changes
-                        </button>
+                        <x-forms.primary-button
+                        color="red"
+                        name="Cancel"
+                        class="hidden"
+                        id="cancelBtn"/>
+
+                        <x-forms.primary-button
+                        color="amber"
+                        name="Save Changes"
+                        class="hidden"
+                        id="updateBtn"/>
+                        
                     </div>
                 </form>
             </section>

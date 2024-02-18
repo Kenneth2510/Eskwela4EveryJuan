@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class LearnerController extends Controller
 {
@@ -176,6 +177,7 @@ class LearnerController extends Controller
         $LearnerData['learner_security_code'] = $securityCodeNumber;
 
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         $folderPath = 'learners/' . $folderName;
 
         // Copy the default photo to the same directory
@@ -201,6 +203,7 @@ class LearnerController extends Controller
         Business::create($businessData);
 
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         
         // $fileName = time() . '-' . $file->getClientOriginalName();
         $folderPath = '/public/learners/' . $folderName;
@@ -367,7 +370,7 @@ class LearnerController extends Controller
         ]);
     
         $folderName = "{$learner['learner_lname']} {$learner['learner_fname']}";
-    
+        $folderName = Str::slug($folderName, '_');
         $fileName = time() . '-' . $learnerData['profile_picture']->getClientOriginalName();
         $folderPath = 'learners/' . $folderName; // Specify the public directory
         $filePath = $learnerData['profile_picture']->storeAs($folderPath, $fileName, 'public');
