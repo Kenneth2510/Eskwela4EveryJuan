@@ -52,7 +52,12 @@
                                 <label for="">Remember me</label>
                             </div>
                             
-                            <x-forms.primary-button color="amber" name="Log in" />
+                            <x-forms.primary-button
+                            color="amber"
+                            name="Log in"
+                            type="button"
+                            class="text-black">
+                            </x-forms.primary-button>
                         </div>
                     </div>
                 </form>

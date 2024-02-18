@@ -10,8 +10,8 @@
         </header>   
 
         {{-- MAIN --}}
-        <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto text-darthmouthgreen md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
-            <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent ">
+        <div class="w-full h-screen pt-16 lg:h-screen lg:overflow-auto text-darthmouthgreen md:bg-seagreen lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
+            <div class="rounded-lg md:overflow-hidden md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent md:h-4/5 md:overflow-y-scroll lg:h-auto lg:overflow-y-hidden">
                 <x-header title="Create an Instructor Account" id="ins-head">
                     <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                 </x-header>
@@ -123,9 +123,6 @@
                             name="Next"
                             type="button"
                             id="nxtBtn">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                                </svg>
                             </x-forms.primary-button>
                         </div>
                     </div> 
@@ -160,18 +157,12 @@
                                     <x-forms.secondary-button
                                     name="Back"
                                     id="prevBtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                                        </svg>
                                     </x-forms.secondary-button>
                                     <x-forms.primary-button
                                     color="amber"
                                     name="Next"
                                     type="button"
                                     id="nxtBtn2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                                        </svg>
                                     </x-forms.primary-button>
                                 </div>
                                 
