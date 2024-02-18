@@ -4,7 +4,7 @@
     <section class="relative flex flex-col h-screen py-10 mx-auto lg:px-10 md:items-center md:justify-center lg:flex-row lg:justify-between">
         <div class="relative px-2 mx-auto border-white lg:py-10 lg:w-2/3 lg:border-r-2">
             <div class="relative text-center">
-                <h1 class="text-2xl font-semibold leading-none text-black lg:text-7xl">Eskwela4EveryJuan</h1>
+                <h1 class="text-2xl font-semibold lg:leading-[3.5rem] text-black md:text-4xl lg:text-[5rem]">Eskwela4EveryJuan</h1>
                 <p class="hidden pt-5 text-base font-normal text-justify text-black lg:block">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
             </div>
         </div>
