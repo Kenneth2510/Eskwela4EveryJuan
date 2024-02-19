@@ -22,6 +22,7 @@ class LearnerPostAssessmentProgress extends Model
         'finish_period',
         'score',
         'max_duration',
+        'attempt',
     ];
 
 

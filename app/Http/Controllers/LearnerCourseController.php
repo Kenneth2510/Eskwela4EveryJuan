@@ -261,7 +261,7 @@ class LearnerCourseController extends Controller
 
                 $learnerTotalTime = $learnerTotalLessonProgressDuration + $learnerTotalLessonProgressDuration + $learnerTotalLessonProgressDuration;
 
-                $learnerTotalTimeinSeconds = $learnerTotalTime;
+                $learnerTotalTimeinSeconds = $learnerTotalTime / 1000;
 
                 $learnerhours = floor($learnerTotalTimeinSeconds / 3600);
                 $learnerminutes = floor(($learnerTotalTimeinSeconds % 3600) / 60);
@@ -302,17 +302,18 @@ class LearnerCourseController extends Controller
                     ->first();
                 }
          
-
-                $totalCourseTime = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
-
-                $totalCourseTimeInSeconds = $totalCourseTime;
+                $totalCourseTimeInSeconds = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
+                $totalCourseTimeInSeconds = 1927700 / 1000; // Convert milliseconds to seconds
 
                 $hours = floor($totalCourseTimeInSeconds / 3600);
                 $minutes = floor(($totalCourseTimeInSeconds % 3600) / 60);
                 $seconds = $totalCourseTimeInSeconds % 60;
-
-
+                
                 $formattedTotalCourseTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+                
+                
+                // dd($formattedTotalCourseTime);
+                
 
 
                 $syllabusProgress = DB::table('learner_syllabus_progress')
@@ -485,8 +486,8 @@ class LearnerCourseController extends Controller
                         'courseFiles' => $courseFiles,
                     ];
                 }
-                
 
+                // dd($data);
                 return view('learner_course.courseOverview', compact('course', 'learner', 'isEnrolled'))
                 ->with($data);
     
@@ -912,6 +913,11 @@ class LearnerCourseController extends Controller
                 ->where('course_id', $course->course_id)
                 ->first();
 
+                $totalNumofQuestions = DB::table('learner_post_assessment_output')
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->count();
+
                 $data = [
                     'title' => 'Course Lesson',
                     'scripts' => ['/learner_pre_assessment.js'],
@@ -919,6 +925,7 @@ class LearnerCourseController extends Controller
                     'darkenedColor' => '#00693e',
                     'learnerCourseData' => $courseData,
                     'preAssessmentData' => $preAssessmentData,
+                    'questionsCount' => $totalNumofQuestions,
                 ];
 
                 return view('learner_course.coursePreAssessment', compact('learner'))
@@ -1680,13 +1687,15 @@ class LearnerCourseController extends Controller
             $learner= session('learner'); 
             try {
                 $currentLessonStatus = DB::table('learner_lesson_progress')
-                    ->where('learner_course_id' , $learner_course->learner_course_id)
-                    ->where('course_id', $course->course_id)
-                    ->where('syllabus_id' , $syllabus->syllabus_id)
-                    ->value('status');
+                ->select('status', 'learner_lesson_progress_id')
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->first();
+            
     
                 // Check if the current lesson is not already completed
-                if ($currentLessonStatus !== 'COMPLETED') {
+                if ($currentLessonStatus->status !== 'COMPLETED') {
                     // Update the status of the current lesson to 'COMPLETED'
                     DB::table('learner_syllabus_progress')
                         ->where('learner_course_id' , $learner_course->learner_course_id)
@@ -1706,22 +1715,47 @@ class LearnerCourseController extends Controller
                             'status' => 'COMPLETED',
                             'finish_period' => $timestampString,
                         ]);
+
+                        $learnerSyllabusProgress = DB::table('learner_syllabus_progress') 
+                            ->select(
+                                'learner_syllabus_progress_id',
+                                'learner_course_id',
+                                'course_id',
+                                'syllabus_id',
+                                'status',
+                            )
+                            ->where('course_id', $course->course_id)
+                            ->where('syllabus_id', $syllabus->syllabus_id)
+                            ->where('learner_course_id', $learner_course->learner_course_id)
+                            ->first();
+                        
                     
                     // Find the next lesson that is still 'LOCKED' and update its status to 'NOT YET STARTED'
-                    $nextLesson = DB::table('learner_syllabus_progress')
-                        ->where('learner_course_id' , $learner_course->learner_course_id)
-                        ->where('course_id', $course->course_id)
-                        ->where('status', 'LOCKED')
+                    $nextSyllabusProgress = DB::table('learner_syllabus_progress')
+                    ->select(
+                        'learner_syllabus_progress_id', 
+                        'syllabus_id', 
+                        'category', 
+                        'status',
+                        )
+                    ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                    ->orderBy('learner_syllabus_progress_id', 'ASC')
+                    ->limit(1)
+                    ->first();
+    
+                    if($nextSyllabusProgress) {
+                        DB::table('learner_syllabus_progress')
+                        ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
                         ->orderBy('learner_syllabus_progress_id', 'ASC')
                         ->limit(1)
-                        ->first();
-    
-                    if ($nextLesson) {
-                        DB::table('learner_syllabus_progress')
-                            ->where('learner_course_id', $learner_course->learner_course_id)
-                            ->where('course_id', $course->course_id)
-                            ->where('learner_syllabus_progress_id', $nextLesson->learner_syllabus_progress_id)
-                            ->update(['status' => 'NOT YET STARTED']);
+                        ->update(['status' => 'NOT YET STARTED']);
+                    } else {
+                        DB::table('learner_post_assessment_progress')
+                        ->where('learner_course_id', $learnerSyllabusProgress->learner_course_id)
+                        ->where('course_id', $learnerSyllabusProgress->course_id)
+                        ->update(['status' => 'NOT YET STARTED']);
+                        
+                        session()->flash('message', "You have finished all of the topics! \n Be ready for the Post Assessment to finish this course!");
                     }
                 }
     
@@ -2938,19 +2972,67 @@ class LearnerCourseController extends Controller
                     ]);
 
 
+                    // // Find the next lesson that is still 'LOCKED' and update its status to 'NOT YET STARTED'
+                    // $nextLesson = DB::table('learner_syllabus_progress')
+                    // ->where('learner_quiz_progress_id', '>', $learnerQuizProgress->learner_quiz_progress_id)
+                    // ->where('learner_course_id' , $learnerQuizOutputData->learner_course_id)
+                    // ->where('course_id', $learnerQuizOutputData->course_id)
+                    // ->orderBy('learner_syllabus_progress_id', 'ASC')
+                    // ->limit(1)
+                    // ->first();
+
+                    // if ($nextLesson) {
+                    //     DB::table('learner_syllabus_progress')
+                    //         ->where('learner_syllabus_progress_id', $nextLesson->learner_syllabus_progress_id)
+                    //         ->update(['status' => 'NOT YET STARTED']);
+                    // } else {
+                    //     DB::table('learner_post_assessment_progress')
+                    //     ->where('learner_course_id', $learner_course->learner_course_id)
+                    //     ->where('course_id', $course->course_id)
+                    //     ->update(['status' => 'NOT YET STARTED']);
+                    //     session()->flash('message', "Great! You have finished all the Topics. \n Be ready for the Post Assessment for final grading!");
+                    // }
+
+                    $learnerSyllabusProgress = DB::table('learner_syllabus_progress') 
+                    ->select(
+                        'learner_syllabus_progress_id',
+                        'learner_course_id',
+                        'course_id',
+                        'syllabus_id',
+                        'status',
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('syllabus_id', $syllabus->syllabus_id)
+                    ->where('learner_course_id', $learner_course->learner_course_id)
+                    ->first();
+                
+            
                     // Find the next lesson that is still 'LOCKED' and update its status to 'NOT YET STARTED'
-                    $nextLesson = DB::table('learner_syllabus_progress')
-                    ->where('learner_course_id' , $learnerQuizOutputData->learner_course_id)
-                    ->where('course_id', $learnerQuizOutputData->course_id)
-                    ->where('status', 'LOCKED')
+                    $nextSyllabusProgress = DB::table('learner_syllabus_progress')
+                    ->select(
+                        'learner_syllabus_progress_id', 
+                        'syllabus_id', 
+                        'category', 
+                        'status',
+                        )
+                    ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
                     ->orderBy('learner_syllabus_progress_id', 'ASC')
                     ->limit(1)
                     ->first();
 
-                    if ($nextLesson) {
+                    if($nextSyllabusProgress) {
                         DB::table('learner_syllabus_progress')
-                            ->where('learner_syllabus_progress_id', $nextLesson->learner_syllabus_progress_id)
-                            ->update(['status' => 'NOT YET STARTED']);
+                        ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                        ->orderBy('learner_syllabus_progress_id', 'ASC')
+                        ->limit(1)
+                        ->update(['status' => 'NOT YET STARTED']);
+                    } else {
+                        DB::table('learner_post_assessment_progress')
+                        ->where('learner_course_id', $learnerSyllabusProgress->learner_course_id)
+                        ->where('course_id', $learnerSyllabusProgress->course_id)
+                        ->update(['status' => 'NOT YET STARTED']);
+                        
+                        session()->flash('message', "You have finished all of the topics! \n Be ready for the Post Assessment to finish this course!");
                     }
                 }
 
@@ -3299,6 +3381,29 @@ class LearnerCourseController extends Controller
                 ->where('learner_course.course_id', $course->course_id)
                 ->first();
 
+                $postAssessmentData_recent = DB::table('learner_post_assessment_progress')
+                ->select(
+                    'learner_post_assessment_progress_id',
+                    'status',
+                    'max_duration',
+                    'score',
+                    'remarks',
+                    'start_period',
+                    'finish_period',
+                    'attempt',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->orderBy('attempt', 'DESC')
+                ->first();
+
+                $attemptCount = DB::table('learner_post_assessment_progress')
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->where('attempt', 1)
+                ->count();
+
+
                 $postAssessmentData = DB::table('learner_post_assessment_progress')
                 ->select(
                     'learner_post_assessment_progress_id',
@@ -3308,20 +3413,72 @@ class LearnerCourseController extends Controller
                     'remarks',
                     'start_period',
                     'finish_period',
+                    'attempt',
                 )
                 ->where('learner_course_id', $learner_course->learner_course_id)
                 ->where('course_id', $course->course_id)
-                ->first();
+                ->get();
+
+                $postAssessmentDataWithQuestions = [];
+                foreach ($postAssessmentData as $postAssessment) {
+                    $questionsDataForPostAssessment = DB::table('learner_post_assessment_output')
+                        ->select(
+                            'learner_post_assessment_output.syllabus_id',
+                            'learner_post_assessment_output.attempt',
+                            DB::raw('COUNT(learner_post_assessment_output.question_id) AS total_lesson_question'),
+                            DB::raw('SUM(CASE WHEN learner_post_assessment_output.isCorrect = 1 THEN 1 ELSE 0 END) AS correct_answers_per_lesson'),
+                            'syllabus.topic_title',
+                        )
+                        ->join('syllabus', 'learner_post_assessment_output.syllabus_id', 'syllabus.syllabus_id')
+                        ->where('learner_post_assessment_output.learner_course_id', $learner_course->learner_course_id)
+                        ->where('learner_post_assessment_output.course_id', $course->course_id)
+                        ->where('learner_post_assessment_output.attempt', $postAssessment->attempt)
+                        ->groupBy('learner_post_assessment_output.syllabus_id', 'learner_post_assessment_output.attempt')
+                        ->get();
+
+                    $postAssessment->questionsData = $questionsDataForPostAssessment;
+                    $postAssessmentDataWithQuestions[] = $postAssessment;
+                }
+
+
+                // $questionsData = DB::table('learner_post_assessment_output')
+                // ->select(
+                //     'learner_post_assessment_output.syllabus_id',
+                //     'learner_post_assessment_output.attempt',
+                //     DB::raw('COUNT(learner_post_assessment_output.question_id) AS total_lesson_question'),
+                //     DB::raw('SUM(CASE WHEN learner_post_assessment_output.isCorrect = 1 THEN 1 ELSE 0 END) AS correct_answers_per_lesson'),
+                //     'syllabus.topic_title',
+                // )
+                // ->join('syllabus', 'learner_post_assessment_output.syllabus_id', 'syllabus.syllabus_id')
+                // ->where('learner_post_assessment_output.learner_course_id', $learner_course->learner_course_id)
+                // ->where('learner_post_assessment_output.course_id', $course->course_id)
+                // ->groupBy('learner_post_assessment_output.syllabus_id', 'learner_post_assessment_output.attempt')
+                // ->get();
+            
+                // $groupedQuestionsData = $questionsData->groupBy('attempt');
+
+            // dd($groupedQuestionsData);
+            
+
+            
+                $totalNumofQuestions = DB::table('learner_post_assessment_output')
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->count();
 
                 $data = [
-                    'title' => 'Course Lesson',
+                    'title' => 'Course Post Assessment',
                     'scripts' => ['/learner_post_assessment.js'],
                     'mainBackgroundCol' => '#00693e',
                     'darkenedColor' => '#00693e',
                     'learnerCourseData' => $courseData,
-                    'postAssessmentData' => $postAssessmentData,
+                    'postAssessmentData_recent' => $postAssessmentData_recent,
+                    'postAssessmentData' => $postAssessmentDataWithQuestions,
+                    'questionsCount' => $totalNumofQuestions,
+                    'attemptCount' => $attemptCount,
+                    // 'questionsData' => $groupedQuestionsData,
                 ];
-
+                // dd($data);
                 return view('learner_course.coursePostAssessment', compact('learner'))
                 ->with($data);
 
@@ -3333,7 +3490,7 @@ class LearnerCourseController extends Controller
         }
     }
 
-    public function answer_post_assessment (Course $course, LearnerCourse $learner_course) {
+    public function answer_post_assessment (Course $course, LearnerCourse $learner_course, $attempt) {
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
@@ -3364,9 +3521,11 @@ class LearnerCourseController extends Controller
                     'remarks',
                     'start_period',
                     'finish_period',
+                    'attempt'
                 )
                 ->where('learner_course_id', $learner_course->learner_course_id)
                 ->where('course_id', $course->course_id)
+                ->where('attempt', $attempt)
                 ->first();
 
 
@@ -3375,6 +3534,7 @@ class LearnerCourseController extends Controller
 
                 DB::table('learner_post_assessment_progress')
                 ->where('learner_post_assessment_progress_id', $postAssessmentData->learner_post_assessment_progress_id)
+                ->where('attempt', $attempt)
                 ->update([
                     'start_period' => $timestampString,
                     'status' => 'IN PROGRESS',
@@ -3395,6 +3555,7 @@ class LearnerCourseController extends Controller
                         )
                         ->where('learner_course_id', $learner_course->learner_course_id)
                         ->where('course_id', $course->course_id)
+                        ->where('attempt', $attempt)
                         ->get();
 
                         $questionsCount = DB::table('questions')
@@ -3458,7 +3619,8 @@ class LearnerCourseController extends Controller
                                 'learner_id' => $courseData->learner_id,
                                 'course_id' => $courseData->course_id,
                                 'question_id' => $content->question_id,
-                                'syllabus_id' => $content->syllabus_id
+                                'syllabus_id' => $content->syllabus_id,
+                                'attempt' => $attempt
                             ];
 
                             LearnerPostAssessmentOutput::create($outputData);
@@ -3480,6 +3642,7 @@ class LearnerCourseController extends Controller
                         ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
                         ->where('learner_post_assessment_output.course_id', $courseData->course_id)
                         ->where('learner_post_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->where('attempt', $attempt)
                         ->groupBy(
                             'learner_post_assessment_output.learner_post_assessment_output_id',
                             'learner_post_assessment_output.learner_course_id',
@@ -3548,7 +3711,7 @@ class LearnerCourseController extends Controller
         }
     }
 
-    public function answer_post_assessment_json(Course $course, LearnerCourse $learner_course) {
+    public function answer_post_assessment_json(Course $course, LearnerCourse $learner_course, $attempt) {
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
@@ -3579,9 +3742,11 @@ class LearnerCourseController extends Controller
                     'remarks',
                     'start_period',
                     'finish_period',
+                    'attempt'
                 )
                 ->where('learner_course_id', $learner_course->learner_course_id)
                 ->where('course_id', $course->course_id)
+                ->where('attempt', $attempt)
                 ->first();
 
 
@@ -3590,6 +3755,7 @@ class LearnerCourseController extends Controller
                             'learner_post_assessment_output.learner_post_assessment_output_id',
                             'learner_post_assessment_output.learner_course_id',
                             'learner_post_assessment_output.course_id',
+                            'learner_post_assessment_output.attempt',
                             'learner_post_assessment_output.question_id',
                             'learner_post_assessment_output.syllabus_id',
                             'questions.question',
@@ -3600,6 +3766,7 @@ class LearnerCourseController extends Controller
                         ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
                         ->where('learner_post_assessment_output.course_id', $courseData->course_id)
                         ->where('learner_post_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->where('attempt', $attempt)
                         ->groupBy(
                             'learner_post_assessment_output.learner_post_assessment_output_id',
                             'learner_post_assessment_output.learner_course_id',
@@ -3638,7 +3805,7 @@ class LearnerCourseController extends Controller
         }
     }
 
-    public function submit_post_assessment(Course $course, LearnerCourse $learner_course, Request $request) {
+    public function submit_post_assessment(Course $course, LearnerCourse $learner_course, $attempt, Request $request) {
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
@@ -3651,13 +3818,14 @@ class LearnerCourseController extends Controller
             DB::table('learner_post_assessment_output')
             ->where('learner_post_assessment_output_id', $learner_post_assessment_output_id)
             ->where('question_id', $question_id)
+            ->where('attempt', $attempt)
             ->where('learner_course_id', $learner_course->learner_course_id)
             ->update([
                 'answer' => $answer
             ]);
 
 
-            $this->check_post_assessment_answer($learner_post_assessment_output_id, $question_id, $answer);
+            $this->check_post_assessment_answer($learner_post_assessment_output_id, $question_id, $answer, $attempt);
 
 
 
@@ -3678,7 +3846,7 @@ class LearnerCourseController extends Controller
     }
     
 
-    public function check_post_assessment_answer($learner_post_assessment_output_id, $question_id, $answer) {
+    public function check_post_assessment_answer($learner_post_assessment_output_id, $question_id, $answer, $attempt) {
         try {
             // If $answer is null, set isCorrect to 0
             $answerValue = $answer !== null
@@ -3691,9 +3859,10 @@ class LearnerCourseController extends Controller
 
                 $isCorrect = $answerValue !== null ? $answerValue->isCorrect : 0;
     
-                DB::table('learner_pre_assessment_output')
-                ->where('learner_pre_assessment_output_id', $learner_post_assessment_output_id)
+                DB::table('learner_post_assessment_output')
+                ->where('learner_post_assessment_output_id', $learner_post_assessment_output_id)
                 ->where('question_id', $question_id)
+                ->where('attempt', $attempt)
                 ->update([
                     'isCorrect' => $isCorrect
                 ]);
@@ -3708,7 +3877,7 @@ class LearnerCourseController extends Controller
     }
     
 
-    public function score_post_assessment (Course $course, LearnerCourse $learner_course, Request $request) {
+    public function score_post_assessment (Course $course, LearnerCourse $learner_course, $attempt, Request $request) {
         
         try {
             $learner_post_assessment_output_id = $request->input('learner_post_assessment_output_id');
@@ -3718,6 +3887,7 @@ class LearnerCourseController extends Controller
             $totalCount = DB::table('learner_post_assessment_output')
             ->where('course_id', $course->course_id)
             ->where('learner_course_id', $learner_course->learner_course_id)
+            ->where('attempt', $attempt)
             ->count();
 
             // score of the learner
@@ -3725,6 +3895,7 @@ class LearnerCourseController extends Controller
             ->where('isCorrect', 1)
             ->where('course_id', $course->course_id)
             ->where('learner_course_id', $learner_course->learner_course_id)
+            ->where('attempt', $attempt)
             ->count();
             
             $scorePercentage = ($scoreCount / $totalCount) * 100;
@@ -3735,10 +3906,11 @@ class LearnerCourseController extends Controller
             DB::table('learner_post_assessment_progress')
             ->where('course_id', $course->course_id)
             ->where('learner_course_id', $learner_course->learner_course_id)
+            ->where('attempt', $attempt)
             ->update([
                 'status' => "COMPLETED",
                 'score' => $scoreCount,
-                'remarks' => $scorePercentage >= 90 ? 'Excellent' : ($scorePercentage >= 80 ? 'Very Good' : ($scorePercentage >= 70 ? 'Good' : ($scorePercentage >= 60 ? 'Satisfactory' : 'Needs Improvement'))),
+                'remarks' => $scorePercentage >= 90 ? 'Excellent' : ($scorePercentage >= 80 ? 'Very Good' : ($scorePercentage >= 70 ? 'Good' : ($scorePercentage > 50 ? 'Satisfactory' : 'Needs Improvement'))),
                 'finish_period' => $timestampString,
 
             ]);
@@ -3765,7 +3937,7 @@ class LearnerCourseController extends Controller
     }   
 
     
-    public function view_output_post_assessment(Course $course, LearnerCourse $learner_course) {
+    public function view_output_post_assessment(Course $course, LearnerCourse $learner_course, $attempt) {
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
@@ -3794,11 +3966,13 @@ class LearnerCourseController extends Controller
                     'max_duration',
                     'score',
                     'remarks',
+                    'attempt',
                     'start_period',
                     'finish_period',
                 )
                 ->where('learner_course_id', $learner_course->learner_course_id)
                 ->where('course_id', $course->course_id)
+                ->where('attempt', $attempt)
                 ->first();
 
 
@@ -3811,6 +3985,7 @@ class LearnerCourseController extends Controller
                             'learner_post_assessment_output.learner_post_assessment_output_id',
                             'learner_post_assessment_output.learner_course_id',
                             'learner_post_assessment_output.course_id',
+                            'learner_post_assessment_output.attempt',
                             'learner_post_assessment_output.question_id',
                             'learner_post_assessment_output.syllabus_id',
                             'learner_post_assessment_output.answer',
@@ -3823,6 +3998,7 @@ class LearnerCourseController extends Controller
                         ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
                         ->where('learner_post_assessment_output.course_id', $courseData->course_id)
                         ->where('learner_post_assessment_output.learner_course_id', $courseData->learner_course_id)
+                        ->where('attempt', $attempt)
                         ->groupBy(
                             'learner_post_assessment_output.learner_post_assessment_output_id',
                             'learner_post_assessment_output.learner_course_id',
@@ -3860,7 +4036,7 @@ class LearnerCourseController extends Controller
         }
     }
 
-    public function view_output_post_assessment_json(Course $course, LearnerCourse $learner_course) {
+    public function view_output_post_assessment_json(Course $course, LearnerCourse $learner_course, $attempt) {
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
@@ -3889,11 +4065,13 @@ class LearnerCourseController extends Controller
                     'max_duration',
                     'score',
                     'remarks',
+                    'attempt',
                     'start_period',
                     'finish_period',
                 )
                 ->where('learner_course_id', $learner_course->learner_course_id)
                 ->where('course_id', $course->course_id)
+                ->where('attempt', $attempt)
                 ->first();
 
 
@@ -3912,6 +4090,7 @@ class LearnerCourseController extends Controller
                         'learner_post_assessment_output.course_id',
                         'learner_post_assessment_output.question_id',
                         'learner_post_assessment_output.syllabus_id',
+                        'learner_post_assessment_output.attempt',
                         'learner_post_assessment_output.answer',
                         'learner_post_assessment_output.isCorrect',
                         'questions.question',
@@ -3926,6 +4105,7 @@ class LearnerCourseController extends Controller
                     ->leftJoin('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
                     ->where('learner_post_assessment_output.course_id', $courseData->course_id)
                     ->where('learner_post_assessment_output.learner_course_id', $courseData->learner_course_id)
+                    ->where('attempt', $attempt)
                     ->groupBy(
                         'learner_post_assessment_output.learner_post_assessment_output_id',
                         'learner_post_assessment_output.learner_course_id',
@@ -3967,4 +4147,48 @@ class LearnerCourseController extends Controller
             return redirect('/learner');
         }
     }
+
+    public function post_assessment_reattempt(Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+            
+                $lastLearnerPostAssessmentData = DB::table('learner_post_assessment_progress')
+                ->select(
+                    'learner_post_assessment_progress_id',
+                    'attempt',
+                )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('course_id', $course->course_id)
+                ->orderBy('attempt', 'DESC')
+                ->first();
+
+                $newAttempt = $lastLearnerPostAssessmentData->attempt + 1;
+
+                $newLearnerPostAssessmentData = [
+                    'learner_course_id' => $learner_course->learner_course_id,
+                    'learner_id' => $learner->learner_id,
+                    'course_id' => $course->course_id,
+                    'status' => "NOT YET STARTED",
+                    'attempt' => $newAttempt,
+                ];
+
+                LearnerPostAssessmentProgress::create($newLearnerPostAssessmentData);
+                
+                session()->flash('message', 'You may now reattempt the Post Assessment');
+                return back();
+
+                // return response()->json($data);
+    
+
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+            
+                return response()->json(['errors' => $errors], 422);
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+
 }

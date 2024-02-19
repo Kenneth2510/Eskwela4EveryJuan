@@ -33,9 +33,9 @@
                     <h1 class="mx-2 text-2xl font-semibold">Post Assessment</h1>
                 </div>
                 <h1 class="mx-2 text-2xl font-semibold">
-                    @if ($postAssessmentData->status === "NOT YET STARTED")
+                    @if ($postAssessmentData_recent->status === "NOT YET STARTED")
                     <span class="">STATUS: NOT YET STARTED</span>
-                    @elseif ($postAssessmentData->status === "COMPLETED")
+                    @elseif ($postAssessmentData_recent->status === "COMPLETED")
                     <span class="">STATUS: COMPLETED</span>
                     @else
                     <span class="">STATUS: IN PROGRESS</span>
@@ -91,7 +91,7 @@
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     // Get the milliseconds duration from your controller
-                    let durationInMilliseconds = {{$postAssessmentData->max_duration}};
+                    let durationInMilliseconds = {{$postAssessmentData_recent->max_duration}};
             
                     // Calculate hours, minutes, and seconds
                     let hours = Math.floor(durationInMilliseconds / 3600000);
@@ -105,78 +105,129 @@
                 });
             </script>
 
- 
+    
+        @foreach($postAssessmentData as $postAssessment)
             <div class="px-10 mt-8" id="score_area">
-                {{-- <h1 class="mb-2 text-2xl font-semibold">Attempt Number: {{$quizAttemptData->attempt}}</h1> --}}
-
-                @if($preAssessmentData->remarks)
-                <h1 class="mb-2 text-2xl font-semibold">Attempt Taken on {{$postAssessmentData->start_period}}</h1>
+                @if($postAssessment->remarks)
+                    <h1 class="mb-2 text-2xl font-semibold">Attempt Taken on {{$postAssessment->start_period}}</h1>
                 @endif
                 <div class="p-6 bg-gray-100 shadow-md rounded-xl">
                     <h1 class="mb-4 text-3xl font-bold">Score:</h1>
-                    <h1 class="text-4xl font-bold text-green-600">{{$postAssessmentData->score}} <span class="text-2xl font-bold text-black"> / 25</span></h1>
+                    <h1 class="text-4xl font-bold text-green-600">{{$postAssessment->score}} <span class="text-2xl font-bold text-black"> / {{ $questionsCount }}</span></h1>
                     
                     <div class="my-5">
                         <h1 class="text-xl font-semibold">Remarks:</h1>
-   
-                            <span class="mx-2 text-2xl font-semibold {{ in_array($postAssessmentData->remarks, ['Excellent', 'Very Good', 'Good']) ? 'text-dartmouthgreen' : 'text-red-600' }}">
-                                {{ $postAssessmentData->remarks }}
-                            </span>
-                        </h1>
+                        <span class="mx-2 text-2xl font-semibold {{ in_array($postAssessment->remarks, ['Excellent', 'Very Good', 'Good', 'Satisfactory']) ? 'text-dartmouthgreen' : 'text-red-600' }}">
+                            {{ $postAssessment->remarks }}
+                        </span>
                         
+                        <h3 class="mt-5 text-xl font-semibold">Assessment Breakdown</h3>
+                        @foreach ($postAssessment->questionsData as $q)
+                            <h4 class="text-lg font-semibold">{{ $q->topic_title }} : </h4>
+                            <h4 class="text-lg font-bold text-green-600">{{$q->correct_answers_per_lesson}} <span class="text-lg font-bold text-black"> / {{ $q->total_lesson_question }}</span></h4>
+                        @endforeach
                     </div>
 
                     <div class="my-3">
-                        @if($postAssessmentData->remarks)
-                        <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/view_output") }}" method="GET" class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">
-                            View Output
-                        </a> 
+                        @if($postAssessment->remarks)
+                            <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/view_output/$postAssessment->attempt") }}" method="GET" class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">
+                                View Output
+                            </a> 
                         @endif
                     </div>
-                    
-                      
                 </div>
             </div>
+        @endforeach
+                    
 
-            
             
         
-            
+        {{-- <div class="px-10 mt-[50px] flex justify-between">
+            @foreach ($postAssessmentData as $postAssessment)
 
-        <div class="px-10 mt-[50px] flex justify-between">
-            {{-- @if(count($learnerQuizProgressData) == 1) --}}
-                    
-                    @if ($postAssessmentData->status == 'COMPLETED')
-                        <!-- has attempt 1 only and complete -->
-                        {{-- @if ($preAssessmentData->remarks == 'PASS') --}}
-                            <!-- has attempt 1 only and pass -->
+                @if($postAssessment->attempt !== $attemptCount) 
+                
+                @else
+
+                    @if ($postAssessment->status == 'COMPLETED')
+                        
+                        @if ($postAssessment->remarks == "Needs Improvement") 
+                            
+                            <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Return    
+                            </a>
+
+                            <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/reattempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Re Attempt the Assessment
+                            </a>
+
+                        @else
+
+                            <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Return    
+                            </a>
+
+                            <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/view_output/$postAssessment->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            View Output
+                            </a>
+                            
+                        @endif
+
+                    @else
+
                         <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                             Return    
                         </a>
 
-                        <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/view_output") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
-                        View Output
+                        <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/answer/$postAssessment->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            Answer Now
                         </a>
-
-                        {{-- @endif --}}
-
-                    @else
-                        <!-- has attempt 1 only and not yet started -->
-                    <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
-                        Return    
-                    </a>
-
-                    <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/answer") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
-                        Answer Now
-                    </a>  
-
+                        
                     @endif
 
-            {{-- @endif --}}
+                @endif
+            @endforeach
+        </div> --}}
+
+               
+        <div class="px-10 mt-[50px] flex justify-between">
+   
+                    @if ($postAssessmentData_recent->status == 'COMPLETED')
+                        
+                        @if ($postAssessmentData_recent->remarks == "Needs Improvement") 
+                            
+                            <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Return    
+                            </a>
+
+                            <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/reattempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Re Attempt the Assessment
+                            </a>
+
+                        @else
+
+                            <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                                Return    
+                            </a>
+
+                            <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/view_output/$postAssessmentData_recent->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            View Output
+                            </a>
+                            
+                        @endif
+
+                    @else
+
+                        <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            Return    
+                        </a>
+
+                        <a href="{{ url("/learner/course/content/$learnerCourseData->course_id/$learnerCourseData->learner_course_id/post_assessment/answer/$postAssessmentData_recent->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            Answer Now
+                        </a>
+                        
+                    @endif
         </div>
-        
-
-
         
     </div>
 </section>

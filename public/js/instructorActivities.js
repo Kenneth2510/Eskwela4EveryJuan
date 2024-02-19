@@ -101,11 +101,11 @@ $(document).ready(() => {
                     const learner_id = learnerActivityContent[i]['learner_id'];
                     const learner_fname = learnerActivityContent[i]['learner_fname'];
                     const learner_lname = learnerActivityContent[i]['learner_lname'];
-                    const total_score = learnerActivityContent[i]['total_score'];
+                    let total_score = learnerActivityContent[i]['total_score'];
                     const status = learnerActivityContent[i]['status'];
                     const attempt = learnerActivityContent[i]['attempt'];
                     const mark = learnerActivityContent[i]['mark'];
-                    const updated_at = learnerActivityContent[i]['updated_at'];
+                    const created_at = learnerActivityContent[i]['created_at'];
     
                     if(status == "NOT YET STARTED") {
                         dispStatus = "NOT YET STARTED"
@@ -125,8 +125,8 @@ $(document).ready(() => {
                             <td>${learner_id}</td>
                             <td>${learner_fname} ${learner_lname}</td>
                             <td>${attempt}</td>
-                            <td>${updated_at}</td>
-                            <td>${total_score}/${criteria_total_score}</td>
+                            <td>${created_at}</td>
+                            <td>${total_score}</td>
                             <td>${dispStatus}</td>
                             <td>${mark}</td>
                             <td class="float-right">
