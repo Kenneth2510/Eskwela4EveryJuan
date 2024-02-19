@@ -272,10 +272,10 @@
             <div class="hidden py-5 mx-5" id="gradesheetArea">
                 <h1 class="text-4xl font-semibold">Your Grades</h1>
                 <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
-                    <table class="table-fixed">
+                    <table class="table-fixed w-[3000px]">
                         <thead class="text-left">
-                            <th class="w-4/12">Name</th>
-                            <th class="w-4/12">Status</th>
+                            <th class="w-6/12">Name</th>
+                            <th class="w-6/12">Status</th>
                             <th class="w-4/12">Date Started</th>
                             <th class="w-4/12">Pre Assessment</th>
                             
@@ -296,10 +296,10 @@
                         <tbody class="text-center">
                             @forelse ($gradesheet as $grade)
                                 <tr>
-                                    <td class="py-3">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                                    <td class="w-1/2">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
                                     <td>{{ $grade->course_progress }}</td>
                                     <td>{{ $grade->start_period }}</td>
-                                    <td>#</td>
+                                    <td>{{ $preAssessmentGrade->score }}</td>
                                     
                                     {{-- Display activity scores --}}
                                     @foreach ($activitySyllabus as $activity)
@@ -317,10 +317,10 @@
                                         <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
                                     @endforeach
                                     
-                                    <td>#</td>
-                                    <td>#</td>
-                                    <td>#</td>
-                                    <td>{{ $grade->finish_period }}</td>
+                                    <td>{{ $postAssessmentGrade }}</td>
+                                    <td>{{ $courseProgress->grade }}</td>
+                                    <td>{{ $courseProgress->remarks }}</td>
+                                    <td>{{ $courseProgress->finish_period }}</td>
                                 </tr>
                             @empty
                                 <tr>
