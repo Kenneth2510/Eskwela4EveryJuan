@@ -241,6 +241,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/manage/{course}', 'LearnerCourseController@manage_course');
     Route::get('/learner/course/manage/{course}/overview', 'LearnerCourseController@course_overview');
     Route::get('/learner/course/manage/{course}/view_syllabus', 'LearnerCourseController@view_syllabus');
+    // Route::get('/learner/course/{course}/print_certificate', 'LearnerCourseController@print_certificate');
 
     Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment', 'LearnerCourseController@pre_assessment');
     Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment/answer', 'LearnerCourseController@answer_pre_assessment');
@@ -281,6 +282,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     Route::get('/learner/course/content/{course}/{learner_course}/grades', 'LearnerCourseController@grades');
     Route::get('/learner/course/content/{course}/{learner_course}/gradespdf', 'LearnerCourseController@gradespdf');
+
+    
+    Route::get('/learner/course/{course}/{learner_course}/certificate', 'LearnerCourseController@generate_certificate');
     // // })->middleware('web');
 });
 

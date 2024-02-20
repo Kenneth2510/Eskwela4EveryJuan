@@ -36,7 +36,11 @@
                     @endif
                  {{$isEnrolled->status}}</h4>
                  @if ($courseProgress)
-                 <h4 class="flex items-center mt-10 text-xl">Your Progress: {{$courseProgress->course_progress}}</h4>
+                 <h4 class="flex items-center my-10 text-xl">Your Progress: {{$courseProgress->course_progress}}</h4>
+                    @if($courseProgress->course_progress == 'COMPLETED')
+                        
+                    <a href="{{ url("/learner/course/$course->course_id/$courseProgress->learner_course_id/certificate") }}" target="_blank" class="px-5 py-3 mb-5 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">Download Certificate of Completion</a>
+                    @endif
                  @endif
                 @endif
                 
