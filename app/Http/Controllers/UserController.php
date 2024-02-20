@@ -13,4 +13,8 @@ class UserController extends Controller
     public function home() {
         return view('home')->with('title', 'Eskwela4EveryJuan');
     }
+
+    public function landing() {
+        return view('landing')->with('title', 'Eskwela4EveryJuan | Landing Page');
+    }
 }
