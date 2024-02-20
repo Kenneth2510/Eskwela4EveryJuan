@@ -54,6 +54,7 @@ Route::controller(LearnerController::class)->group(function() {
     Route::put('/learner/settings', 'update_info');
     Route::put('/learner/update_profile', 'update_profile');
 
+    Route::get('/learner/profile', 'profile');
 });
 
 Route::controller(InstructorController::class)->group(function() {
@@ -377,4 +378,9 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/send', 'MailController@index');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/send', 'LearnerMessageController@index');
 });

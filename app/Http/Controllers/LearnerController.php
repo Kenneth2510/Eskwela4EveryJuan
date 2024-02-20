@@ -763,6 +763,9 @@ class LearnerController extends Controller
             "business_name" => ['required'],
             "business_address" => ['required'],
             "business_owner_name" => ['required'],
+            'business_category' => ['required'],
+            'business_classification' => ['required'],
+            'business_description' => ['required'],
         ]);
 
         $passwordConfirm = $request->input('password_confirmation');
@@ -839,5 +842,30 @@ class LearnerController extends Controller
         return redirect('/learner/settings')->with('message', 'Profile picture updated successfully');
     }
     
-    
+    public function profile() {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+
+                
+            $business = Business::where('learner_id', $learner->learner_id)->first();
+
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['userProfile.js'], 
+                'learner' => $learner,
+                'business' => $business,
+            ];
+
+            return view('learner.profile')
+            ->with($data);
+
+            } catch (\Exception $e) {
+                $e->getMessage();
+            }
+        } else {
+            return redirect('/learner');
+        }  
+    }
 }
