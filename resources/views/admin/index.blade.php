@@ -1,15 +1,15 @@
-@include('partials.header')
+@extends('layouts.admin_login')
 
-<section class="w-auto h-screen text-mainwhitebg">
+@section('content')
     <section class="relative flex flex-col h-screen py-10 mx-auto lg:px-10 md:items-center md:justify-center lg:flex-row lg:justify-between">
         <div class="relative px-2 mx-auto border-white lg:py-10 lg:w-2/3 lg:border-r-2">
-            <div class="relative text-center">
-                <h1 class="text-2xl font-semibold lg:leading-[3.5rem] text-black md:text-4xl lg:text-[5rem]">Eskwela4EveryJuan</h1>
+            <div class="relative px-10">
+                <h1 class="text-2xl font-semibold lg:leading-[3.5rem] text-seagreen md:text-4xl lg:text-[5rem]">Eskwela4EveryJuan</h1>
                 <p class="hidden pt-5 text-base font-normal text-justify text-black lg:block">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
             </div>
         </div>
     
-        <div id="adminlogin" class="relative px-4 py-16 transition-opacity duration-100 md:border-2 md:w-3/5 md:my-4 lg:border-none lg:w-1/3">
+        <div id="adminlogin" class="relative px-4 py-16 transition-opacity duration-100 md:border-2 md:w-4/5 md:my-4 lg:border-none lg:w-1/3">
             <form action="/admin/login" method="POST">
                 @csrf
                 <h3 class="text-lg font-semibold leading-none text-center text-black">Admin Login</h3>
@@ -37,12 +37,8 @@
                 </div>
             </form>
         </div>
-    
     </section>
-
-    
-   
-</section>
+@endsection
     
     {{-- <script>
         $(document).ready(function() {
@@ -55,4 +51,3 @@
             });
         });
       </script> --}}
-@include('partials.footer')

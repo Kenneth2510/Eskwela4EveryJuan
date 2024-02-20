@@ -55,7 +55,7 @@
                             <x-forms.primary-button
                             color="amber"
                             name="Log in"
-                            type="button"
+                            type="submit"
                             class="text-black">
                             </x-forms.primary-button>
                         </div>
