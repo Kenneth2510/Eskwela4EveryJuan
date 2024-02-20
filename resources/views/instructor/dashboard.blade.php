@@ -1,14 +1,5 @@
-@include('partials.header')
-    
-    <section class="flex flex-row w-full h-auto bg-mainwhitebg">
-
-
-        @include('partials.instructorNav')
-        @include('partials.instructorSidebar')
-        
-    
-        {{-- SIDEBAR END --}}
-
+@extends('layouts.instructor_layout')
+@section('content')
         {{-- MAIN START --}}
         <section class="relative w-full h-screen px-4 overflow-auto md:w-3/4 lg:w-9/12" id="insDashCont">
             <div class="top-0 right-0 md:absolute z-1 pt-[110px] md:pt-[60px] ">
@@ -141,10 +132,6 @@
             
             {{-- MY COURSES END --}}
         </section>
-        {{-- MAIN END --}}  
-        
-        @include('partials.instructorProfile')  
+        {{-- MAIN END --}}      
+@endsection
 
-    </section>
-
-@include('partials.footer')

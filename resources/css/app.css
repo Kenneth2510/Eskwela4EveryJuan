@@ -31,14 +31,9 @@
         @apply flex flex-row w-full h-auto text-sm bg-mainwhitebg md:text-base lg:h-screen;
     }
 
-    * {
-        scrollbar-width: auto;
-        scrollbar-color: #1f8247 #ffffff;
-    }
-
     /* Chrome, Edge, and Safari */
     *::-webkit-scrollbar {
-        width: 16px;
+        width: 15px;
     }
 
     *::-webkit-scrollbar-track {
@@ -47,7 +42,7 @@
 
     *::-webkit-scrollbar-thumb {
         background-color: #1f8247;
-        border-radius: 10px;
+        border-radius: 50px;
         border: 3px solid #ffffff;
     }
 }
