@@ -295,7 +295,7 @@ class InstructorCourseController extends Controller
 
                 $totalCourseTime = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
 
-                $totalCourseTimeInSeconds = $totalCourseTime;
+                $totalCourseTimeInSeconds = $totalCourseTime / 1000;
 
                 $hours = floor($totalCourseTimeInSeconds / 3600);
                 $minutes = floor(($totalCourseTimeInSeconds % 3600) / 60);
@@ -2430,16 +2430,46 @@ class InstructorCourseController extends Controller
                             ]);
 
                         $learnerSyllabusProgress = DB::table('learner_syllabus_progress')
-                            ->select('learner_syllabus_progress_id', 'syllabus_id', 'category', 'status', /* add other columns as needed */)
+                            ->select(
+                                'learner_syllabus_progress_id', 
+                                'syllabus_id', 
+                                'category', 
+                                'status',
+                                )
                             ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                            ->where('status', '=', 'LOCKED')
+                            ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
                             ->orderBy('learner_syllabus_progress_id', 'ASC')
                             ->first();
 
                         if ($learnerSyllabusProgress) {
-                            DB::table('learner_syllabus_progress')
-                                ->where('learner_syllabus_progress_id', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                            $nextSyllabusProgress = DB::table('learner_syllabus_progress')
+                            ->select(
+                                'learner_syllabus_progress_id', 
+                                'syllabus_id', 
+                                'category', 
+                                'status',
+                                )
+                            ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                            ->orderBy('learner_syllabus_progress_id', 'ASC')
+                            ->limit(1)
+                            ->first();
+
+                            if($nextSyllabusProgress) {
+                                DB::table('learner_syllabus_progress')
+                                ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                                ->orderBy('learner_syllabus_progress_id', 'ASC')
+                                ->limit(1)
                                 ->update(['status' => 'NOT YET STARTED']);
+                            } else {
+                                DB::table('learner_post_assessment_progress')
+                                ->where('learner_course_id', $learner_course->learner_course_id)
+                                ->where('course_id', $learnerActivityOutputData->course_id)
+                                ->update(['status' => 'NOT YET STARTED']);
+                                
+                                session()->flash('message', "You have finished all of the topics! \n Be ready for the Post Assessment to finish this course!");
+                            }
+
+
                         }
                     }
                 }
