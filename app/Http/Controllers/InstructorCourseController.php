@@ -237,6 +237,7 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
             // dd($instructor);
 
+            
             try {
                 $course = DB::table('course')
                 ->select(
@@ -246,6 +247,7 @@ class InstructorCourseController extends Controller
                     'course.course_description',
                     'course.course_status',
                     'course.course_difficulty',
+                    'course.instructor_id',
                     'instructor.instructor_fname',
                     'instructor.instructor_lname',
                     'instructor.profile_picture',
@@ -253,6 +255,11 @@ class InstructorCourseController extends Controller
                 ->join('instructor', 'course.instructor_id', '=',  'instructor.instructor_id')
                 ->where('course_id', $course->course_id)
                 ->first();
+
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $syllabus = DB::table('syllabus')
                 ->select(
@@ -485,6 +492,11 @@ class InstructorCourseController extends Controller
 
             try{
 
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
+
                 $enrolleeProgress = DB::table('learner_course_progress')
                 ->select(
                     'learner_course_progress_id',
@@ -520,6 +532,11 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
 
             try{
+
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $courseData = $request->validate([
                     'course_name' => ['required'],
@@ -817,6 +834,11 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {
+
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
 
                     // if (!function_exists('getRandomColor')) {
                     //     function getRandomColor() {
@@ -1145,6 +1167,11 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {
+
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
 
                     $lessonInfo = DB::table('lessons')
                         ->select(
@@ -1810,7 +1837,10 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
                     // if (!function_exists('getRandomColor')) {
                     //     function getRandomColor() {
                     //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
@@ -2164,7 +2194,10 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
 
             try {
-
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
                 // if (!function_exists('getRandomColor')) {
                 //         function getRandomColor() {
                 //         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
@@ -2654,7 +2687,10 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {       
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
                 // if (!function_exists('getRandomColor')) {
                 //     function getRandomColor() {
                 //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
@@ -2971,6 +3007,10 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
     
             try {
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
                 // if (!function_exists('getRandomColor')) {
                 //     function getRandomColor() {
                 //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
@@ -3355,7 +3395,10 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {  
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
                     // if (!function_exists('getRandomColor')) {
                     //     function getRandomColor() {
                     //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
