@@ -159,6 +159,7 @@ class LearnerCourseController extends Controller
                     'instructor.instructor_fname',
                     'instructor.instructor_lname',
                     'instructor.profile_picture',
+                    'instructor.instructor_email'
                 )
                 ->join('instructor', 'course.instructor_id', '=',  'instructor.instructor_id')
                 ->where('course_id', $course->course_id)

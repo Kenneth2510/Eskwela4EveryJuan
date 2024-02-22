@@ -18,6 +18,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
 use Illuminate\Support\Facades\Cache;
+use Barryvdh\Snappy\Facades\SnappyPdf;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
+
 
 class LearnerController extends Controller
 {
@@ -477,6 +481,7 @@ class LearnerController extends Controller
             Storage::makeDirectory($folderPath);
         }
 
+        session()->flash('message', 'Learner Account Created successfully');
         return redirect('/learner')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored');
     
     }
@@ -810,51 +815,23 @@ class LearnerController extends Controller
         }  
     }
 
-    public function update_profile(Request $request) {
-        if (session()->has('learner')) {
-            $learner= session('learner');
-        } else {
-            return redirect('/learner');
-        }
-    
-        $learnerData = $request->validate([
-            "profile_picture" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-    
-        $folderName = "{$learner['learner_lname']} {$learner['learner_fname']}";
-        $folderName = Str::slug($folderName, '_');
-        $fileName = time() . '-' . $learnerData['profile_picture']->getClientOriginalName();
-        $folderPath = 'learners/' . $folderName; // Specify the public directory
-        $filePath = $learnerData['profile_picture']->storeAs($folderPath, $fileName, 'public');
-    
-        try {
-            // Update the instructor's profile_picture directly with the correct path
-            Learner::where('learner_id', $learner['learner_id'])
-                ->update(['profile_picture' => $filePath]);
-
-                $learner['profile_picture'] = $filePath;
-                session(['learner' => $learner]);
-    
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-    
-        return redirect('/learner/settings')->with('message', 'Profile picture updated successfully');
-    }
     
     public function profile() {
         if (session()->has('learner')) {
             $learner= session('learner');
 
             try {
-
+            $learnerData = Learner::where('learner_id', $learner->learner_id)->first();
                 
             $business = Business::where('learner_id', $learner->learner_id)->first();
 
+            $this->generate_profile_pdf();
+
+            
             $data = [
                 'title' => 'Profile',
-                'scripts' => ['userProfile.js'], 
-                'learner' => $learner,
+                'scripts' => ['learnerProfile.js'], 
+                'learner' => $learnerData,
                 'business' => $business,
             ];
 
@@ -863,6 +840,331 @@ class LearnerController extends Controller
 
             } catch (\Exception $e) {
                 $e->getMessage();
+            }
+        } else {
+            return redirect('/learner');
+        }  
+    }
+
+
+    public function update_user_info(Request $request) {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+                // dd($request);
+                $updated_learnerData = $request->validate([
+                    "learner_fname" => ['required'],
+                    "learner_lname" => ['required'],
+                    "learner_bday" => ['required'],
+                    "learner_gender" => ['required'],
+                ]);
+
+                Learner::where('learner_id', $learner->learner_id)
+                ->update($updated_learnerData);
+
+                
+                session()->flash('message', 'User Info changed successfully');
+                
+                // return redirect('/learner/profile')->with('message' , 'Profile updated successfully');
+        
+    
+                } catch (\Exception $e) {
+                    $e->getMessage();
+                }
+            } else {
+                return redirect('/learner');
+            }  
+    }
+
+    public function update_business_info(Request $request) {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+                // dd($request);
+                // $updated_learnerData = $request->validate([
+                //     "business_name" => ['required'],
+                //     "business_address" => ['required'],
+                //     "business_owner_name" => ['required'],
+                //     "business_category" => ['required'],
+                //     "business_classification" => ['nullable', 'string'],
+                //     "business_description" => ['nullable', 'string'],
+                // ]);
+                
+                $business_name = $request->input('business_name');
+                $business_address = $request->input('business_address');
+                $business_owner_name = $request->input('business_owner_name');
+                $business_category = $request->input('business_category');
+                $business_classification = $request->input('business_classification');
+                $business_description = $request->input('business_description');
+
+                DB::table('business')
+                ->where('learner_id', $learner->learner_id)
+                ->update([
+                    "business_name" => $business_name,
+                    "business_address" => $business_address,
+                    "business_owner_name" => $business_owner_name,
+                    "business_category" => $business_category,
+                    "business_classification" => $business_classification,
+                    "business_description" => $business_description,
+                ]);
+                
+                session()->flash('message', 'User Info changed successfully');
+                
+                // return redirect('/learner/profile')->with('message' , 'Profile updated successfully');
+                return response()->json(['message' => 'User Info changed successfully']);
+
+                
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+                return response()->json(['errors' => $errors], 422);
+            }
+            } else {
+                return redirect('/learner');
+            }  
+    }
+
+    public function update_login_info(Request $request) {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+                
+                $learnerNewPassword = $request->input('learnerNewPassword');
+                $learnerNewPasswordConfirm = $request->input('learnerNewPasswordConfirm');
+                $learner_security_code = $request->input('learner_security_code');
+
+                 if($learnerNewPassword == $learnerNewPasswordConfirm && $learner->learner_security_code == $learner_security_code) {
+
+                    $hashedPassword = bcrypt($learnerNewPassword);
+                    DB::table('learner')
+                    ->where('learner_id', $learner->learner_id)
+                    ->update([
+                        'password' => $hashedPassword,
+                    ]);
+
+                    session()->flash('message', 'User Info changed successfully');
+                    $message = 'User Info changed Successfully';
+                 } else {
+                    session()->flash('message', 'Error Occurred');
+                    $message = 'Error Occurred';
+                 }
+
+                
+                // return redirect('/learner/profile')->with('message' , 'Profile updated successfully');
+                return response()->json(['message' => $message]);
+
+                
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+                return response()->json(['errors' => $errors], 422);
+            }
+            } else {
+                return redirect('/learner');
+            }  
+    }
+
+
+    
+    public function update_profile_photo(Request $request) {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+       
+        $learnerData = $request->validate([
+            "profile_picture" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $folderName = "{$learner->learner_lname} {$learner->learner_fname}";
+        $folderName = Str::slug($folderName, '_');
+        $fileName = time() . '-' . $learnerData['profile_picture']->getClientOriginalName();
+        $folderPath = 'learners/' . $folderName; // Specify the public directory
+        $filePath = $learnerData['profile_picture']->storeAs($folderPath, $fileName, 'public');
+    
+        try {
+            // Update the instructor's profile_picture directly with the correct path
+            Learner::where('learner_id', $learner->learner_id)
+                ->update(['profile_picture' => $filePath]);
+
+                $learner->profile_picture = $filePath;
+                session(['learner' => $learner]);
+
+                return redirect('/learner/profile')->with('message', 'Profile picture updated successfully');
+    
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    
+        
+    } else {
+        return redirect('/learner');
+    }
+
+    }
+
+
+    public function view_other_learner($email) {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+                
+                $learnerData = DB::table('learner')
+                ->where('learner_email', $email)
+                ->first();
+
+                $businessData = DB::table('business')
+                ->where('learner_id', $learnerData->learner_id)
+                ->first();
+
+                $courseProgress = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress.learner_course_id',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+                    'learner_course_progress.course_id',
+                    'course.course_name',
+                )
+                ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+                ->where('learner_course_progress.learner_id', $learnerData->learner_id)
+                ->get();
+   
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['userProfile.js'], 
+                'learner' => $learnerData,
+                'business' => $businessData,
+                'courses' => $courseProgress,
+            ];
+
+            return view('learner.viewLearnerProfile')
+            ->with($data);
+
+            } catch (\Exception $e) {
+                $e->getMessage();
+            }
+        } else {
+            return redirect('/learner');
+        }  
+    }
+
+
+    public function view_other_instructor($email) {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+                
+                $instructorData = DB::table('instructor')
+                ->where('instructor_email', $email)
+                ->first();
+
+                $courseData = DB::table('learner_course_progress')
+                ->select(
+                    DB::raw('COUNT(learner_course_progress.learner_course_id) as learner_count'),
+                    'course.course_name'
+                )
+                ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+                ->where('course.instructor_id', $instructorData->instructor_id)
+                ->groupBy(
+                    'course.course_name'
+                )
+                ->get();
+            
+
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['userProfile.js'], 
+                'learner' => $learner,
+                'instructor' => $instructorData,
+                'courses' => $courseData,
+            ];
+
+            return view('learner.viewInstructorProfile')
+            ->with($data);
+
+            } catch (\Exception $e) {
+                $e->getMessage();
+            }
+        } else {
+            return redirect('/learner');
+        }  
+    }
+
+    public function generate_profile_pdf() {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            try {
+            $learnerData = Learner::where('learner_id', $learner->learner_id)->first();
+                
+            $business = Business::where('learner_id', $learner->learner_id)->first();
+
+            
+            $courseProgress = DB::table('learner_course_progress')
+            ->select(
+                'learner_course_progress.learner_course_id',
+                'learner_course_progress.course_progress',
+                'learner_course_progress.start_period',
+                'learner_course_progress.finish_period',
+                'learner_course_progress.course_id',
+                'course.course_name',
+            )
+            ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+            ->where('learner_course_progress.learner_id', $learnerData->learner_id)
+            ->get();
+
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['userProfile.js'], 
+                'learner' => $learnerData,
+                'business' => $business,
+                'courses' => $courseProgress
+            ];
+
+            // return view('learner.previewProfile')
+            // ->with($data);
+                
+                            // Render the view with the Blade template
+                    $html = view('learner.previewProfile', compact('learner'))
+                    ->with($data)
+                    ->render();
+
+                // Generate a unique filename for the PDF
+                $filename = $learner->learner_id . '_' . $learner->learner_fname . '_' . $learner->learner_lname .'.pdf';
+
+                // Define the folder path based on the course name
+                $folderName = Str::slug("{$learner->learner_lname} {$learner->learner_fname}", '_');
+                $folderPath = 'learners/' . $folderName . '/documents';
+
+                // Check if the file already exists in storage and delete it
+                if (Storage::disk('public')->exists($folderPath . '/' . $filename)) {
+                    Storage::disk('public')->delete($folderPath . '/' . $filename);
+                }
+
+                // Generate the PDF using Snappy PDF
+                $pdf = SnappyPdf::loadHTML($html)
+                ->setOption('zoom', 0.8) // Set the scale factor to 80%
+                ->output();
+
+                // Store the new PDF in the public directory within the course-specific folder
+                Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);
+
+                // Generate the URL to the stored PDF
+                $pdfUrl = URL::to('storage/' . $folderPath . '/' . $filename);
+                // dd($data);
+                // return view('learner_course.courseGradesPdf', compact('learner'))
+                // ->with($data);
+
+                return null;
+
+            } catch (\Exception $e) {
+            // Log the error
+            Log::error('Failed to generate PDF: ' . $e->getMessage());
+
+            // Optionally, return an error response or redirect the user
+            return response()->json(['success' => false, 'message' => 'Failed to generate PDF']);
             }
         } else {
             return redirect('/learner');

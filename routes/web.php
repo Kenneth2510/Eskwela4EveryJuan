@@ -47,14 +47,24 @@ Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner/dashboard', 'dashboard');
     Route::get('/learner/dashboard/overviewNum', 'overviewNum');
     Route::get('/learner/dashboard/sessionData', 'sessionData');
-    Route::get('/learner/settings', 'settings');
+    // Route::get('/learner/settings', 'settings');
 
     Route::get('/learner/register1', 'register1');
 
-    Route::put('/learner/settings', 'update_info');
-    Route::put('/learner/update_profile', 'update_profile');
+    // Route::put('/learner/settings', 'update_info');
+    // Route::put('/learner/update_profile', 'update_profile');
 
     Route::get('/learner/profile', 'profile');
+    Route::post('/learner/profile/update_user_info', 'update_user_info');
+    Route::post('/learner/profile/update_business_info', 'update_business_info');
+    Route::post('/learner/profile/update_login_info', 'update_login_info');
+    Route::put('/learner/profile/update_profile_photo', 'update_profile_photo');
+    
+    Route::get('/learner/profile/generate_profile_pdf', 'generate_profile_pdf');
+
+    
+    Route::get('/learner/profile/learner/{email}', 'view_other_learner');
+    Route::get('/learner/profile/instructor/{email}', 'view_other_instructor');
 });
 
 Route::controller(InstructorController::class)->group(function() {
@@ -78,7 +88,16 @@ Route::controller(InstructorController::class)->group(function() {
     Route::put('/instructor/update_profile', 'update_profile');
 
     // Route::get('/instructor/activities', 'activity');
-    Route::get('/instructor/quiz', 'quiz');
+    // Route::get('/instructor/quiz', 'quiz');
+
+    Route::get('/instructor/profile', 'profile');
+    Route::post('/instructor/profile/update_user_info', 'update_user_info');
+    Route::post('/instructor/profile/update_business_info', 'update_business_info');
+    Route::post('/instructor/profile/update_login_info', 'update_login_info');
+    Route::put('/instructor/profile/update_profile_photo', 'update_profile_photo');
+    
+    Route::get('/instructor/profile/learner/{email}', 'view_other_learner');
+    Route::get('/instructor/profile/instructor/{email}', 'view_other_instructor');
 });
 
 
@@ -382,5 +401,5 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 
 Route::namespace('App\Http\Controllers')->group(function () {
-    Route::get('/send', 'LearnerMessageController@index');
+    Route::get('/learner/message', 'LearnerMessageController@index');
 });

@@ -13,18 +13,15 @@
         <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto bg-mainwhitebg text-darthmouthgreen md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent ">
 
-                {{-- <x-header title="Create an learner Account" id="ins-head">
-                    <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-                </x-header> --}}
+          
 
                 <h1 class="text-6xl font-bold text-darthmouthgreen">Create New Learner Account</h1>
                 <p class="mt-3 text-sm text-darthmouthgreen md:text-base">Welcome, future learner! We're excited to have you join our learning community. Please provide the necessary information below to create your new account.</p>
 
-                {{-- <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/learner/register1') }}" method="POST" enctype="multipart/form-data"> --}}
+               
+                {{-- <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/learner/register') }}" method="POST" enctype="multipart/form-data">
 
-                <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/learner/register') }}" method="POST" enctype="multipart/form-data">
-
-                    @csrf
+                    @csrf --}}
                     <div class="" id="first-form">
                         <div class="flex flex-col flex-nowrap lg:flex-row">
                             <div class=" FORM-CTNR lg:w-1/2 lg:mr-2">
@@ -35,7 +32,8 @@
                                     </span>
                                 @enderror
                                 <input class="border IN-V-INP border-darthmouthgreen" type="text" name="learner_fname" id="learner_fname" value="{{old('learner_fname')}}">
-                                
+                                <span id="firstNameError" class="text-red-500"></span>
+                               
                             </div>
                             <div class=" FORM-CTNR lg:w-1/2 lg:ml-2">
                                 <label for="learner_lname" class="text-lg text-darthmouthgreen">Lastname:</label>
@@ -45,7 +43,7 @@
                                     </span>
                                 @enderror
                                 <input class="border IN-V-INP border-darthmouthgreen" type="text" name="learner_lname" id="learner_lname" value="{{old('learner_lname')}}">
-                                
+                                <span id="lastNameError" class="text-red-500"></span>
                             </div>
                         </div>
                         
@@ -58,7 +56,7 @@
                                     </span>
                                 @enderror
                                 <input class="border IN-V-INP border-darthmouthgreen" type="date" name="learner_bday" id="learner_bday" value="{{old('learner_bday')}}">
-                                
+                                <span id="bdayError" class="text-red-500"></span>
                             </div>
                             
                             <div class="lg:ml-2 FORM-CTNR lg:w-1/2">
@@ -68,13 +66,13 @@
                                         {{$message}}
                                     </span>
                                 @enderror
-                                <select name="learner_gender" id="gender" class="border IN-V-INP border-darthmouthgreen">
+                                <select name="learner_gender" id="learner_gender" class="border IN-V-INP border-darthmouthgreen">
                                     <option value="" {{old('learner_gender') == "" ? 'selected' : ''}} class=""></option>
                                     <option value="Male" {{old('learner_gender') == "Male" ? 'selected' : ''}} class="">Male</option>
                                     <option value="Female" {{old('learner_gender') == "Female" ? 'selected' : ''}} class="">Female</option>
                                     <option value="Others" {{old('learner_gender') == "Others" ? 'selected' : ''}} class="">Preferred not to say</option>
                                 </select>
-                                
+                                <span id="genderError" class="text-red-500"></span>
                             </div>
                         </div>
 
@@ -86,18 +84,17 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="email" name="learner_email" id="learner_email" value="{{old('learner_email')}}">
-                           
+                            <span id="emailError" class="text-red-500"></span>
                         </div>
                         <div class="FORM-CTNR">
                             <label for="learner_contactno" class="text-lg text-darthmouthgreen">Contact Number:</label>
-                            {{-- <input class="IN-V-INP" type="text" name="learner_contactno" id="learner_contactno"> --}}
-                            @error('learner_contactno')
+                              @error('learner_contactno')
                             <span class="p-1 text-sm text-red-500">
                                     {{$message}}
                                 </span>
                             @enderror
                             <input type="tel" id="learner_contactno" maxlength="11" pattern="[0-9]{11}" name="learner_contactno" class="border IN-V-INP border-darthmouthgreen" placeholder="09" value="{{old('learner_contactno')}}">
-                           
+                            <span id="contactnoError" class="text-red-500"></span>
                         </div>
                         <div class="FORM-CTNR">
                             <label for="learner_username" class="text-lg text-darthmouthgreen">Username:</label>
@@ -107,7 +104,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="text" name="learner_username" id="learner_username" value="{{old('learner_username')}}">
-                        
+                            <span id="usernameError" class="text-red-500"></span>
                         </div>
                         <div class="FORM-CTNR">
                             <label for="password" class="text-lg text-darthmouthgreen">Password:</label>
@@ -116,12 +113,19 @@
                                     {{$message}}
                                 </span>
                             @enderror
-                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password" id="">
-                           
+                            <input class="border IN-V-INP border-darthmouthgreen" type="password" minlength="8" name="password" id="password">
+                            <span id="passwordError" class="text-red-500"></span>
+                            <span id="passwordRequirements" class="text-gray-500 text-sm">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
                         </div>
+
+                        <div class="text-darthmouthgreen">
+                            <input type="checkbox" id="showPassword"> Show Password
+                        </div>
+
                         <div class="FORM-CTNR">
                             <label for="password_confirmation" class="text-lg text-darthmouthgreen">Confirm Password:</label>
-                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="">
+                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="password_confirmation">
+                            <span id="passwordConfirmationError" class="text-red-500"></span>
                         </div>
 
                         
@@ -133,32 +137,17 @@
                     </div> 
                     
                     <div class="hidden overflow-hidden" id="resumeForm">
-                        {{-- <div>
-                            <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
-                                <svg class="pr-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                            </button>
-                        </div> --}}
+                   
                         
                         <div class="px-4 mt-2 mb-2">
-                            {{-- <x-header title="About Credentials">
-                                <p class="text-sm text-darthmouthgreen">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-                            </x-header> --}}
+                  
 
                             <h1 class="text-2xl font-bold text-darthmouthgreen">About you Business</h1>
                             <p class="mt-3 text-xs text-darthmouthgreen md:text-base">Welcome, future learner! To tailor your experience and provide the best learning opportunities, please share some details about your business with us. Your information will be kept confidential and used solely for educational purposes.</p>
             
                         </div>
 
-                        {{-- <div class="pb-4 my-8 font-semibold border-b-2" action="">
-                            <label for="learner_credentials" class="text-lg text-darthmouthgreen">Upload CV or Resume</label>
-                            @error('learner_credentials')
-                                <span class="p-1 text-sm text-red-500">
-                                        {{$message}}
-                                    </span>
-                                @enderror
-                            <input type="file" name="learner_credentials" id="learner_credentials" accept="application/pdf" class="text-darthmouthgreen">
-                            
-                        </div> --}}
+                    
 
                         <div class="mt-4 FORM-CTNR">
                             <label for="business_name" class="text-lg text-darthmouthgreen">Business Name:</label>
@@ -168,6 +157,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="text" name="business_name" id="business_name" value="{{old('business_name')}}">
+                            <span id="businessNameError" class="text-red-500"></span>
                         </div>
 
                         
@@ -179,6 +169,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="text" name="business_address" id="business_address" value="{{old('business_address')}}">
+                            <span id="businessAddressError" class="text-red-500"></span>
                         </div>
 
                         
@@ -190,6 +181,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="text" name="business_owner_name" id="business_owner_name" value="{{old('business_owner_name')}}">
+                            <span id="businessOwnerNameError" class="text-red-500"></span>
                         </div>
                         
 
@@ -201,6 +193,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="text" maxlength="13" name="bplo_account_number" id="bplo_account_number" value="{{old('bplo_account_number')}}">
+                            <span id="bploError" class="text-red-500"></span>
                         </div>
 
                         <div class=" FORM-CTNR lg:w-1/2">
@@ -210,13 +203,13 @@
                                     {{$message}}
                                 </span>
                             @enderror
-                            <select name="business_category" id="gender" class="border IN-V-INP border-darthmouthgreen">
+                            <select name="business_category" id="business_category" class="border IN-V-INP border-darthmouthgreen">
                                 <option value="" {{old('business_category') == "" ? 'selected' : ''}} class=""></option>
                                 <option value="Micro" {{old('business_category') == "Micro" ? 'selected' : ''}} class="">Micro</option>
                                 <option value="Small" {{old('business_category') == "Small" ? 'selected' : ''}} class="">Small</option>
                                 <option value="Medium" {{old('business_category') == "Medium" ? 'selected' : ''}} class="">Medium</option>
                             </select>
-                            
+                            <span id="businessCategoryError" class="text-red-500"></span>
                         </div>
 
                         <div class="">
@@ -234,12 +227,7 @@
 
 
                     <div class="hidden overflow-hidden" id="security_code">
-                        {{-- <div>
-                            <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
-                                <svg class="pr-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                            </button>
-                        </div> --}}
-                        
+            
                         <div class="px-4 mt-4">
                             <h1 class="text-2xl font-bold text-darthmouthgreen">Set your Security Code</h1>
                             <p class="mt-3 text-xs text-darthmouthgreen md:text-base">Secure your account by setting a unique security code. This code will add an extra layer of protection to your account, ensuring that only you can access sensitive information. Please choose a memorable code that combines numbers and letters to maximize security.</p>
@@ -248,13 +236,14 @@
 
                     <div class="flex items-center pb-4 my-8 ml-5 font-semibold text-black border-b-2 security-code-container">
                             <label for="learner_security_code" class="text-xl text-darthmouthgreen">Security Code:</label>
-                            <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_4" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="security_code_1" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="security_code_2" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="security_code_3" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_4" id="security_code_4" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="security_code_5" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="security_code_6" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
 
+                            <span id="securityCodeError" class="text-red-500"></span>
                             
                             <script>
                             
@@ -310,20 +299,15 @@
                             
                             <div class="grid h-auto mt-5 text-black place-items-end" >
                                 <div class="flex">
-                                    {{-- <x-forms.secondary-button name="Return" id="prevBtn2"/>
-                                
-                                    <x-forms.primary-button
-                                    color="amber"
-                                    name="Create my account"/> --}}
-
+                        
                                     <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="prevBtn2" name="Back"><i class="fa-solid fa-arrow-left hover:text-darthmouthgreen"></i>Back</button>
-                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="" type="submit" name="Create my account">Create my account</button>
+                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="register_submit_btn" type="button" name="Create my account">Create my account</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                </form>
+                {{-- </form> --}}
   
                 <div class="mx-auto mb-10 text-sm w-max md:text-base">
 

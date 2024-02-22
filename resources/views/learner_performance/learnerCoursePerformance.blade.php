@@ -16,7 +16,7 @@
             <br>
             PERFORMANCE DASHBOARD
         </h1>
-        <hr class="border-t-2 border-gray-300 my-6">
+        <hr class="my-6 border-t-2 border-gray-300">
 
         <div class="flex p-10 mt-5" id="genInfo">
             <div class="w-1/2 mx-3 h-[300px] border-2 border-darthmouthgreen" id="totalLearnerPerformancePercent">
@@ -162,7 +162,7 @@
                         <canvas id="learnerQuizProgressChart"></canvas>
                     </div>
     
-                    <div class="w-2/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerQuizProgressChartTable">
+                    <div class="w-2/3 h-[350px] ml-5 border-2 overflow-y-auto border-darthmouthgreen" id="learnerQuizProgressChartTable">
                         <table>
                             <thead class="py-3 text-white text-md bg-darthmouthgreen">
                                 <th class="w-2/12">Quiz Title</th>

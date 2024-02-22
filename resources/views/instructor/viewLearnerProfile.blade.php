@@ -3,19 +3,22 @@
 <section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
 
     @include('partials.instructorNav')
-    @include('partials.learnerSidebar')
+    @include('partials.instructorSidebar')
 
         
     {{-- MAIN --}}
     <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
         <div class="px-3 pb-4 rounded-lg shadow-lg b">
 
+            <a href="{{ back()->getTargetUrl() }}" class="w-8 h-8 m-2">
+                <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+            </a>
+        
             <div class="flex" id="upper_container">
 
                 <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
                     <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
                         <img class="z-0 w-40 rounded-full h-40" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
-                        <button id="update_profile_photo_btn" style="position: absolute; bottom: -6px; right: 10px;" class="w-12 h-12 text-white rounded-full z-5 bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border-2 hover:text-darthmouthgreen"><i class="fa-solid fa-camera"></i></button>
                     </div>
 
                     <div class="mt-10" id="name_area">
@@ -24,7 +27,6 @@
 
                     <div class="mt-5 text-center" id="account_status_area">
                         <h1 class="text-xl">LEARNER</h1>
-                        {{-- <h1 class="text-xl">ID: 1</h1> --}}
 
                         @if ($learner->status == 'Approved')
                         <div class="px-5 py-2 text-white bg-darthmouthgreen rounded-xl">Approved</div>
@@ -49,9 +51,7 @@
                         <h1 class="text-4xl font-semibold text-darthmouthgreen">User Details</h1>
 
                         <hr class="my-6 border-t-2 border-gray-300">
-                        {{-- <form id="user_info_form" enctype="multipart/form-data" action="{{ url('/learner/profile/update_user_info') }}" method="POST">
-                            @method('PUT')
-                            @csrf --}}
+             
                         <div class="flex w-full mt-5" id="userInfo">
                             
                             <div class="w-1/2 mx-2" id="userInfo_left">
@@ -92,21 +92,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-end w-full px-5 mt-5">
-                            <button type="button" class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="edit_user_info_btn">edit</button>
-                            <button type="button" class="hidden px-5 py-3 mx-2 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="submit_user_info_btn">apply changes</button>
-                            <button type="button" class="hidden px-5 py-3 text-lg text-white bg-gray-500 hover:border-2 hover:bg-white hover:border-gray-500 hover:text-gray-500 rounded-xl" id="cancel_user_info_btn">cancel</button>
-                        </div>
-                        {{-- </form> --}}
                     </div>
 
                         <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="upper_right_2">
                             <h1 class="text-4xl font-semibold text-darthmouthgreen">Business Details</h1>
 
                             <hr class="my-6 border-t-2 border-gray-300">
-                            {{-- <form id="business_info_form" enctype="multipart/form-data" action="{{ url('/learner/update_business_info') }}" method="POST">
-                                @method('PUT')
-                                @csrf --}}
+                     
                             <div class="mt-3" id="businessNameArea">
                                 <label for="business_name">Business Name</label><br>
                                 <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="business_name" id="business_name" value="{{$business->business_name}}" disabled>
@@ -169,68 +161,11 @@
                                 <span id="businessDescriptionError" class="text-red-500"></span>
                             </div>
 
-                            <div class="flex justify-end w-full px-5 mt-5">
-                                <button type="button" class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="edit_business_info_btn">edit</button>
-                                <button type="button" class="hidden px-5 py-3 mx-2 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="submit_business_info_btn">apply changes</button>
-                                <button type="button" class="hidden px-5 py-3 text-lg text-white bg-gray-500 hover:border-2 hover:bg-white hover:border-gray-500 hover:text-gray-500 rounded-xl" id="cancel_business_info_btn">cancel</button>
-                            </div>
-                            {{-- </form> --}}
                         </div>
 
-                        <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="upper_right_3">
-                            <h1 class="text-4xl font-semibold text-darthmouthgreen">Account Details</h1>
 
-                            <hr class="my-6 border-t-2 border-gray-300">
-                            {{-- <form id="login_info_form" enctype="multipart/form-data" action="{{ url('/learner/update_login_info') }}" method="POST">
-                                @method('PUT')
-                                @csrf --}}
-                            <div class="mt-3" id="learner_usernameArea">
-                                <label for="learner_username">Username</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="learner_username" id="learner_username" value="{{$learner->learner_username}}" disabled>
-                            </div>
 
-                            <div class="mt-3" id="learnerPasswordArea">
-                                <label for="password">Password</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-gray-300" type="text" name="password" id="password" disabled>
-                            </div>
-                            
-                            <div class="mt-3 hidden" id="new_passwordArea">
-                                <label for="learnerNewPassword">New Password</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-gray-300" type="password" name="learnerNewPassword" id="learnerNewPassword">
-                                
-                                <span id="newPasswordError" class="text-red-500"></span><br>
-                                <span id="passwordRequirements" class="text-gray-500 text-sm">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
-                            </div>
-                            
-                            <div id="passwordCheckbox" class="mt-3 hidden">
-                                <input type="checkbox" id="showNewPassword" class="mr-2">
-                                <label for="showNewPassword" class="cursor-pointer">Show New Password</label>
-                            </div>
-                            
-                            <div class="mt-3 hidden" id="learnerPasswordConfirmArea">
-                                <label for="learnerNewPasswordConfirm">Confirm New Password</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-gray-300" type="password" name="learnerNewPasswordConfirm" id="learnerNewPasswordConfirm">
-                                
-                                <span id="newPasswordConfirmError" class="text-red-500"></span>
-                            </div>
-                            
-
-                            <div class="hidden mt-3" id="securityCodeArea">
-                                <label for="learner_security_code">Enter your Security Code</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="password" maxlength="6" name="learner_security_code" id="learner_security_code">
-                                
-                                <span id="securityCodeError" class="text-red-500"></span>
-                            </div>
-
-                            <div class="flex justify-end w-full px-5 mt-5">
-                                <button type="button" class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="edit_login_info_btn">change password</button>
-                                <button type="button" class="hidden px-5 py-3 mx-2 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="submit_login_info_btn">apply changes</button>
-                                <button type="button" class="hidden px-5 py-3 text-lg text-white bg-gray-500 hover:border-2 hover:bg-white hover:border-gray-500 hover:text-gray-500 rounded-xl" id="cancel_login_info_btn">cancel</button>
-                            </div>
-                            {{-- </form> --}}
-                        </div>
-
-                        {{-- <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="courseProgress">
+                 <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="courseProgress">
                             <h1 class="text-4xl font-semibold text-darthmouthgreen">Courses Progress</h1>
 
                             <hr class="my-6 border-t-2 border-gray-300">
@@ -241,51 +176,25 @@
                                     <th>Status</th>
                                     <th>Start Period</th>
                                     <th>Finish Period</th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
+                                    @foreach ($courses as $course)
                                     <tr>
-                                        <td class="py-5">HTML</td>
-                                        <td>IN PROGRESS</td>
-                                        <td>02/14/2024</td>
-                                        <td>02/14/2024</td>
+                                        <td class="py-5">{{ $course->course_name }}</td>
+                                        <td>{{ $course->course_progress }}</td>
+                                        <td>{{ $course->start_period }}</td>
+                                        <td>{{ $course->finish_period }}</td>
+                                        <td>
+                                            <a href="{{ url("/learner/course/$$course->course_id") }}"></a>
+                                        </td>
                                     </tr>
+                                    @endforeach
+
                                 </tbody>
                             </table>
-                        </div> --}}
+                        </div>
 
-                        
-                        {{-- <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="courseProgress">
-                            <h1 class="text-4xl font-semibold text-darthmouthgreen">Your Credentials</h1>
-
-                            <hr class="my-6 border-t-2 border-gray-300">
-
-                            <a href="">sample</a>
-
-                            <div class="flex justify-end w-full px-5 mt-5">
-                                <button class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl">Change File</button>
-                            </div>
-                        </div> --}}
-
-
-                                                
-                        {{-- <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="courseProgress">
-                            <h1 class="text-4xl font-semibold text-darthmouthgreen">Courses Managed</h1>
-
-                            <hr class="my-6 border-t-2 border-gray-300">
-
-                            <table class="w-full">
-                                <thead>
-                                    <th>Course Name</th>
-                                    <th>Status</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="py-5">HTML</td>
-                                        <td>IN PROGRESS</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> --}}
 
                     </div>
                 </div>
@@ -295,44 +204,9 @@
     </section>
 
 
-    @include('partials.learnerProfile')
+    @include('partials.instructorProfile')
         
     </section>
 
-
-    <div id="profilePicturePopup" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-            <div class="flex justify-end w-full">
-                <button class="cancelUpdate">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            <h2 class="mb-2 text-2xl font-semibold">Upload Profile Picture</h2>
-            
-            <form id="profilePictureForm" enctype="multipart/form-data" action="{{ url('/learner/profile/update_profile_photo') }}" method="POST">
-                @method('PUT')
-                @csrf
-                <!-- Add the hidden input field for the method -->
-                <input type="hidden" name="_method" value="PUT">
-                <div class="mb-4">
-                    <input type="file" name="profile_picture" id="profile_picture" class=""><br>
-                    <label for="profile_picture" class="px-4 py-2 text-white bg-darthmouthgreen rounded-lg cursor-pointer hover:border hover:border-darthmouthgreen hover:bg-white hover:text-darthmouthgreen">
-                        Select Image
-                    </label>
-                    @error('profile_picture')
-                        <p class="p-1 mt-2 text-xs text-red-500">
-                            {{$message}}
-                        </p>
-                    @enderror
-                </div>
-                <div class="mb-4 mt-5 flex justify-center">
-                    <button type="submit" class="px-5 py-3 mx-1 text-white bg-darthmouthgreen rounded-lg hover:border hover:border-darthmouthgreen hover:bg-white hover:text-darthmouthgreen">Upload</button>
-                    <button type="button" class="px-5 py-3 mx-1 text-white bg-red-500 rounded-lg cancelUpdate hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
-                </div>
-            </form>
-            
-            
-        </div>
-    </div>
 
 @include('partials.footer')

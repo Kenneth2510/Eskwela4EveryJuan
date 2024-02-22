@@ -193,6 +193,7 @@
                                 <th class="w-1/12">Enrollment Status</th>
                                 <th class="w-2/12">Date Enrolled</th>
                                 <th class="w-1/12">Course Progress</th>
+                                <th class="w-2/12"></th>
                             </thead>
                             <tbody class="">
                                 @forelse ($courseEnrollees as $enrollee)
@@ -202,6 +203,9 @@
                                     <td>{{ $enrollee->status }}</td>
                                     <td>{{ $enrollee->created_at }}</td>
                                     <td>{{ $enrollee->course_progress }}</td>
+                                    <td>
+                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="rounded-xl py-1 px-3 bg-darthmouthgreen text-white hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -223,7 +227,7 @@
                     <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
                     <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
                     <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
-                        <table id="gradesheet" class="table-fixed">
+                        <table id="gradesheet" class="table-fixed w-[3000px]">
                             <thead class="px-3 text-center text-white bg-darthmouthgreen">
                                 <th class="w-4/12 pl-5">Name</th>
                                 <th class="w-4/12">Status</th>
