@@ -13,18 +13,18 @@
                 <div class="py-4 border-t-2 border-gray-300">
                     <h1 class="py-2 text-2xl font-semibold">Overview</h1>
 
-                    <div class="flex items-center justify-between text-sm md:text-base" id="overview_area">
-                        <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 text-darthmouthgreen border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
+                    <div class="flex items-center justify-between text-sm md:text-base text-darthmouthgreen" id="overview_area">
+                        <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
                             <h1 class="text-lg font-semibold md:text-4xl lg:text-7xl" id="totalCoursesText">#</h1>
-                            <p class="">Active Courses Managed</p>
+                            <p class="font-medium text-black">Active Courses Managed</p>
                         </div>
                         <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 border-darthmouthgreen rounded-2xl" id="totalLearnersArea">
                             <h1 class="text-lg font-semibold md:text-4xl lg:text-7xl" id="totalLearnersCountText">#</h1>
-                            <p class="">Learners Enrolled</p>
+                            <p class="font-medium text-black">Learners Enrolled</p>
                         </div>
                         <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
                             <h1 class="text-lg font-semibold md:text-4xl lg:text-7xl" id="totalSyllabusCountText">#</h1>
-                            <p class="">Topics Created</p>
+                            <p class="font-medium text-black">Topics Created</p>
                         </div>
                     </div>                    
                 </div>
