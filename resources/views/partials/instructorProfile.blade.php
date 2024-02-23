@@ -28,12 +28,6 @@
                             @include('partials.calendar')
                         </div>
 
-
-                        <div class="flex flex-col items-center justify-center my-8">
-                            <a class="lg:hidden" href="">Edit Profile</a>
-                            <a class="" href="">view activity logs</a>
-                        </div>
-
                         <div class="mt-4 text-center text-mainwhitebg md:hidden">
                             <form  action="">
                                 <button class="w-32 h-10 font-medium underline rounded-lg shadow-lg underline-offset-2 bg-darthmouthgreen">Logout</button>
