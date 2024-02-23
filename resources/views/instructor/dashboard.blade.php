@@ -3,7 +3,7 @@
 @section('content')
 
         {{-- MAIN START --}}
-        <section class="w-full h-screen md:w-3/4 lg:w-9/12">
+        <section class="w-full h-screen md:w-3/4 lg:w-10/12">
             <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
 
                 <div class="py-4" id="welcome">
