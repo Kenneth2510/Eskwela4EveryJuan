@@ -5,7 +5,6 @@
         <header class="absolute top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-transparent">
             <a href="#">
                 <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
-
                     Eskwela4EveryJuan
                 </span>
             </a>

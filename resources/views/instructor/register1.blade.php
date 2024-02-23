@@ -1,7 +1,7 @@
 @include('partials.header')
 
-    <section class="relative flex flex-row w-full h-screen text-sm bg-mainwhitebg">
-        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-transparent">
+    <section class="relative flex flex-row w-full h-screen text-base bg-mainwhitebg">
+        <header class="absolute top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4">
             <a href="#">
                 <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
                     Eskwela4EveryJuan
@@ -10,7 +10,7 @@
         </header>
 
         {{-- MAIN --}}
-        <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto bg-mainwhitebg text-darthmouthgreen md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
+        <div class="relative w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto bg-mainwhitebg text-darthmouthgreen md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent ">
 
 
@@ -18,18 +18,18 @@
                     <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                 </x-header> --}}
 
-                <h1 class="text-6xl font-bold text-darthmouthgreen">Create New Instructor Account</h1>
-                <p class="mt-3 text-sm text-darthmouthgreen md:text-base">Welcome, future instructor! We're excited to have you join our teaching community. Please provide the necessary information below to create your new account.</p>
+                <h1 class="text-4xl font-bold text-darthmouthgreen">Create New Instructor Account</h1>
+                <p class="mt-3 text-darthmouthgreen">Welcome, future instructor! We're excited to have you join our teaching community. Please provide the necessary information below to create your new account.</p>
 
                 {{-- <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/instructor/register1') }}" method="POST" enctype="multipart/form-data"> --}}
 
-                <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/instructor/register') }}" method="POST" enctype="multipart/form-data">
+                <form class="pb-4 mx-4 mt-10" action="{{ url('/instructor/register') }}" method="POST" enctype="multipart/form-data">
 
                     @csrf
                     <div class="" id="first-form">
                         <div class="flex flex-col flex-nowrap lg:flex-row">
                             <div class=" FORM-CTNR lg:w-1/2 lg:mr-2">
-                                <label for="instructor_fname" class="text-lg text-darthmouthgreen">Firstname:</label>
+                                <label for="instructor_fname" class="text-darthmouthgreen">Firstname:</label>
                                 @error('instructor_fname')
                                     <span class="p-1 text-sm text-red-500">
                                         {{$message}}
@@ -39,7 +39,7 @@
                                 
                             </div>
                             <div class=" FORM-CTNR lg:w-1/2 lg:ml-2">
-                                <label for="instructor_lname" class="text-lg text-darthmouthgreen">Lastname:</label>
+                                <label for="instructor_lname" class="text-darthmouthgreen">Lastname:</label>
                                 @error('instructor_lname')
                                 <span class="p-1 text-sm text-red-500">
                                         {{$message}}
@@ -52,7 +52,7 @@
                         
                         <div class="flex flex-col lg:flex-row lg:justify-between">
                             <div class="lg:mr-2 FORM-CTNR lg:w-1/2">
-                                <label for="instructor_bday" class="text-lg text-darthmouthgreen">Birthday:</label>
+                                <label for="instructor_bday" class="text-darthmouthgreen">Birthday:</label>
                                 @error('instructor_bday')
                                 <span class="p-1 text-sm text-red-500">
                                         {{$message}}
@@ -63,7 +63,7 @@
                             </div>
                             
                             <div class="lg:ml-2 FORM-CTNR lg:w-1/2">
-                                <label for="instructor_gender" class="text-lg text-darthmouthgreen">Gender</label>
+                                <label for="instructor_gender" class="text-darthmouthgreen">Gender</label>
                                 @error('instructor_gender')
                                 <span class="p-1 text-sm text-red-500">
                                         {{$message}}
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="FORM-CTNR">
-                            <label for="instructor_email" class="text-lg text-darthmouthgreen">Email:</label>
+                            <label for="instructor_email" class="text-darthmouthgreen">Email:</label>
                             @error('instructor_email')
                             <span class="p-1 text-sm text-red-500">
                                     {{$message}}
@@ -90,7 +90,7 @@
                            
                         </div>
                         <div class="FORM-CTNR">
-                            <label for="instructor_contactno" class="text-lg text-darthmouthgreen">Contact Number:</label>
+                            <label for="instructor_contactno" class="text-darthmouthgreen">Contact Number:</label>
                             {{-- <input class="IN-V-INP" type="text" name="instructor_contactno" id="instructor_contactno"> --}}
                             @error('instructor_contactno')
                             <span class="p-1 text-sm text-red-500">
@@ -101,7 +101,7 @@
                            
                         </div>
                         <div class="FORM-CTNR">
-                            <label for="instructor_username" class="text-lg text-darthmouthgreen">Username:</label>
+                            <label for="instructor_username" class="text-darthmouthgreen">Username:</label>
                             @error('instructor_username')
                             <span class="p-1 text-sm text-red-500">
                                     {{$message}}
@@ -111,7 +111,7 @@
                         
                         </div>
                         <div class="FORM-CTNR">
-                            <label for="password" class="text-lg text-darthmouthgreen">Password:</label>
+                            <label for="password" class=" text-darthmouthgreen">Password:</label>
                             @error('password')
                             <span class="p-1 text-sm text-red-500">
                                     {{$message}}
@@ -121,12 +121,12 @@
                            
                         </div>
                         <div class="FORM-CTNR">
-                            <label for="password_confirmation" class="text-lg text-darthmouthgreen">Confirm Password:</label>
+                            <label for="password_confirmation" class=" text-darthmouthgreen">Confirm Password:</label>
                             <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="">
                         </div>
 
                         <div class="grid h-auto mt-5 text-black place-items-end" >
-                            <button class="px-5 py-3 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="nxtBtn" name="Next">Next <i class="fa-solid fa-arrow-right hover:text-darthmouthgreen"></i></button>
+                            <button class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="nxtBtn" name="Next">Next</button>
 
                         </div>
                     </div> 
@@ -144,12 +144,12 @@
                             </x-header> --}}
 
                             <h1 class="text-2xl font-bold text-darthmouthgreen">About Credentials</h1>
-                            <p class="mt-3 text-xs text-darthmouthgreen md:text-base">Welcome, future instructor! To get started, please provide the required information below to set up your new account. Your credentials will be securely stored to ensure a seamless and personalized experience on our teaching platform.</p>
+                            <p class="mt-3 text-darthmouthgreen md:text-base">Welcome, future instructor! To get started, please provide the required information below to set up your new account. Your credentials will be securely stored to ensure a seamless and personalized experience on our teaching platform.</p>
             
                         </div>
 
                         <div class="pb-4 my-8 font-semibold border-b-2" action="">
-                            <label for="instructor_credentials" class="text-lg text-darthmouthgreen">Upload CV or Resume</label>
+                            <label for="instructor_credentials" class=" text-darthmouthgreen">Upload CV or Resume</label>
                             @error('instructor_credentials')
                                 <span class="p-1 text-sm text-red-500">
                                         {{$message}}
@@ -177,8 +177,8 @@
                                             <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
                                         </svg>
                                     </x-forms.primary-button> --}}
-                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="prevBtn" name="Back"><i class="fa-solid fa-arrow-left hover:text-darthmouthgreen"></i>Back</button>
-                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="nxtBtn2" name="Next">Next <i class="fa-solid fa-arrow-right hover:text-darthmouthgreen"></i></button>
+                                    <button class="px-5 py-3 mx-2 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="prevBtn" name="Back">Back</button>
+                                    <button class="px-5 py-3 mx-2 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="nxtBtn2" name="Next">Next</button>
 
                                 </div>
                                 
@@ -187,7 +187,7 @@
                     </div>
 
 
-                    <div class="hidden overflow-hidden" id="security_code">
+                    <div class="hidden py-2 overflow-hidden" id="security_code">
                         {{-- <div>
                             <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
                                 <svg class="pr-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
@@ -196,18 +196,21 @@
                         
                         <div class="px-4 mt-4">
                             <h1 class="text-2xl font-bold text-darthmouthgreen">Set your Security Code</h1>
-                            <p class="mt-3 text-xs text-darthmouthgreen md:text-base">Secure your account by setting a unique security code. This code will add an extra layer of protection to your account, ensuring that only you can access sensitive information. Please choose a memorable code that combines numbers and letters to maximize security.</p>
+                            <p class="mt-3 text-darthmouthgreen">Secure your account by setting a unique security code. This code will add an extra layer of protection to your account, ensuring that only you can access sensitive information. Please choose a memorable code that combines numbers and letters to maximize security.</p>
 
                         </div>
 
-                    <div class="flex items-center pb-4 my-8 ml-5 font-semibold text-black border-b-2 security-code-container">
-                            <label for="instructor_security_code" class="text-xl text-darthmouthgreen">Security Code:</label>
-                            <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_4" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                    <div class="flex flex-wrap items-center pb-4 my-8 ml-5 font-semibold text-black border-b-2 security-code-container">
+                            <label for="instructor_security_code" class="text-darthmouthgreen">Security Code:</label>
+                            <div>
+                                <input class="code m-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
+                                <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                                <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                                <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_4" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                                <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                                <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">                                
+                            </div>
+
 
                             
                             <script>
@@ -259,7 +262,7 @@
                         <div class="">
                             <div class="flex flex-row">
                                 <input class="mx-2" type="checkbox" name="" id="">
-                                <p class="text-sm text-darthmouthgreen">I've read and accept <span class="font-bold text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
+                                <p class=" text-darthmouthgreen">I've read and accept <span class="font-bold text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
                             </div>
                             
                             <div class="grid h-auto mt-5 text-black place-items-end" >
@@ -270,8 +273,8 @@
                                     color="amber"
                                     name="Create my account"/> --}}
 
-                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="prevBtn2" name="Back"><i class="fa-solid fa-arrow-left hover:text-darthmouthgreen"></i>Back</button>
-                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="" type="submit" name="Create my account">Create my account</button>
+                                    <button class="px-5 py-3 mx-2 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="prevBtn2" name="Back">Back</button>
+                                    <button class="px-5 py-3 mx-2 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="" type="submit" name="Create my account">Create my account</button>
                                 </div>
                             </div>
                         </div>
@@ -279,12 +282,12 @@
 
                 </form>
   
-                <div class="mx-auto mb-10 text-sm w-max md:text-base">
+                <div class="w-full py-4 mx-auto text-center">
 
                     <p class="text-darthmouthgreen md:text-darthmouthgreen">Already have an account?
                         <span class="font-bold text-darthmouthgreen md:text-darthmouthgreen">
                             <a href="{{ url('/instructor') }}">
-                                Sign up
+                                Sign in
                             </a>
                         </span>
                     </p>
