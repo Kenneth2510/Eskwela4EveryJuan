@@ -8,6 +8,20 @@ use App\Models\Instructor;
 use App\Models\Course;
 use App\Models\Admin;
 use App\Models\LearnerCourse;
+use App\Models\LearnerCourseProgress;
+use App\Models\LearnerSyllabusProgress;
+use App\Models\LearnerLessonProgress;
+use App\Models\LearnerActivityProgress;
+use App\Models\LearnerQuizProgress;
+use App\Models\Syllabus;
+use App\Models\Lessons;
+use App\Models\Activities;
+use App\Models\Quizzes;
+use App\Models\LessonContents;
+use App\Models\LearnerPreAssessmentProgress;
+use App\Models\LearnerPreAssessmentOutput;
+use App\Models\LearnerPostAssessmentProgress;
+use App\Models\LearnerPostAssessmentOutput;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +32,9 @@ use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
 
 class AdminController extends Controller
 {
@@ -33,30 +49,32 @@ class AdminController extends Controller
 }
 
 
-    public function login_process(Request $request) {
-        $adminData = $request->validate([
-            "admin_username" => ['required'],
-            "password" => ['required']
-        ]);
-    
-        if (auth('admin')->attempt($adminData)) {
+public function login_process(Request $request) {
+    $adminData = $request->validate([
+        "admin_username" => ['required'],
+        "password" => ['required']
+    ]);
 
-            $admin = auth('admin')->user();
-            // dd($admin);
+    // Use the "admin" guard to attempt the login
+    if (auth('admin')->attempt($adminData)) {
+        $admin = auth('admin')->user();
 
-            $admin = Admin::find($admin->admin_id);
+        // It's not necessary to fetch the user again using Admin::find
+        // The authenticated user is already available in $admin variable
 
-            if($admin) {
-                $request->session()->put('admin' , $admin);
-            }
+        // Store the authenticated admin in the session
+        $request->session()->put('admin', $admin);
 
-            $request->session()->regenerate();
-    
-            return redirect('/admin/dashboard')->with('message', "Welcome Back");
-        }
-    
-        return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+        // Regenerate the session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        return redirect('/admin/dashboard')->with('message', "Welcome Back");
     }
+
+    // If authentication fails, redirect back with errors
+    return back()->withErrors(['admin_username' => 'Login Failed'])->withInput($request->except('password'));
+}
+
     
     public function logout(Request $request) {
         auth('admin')->logout();
@@ -221,8 +239,11 @@ class AdminController extends Controller
 
         $LearnerData = array_merge($LearnerPersonalData , $LearnerLoginData);
         $LearnerData['password'] = bcrypt($LearnerData['password']);
+
+        // $folderName = Str::slug($course->course_name, '_');
         
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         $folderPath = 'learners/' . $folderName;
 
         // Copy the default photo to the same directory
@@ -248,6 +269,7 @@ class AdminController extends Controller
         Business::create($businessData);
 
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
+        $folderName = Str::slug($folderName, '_');
         
         // $fileName = time() . '-' . $file->getClientOriginalName();
         $folderPath = '/public/learners/' . $folderName;
@@ -301,11 +323,38 @@ class AdminController extends Controller
 
         try {
             $learner->update(['status' => 'Approved']);  
+
+            $data = [
+                'subject' => 'Your Learner Account Approval',
+                'body' => 'Hello! Your learner account has been successfully approved by the admin. You can now log in using the link below:
+            
+                [Learner Login](http://127.0.0.1:8000/learner)
+            
+                Thank you for joining our platform!',
+            ];
+            
+
+            try {
+                // Create an instance of MailNotify
+                $mailNotify = new MailNotify($data);
+    
+                // Call the to() method on the instance, not statically on the class
+                Mail::to($learner->learner_email)->send($mailNotify);
+                
+                // return response()->json(['Great! check your mail box']);
+    
+            } catch (\Exception $th) {
+                dd($th);
+                return response()->json(['Error in sending email']);
+            }
+
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
         return redirect()->back()->with('message' , 'Learner Status successfully changed');
     }
+
 
     public function rejectLearner(Learner $learner)
     {
@@ -522,7 +571,7 @@ class AdminController extends Controller
             $instructorData['password'] = bcrypt($instructorData['password']);
         
             $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
-
+            $folderName = Str::slug($folderName, '_');
 
             if($request->hasFile('instructor_credentials')) {
                 
@@ -600,6 +649,30 @@ class AdminController extends Controller
 
         try {
             $instructor->update(['status' => 'Approved']);  
+
+            $data = [
+                'subject' => 'Your Instructor Account Approval',
+                'body' => 'Hello! Your instructor account has been successfully approved by the admin. You can now log in using the link below:
+            
+                [Instructor Login](http://127.0.0.1:8000/instructor)
+            
+                Thank you for joining our platform!',
+            ];
+            
+
+            try {
+                // Create an instance of MailNotify
+                $mailNotify = new MailNotify($data);
+    
+                // Call the to() method on the instance, not statically on the class
+                Mail::to($instructor->instructor_email)->send($mailNotify);
+                
+                // return response()->json(['Great! check your mail box']);
+    
+            } catch (\Exception $th) {
+                dd($th);
+                return response()->json(['Error in sending email']);
+            }
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -642,7 +715,7 @@ class AdminController extends Controller
         ]);
 
         $folderName = "{$instructorData['instructor_lname']} {$instructorData['instructor_fname']}";
-
+        $folderName = Str::slug($folderName, '_');
         if($request->hasFile('instructor_credentials')) {
             
             $file = $request->file('instructor_credentials');
@@ -808,6 +881,7 @@ class AdminController extends Controller
 
             
             $folderName = $courseData['course_name'];
+            $folderName = Str::slug($folderName, '_');
             $folderPath = 'public/courses/' . $folderName;
 
             if(!Storage::exists($folderPath)) {
@@ -1074,10 +1148,196 @@ class AdminController extends Controller
         ->with(['title' => 'Course Management', 'adminCodeName' => $admin_codename]);
     }
 
+
+    // add learner course progress, learner syllabus progress, lesson, activity,quiz progress
     public function approve_learner_course(LearnerCourse $learnerCourse) {
         try {
+            
+            $now = Carbon::now();
+            $timestampString = $now->toDateTimeString();
             // dd($learnerCourse);
-            $learnerCourse->update(['status' => 'Approved']);  
+            $learnerCourse->update([
+                'status' => 'Approved',
+            ]);  
+
+            $courseProgressData = [
+                "learner_course_id" => $learnerCourse->learner_course_id,
+                "learner_id" => $learnerCourse->learner_id,
+                "course_id" => $learnerCourse->course_id,
+                "start_period" => $timestampString,
+            ];
+
+            // LearnerCourseProgress::create($courseProgressData);
+            LearnerCourseProgress::firstOrCreate($courseProgressData);
+
+            $learnerAssessmentData = [
+                "learner_course_id" => $learnerCourse->learner_course_id,
+                "learner_id" => $learnerCourse->learner_id,
+                "course_id" => $learnerCourse->course_id,
+            ];
+
+            LearnerPreAssessmentProgress::create($learnerAssessmentData);
+            LearnerPostAssessmentProgress::create($learnerAssessmentData);
+
+            $syllabusData = DB::table('syllabus')
+            ->select(
+                'syllabus_id',
+                'course_id',
+                'topic_id',
+                'topic_title',
+                'category'
+            )
+            ->where('course_id', $learnerCourse->course_id)
+            ->orderBy('topic_id', 'ASC')
+            ->get();
+
+            // dd($syllabusData);
+
+            // $syllabusDataLength = count($syllabusData);
+        
+
+            foreach($syllabusData as $syllabus) {
+                $rowSyllabusData = [
+                    "learner_course_id" => $learnerCourse->learner_course_id,
+                    "learner_id" => $learnerCourse->learner_id,
+                    "course_id" => $learnerCourse->course_id,
+                    "syllabus_id"=> $syllabus->syllabus_id,
+                    "category" => $syllabus->category
+                ];
+
+                // dd($rowSyllabusData);
+                LearnerSyllabusProgress::create($rowSyllabusData);
+
+                switch ($syllabus->category) {
+                    case "LESSON":
+                        
+                        $lessonData = DB::table('lessons')
+                        ->select(
+                            'lesson_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id'
+                        )
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->where('topic_id', $syllabus->topic_id)
+                        ->first();
+
+                        $rowLessonData = [
+                            "learner_course_id" => $learnerCourse->learner_course_id,
+                            "learner_id" => $learnerCourse->learner_id,
+                            "course_id" => $learnerCourse->course_id,
+                            "syllabus_id" => $syllabus->syllabus_id,
+                            "lesson_id" => $lessonData->lesson_id,
+                        ];
+
+                        LearnerLessonProgress::create($rowLessonData);
+                        
+                        break;
+                
+                    case "ACTIVITY":
+
+                        $activityData = DB::table('activities')
+                        ->select(
+                            'activity_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id'
+                        )
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        // ->where('topic_id', $syllabus->topic_id)
+                        ->first();
+
+                        // dd($activityData);
+                        $rowActivityData = [
+                            "learner_course_id" => $learnerCourse->learner_course_id,
+                            "learner_id" => $learnerCourse->learner_id,
+                            "course_id" => $learnerCourse->course_id,
+                            "syllabus_id" => $syllabus->syllabus_id,
+                            "activity_id" => $activityData->activity_id,
+                        ];
+
+                        LearnerActivityProgress::create($rowActivityData);
+
+                        break;
+                
+                    case "QUIZ":
+
+                        $quizData = DB::table('quizzes')
+                        ->select(
+                            'quiz_id',
+                            'course_id',
+                            'syllabus_id',
+                            'topic_id'
+                        )
+                        ->where('syllabus_id', $syllabus->syllabus_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        // ->where('topic_id', $syllabus->topic_id)
+                        ->first();
+
+                        $rowQuizData = [
+                            "learner_course_id" => $learnerCourse->learner_course_id,
+                            "learner_id" => $learnerCourse->learner_id,
+                            "course_id" => $learnerCourse->course_id,
+                            "syllabus_id" => $syllabus->syllabus_id,
+                            "quiz_id" => $quizData->quiz_id,
+                        ];
+
+                        LearnerQuizProgress::create($rowQuizData);
+
+                        break;
+                
+                    default:
+
+                        break;
+                }
+            };
+
+            DB::table('learner_syllabus_progress')
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->orderBy('learner_syllabus_progress_id', 'ASC')
+                ->limit(1)
+                ->update(['status' => 'NOT YET STARTED']);
+
+            $firstTopic = DB::table('learner_syllabus_progress')
+                ->select(
+                    'learner_syllabus_progress_id',
+                    'learner_course_id',
+                    'syllabus_id',
+                    'category',
+                    'status',
+                )
+                ->where('learner_course_id', $learnerCourse->learner_course_id)
+                ->orderBy('learner_course_id', 'ASC')
+                ->first();
+
+            switch ($firstTopic->category) {
+                case "LESSON":
+                    DB::table('learner_lesson_progress')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->orderBy('learner_lesson_progress_id','ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
+                    break;
+                case "ACTIVITY":
+                    DB::table('learner_activity_progress')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->orderBy('learner_activity_progress_id','ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
+                    break;
+                case "QUIZ":
+                    DB::table('learner_quiz_progress')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->orderBy('learner_quiz_progress_id','ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
+                    break;
+                default:
+                    break;
+            };
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -1087,6 +1347,61 @@ class AdminController extends Controller
     public function reject_learner_course(LearnerCourse $learnerCourse) {
         try {
             $learnerCourse->update(['status' => 'Rejected']);  
+
+            DB::table('learner_course_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->delete();
+
+            DB::table('learner_syllabus_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->delete();            
+            
+            DB::table('learner_lesson_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->delete();
+
+            $learnerActivityOutput = DB::table('learner_activity_output')
+            ->select(
+                'learner_activity_output_id'
+            )
+            ->where('learner_course_id', $learnerCourse->learner_course_id)
+            ->where('course_id', $learnerCourse->course_id)
+            ->get();
+
+            foreach ($learnerActivityOutput as $activityOutput) {
+                DB::table('learner_activity_criteria_score')
+                ->where('learner_activity_output_id', $activityOutput->learner_activity_output_id)
+                ->delete();
+            }
+            DB::table('learner_activity_output')
+                            ->where('learner_course_id', $learnerCourse->learner_course_id)
+                            ->where('course_id', $learnerCourse->course_id)
+                            ->delete();
+                    
+            DB::table('learner_activity_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->delete();
+
+            DB::table('learner_quiz_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->delete();
+
+            DB::table('learner_quiz_progress')
+                        ->where('learner_course_id', $learnerCourse->learner_course_id)
+                        ->where('learner_id', $learnerCourse->learner_id)
+                        ->where('course_id', $learnerCourse->course_id)
+                        ->delete();
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }

@@ -1,3 +1,4 @@
+
 @extends('layouts.admin_login')
 
 @section('content')
@@ -7,6 +8,7 @@
                 <h1 class="text-2xl font-semibold lg:leading-[3.5rem] text-seagreen md:text-4xl lg:text-[5rem]">Eskwela4EveryJuan</h1>
                 <p class="hidden pt-5 text-base font-normal text-justify text-black lg:block">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
             </div>
+
         </div>
     
         <div id="adminlogin" class="relative px-4 py-16 transition-opacity duration-100 md:border-2 md:w-4/5 md:my-4 lg:border-none lg:w-1/3">
@@ -15,7 +17,7 @@
                 <h3 class="text-lg font-semibold leading-none text-center text-black">Admin Login</h3>
                 <div class="relative">
                     @error('admin_username')
-                    <p class="p-1 mt-2 text-xs text-red-500">
+                    <p class="p-1 mt-2 text-lg text-red-500">
                         {{$message}}
                     </p>
                     @enderror

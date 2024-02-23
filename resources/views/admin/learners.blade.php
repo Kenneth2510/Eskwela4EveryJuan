@@ -7,7 +7,7 @@
         <h1 class="py-4 text-2xl font-semibold lg:text-4xl">Learner Management</h1>
         <div id="adminuser" class="items-center hidden lg:flex">
             <h3 class="text-lg">{{ $adminCodeName }}</h3>
-            <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
+            <div id="icon" class="w-10 h-10 rounded-full bg-slate-400"></div>
         </div>
     </div>
     <div id="maincontainer" class="relative w-full px-2 text-black shadow-lg rounded-2xl">
@@ -62,7 +62,7 @@
                 </form>
             </div>
         </div>
-
+        
         <div id="contenttable" class="h-auto py-4 overflow-x-scroll text-sm lg:overflow-hidden">
           <table class="hidden w-full text-center md:table">
             <thead class="border-b-2 border-black ">

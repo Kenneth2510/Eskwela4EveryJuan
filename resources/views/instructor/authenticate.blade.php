@@ -2,10 +2,18 @@
 
 {{-- SECURITY CODE --}}
 <section class="items-center justify-center w-full h-screen md:bg-darthmouthgreen md:flex">
-    <div class="w-full p-2 py-8 mt-16 rounded-lg md:bg-mainwhitebg text-darthmouthgreen md:w-3/4 md:shadow-lg lg:w-[500px] md:h-3/4 lg:h-96" id="securityForm">
-        <div class="relative text-xl font-semibold tracking-wide text-center md:text-2xl">
-            <svg class="absolute cursor-pointer" id="backBtn" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+
+    <div class="w-full p-2 py-8 mt-16 rounded-lg md:bg-mainwhitebg text-darthmouthgreen md:w-3/4 md:shadow-lg lg:w-1/4 md:h-3/4 lg:h-96" id="securityForm">
+        
+        <div class="relative flex justify-between text-xl font-semibold tracking-wide md:text-2xl">
+            <form class="" action="{{ url('/instructor/logout') }}" method="POST"> 
+                @csrf
+                <button type="submit"><svg class="absolute cursor-pointer" id="backBtn" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg></button>
+            </form>
+
             <h1>Security Code</h1>
+            <h1> </h1>
+
         </div>
         
         <form action="{{ url('/instructor/authenticate') }}" method="POST">
