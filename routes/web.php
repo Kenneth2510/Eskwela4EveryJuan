@@ -30,6 +30,9 @@ Route::controller(UserController::class)->group(function() {
     // Route::get('/home', 'home');
 });
 
+Route::controller(UserController::class)->group(function() {
+    Route::get('/landing', 'landing');
+});
 
 Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner', 'index');

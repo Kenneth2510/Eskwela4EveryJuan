@@ -14,9 +14,8 @@
     
 
 
-    <title>{{ $title !== "" ? $title : 'Eskwela4EveryJuan'}}</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+<title>{{ $title !== "" ? $title : 'Eskwela4EveryJuan'}}</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
     
     <script src="https://kit.fontawesome.com/fd323b0f11.js" crossorigin="anonymous"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

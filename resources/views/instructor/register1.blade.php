@@ -13,6 +13,7 @@
         <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto bg-mainwhitebg text-darthmouthgreen md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent ">
 
+
                 {{-- <x-header title="Create an Instructor Account" id="ins-head">
                     <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
                 </x-header> --}}
@@ -124,11 +125,9 @@
                             <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="">
                         </div>
 
-                        
-
-                        
                         <div class="grid h-auto mt-5 text-black place-items-end" >
                             <button class="px-5 py-3 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="nxtBtn" name="Next">Next <i class="fa-solid fa-arrow-right hover:text-darthmouthgreen"></i></button>
+
                         </div>
                     </div> 
                     
@@ -167,21 +166,20 @@
                                     {{-- <x-forms.secondary-button
                                     name="Back"
                                     id="prevBtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                                        </svg>
                                     </x-forms.secondary-button>
                                     <x-forms.primary-button
                                     color="amber"
                                     name="Next"
                                     type="button"
                                     id="nxtBtn2">
+
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                             <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
                                         </svg>
                                     </x-forms.primary-button> --}}
                                     <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="prevBtn" name="Back"><i class="fa-solid fa-arrow-left hover:text-darthmouthgreen"></i>Back</button>
                                     <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="nxtBtn2" name="Next">Next <i class="fa-solid fa-arrow-right hover:text-darthmouthgreen"></i></button>
+
                                 </div>
                                 
                             </div>

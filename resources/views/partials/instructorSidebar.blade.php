@@ -1,5 +1,3 @@
-
-
 <section class="fixed z-20 w-full h-auto overflow-hidden text-black md:w-1/3 lg:w-2/12 md:relative" id="sidebar_full">
 
     
@@ -256,6 +254,7 @@
 <script>
     $(document).ready(function() {
         var currentUrl = window.location.href;
+
 
         if (currentUrl.includes('/instructor/dashboard')) {
             $('#instructor_dashboard').addClass('bg-green-100');

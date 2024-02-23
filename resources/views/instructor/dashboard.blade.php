@@ -1,13 +1,6 @@
-@include('partials.header')
-    
-    <section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
+@extends('layouts.instructor_layout')
 
-
-        @include('partials.instructorNav')
-        @include('partials.instructorSidebar')
-        
-    
-        {{-- SIDEBAR END --}}
+@section('content')
 
         {{-- MAIN START --}}
         <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
@@ -109,10 +102,6 @@
 
             </div>
         </section>
-        {{-- MAIN END --}}  
-        
-        @include('partials.instructorProfile')  
+        {{-- MAIN END --}}      
+@endsection
 
-    </section>
-
-@include('partials.footer')

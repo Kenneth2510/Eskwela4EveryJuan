@@ -5,6 +5,7 @@
         <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-transparent">
             <a href="#">
                 <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
+
                     Eskwela4EveryJuan
                 </span>
             </a>
@@ -20,7 +21,7 @@
                 <h1 class="text-6xl font-bold text-darthmouthgreen">Instructor Login</h1>
                 <p class="mt-3 text-sm text-darthmouthgreen md:text-base">Welcome, instructor! Please enter your credentials to access the teaching platform.</p>
 
-                <form class="flex flex-col justify-center text-black rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full lg:text-mainwhitebg" action="{{ url('/instructor/login') }}" method="POST">
+                <form class="flex flex-col justify-center text-black rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full" action="{{ url('/instructor/login') }}" method="POST">
                     @csrf
                     <div class="pb-4 mx-4 text-sm border-b-4">
 
@@ -28,13 +29,14 @@
                             <label class="text-xl font-medium text-darthmouthgreen lg:w-1/2" for="instructor_username">Username:</label>
                             <div class="relative lg:w-1/2">
                                 <svg class="absolute w-8 h-8 mx-1 border-r-2 md:w-10 md:h-10 lg:my-1" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
-                                <input class="w-full h-8 pl-10 rounded text-darthmouthgreen md:h-10 lg:h-12 md:pl-12" 
-       type="text" 
-       name="instructor_username" 
-       id="instructor_username" 
-       value="{{ old('instructor_username') }}" 
-       required 
-       style="border-color: #00693e;">
+
+                                <input class="w-full h-8 pl-10 rounded text-darthmouthgreen md:h-10 lg:h-12 md:pl-12 ring-seagreen ring-2" 
+                                   type="text" 
+                                   name="instructor_username" 
+                                   id="instructor_username" 
+                                   value="{{ old('instructor_username') }}" 
+                                   required 
+                                   style="border-color: #00693e;">
 
                             </div>
                             
@@ -48,6 +50,7 @@
                                 <svg class="absolute right-0 hidden w-6 h-6 mx-1 top-1 lg:my-1" id="hidePwd" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
                                 
                                 <input required class="w-full h-8 pl-10 rounded text-darthmouthgreen md:h-10 lg:h-12 md:pl-12" type="password" name="password" id="password">
+
 
                             </div>
                         </div>
@@ -89,9 +92,9 @@
                     {{--<p class="text-black lg:text-mainwhitebg">Don't have an account yet?
                         <span class="font-semibold text-darthmouthgreen lg:text-white">
                             <a href="{{url('/instructor/register1')}}">--}}
-
                     <p class="text-darthmouthgreen md:text-darthmouthgreen">Don't have an account yet?
                         <span class="font-bold text-darthmouthgreen md:text-darthmouthgreen">
+
                             <a href="{{url('/instructor/register')}}">
                                 Sign up
                             </a>

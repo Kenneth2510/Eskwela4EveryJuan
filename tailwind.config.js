@@ -16,10 +16,10 @@ export default {
                 smallpc: "1440px",
                 largepc: "1920px",
             },
-            
+
             spacing: {
-                '1/5': '20%',
-              },
+                "1/5": "20%",
+            },
 
             colors: {
                 transparent: "transparent",
@@ -29,6 +29,7 @@ export default {
                 seagreen: "#1F8247",
                 lemonchiffon: "#FFFBCE",
                 ashgray: "#9FAFA1",
+                mintgreen: "#79C586",
             },
 
             backgroundImage: {

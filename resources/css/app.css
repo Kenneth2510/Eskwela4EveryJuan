@@ -23,7 +23,26 @@
         @apply flex flex-col my-2 font-medium;
     }
 
+    .AD-INP {
+        @apply w-full px-2 py-4 text-black rounded-lg shadow-sm lg:w-[350px];
+    }
+
     .main-container {
         @apply flex flex-row w-full h-auto text-sm bg-mainwhitebg md:text-base lg:h-screen;
+    }
+
+    /* Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: 15px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: #ffffff;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: #1f8247;
+        border-radius: 50px;
+        border: 3px solid #ffffff;
     }
 }
