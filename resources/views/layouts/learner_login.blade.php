@@ -13,7 +13,7 @@
           </span>
         </a>
       </header>
-      @yield('content')
+        @yield('content')
     </section>
 
 

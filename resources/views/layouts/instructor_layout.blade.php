@@ -13,6 +13,4 @@
     
         {{-- @include('partials.instructorProfile')   --}}
     </section>
-
-
 @include('partials.footer')
