@@ -23,6 +23,6 @@ class LessonContents extends Model
 
     public function syllabus()
     {
-        return $this->belongsTo(Lesson::class, 'lesson_id');
+        return $this->belongsTo(Lessons::class, 'lesson_id');
     }
 }

@@ -18,7 +18,7 @@
 
                 <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
                     <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
-                        <img class="z-0 w-40 rounded-full h-40" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
+                        <img class="z-0 w-40 h-40 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
                     </div>
 
                     <div class="mt-10" id="name_area">
@@ -39,9 +39,9 @@
 
                     <div class="mt-10 text-center" id="email_area">
                         <h1 class="text-xl">Email</h1>
-                        <h2 class="text-md">{{$learner->learner_email}}</h2>
+                        <h2 class="mb-5 text-md">{{$learner->learner_email}}</h2>
 
-                        <button class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl">Send Message</button>
+                        <a href="{{ url('/instructor/message') }}?email={{ $learner->learner_email }}&type=Learner" class="px-5 py-3 mt-10 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl">Send Message</a>
                     </div>
                 </div> 
 

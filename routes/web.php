@@ -402,4 +402,23 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/message', 'LearnerMessageController@index');
+    Route::get('/learner/message/search_recipient', 'LearnerMessageController@search_recipient');
+    Route::post('/learner/message/send', 'LearnerMessageController@send');
+    
+    Route::get('/learner/message/getMessages', 'LearnerMessageController@getMessages');
+    Route::get('/learner/message/getSelectedMessage', 'LearnerMessageController@getSelectedMessage');
+
+    Route::post('/learner/message/reply', 'LearnerMessageController@reply');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/instructor/message', 'InstructorMessageController@index');
+    Route::get('/instructor/message/search_recipient', 'InstructorMessageController@search_recipient');
+    Route::post('/instructor/message/send', 'InstructorMessageController@send');
+    
+    Route::get('/instructor/message/getMessages', 'InstructorMessageController@getMessages');
+    Route::get('/instructor/message/getSelectedMessage', 'InstructorMessageController@getSelectedMessage');
+
+    Route::post('/instructor/message/reply', 'InstructorMessageController@reply');
 });

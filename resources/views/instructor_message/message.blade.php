@@ -2,7 +2,7 @@
 
 <section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
     @include('partials.instructorNav')
-    @include('partials.learnerSidebar')
+    @include('partials.instructorSidebar')
 
         {{-- MAIN --}}
     <section class="w-full px-2 pt-[20px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
@@ -22,28 +22,6 @@
                     <div class="w-full" id="message_list_area">
                         <ul id="sideMessageArea">
 
-                            {{-- <li class="border-b border-darthmouthgreen selectedMessage">
-                                <button class="w-full">
-                                    <div class="flex mx-5 my-2">
-                                        <div class="w-1/4" id="profile_photo_area">
-                                            <img class="z-0 w-10 h-10 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
-                                        </div>
-                                        <div class="w-3/4">
-                                            <div class="flex flex-col items-start justify-start" id="userInfoArea">
-                                                <h1 class="font-semibold text-md">sample title</h1>
-                                                <h1 class="text-sm font-regular">fname lname</h1>
-                                                <h4 class="text-xs text-gray-700">02/14/2024</h4>
-                                            </div>
-                                            <div class="text-left " id="previewmessge">
-                                                <p class="text-sm opacity-30">sample message sample</p>
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="w-2 h-2 rounded-full bg-darthmouthgreen"></div>
-                                        </div>
-                                    </div>   
-                                </button>
-                            </li> --}}
 
 
                            
@@ -63,74 +41,12 @@
                             <div class="flex-grow overflow-y-auto" id="messageContainer">
 
                                 <div class="pb-20 border-b border-darthmouthgreen" id="mainMessage">
-                                {{--     <div class="flex items-center justify-between" id="userInfoArea">
-                                        <div class="flex items-start">
-                                            <div class="" id="profile_photo_area">
-                                                <img class="z-0 w-12 h-12 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
-                                            </div>
-                                            <div class="ml-3">
-                                                <h1 class="text-lg font-semibold">fname lname</h1>
-                                                <h4 class="text-gray-700 text-md">to sample@email.com</h4>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex items-start justify-between pr-5 " id="userInfoArea">
-                                                <h4 class="text-gray-700 text-md">sample date</h4>
-                                        </div>
-                                    </div>
-
-                                    <div class="px-16 mt-10" id="messageContent">
-                                        <div><p>sample sample sample sample messaghe msapleam sapl;a</p></div>
-                                    </div>--}}
+                      
                                 </div> 
                     
                                 {{-- replies area --}}
                                 <div class="pb-20 mt-3" id="mainMessageReplyContainer">
-                                    {{-- <div class="pb-20 mt-3 border-b border-darthmouthgreen mainMessageReplyArea" id="">
-                                        <div class="flex items-center justify-between" id="userInfoArea">
-    
-    
-                                            <div class="flex items-start justify-between pr-5 " id="userInfoArea">
-                                                    <h4 class="text-gray-700 text-md">sample date</h4>
-                                            </div>
-    
-                                            <div class="flex items-start">
-                                                <div class="mx-3 text-right">
-                                                    <h1 class="text-lg font-semibold">fname lname</h1>
-                                                    <h4 class="text-gray-700 text-md">to sample@email.com</h4>
-                                                </div>
-                                                <div class="" id="profile_photo_area">
-                                                    <img class="z-0 w-12 h-12 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
-                                                </div>
-                                            </div>
-                                        </div>
-    
-                                        <div class="px-16 mt-10" id="messageContent">
-                                            <div><p>sample sample sample sample messaghe msapleam sapl;a</p></div>
-                                        </div>
-                                    </div>
-    
-                                    <div class="pb-20 mt-3 border-b border-darthmouthgreen mainMessageReplyArea" id="">
-                                        <div class="flex items-center justify-between" id="userInfoArea">
-                                            <div class="flex items-start">
-                                                <div class="" id="profile_photo_area">
-                                                    <img class="z-0 w-12 h-12 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
-                                                </div>
-                                                <div class="mx-3">
-                                                    <h1 class="text-lg font-semibold">fname lname</h1>
-                                                    <h4 class="text-gray-700 text-md">to sample@email.com</h4>
-                                                </div>
-                                            </div>
-    
-                                            <div class="flex items-start justify-between pr-5 " id="userInfoArea">
-                                                    <h4 class="text-gray-700 text-md">sample date</h4>
-                                            </div>
-                                        </div>
-    
-                                        <div class="px-16 mt-10" id="messageContent">
-                                            <div><p>sample sample sample sample messaghe msapleam sapl;a</p></div>
-                                        </div>
-                                    </div> --}}
+                                    
                                 </div>
                                 
 
@@ -171,7 +87,7 @@
 
 
 
-@include('partials.learnerProfile')
+@include('partials.instructorProfile')
 </section>
 
 <div id="createNewMessage" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
