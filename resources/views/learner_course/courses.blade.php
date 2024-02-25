@@ -26,17 +26,17 @@
                 </div>
               
         
-                <div class="h-80 relative overflow-hidden px-20" id="courseCarouselArea">
-                    <button id="course_carousel_left_btn" class="mx-5 h-full absolute flex justify-center items-center left-0">
-                        <i class="fa-solid fa-angle-left text-2xl"></i>
+                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                    <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
-                    <button id="course_carousel_right_btn" class="mx-5 h-full absolute flex justify-center items-center right-0">
-                        <i class="fa-solid fa-angle-right text-2xl"></i>
+                    <button id="course_carousel_right_btn" class="absolute right-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-right"></i>
                     </button>
-                    <div class="h-80 flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
+                    <div class="flex overflow-x-auto h-80 scroll scroll-smooth" id="courseCardContainer">
                         @foreach ($learnerCourse as $course)
         
-                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
+                        <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">
                             <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
                                 <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $course->profile_picture) }}" alt="">
                             </div>
@@ -61,7 +61,7 @@
             </div>
 
 
-            <hr class="border-t-2 border-gray-300 my-6">
+            <hr class="my-6 border-t-2 border-gray-300">
 
             <div class="flex justify-between">
                 <h1 class="mx-5 text-2xl font-semibold">All your courses</h1>
@@ -73,7 +73,7 @@
                     <div class="flex flex-row flex-wrap items-center justify-center" id="courses">
                         @foreach ($learnerCourse as $course)
         
-                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
+                        <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">
                             <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
                                 <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $course->profile_picture) }}" alt="">
                             </div>
@@ -100,24 +100,24 @@
 
 
             
-            <hr class="mt-5 border-t-2 border-gray-300 my-6">
+            <hr class="my-6 mt-5 border-t-2 border-gray-300">
             <div class="mt-5">
                 <div class="flex justify-between">
                     <h1 class="mx-5 text-2xl font-semibold">Available Courses</h1>
                 </div>
               
         
-                <div class="h-80 relative overflow-hidden px-20" id="courseCarouselArea">
-                    <button id="course_carousel_left_btn" class="mx-5 h-full absolute flex justify-center items-center left-0">
-                        <i class="fa-solid fa-angle-left text-2xl"></i>
+                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                    <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
-                    <button id="course_carousel_right_btn" class="mx-5 h-full absolute flex justify-center items-center right-0">
-                        <i class="fa-solid fa-angle-right text-2xl"></i>
+                    <button id="course_carousel_right_btn" class="absolute right-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-right"></i>
                     </button>
-                    <div class="h-80 flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
+                    <div class="flex overflow-x-auto h-80 scroll scroll-smooth" id="courseCardContainer">
                         @foreach ($allCourses as $coursedata)
         
-                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
+                        <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">
                             <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
                                 <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $coursedata->profile_picture) }}" alt="">
                             </div>

@@ -12,7 +12,7 @@
 
     {{-- MAIN --}}
     {{-- pt-[100px] --}}
-    <section style="margin-left:15%;" class="w-10/12  mx-5 overscroll-auto md:overflow-auto bg-white p-5 rounded-lg">
+    <section style="margin-left:15%;" class="w-10/12 p-5 mx-5 bg-white rounded-lg overscroll-auto md:overflow-auto">
         <script src="{{asset('js/instructor_course_manage.js')}}" defer></script>
        
         {{-- course name/title --}}
@@ -87,7 +87,7 @@
                     </ul>
                 </div>
          
-                <div id="content_area" class=" w-5/6 m-5 overflow-y-auto">
+                <div id="content_area" class="w-5/6 m-5 overflow-y-auto ">
                     <div id="course_info" class="">
                         <h1 class="text-2xl font-semibold border-b-2 border-black">Course Information</h1>
 
@@ -142,7 +142,7 @@
                                 <div class="mt-1">
                                     <h1>Course Description</h1>
                                     {{-- <p class="h-24 overflow-y-auto ">{{ $course->course_description }}</p> --}}
-                                    <textarea name="course_description" id="course_description" class="max-h-24 h-24 max-w-full w-full" disabled>{{ $course->course_description }}</textarea>
+                                    <textarea name="course_description" id="course_description" class="w-full h-24 max-w-full max-h-24" disabled>{{ $course->course_description }}</textarea>
                                 </div>
                                 
                                
@@ -162,12 +162,12 @@
                                     </button>
                                 </div>
 
-                                <div id="updateCourseModal" class="hidden fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
+                                <div id="updateCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
                                  
-                                        <div class="bg-white p-5 rounded-lg text-center">
+                                        <div class="p-5 text-center bg-white rounded-lg">
                                             <p>Are you sure you want to edit this course?</p>
-                                            <button type="submit" id="confirmUpdate" class="px-4 py-2 bg-green-600 text-white rounded-md m-2">Confirm</button>
-                                            <button type="button" id="cancelUpdate" class="px-4 py-2 bg-gray-400 text-gray-700 rounded-md m-2">Cancel</button>
+                                            <button type="submit" id="confirmUpdate" class="px-4 py-2 m-2 text-white bg-green-600 rounded-md">Confirm</button>
+                                            <button type="button" id="cancelUpdate" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
                                         </div>
                                 </div>
                                 
