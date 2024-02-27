@@ -1,186 +1,189 @@
 @include('partials.header')
+
+<section class="flex flex-row w-screen text-sm main-container bg-mainwhitebg md:text-base">
 @include('partials.sidebar')
 
-<section id="AD002_IA_container" class="relative w-4/5 h-full left-80">
 
-    <div id="AD002_IA_title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">Add New Instructor</ h1>
-        <div id="adminuser" class="flex items-center">
-            <h3 class="text-lg">{{ $adminCodeName }}</h3>
-            <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
+
+
+<section class="w-screen px-2 pt-[40px] mx-2 mt-2  overscroll-auto md:overflow-auto">
+    <div class="flex justify-between px-10">
+        <h1 class="text-6xl font-bold text-darthmouthgreen">Course Management</h1>
+        <div class="">
+            <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
         </div>
     </div>
 
-    <div id="AD002_IA_maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
+    <div class="w-full px-3 pb-4 mt-10 rounded-lg shadow-lg b">
         <div class="mb-5">
-            <a href="/admin/course" class="">
+            <a href="/admin/courses" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
             </a>
         </div>
+        <div class="flex justify-between">
+            <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
+                <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
+                    <img class="z-0 w-40 h-40 rounded-full" src="{{ asset('storage/images/course_img.png')}}" alt="Profile Picture">
+                </div>
 
-        <form id="addCourse" action="" method="POST">
-            @csrf
-        <div id="AD002_IA_content" class="smallpc:flex smallpc:items-start">
-            <div id="AD002_IA_personal_details_container" class="mx-auto my-5 smallpc:w-6/12">
-                <h3 class="mb-5 text-3xl font-medium border-b-2 md:text-4xl border-b-black">Course Details</h3>
-                <div id="namefield" class="flex mt-5">
-                    <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Course Name</h4>
-                    <div id="AD002_IA_course" class="block">
-                        <div class="mb-3">
-                            <label for="course_name" class="hidden text-md font-regular md:text-lg">Course Name</label>
-                            <input type="text" id="courseName" name="course_name" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15" placeholder="Course Name" value="{{ old('course_name') }}">
-                            @error('course_name')
-                            <p class="p-1 mt-2 text-xs text-red-500">
-                                {{$message}}
-                            </p>
-                            @enderror
-                        </div>
-                  
-                        
-                    </div>
+                <div class="mt-10" id="name_area">
+                    <h1 class="text-2xl font-semibold text-center" id="codenameDisp">NAME</h1>
                 </div>
-    
-                <div id="AD002_IA_course_difficulty" class="">
-                    <div id="gender" class="flex mt-5">
-                        <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Gender</h4>
-                        <div class="">
-                            <label for="courseDifficulty" class="hidden">Course Difficulty</label>
-                            <select name="course_difficulty" id="courseDifficulty" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
-                                <option value="" {{old('courseDifficulty') == "" ? 'selected' : ''}} class="">--select difficulty--</option>
-                                <option value="Beginner" {{old('courseDifficulty') == "Beginner" ? 'selected' : ''}} class="">Beginner</option>
-                                <option value="Intermediate" {{old('courseDifficulty') == "Intermediate" ? 'selected' : ''}} class="">Intermediate</option>
-                                <option value="Advanced" {{old('courseDifficulty') == "Advanced" ? 'selected' : ''}} class="">Advanced</option>
+
+                <div class="mt-5 text-center" id="account_status_area">
+                    <h1 class="text-xl" id="roleDisp">COURSE</h1>
+                </div>
+
+                
+                <div class="flex justify-center w-full px-5 mt-5">
+                    <button type="button" class="px-5 py-3 mx-2 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl" id="submit_new_admin">Save new Course</button>
+                </div>
+
+            </div> 
+            <div class="w-9/12 h-full" id="upper_right_container">
+                <div class="w-full px-5 py-10 bg-white shadow-lg rounded-xl" id="upper_right_1">
+                    <h1 class="text-4xl font-semibold text-darthmouthgreen">Course Details</h1>
+
+                    <hr class="my-6 border-t-2 border-gray-300">
+
+                    <div class="w-full mt-5" id="userInfo">
+
+                        <div class="w-full mt-3" id="courseNameArea">
+                            <label for="course_name">Course Name</label><br>
+                            <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="course_name" id="course_name" value="">
+                            <span id="courseNameError" class="text-red-500"></span>
+                        </div>
+
+                        <div class="w-full mt-3" id="courseDifficultyArea">
+                            <label for="course_difficulty">Course Difficulty</label><br>
+                            <select class="w-full h-12 px-10 py-1 border-2 rounded-lg border-darthmouthgreen" name="course_difficulty" id="course_difficulty">
+                                <option value="" selected disabled>-- select an option --</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermmediate">Intermmediate</option>
+                                <option value="Advanced">Advanced</option>
                             </select>
-                            @error('course_difficulty')
-                            <p class="p-1 mt-2 text-xs text-red-500">
-                                {{$message}}
-                            </p>
-                            @enderror
+                            <span id="courseDifficultyError" class="text-red-500"></span>
+                        </div>
+
+                        <div class="mt-3" id="course_descriptionArea">
+                            <label for="course_description">Course Description</label><br>
+                            <textarea name="course_description" class="w-full px-5 py-1 border-2 rounded-lg h-36 border-darthmouthgreen" id="course_description"></textarea>
+                            <span id="courseDescriptionError" class="text-red-500"></span>
                         </div>
                     </div>
+    
                 </div>
-    
-                <div id="AD002_IA_course_description" class="flex mt-5">
-                    <h4 class="w-32 ml-3 text-lg font-medium md:w-40 md:text-2xl">Course Description</h4>
-                    <div class="">
-                        <label for="courseDescription" class="hidden">Course Description</label>
-                        <textarea name="course_description" id="courseDescription" class="border-2 border-black rounded-md w-96 max-w-96 min-w-96 h-44 min-h-44 max-h-44"></textarea>
-                        @error('course_description')
-                            <p class="p-1 mt-2 text-xs text-red-500">
-                                {{$message}}
-                            </p>
-                            @enderror
-                    </div>
-                </div>
-    
-    
-    
-            </div>
-    
-            <div id="AD002_IA_instructor_field" class="mx-auto my-5 mt-16 smallpc:w-6/12 smallpc:mt-5">
-                <h3 class="mb-5 text-3xl font-medium border-b-2 border-b-black md:text-4xl">Instructor</h3>
-                <div id="AD002_IA_instructor_container" class="mt-5">
-                    <div id="AD002_IA_instructor" class="flex">
-                        <h4 class="w-40 ml-3 text-lg font-medium leading-5 md:w-60 md:text-2xl">Instructor</h4>
-                        <div class="ml-4">
-                            <label for="instructor_id" class="hidden"></label>
-                            <select name="instructor_id" id="instructor_id" class="px-3 py-2 text-lg border-2 border-black rounded-md md:text-xl w-15">
-                                <option value="">Select an option</option>
+
+                    <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="upper_right_3">
+                        <h1 class="text-4xl font-semibold text-darthmouthgreen">Instructor Details</h1>
+
+                        <hr class="my-6 border-t-2 border-gray-300">
+
+                        <div class="w-full mt-3" id="courseInstructorArea">
+                            <label for="course_instructor">Course Instructor</label><br>
+                            <select class="w-full h-12 px-10 py-1 border-2 rounded-lg border-darthmouthgreen" name="course_instructor" id="course_instructor">
+                                <option value="" selected disabled>-- select an option --</option>
                                 @foreach ($instructors as $instructor)
-                                <option value={{$instructor->id}}>{{$instructor->name}}</option>
+                                <option value="{{$instructor->id}}">{{$instructor->name}}</option>
                                 @endforeach
                             </select>
-                            @error('instructor')
-                            <p class="p-1 mt-2 text-xs text-red-500">
-                                {{$message}}
-                            </p>
-                            @enderror
+                            <span id="courseInstructorError" class="text-red-500"></span>
                         </div>
+            
                     </div>
-                </div>
             </div>
-
         </div>
-        
-    
-            <div id="button_container" class="pt-5 mx-auto mt-16 text-center border-2 border-t-black">
-                <a href="/admin/instructors" class="px-5 py-5 text-xl font-medium text-white bg-red-600 md:text-2xl hover:bg-red-900 rounded-xl">cancel</a>
-                <button type="submit" class="px-5 py-5 text-xl font-medium text-white bg-green-600 md:text-2xl hover:bg-green-900 rounded-xl">Add New</button>
-            </div>
-        </form>
     </div>
-    
-    
+
+        
+
 </section>
 
-@include('partials.footer')
-
+    
+</section>
 <script>
     $(document).ready(function() {
 
-        var formSubmitted = false;
+        var baseUrl = window.location.href
+        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
+    
 
-        $('#addCourse').submit(function(e) {
-            e.preventDefault();
 
-            const courseName = $('#courseName').val();
-            const courseDifficulty = $('#courseDifficulty').val();
-            const courseDescription = $('#courseDescription').val();
-            const instructor = $('#instructor_id').val();
 
-            if(courseName === '' || courseDifficulty === '' || courseDifficulty === null || courseDescription === '' || instructor === '' || instructor === null){
-                alert('Please enter values in the fields')
-
-                if(courseName === '') {
-                    var errorMsg = `
-                    <span class="text-red-600">*Please enter a Course Name*</span>
-                    `;
-
-                    $('#courseName').after(errorMsg);
-                }
-                if (courseDescription === '') {
-                    var errorMsg = `
-                    <span class="text-red-600">*Please enter a Course Description*</span>
-                    `;
-
-                    $('#courseDescription').before(errorMsg);
-                }
-                if (courseDifficulty === null || courseDifficulty === '') {
-                    var errorMsg = `
-                    <span class="text-red-600">*Please select a Course Difficulty*</span>
-                    `;
-
-                    $('#courseDifficulty').after(errorMsg);
-                } 
-
-                if (instructor === null || instructor === '') {
-                    var errorMsg = `
-                    <span class="text-red-600">*Please select a Course Difficulty*</span>
-                    `;
-
-                    $('#instructor_id').after(errorMsg);
-                } 
-            } else {
-                var formData = new FormData(this);
-
-            $.ajax({
-                type: 'POST',
-                url: '/admin/add_course',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if(response && response.redirect_url) {
-                        window.location.href= response.redirect_url
-                    } else {
-                        
-                    }
-                }
-            });
-            }
-            formSubmitted = true;
-            $('#addCourse')[0].reset();
+        $('#course_name').on('input', function() {
+            var val = $(this).val();
+            
+            $('#codenameDisp').text(val)
         })
 
+        $('#submit_new_admin').on('click', function() {
+            var course_name = $('#course_name').val();
+            var course_difficulty = $('#course_difficulty').val();
+            var course_description = $('#course_description').val();
+            var course_instructor = $('#course_instructor').val();
+
+
+            var isValid = true;
+
+            if (course_name === '') {
+                $('#courseNameError').text('Please enter a course name.');
+                isValid = false;
+            } else {
+                $('#courseNameError').text('');
+            }
+
+            if (course_difficulty === '') {
+                $('#courseDifficultyError').text('Please choose a difficulty');
+                isValid = false;
+            } else {
+                $('#courseDifficultyError').text('');
+            }
+
+            if (course_description === '') {
+                $('#courseDescriptionError').text('Please enter your course description.');
+                isValid = false;
+            } else {
+                $('#courseDescriptionError').text('');
+            }
+
+            if (course_instructor === '') {
+                $('#courseInstructorError').text('Please choose an Instructor');
+                isValid = false;
+            } else {
+                $('#courseInstructorError').text('');
+            }
+
+
+            if(isValid) {
+                var adminInfo = {
+                    course_name: course_name,
+                    course_difficulty: course_difficulty,
+                    course_description: course_description,
+                    instructor_id: course_instructor,
+                }
+    
+            var url = baseUrl;
+    
+            $.ajax ({
+                type: "POST",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                data: adminInfo,
+                success: function (response){
+                    console.log(response)
+                    if (response.redirect_url) {
+                    window.location.href = response.redirect_url;
+        }
+                    // window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+            }
+        })
     })
 </script>
+@include('partials.footer')

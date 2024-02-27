@@ -383,7 +383,7 @@ class LearnerCourseController extends Controller
                 }
          
                 $totalCourseTimeInSeconds = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
-                $totalCourseTimeInSeconds = 1927700 / 1000; // Convert milliseconds to seconds
+                $totalCourseTimeInSeconds = ($totalCourseTimeInSeconds) / 1000; // Convert milliseconds to seconds
 
                 $hours = floor($totalCourseTimeInSeconds / 3600);
                 $minutes = floor(($totalCourseTimeInSeconds % 3600) / 60);

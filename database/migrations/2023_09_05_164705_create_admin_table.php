@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id('admin_id');
             $table->string('admin_username');
             $table->string('admin_codename');
-            $table->string('admin_password');
+            $table->string('role');
+            $table->string('email')->default("eskwela4everyjuan@gmail.com");
+            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });

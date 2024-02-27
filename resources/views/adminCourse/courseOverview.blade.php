@@ -1,16 +1,23 @@
 @include('partials.header')
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
 
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
+<section class="flex flex-row w-screen text-sm main-container bg-mainwhitebg md:text-base">
+@include('partials.sidebar')
 
-        
-    {{-- MAIN --}}
-    <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        {{-- course name/title --}}
-        <a href="{{ url('/instructor/courses') }}" class="w-8 h-8 m-2">
-            <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+
+
+
+<section class="w-screen px-2 pt-[40px] mx-2 mt-2  overscroll-auto md:overflow-auto">
+    <div class="flex justify-between px-10">
+        <h1 class="text-6xl font-bold text-darthmouthgreen">Course Syllabus Management</h1>
+        <div class="">
+            <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
+        </div>
+    </div>
+    <div class="mb-5">
+        <a href="/admin/courseManage" class="">
+            <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
         </a>
+    </div>
         
         <div class="relative z-0 pb-4 text-black border rounded-lg shadow-lg">
             <div class="flex justify-between px-5 mx-3" id="courseInfo">
@@ -41,7 +48,7 @@
                 <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
                     <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
                     <div class="flex flex-col">
-                        <a href="{{ url("/instructor/course/content/$course->course_id") }}" id="" class="px-5 py-3 my-1 text-xl text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
+                        <a href="{{ url("/admin/courseManage/content/$course->course_id") }}" id="" class="px-5 py-3 my-1 text-xl text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
                         <button id="viewDetailsBtn"  class="px-5 py-3 my-1 text-lg text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">View Details</button>    
                     </div>
                 </div>
@@ -121,10 +128,10 @@
         </div>
     
         
-    </section>
+
+</section>
+
     
-@include('partials.instructorProfile')    {{-- @include('instructor_course.courseManage'); --}}
-</div>
 </section>
 
 
@@ -169,8 +176,8 @@
                 
                 </div>
                 <div class="flex flex-col items-center justify-center w-1/5" id="courseInfo_right">
-                    <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="Profile Picture">
-                    <h4 class="text-xl">{{$instructor->instructor_fname}} {{$instructor->instructor_lname}}</h4>
+                    <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
+                    <h4 class="text-xl">{{$course->instructor_fname}} {{$course->instructor_lname}}</h4>
                     <h4 class="text-xl">INSTRUCTOR</h4>
                     <button id="courseEditBtn" class="px-5 py-3 text-white bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen rounded-xl">Edit</button>
                 </div>
@@ -314,7 +321,7 @@
                                         <a href="{{ Storage::url($file) }}" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen" download>Download</a>
                                     </td>     
                                     <td>
-                                        <a href="{{ url("/instructor/course/$course->course_id/delete_file/" . basename($file)) }}" class="px-5 py-3 text-white bg-red-500 rounded-xl hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500" onclick="return confirm('Are you sure you want to delete this file?')">Delete</a>
+                                        <a href="{{ url("/admin/courseManage/$course->course_id/delete_file/" . basename($file)) }}" class="px-5 py-3 text-white bg-red-500 rounded-xl hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500" onclick="return confirm('Are you sure you want to delete this file?')">Delete</a>
                                     </td>
                                                                  
                                 </tr>
@@ -366,7 +373,7 @@
             </button>
         </div>
         
-        <form id="uploadFileForm" action="{{ url("/instructor/course/$course->course_id/add_file") }}" method="POST" enctype="multipart/form-data">
+        <form id="uploadFileForm" action="{{ url("/admin/courseManage/$course->course_id/add_file") }}" method="POST" enctype="multipart/form-data">
             
             @csrf
             <div class="flex flex-col items-center w-full mt-5">

@@ -14,7 +14,7 @@
                 </div>
                 <div class="" id="logo_full">
                     <a href="{{ url('/instructor/dashboard') }}">
-                        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-black">
+                        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
                             Eskwela4EveryJuan
                         </span>
                     </a>

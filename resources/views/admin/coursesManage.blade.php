@@ -8,7 +8,7 @@
 
 <section class="w-screen px-2 pt-[40px] mx-2 mt-2  overscroll-auto md:overflow-auto">
     <div class="flex justify-between px-10">
-        <h1 class="text-6xl font-bold text-darthmouthgreen">Course Management</h1>
+        <h1 class="text-6xl font-bold text-darthmouthgreen">Course Syllabus Management</h1>
         <div class="">
             <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
         </div>
@@ -17,12 +17,8 @@
     <div class="w-full px-3 pb-4 mt-10 rounded-lg shadow-lg b">
 
             <div class="flex items-center justify-end space-x-3">
-                
-                {{-- @if($admin->role === 'IT_DEPT' || $admin->role === 'SUPER_ADMIN' ) --}}
-                @if(in_array($admin->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR']))
-                <a href="{{ url('/admin/add_course') }}" class="px-4 py-2 text-lg font-medium text-white bg-green-600 rounded-xl hover:bg-green-700">Add New</a>
-                @endif
-                <form action="{{ url('/admin/courses') }}" method="GET" class="flex items-center space-x-3">
+
+                <form action="{{ url('/admin/courseManage') }}" method="GET" class="flex items-center space-x-3">
                     <label for="filterDate" class="text-lg">Filter by Date</label>
                     <input type="date" name="filterDate" class="w-40 px-2 py-2 text-base border border-black rounded-xl">
         
@@ -75,7 +71,7 @@
                         <td class="w-1/12">
                             
                             @if(in_array($admin->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR']))
-                            <a href="/admin/view_course/{{$course->course_id}}" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a>
+                            <a href="/admin/courseManage/{{$course->course_id}}" class="px-3 py-2 mx-3 text-lg font-medium bg-green-600 rounded-xl hover:bg-green-900 hover:text-white">view</a>
                             @endif
                         </td>
                     </tr>
