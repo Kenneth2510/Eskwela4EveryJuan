@@ -10,6 +10,8 @@
         @include('partials.instructorSidebar')
         
         @yield('content')
+        @include('partials.instructorSideProfile')
+        @include('partials.instructorChatbot')
     
         {{-- @include('partials.instructorProfile')   --}}
     </section>

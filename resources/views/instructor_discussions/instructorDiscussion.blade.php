@@ -4,7 +4,7 @@
 @section('content')
     {{-- MAIN --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
             <div class="py-4">
                 <h1 class="text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>                
             </div>
