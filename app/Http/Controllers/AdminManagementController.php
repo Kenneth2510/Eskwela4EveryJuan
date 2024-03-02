@@ -64,7 +64,8 @@ class AdminManagementController extends Controller
                     'admin_username',
                     'admin_codename',
                     'role',
-                );
+                )
+                ->where('role', '!=', 'SUPER_ADMIN');
 
                 if(!empty($search_by) && !empty($search_val)) {
                 $query->where($search_by, 'LIKE', '%' . $search_val . '%');
@@ -182,6 +183,7 @@ class AdminManagementController extends Controller
                     'admin_username',
                 )
                 ->where('admin_id', $admin->admin_id)
+                ->where('role', '!=', 'SUPER_ADMIN')
                 ->first();
 
                 $data = [
@@ -190,6 +192,10 @@ class AdminManagementController extends Controller
                     // 'scripts' => ['AD_add_new_admin.js'],
                     'admin' => $adminSession,
                 ];
+
+                if(!$adminData) {
+                    return view('error.error');
+                }
 
                 return view('admin.view_admin')
                 ->with($data);
@@ -228,6 +234,7 @@ class AdminManagementController extends Controller
 
                 DB::table('admin')
                 ->where('admin_id', $admin->admin_id)
+                ->where('role', '!=', 'SUPER_ADMIN')
                 ->update($adminData);
 
 
@@ -271,6 +278,7 @@ class AdminManagementController extends Controller
                
                 DB::table('admin')
                 ->where('admin_id', $admin->admin_id)
+                ->where('role', '!=', 'SUPER_ADMIN')
                 ->delete();
 
                 session()->flash('message', 'Admin Deleted successfully');

@@ -171,10 +171,29 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::put('/admin/pending_course/{course}', 'AdminCourseController@pendingCourse');
 
     Route::get('/admin/manage_course/course_overview/{course}' , 'AdminCourseController@manage_course');
+
+    
+    Route::get('/admin/course/enrollment' , 'AdminCourseController@course_manage_enrollees');
+    Route::get('/admin/course/enrollment/learnerCoursesData' , 'AdminCourseController@getLearnerCourseData');
+    Route::get('/admin/course/enrollment/search' , 'AdminCourseController@search');
+
+    Route::get('/admin/course/enrollment/addNew' , 'AdminCourseController@add_new_enrollee');
+    Route::get('/admin/course/enrollment/addNew/getData' , 'AdminCourseController@getData');
+    Route::post('/admin/course/enrollment/addNew/enrollNew' , 'AdminCourseController@enrollNew');
+
+    Route::get('/admin/course/enrollment/view/{learner_course}' , 'AdminCourseController@view_learner_course');
+
+    Route::get('/admin/course/enrollment/learnerCourse/{learner_course}' , 'AdminCourseController@view_learner_course');
+
+
+
+    
     Route::get('/admin/manage_course/enrollees/{course}' , 'AdminCourseController@course_enrollees');
     Route::put('/admin/manage_course/enrollee/approve/{learner_course}', 'AdminCourseController@approve_learner_course');
     Route::put('/admin/manage_course/enrollee/pending/{learner_course}', 'AdminCourseController@pending_learner_course');
     Route::put('/admin/manage_course/enrollee/reject/{learner_course}', 'AdminCourseController@reject_learner_course');
+
+
 });
 
 Route::namespace('App\Http\Controllers')->group(function () {
@@ -187,7 +206,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/admin/courseManage/{course}/add_file', 'AdminCourseManageController@add_file');
     Route::get('/admin/courseManage/{course}/delete_file/{fileName}', 'AdminCourseManageController@delete_file');
 
-    Route::post('/instructor/admin/courseManage/{course}/delete', 'AdminCourseManageController@delete_course');
+    Route::post('/admin/courseManage/{course}/delete', 'AdminCourseManageController@delete_course');
 
     Route::post('/admin/courseManage/create/syllabus/{course}', 'AdminCourseManageController@create_syllabus');
 

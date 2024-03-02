@@ -389,11 +389,11 @@ $(document).ready(function() {
                 searchVal: searchVal,
             },
             success: function(response) {
-                // console.log(response)
+                console.log(response)
 
-                var learnerData = response['learner']
+                var adminData = response['admin']
                 var messageData = response['messageData'];
-                dispSideMessageArea(messageData, learnerData)
+                dispSideMessageArea(messageData, adminData)
             },
             error: function(error) {
                 console.log(error);
@@ -408,7 +408,7 @@ $(document).ready(function() {
     })
 
 
-    function dispSideMessageArea(messageData, learnerData) {
+    function dispSideMessageArea(messageData, adminData) {
         var sideMessageAreaDisp = ``;
 
         for (let i = 0; i < messageData.length; i++) {
@@ -428,14 +428,14 @@ $(document).ready(function() {
             const message_subject = messageData[i]['message_subject'];
             const message_content = messageData[i]['message_content'];
             
-            if(learnerData['learner_email'] === sender_user_email) {
+            if(adminData['email'] === sender_user_email) {
                 // src="/storage/${profile}"
                 sideMessageAreaDisp += `
                 <li class="border-b border-darthmouthgreen hover:bg-gray-200">
                     <button data-message-content-id="${message_content_id}" class="w-full selectThisMessage">
                         <div class="flex mx-5 my-2">
                             <div class="w-1/4" id="profile_photo_area">
-                                <img class="z-0 w-10 h-10 rounded-full" src="/storage/${sender_profile_picture}" alt="Profile Picture">
+                                <img class="z-0 w-10 h-10 rounded-full" src="/storage/images/default_profile.png" alt="Profile Picture">
                             </div>
                             <div class="w-3/4">
                                 <div class="flex flex-col items-start justify-start userInfoArea" id="">
@@ -525,12 +525,12 @@ $(document).ready(function() {
                 success: function(response) {
                     // console.log(response)
 
-                    var learnerData = response['learner']
+                    var adminData = response['admin']
                     var messageData = response['messageData']
                     var replyData = response['replyData']
 
-                    dispMessageArea(messageData, learnerData)
-                    dispReplyArea(replyData, learnerData)
+                    dispMessageArea(messageData, adminData)
+                    dispReplyArea(replyData, adminData)
                 },
                 error: function(error) {
                     console.log(error);
@@ -540,7 +540,7 @@ $(document).ready(function() {
 
 
 
-    function dispMessageArea(messageData, learner) {
+    function dispMessageArea(messageData, adminData) {
         var messageAreaDisp = ``;
         
             const message_content_id = messageData['message_content_id'];
@@ -564,7 +564,7 @@ $(document).ready(function() {
             <div class="flex items-center justify-between" id="userInfoArea">
                 <div class="flex items-start">
                     <div class="" id="profile_photo_area">
-                        <img class="z-0 w-12 h-12 rounded-full" src="/storage/${sender_profile_picture}" alt="Profile Picture">
+                        <img class="z-0 w-12 h-12 rounded-full" src="/storage/images/default_profile.png" alt="Profile Picture">
                     </div>
                     <div class="ml-3">
                         <h1 class="text-lg font-semibold">${sender_name}</h1>
@@ -573,13 +573,13 @@ $(document).ready(function() {
                             const type = message['receiver_user_type'].toLowerCase();
                             const receiverEmail = message['receiver_user_email'];
                             if (index !== messages.length - 1) {
-                                if (receiverEmail !== learner['learner_email']) {
-                                    messageAreaDisp += `<a href="/learner/profile/${type}/${receiverEmail}">${receiverEmail}</a>, `;
+                                if (receiverEmail !== instructor['instructor_email']) {
+                                    messageAreaDisp += `<a href="/instructor/profile/${type}/${receiverEmail}">${receiverEmail}</a>, `;
                                 } else {
-                                    messageAreaDisp += `<a href="/learner/profile">${receiverEmail}</a>, `;
+                                    messageAreaDisp += `<a href="/instructor/profile">${receiverEmail}</a>, `;
                                 }
                             } else {
-                                messageAreaDisp += `<a href="/learner/profile/${type}/${receiverEmail}">${receiverEmail}</a>`;
+                                messageAreaDisp += `<a href="/instructor/profile/${type}/${receiverEmail}">${receiverEmail}</a>`;
                             }
                         });
                         
@@ -639,7 +639,7 @@ $(document).ready(function() {
     }
 
 
-    function dispReplyArea(replyData, learner) {
+    function dispReplyArea(replyData, adminData) {
         var replyAreaDisp = ``;
     
         for (let i = 0; i < replyData.length; i++) {
@@ -652,25 +652,39 @@ $(document).ready(function() {
             const fileContents = replyData[i]['fileContents'];
             
     
+            
+            if(adminData['email'] === reply_user_email) {
+
             replyAreaDisp += `
             <div class="border-b border-darthmouthgreen mainMessageReplyArea">
                 <div class="flex items-center justify-between" id="userInfoArea">
                     <div class="flex items-start">
                         <div class="" id="profile_photo_area">
-                            <img class="z-0 w-12 h-12 rounded-full" src="/storage/${reply_profile_picture}" alt="Profile Picture">
+                            <img class="z-0 w-12 h-12 rounded-full" src="/storage/images/default_profile.png" alt="Profile Picture">
                         </div>
                         <div class="ml-3">
                             <h1 class="text-lg font-semibold">${reply_name}</h1>
                             <h4 class="text-gray-700 text-md">`
-                            
-                            const type = reply_user_type.toLowerCase();
-                            const receiverEmail = reply_user_email;
-                            if (receiverEmail !== learner['learner_email']) {
-                                replyAreaDisp += `<a href="/learner/profile/${type}/${reply_user_email}">${reply_user_email}</a>, `;
-                            } else {
-                                replyAreaDisp += `<a href="/learner/profile">${receiverEmail}</a>, `;
-                            }
-                            
+            } else {
+                replyAreaDisp += `
+                <div class="border-b border-darthmouthgreen mainMessageReplyArea">
+                    <div class="flex items-center justify-between" id="userInfoArea">
+                        <div class="flex items-start">
+                            <div class="" id="profile_photo_area">
+                                <img class="z-0 w-12 h-12 rounded-full" src="/storage/${reply_profile_picture}" alt="Profile Picture">
+                            </div>
+                            <div class="ml-3">
+                                <h1 class="text-lg font-semibold">${reply_name}</h1>
+                                <h4 class="text-gray-700 text-md">`
+            }            
+                            // const type = reply_user_type.toLowerCase();
+                            // const receiverEmail = reply_user_email;
+                            // if (receiverEmail !== instructor['instructor_email']) {
+                            //     replyAreaDisp += `<a href="/instructor/profile/${type}/${reply_user_email}">${reply_user_email}</a>, `;
+                            // } else {
+                            //     replyAreaDisp += `<a href="/instructor/profile">${receiverEmail}</a>, `;
+                            // }
+                  
             replyAreaDisp +=      `</h4>
                         </div>
                     </div>

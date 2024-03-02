@@ -345,6 +345,8 @@
                     <h1 class="py-5 mx-16 text-4xl font-bold text-green-600">{{$postAssessmentLearnerSumScore}} <span class="text-2xl font-bold text-black"> / {{$totalScoreCount_post_assessment}}</span></h1>
                 </div>
         
+
+                @if ($courseData->course_progress === 'COMPLETED')
                 <hr class="my-6 border-t-2 border-gray-300">
                 <h1 class="mx-2 text-2xl font-semibold">Computation of Grades</h1>
                 <div class="px-10 mt-3">
@@ -364,6 +366,7 @@
                     <h1 class="text-2xl font-bold">Final Grade: <span class="text-green-600">{{$totalGrade}}%</span></h1>
                     <h1 class="text-2xl font-bold">Remarks: <span class="text-green-600">{{$remarks}}</span></h1>
                 </div>
+                @endif
             </div>
         </section>
     </section>

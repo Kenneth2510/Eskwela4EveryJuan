@@ -55,14 +55,14 @@ $(document).ready(function() {
                     label: 'Count',
                     data: counts,
                     backgroundColor: [
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Pending'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Approved'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Rejected'
+                        'rgba(0, 150, 50, 0.5)', // Change color for 'Pending'
+                        'rgba(0, 100, 30, 0.5)', // Change color for 'Approved'
+                        'rgba(0, 50, 10, 0.5)',  // Change color for 'Rejected'
                     ],
                     borderColor: [
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Pending'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Approved'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Rejected'
+                        'rgba(0, 150, 50, 1)',  // Change border color for 'Pending'
+                        'rgba(0, 100, 30, 1)',  // Change border color for 'Approved'
+                        'rgba(0, 50, 10, 1)',   // Change border color for 'Rejected'
                     ],
                     borderWidth: 1
                 }]
@@ -104,14 +104,14 @@ $(document).ready(function() {
                     label: 'Count',
                     data: counts,
                     backgroundColor: [
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Pending'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Approved'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Rejected'
+                        'rgba(0, 150, 50, 0.5)', // Change color for 'Pending'
+                        'rgba(0, 100, 30, 0.5)', // Change color for 'Approved'
+                        'rgba(0, 50, 10, 0.5)',  // Change color for 'Rejected'
                     ],
                     borderColor: [
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Pending'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Approved'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Rejected'
+                        'rgba(0, 150, 50, 1)',  // Change border color for 'Pending'
+                        'rgba(0, 100, 30, 1)',  // Change border color for 'Approved'
+                        'rgba(0, 50, 10, 1)',   // Change border color for 'Rejected'
                     ],
                     borderWidth: 1
                 }]
@@ -153,14 +153,14 @@ $(document).ready(function() {
                     label: 'Count',
                     data: counts,
                     backgroundColor: [
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Pending'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Approved'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Rejected'
+                        'rgba(0, 150, 50, 0.5)', // Change color for 'Pending'
+                        'rgba(0, 100, 30, 0.5)', // Change color for 'Approved'
+                        'rgba(0, 50, 10, 0.5)',  // Change color for 'Rejected'
                     ],
                     borderColor: [
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Pending'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Approved'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Rejected'
+                        'rgba(0, 150, 50, 1)',  // Change border color for 'Pending'
+                        'rgba(0, 100, 30, 1)',  // Change border color for 'Approved'
+                        'rgba(0, 50, 10, 1)',   // Change border color for 'Rejected'
                     ],
                     borderWidth: 1
                 }]
@@ -203,20 +203,20 @@ $(document).ready(function() {
                     label: 'Count',
                     data: counts,
                     backgroundColor: [
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'SUPER_ADMIN'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'IT_DEPT'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'COURSE_SUPERVISOR'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'COURSE_ASST_SUPERVISOR'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'USER_MANAGER'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'CLERK'
+                        'rgba(0, 150, 50, 0.5)',   // Change color for 'SUPER_ADMIN'
+                        'rgba(0, 100, 30, 0.5)',   // Change color for 'IT_DEPT'
+                        'rgba(0, 50, 10, 0.5)',    // Change color for 'COURSE_SUPERVISOR'
+                        'rgba(0, 0, 0, 0.5)',      // Change color for 'COURSE_ASST_SUPERVISOR'
+                        'rgba(50, 0, 0, 0.5)',     // Change color for 'USER_MANAGER'
+                        'rgba(100, 0, 0, 0.5)',    // Change color for 'CLERK'
                     ],
                     borderColor: [
-                        'rgba(2, 92, 38, 1)', // Change border color for 'SUPER_ADMIN'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'IT_DEPT'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'COURSE_SUPERVISOR'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'COURSE_ASST_SUPERVISOR'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'USER_MANAGER'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'CLERK'
+                        'rgba(0, 150, 50, 1)',     // Change border color for 'SUPER_ADMIN'
+                        'rgba(0, 100, 30, 1)',     // Change border color for 'IT_DEPT'
+                        'rgba(0, 50, 10, 1)',      // Change border color for 'COURSE_SUPERVISOR'
+                        'rgba(0, 0, 0, 1)',        // Change border color for 'COURSE_ASST_SUPERVISOR'
+                        'rgba(50, 0, 0, 1)',       // Change border color for 'USER_MANAGER'
+                        'rgba(100, 0, 0, 1)',      // Change border color for 'CLERK'
                     ],
                     borderWidth: 1
                 }]
@@ -289,14 +289,14 @@ $(document).ready(function() {
                     label: 'Count',
                     data: counts,
                     backgroundColor: [
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Pending'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Approved'
-                        'rgba(2, 92, 38, 0.5)', // Change color for 'Rejected'
+                        'rgba(0, 150, 50, 0.5)', // Change color for 'Pending'
+                        'rgba(0, 100, 30, 0.5)', // Change color for 'Approved'
+                        'rgba(0, 50, 10, 0.5)',  // Change color for 'Rejected'
                     ],
                     borderColor: [
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Pending'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Approved'
-                        'rgba(2, 92, 38, 1)', // Change border color for 'Rejected'
+                        'rgba(0, 150, 50, 1)',  // Change border color for 'Pending'
+                        'rgba(0, 100, 30, 1)',  // Change border color for 'Approved'
+                        'rgba(0, 50, 10, 1)',   // Change border color for 'Rejected'
                     ],
                     borderWidth: 1
                 }]

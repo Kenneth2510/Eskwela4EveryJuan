@@ -360,6 +360,21 @@ public function pendingCourse(Course $course)
     return redirect()->back()->with('message' , 'Course Status successfully changed');
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public function manage_course (Course $course) {
 
     if (auth('admin')->check()) {
@@ -397,6 +412,468 @@ public function manage_course (Course $course) {
     ->with(['title' => 'Course Management', 'adminCodeName' => $admin_codename]);
 
 }
+
+
+// public function manage_course () {
+
+//     if (auth('admin')->check()) {
+//         $adminSession = session('admin');
+
+//         if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR' , 'COURSE_ASST_SUPERVISOR'])) {
+//             try {
+
+//                 $courses = DB::table('course')
+//                 ->select(
+//                     'course.course_id',
+//                     'course.course_name',
+//                     'course.course_code',
+//                     'course.course_status',
+//                     'course.course_difficulty',
+//                     'course.instructor_id',
+//                     'instructor.instructor_fname',
+//                     'instructor.instructor_lname',
+//                     'instructor.profile_picture',
+//                 )
+//                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
+//                 ->get();
+
+//                 $data = [
+//                     'title' => 'Course Management',
+//                     'admin' => $adminSession,
+//                     'scripts' => ['AD_course_enroll.js'],
+//                 ];
+//                 // dd($courseData);
+//                 return view('admin.manage_course')
+//                 ->with($data);
+            
+
+//             } catch (\Exception $e) {
+//                 dd($e->getMessage());
+//             }
+//         }  else {
+//             return view('error.error');
+//         }
+//     } else {
+//     return redirect('/admin');
+//     }
+
+
+// }
+
+
+
+public function course_manage_enrollees() {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR', 'COURSE_ASST_SUPERVISOR'])) {
+        
+            $coursesData = DB::table('course')
+            ->select(
+                'course_name',
+                'course_id'
+            )
+            ->where('course_status', 'Approved')
+            ->get();
+
+            $data = [
+                'title' => 'Course Enrollees',
+                'scripts' => ['AD_course_enroll.js'],
+                'courses' =>$coursesData,
+                'admin' => $adminSession,
+            ];
+
+            // dd($data);
+            return view('admin.courseManage_enrollees')
+            ->with($data);
+
+        }  else {
+            return view('error.error');
+        }
+    }  else {
+        return redirect('/admin');
+    }
+}
+
+
+
+public function getLearnerCourseData(Request $request) {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR' , 'COURSE_ASST_SUPERVISOR'])) {
+        
+            $course_id = $request->input('course_id');
+
+            $learnerCourseData = DB::table('learner_course')
+            ->select(
+                'learner_course.learner_course_id',
+                'learner_course.learner_id',
+                'learner_course.created_at',
+                'learner_course.status',
+                DB::raw('CONCAT(learner.learner_fname, " " ,learner.learner_lname) as name'),
+                'learner.learner_email'
+            )
+            ->join('learner', 'learner.learner_id', 'learner_course.learner_id')
+            ->where('learner_course.course_id', $course_id)
+            ->get();
+
+
+            $data = [
+                'learnerCourseData' => $learnerCourseData
+            ];
+
+            return response()->json($data);
+
+            } else {
+                session()->flash('message', 'You cannot access the data');
+                $data = [
+                    'message' => 'You cannot access the data',
+                    'redirect_url' => '/admin/course/enrollment/',
+                ];
+
+                return response()->json($data);
+            }
+    }  else {
+        return redirect('/admin');
+    }
+}
+
+public function search(Request $request) {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR' , 'COURSE_ASST_SUPERVISOR'])) {
+        
+            $course_id = $request->input('course_id');
+            $searchLearner = $request->input('searchLearner');
+            $filterDate = $request->input('filterDate');
+            $filterStatus = $request->input('filterStatus');
+            
+            $learnerCourseData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'learner_course.created_at',
+                    'learner_course.status',
+                    DB::raw('CONCAT(learner.learner_fname, " " ,learner.learner_lname) as name'),
+                    'learner.learner_email'
+                )
+                ->join('learner', 'learner.learner_id', 'learner_course.learner_id')
+                ->where('learner_course.course_id', $course_id);
+            
+            if($searchLearner) {
+                $learnerCourseData
+                    ->where('learner.learner_fname', 'LIKE', '%'. $searchLearner . '%')
+                    ->orWhere('learner.learner_lname', 'LIKE', '%'. $searchLearner . '%');
+            }
+            
+            if($filterDate) {
+                $learnerCourseData->whereDate('learner.created_at', $filterDate);
+            }
+            
+            if($filterStatus) {
+                $learnerCourseData->where('learner.status', $filterStatus);
+            }
+            
+            $learnerCourseData = $learnerCourseData->get();
+
+
+            $data = [
+                'learnerCourseData' => $learnerCourseData
+            ];
+
+            return response()->json($data);
+
+            } else {
+                session()->flash('message', 'You cannot access the data');
+                $data = [
+                    'message' => 'You cannot access the data',
+                    'redirect_url' => '/admin/course/enrollment/',
+                ];
+
+                return response()->json($data);
+            }
+    }  else {
+        return redirect('/admin');
+    }
+}
+
+
+public function add_new_enrollee() {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR' , 'COURSE_ASST_SUPERVISOR'])) {
+       
+            
+            $learners = DB::table('learner')
+            ->select(
+                'learner_id',
+                DB::raw('CONCAT(learner_fname, " ", learner_lname) as name')
+            )
+            ->where('status', 'Approved')
+            ->get();
+
+
+            $courses = DB::table('course')
+            ->select(
+                'course.course_id',
+                'course.course_name'
+            )
+            ->where('course_status', 'Approved')
+            ->get();
+            
+            $data = [
+                'title' => 'Course Enrollees',
+                'scripts' => [],
+                'admin' => $adminSession,
+                'learners' => $learners,
+                'courses' => $courses
+            ];
+
+            return view('admin.courseManage_addLearnerCourse')->with($data);
+        }  else {
+            return view('error.error');
+        }
+    }  else {
+        return redirect('/admin');
+    }
+}
+
+
+public function getData(Request $request) {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR' , 'COURSE_ASST_SUPERVISOR'])) {
+       
+            $course_id = $request->input('course_id');
+            $learner_id = $request->input('learner_id');
+
+
+            $learner = DB::table('learner')
+            ->select(
+                'learner.learner_id',
+                'learner.learner_fname',
+                'learner.learner_lname',
+                'learner.learner_bday',
+                'learner.learner_gender',
+                'learner.learner_contactno',
+                'learner.learner_email',
+
+                'business.business_name',
+                'business.business_address',
+                'business.business_owner_name',
+                'business.bplo_account_number',
+                'business.business_category',
+                'business.business_classification',
+                'business.business_description',
+            )
+            ->join('business', 'business.learner_id','learner.learner_id')
+            ->where('learner.learner_id', $learner_id)
+            ->first();
+
+
+            $course = DB::table('course')
+            ->select(
+                'course.course_id',
+                'course.course_name',
+                'course.course_difficulty',
+                'course.course_description',
+
+                DB::raw('CONCAT(instructor.instructor_fname, " ", instructor.instructor_lname) as instructor_name'),
+            )
+            ->join('instructor', 'instructor.instructor_id', 'course.instructor_id')
+            ->where('course.course_id', $course_id)
+            ->first();
+
+            
+            $data = [
+                'title' => 'Course Enrollees',
+                'scripts' => [],
+                'admin' => $adminSession,
+                'learner' => $learner,
+                'course' => $course
+            ];
+
+            // return view('admin.courseManage_addLearnerCourse')->with($data);
+            return response()->json($data);
+        } else {
+            session()->flash('message', 'You cannot update the data');
+            $data = [
+                'message' => 'You cannot update the data',
+                'redirect_url' => '/admin/course/enrollment/addNew',
+            ];
+    
+            return response()->json($data);
+        }
+    }  else {
+        return redirect('/admin');
+    }
+}
+
+
+public function enrollNew(Request $request) {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR' , 'COURSE_ASST_SUPERVISOR'])) {
+       
+            $course_id = $request->input('course_id');
+            $learner_id = $request->input('learner_id');
+
+
+            $query = DB::table('learner_course')
+            ->where('learner_id', $learner_id)
+            ->where('course_id', $course_id)
+            ->first();
+
+
+            $learnerCourseData = ([
+                "course_id" => $course_id,
+                "learner_id" => $learner_id,
+            ]);
+
+            if ($query === null) {
+            LearnerCourse::create($learnerCourseData);
+
+            session()->flash('message', 'Course enrolled Successfully');
+            $data = [
+                'message' => 'Course enrolled Successfully',
+                'redirect_url' => '/admin/course/enrollment',
+            ];
+            
+            return response()->json($data);
+            } else {
+                session()->flash('message', 'Learner already enrolled');
+                $data = [
+                    'message' => 'Learner already enrolled',
+                    'redirect_url' => '/admin/course/enrollment',
+                ];
+    
+                return response()->json($data);
+            }
+
+
+
+        } else {
+            session()->flash('message', 'You cannot update the data');
+            $data = [
+                'message' => 'You cannot update the data',
+                'redirect_url' => '/admin/course/enrollment/',
+            ];
+
+            return response()->json($data);
+        }
+    }  else {
+        return redirect('/admin');
+    }
+
+}
+
+
+
+public function view_learner_course(LearnerCourse $learnerCourse, Request $request) {
+    if (auth('admin')->check()) {
+        $adminSession = session('admin');
+
+        if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR', 'COURSE_ASST_SUPERVISOR'])) {
+                   
+
+            $learnerCourseData = DB::table('learner_course')
+            ->select(
+                'learner_course.status',
+                'learner_course.learner_course_id',
+
+                'learner.learner_id',
+                'learner.learner_fname',
+                'learner.learner_lname',
+                'learner.learner_bday',
+                'learner.learner_gender',
+                'learner.learner_contactno',
+                'learner.learner_email',
+
+                'business.business_name',
+                'business.business_address',
+                'business.business_owner_name',
+                'business.bplo_account_number',
+                'business.business_category',
+                'business.business_classification',
+                'business.business_description',
+
+                'course.course_id',
+                'course.course_name',
+                'course.course_difficulty',
+                'course.course_description',
+                'course.instructor_id',
+
+                DB::raw('CONCAT(instructor.instructor_fname, " ", instructor.instructor_lname) as instructor_name'),
+            )
+            ->join('learner', 'learner.learner_id', 'learner_course.learner_id')
+            ->join('course', 'course.course_id', 'learner_course.course_id')
+            ->join('instructor', 'instructor.instructor_id', 'course.instructor_id')
+            ->join('business', 'business.learner_id','learner.learner_id')
+            ->where('learner_course_id', $learnerCourse->learner_course_id)
+            ->first();
+            
+            $learners = DB::table('learner')
+            ->select(
+                'learner_id',
+                DB::raw('CONCAT(learner_fname, " ", learner_lname) as name')
+            )
+            ->get();
+
+
+            $courses = DB::table('course')
+            ->select(
+                'course.course_id',
+                'course.course_name'
+            )
+            ->get();
+
+            $instructors = DB::table('instructor')
+            ->select(
+                DB::raw("CONCAT(instructor_fname, ' ', instructor_lname) as name"), 
+                'instructor_id as id'
+            )
+            ->where('status', '=', 'Approved')
+            ->orderBy('instructor_fname', 'ASC')
+            ->get();
+            
+            $data = [
+                'title' => 'Course Enrollee',
+                'scripts' => [],
+                'admin' => $adminSession,  
+                'learnerCourse' => $learnerCourseData,
+                'learners' => $learners,
+                'courses' => $courses,
+                'instructors' => $instructors
+            ];
+            // dd($data);
+            return view('admin.courseEnrollee_viewLearner')->with($data);
+
+
+        }  else {
+            return view('error.error');
+        }
+    }  else {
+        return redirect('/admin');
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 public function course_enrollees (Request $request, Course $course) {
     if (auth('admin')->check()) {
@@ -488,7 +965,7 @@ public function course_enrollees (Request $request, Course $course) {
 // add learner course progress, learner syllabus progress, lesson, activity,quiz progress
 public function approve_learner_course(LearnerCourse $learnerCourse) {
     try {
-        
+        // dd($learnerCourse);
         $now = Carbon::now();
         $timestampString = $now->toDateTimeString();
         // dd($learnerCourse);
@@ -526,158 +1003,139 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
         ->where('course_id', $learnerCourse->course_id)
         ->orderBy('topic_id', 'ASC')
         ->get();
-
-        // dd($syllabusData);
-
-        // $syllabusDataLength = count($syllabusData);
     
-
-        foreach($syllabusData as $syllabus) {
-            $rowSyllabusData = [
-                "learner_course_id" => $learnerCourse->learner_course_id,
-                "learner_id" => $learnerCourse->learner_id,
-                "course_id" => $learnerCourse->course_id,
-                "syllabus_id"=> $syllabus->syllabus_id,
-                "category" => $syllabus->category
-            ];
-
-            // dd($rowSyllabusData);
-            LearnerSyllabusProgress::create($rowSyllabusData);
-
-            switch ($syllabus->category) {
-                case "LESSON":
-                    
-                    $lessonData = DB::table('lessons')
-                    ->select(
-                        'lesson_id',
-                        'course_id',
-                        'syllabus_id',
-                        'topic_id'
-                    )
-                    ->where('syllabus_id', $syllabus->syllabus_id)
-                    ->where('course_id', $learnerCourse->course_id)
-                    ->where('topic_id', $syllabus->topic_id)
-                    ->first();
-
-                    $rowLessonData = [
-                        "learner_course_id" => $learnerCourse->learner_course_id,
-                        "learner_id" => $learnerCourse->learner_id,
-                        "course_id" => $learnerCourse->course_id,
-                        "syllabus_id" => $syllabus->syllabus_id,
-                        "lesson_id" => $lessonData->lesson_id,
-                    ];
-
-                    LearnerLessonProgress::create($rowLessonData);
-                    
-                    break;
-            
-                case "ACTIVITY":
-
-                    $activityData = DB::table('activities')
-                    ->select(
-                        'activity_id',
-                        'course_id',
-                        'syllabus_id',
-                        'topic_id'
-                    )
-                    ->where('syllabus_id', $syllabus->syllabus_id)
-                    ->where('course_id', $learnerCourse->course_id)
-                    // ->where('topic_id', $syllabus->topic_id)
-                    ->first();
-
-                    // dd($activityData);
-                    $rowActivityData = [
-                        "learner_course_id" => $learnerCourse->learner_course_id,
-                        "learner_id" => $learnerCourse->learner_id,
-                        "course_id" => $learnerCourse->course_id,
-                        "syllabus_id" => $syllabus->syllabus_id,
-                        "activity_id" => $activityData->activity_id,
-                    ];
-
-                    LearnerActivityProgress::create($rowActivityData);
-
-                    break;
-            
-                case "QUIZ":
-
-                    $quizData = DB::table('quizzes')
-                    ->select(
-                        'quiz_id',
-                        'course_id',
-                        'syllabus_id',
-                        'topic_id'
-                    )
-                    ->where('syllabus_id', $syllabus->syllabus_id)
-                    ->where('course_id', $learnerCourse->course_id)
-                    // ->where('topic_id', $syllabus->topic_id)
-                    ->first();
-
-                    $rowQuizData = [
-                        "learner_course_id" => $learnerCourse->learner_course_id,
-                        "learner_id" => $learnerCourse->learner_id,
-                        "course_id" => $learnerCourse->course_id,
-                        "syllabus_id" => $syllabus->syllabus_id,
-                        "quiz_id" => $quizData->quiz_id,
-                    ];
-
-                    LearnerQuizProgress::create($rowQuizData);
-
-                    break;
-            
-                default:
-
-                    break;
+    foreach ($syllabusData as $syllabus) {
+        $rowSyllabusData = [
+            "learner_course_id" => $learnerCourse->learner_course_id,
+            "learner_id" => $learnerCourse->learner_id,
+            "course_id" => $syllabus->course_id,
+            "syllabus_id" => $syllabus->syllabus_id,
+            "category" => $syllabus->category
+        ];
+    
+        LearnerSyllabusProgress::create($rowSyllabusData);
+    
+        if ($syllabus->category === "LESSON") {
+            $lessonData = DB::table('lessons')
+                ->select(
+                    'lesson_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id'
+                )
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('course_id', $learnerCourse->course_id)
+                ->where('topic_id', $syllabus->topic_id)
+                ->first();
+    
+            if ($lessonData) {
+                $rowLessonData = [
+                    "learner_course_id" => $learnerCourse->learner_course_id,
+                    "learner_id" => $learnerCourse->learner_id,
+                    "course_id" => $learnerCourse->course_id,
+                    "syllabus_id" => $syllabus->syllabus_id,
+                    "lesson_id" => $lessonData->lesson_id,
+                ];
+    
+                LearnerLessonProgress::create($rowLessonData);
             }
-        };
-
-        DB::table('learner_syllabus_progress')
-            ->where('learner_course_id', $learnerCourse->learner_course_id)
-            ->orderBy('learner_syllabus_progress_id', 'ASC')
-            ->limit(1)
-            ->update(['status' => 'NOT YET STARTED']);
-
-        $firstTopic = DB::table('learner_syllabus_progress')
-            ->select(
-                'learner_syllabus_progress_id',
-                'learner_course_id',
-                'syllabus_id',
-                'category',
-                'status',
-            )
-            ->where('learner_course_id', $learnerCourse->learner_course_id)
-            ->orderBy('learner_course_id', 'ASC')
-            ->first();
-
+        } elseif ($syllabus->category === "ACTIVITY") {
+            $activityData = DB::table('activities')
+                ->select(
+                    'activity_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id'
+                )
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('course_id', $learnerCourse->course_id)
+                ->where('topic_id', $syllabus->topic_id)
+                ->first();
+    
+            if ($activityData) {
+                $rowActivityData = [
+                    "learner_course_id" => $learnerCourse->learner_course_id,
+                    "learner_id" => $learnerCourse->learner_id,
+                    "course_id" => $learnerCourse->course_id,
+                    "syllabus_id" => $syllabus->syllabus_id,
+                    "activity_id" => $activityData->activity_id,
+                ];
+    
+                LearnerActivityProgress::create($rowActivityData);
+            }
+        } elseif ($syllabus->category === "QUIZ") {
+            $quizData = DB::table('quizzes')
+                ->select(
+                    'quiz_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id'
+                )
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('course_id', $learnerCourse->course_id)
+                ->where('topic_id', $syllabus->topic_id)
+                ->first();
+    
+            if ($quizData) {
+                $rowQuizData = [
+                    "learner_course_id" => $learnerCourse->learner_course_id,
+                    "learner_id" => $learnerCourse->learner_id,
+                    "course_id" => $learnerCourse->course_id,
+                    "syllabus_id" => $syllabus->syllabus_id,
+                    "quiz_id" => $quizData->quiz_id,
+                ];
+    
+                LearnerQuizProgress::create($rowQuizData);
+            }
+        }
+    }
+    
+    $firstTopic = DB::table('learner_syllabus_progress')
+        ->select(
+            'learner_syllabus_progress_id',
+            'learner_course_id',
+            'syllabus_id',
+            'category',
+            'status'
+        )
+        ->where('learner_course_id', $learnerCourse->learner_course_id)
+        ->orderBy('learner_course_id', 'ASC')
+        ->first();
+    
+    if ($firstTopic) {
         switch ($firstTopic->category) {
             case "LESSON":
                 DB::table('learner_lesson_progress')
-                ->where('learner_course_id', $learnerCourse->learner_course_id)
-                ->orderBy('learner_lesson_progress_id','ASC')
-                ->limit(1)
-                ->update(['status' => 'NOT YET STARTED']);
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->orderBy('learner_lesson_progress_id', 'ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
                 break;
             case "ACTIVITY":
                 DB::table('learner_activity_progress')
-                ->where('learner_course_id', $learnerCourse->learner_course_id)
-                ->orderBy('learner_activity_progress_id','ASC')
-                ->limit(1)
-                ->update(['status' => 'NOT YET STARTED']);
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->orderBy('learner_activity_progress_id', 'ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
                 break;
             case "QUIZ":
                 DB::table('learner_quiz_progress')
-                ->where('learner_course_id', $learnerCourse->learner_course_id)
-                ->orderBy('learner_quiz_progress_id','ASC')
-                ->limit(1)
-                ->update(['status' => 'NOT YET STARTED']);
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->orderBy('learner_quiz_progress_id', 'ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
                 break;
             default:
                 break;
-        };
+        }
+    }
+
+        
+    return redirect()->back()->with('message' , 'Course Status successfully changed');
 
     } catch (\Exception $e) {
         dd($e->getMessage());
     }
-    return redirect()->back()->with('message' , 'Course Status successfully changed');
 }
 
 public function reject_learner_course(LearnerCourse $learnerCourse) {
@@ -732,11 +1190,35 @@ public function reject_learner_course(LearnerCourse $learnerCourse) {
                     ->where('course_id', $learnerCourse->course_id)
                     ->delete();
 
-        DB::table('learner_quiz_progress')
+        DB::table('learner_quiz_output')
                     ->where('learner_course_id', $learnerCourse->learner_course_id)
                     ->where('learner_id', $learnerCourse->learner_id)
                     ->where('course_id', $learnerCourse->course_id)
                     ->delete();
+
+        DB::table('learner_pre_assessment_progress')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->where('learner_id', $learnerCourse->learner_id)
+                    ->where('course_id', $learnerCourse->course_id)
+                    ->delete();                    
+                    
+        DB::table('learner_pre_assessment_output')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->where('learner_id', $learnerCourse->learner_id)
+                    ->where('course_id', $learnerCourse->course_id)
+                    ->delete();   
+                
+        DB::table('learner_post_assessment_output')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->where('learner_id', $learnerCourse->learner_id)
+                    ->where('course_id', $learnerCourse->course_id)
+                    ->delete(); 
+
+        DB::table('learner_post_assessment_progress')
+                    ->where('learner_course_id', $learnerCourse->learner_course_id)
+                    ->where('learner_id', $learnerCourse->learner_id)
+                    ->where('course_id', $learnerCourse->course_id)
+                    ->delete(); 
 
     } catch (\Exception $e) {
         dd($e->getMessage());

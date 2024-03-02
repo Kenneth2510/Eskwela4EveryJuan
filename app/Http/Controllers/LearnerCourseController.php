@@ -803,36 +803,38 @@ class LearnerCourseController extends Controller
             ->orderBy('attempt', 'DESC')
             ->first();
 
+                if($courseData->course_progress === 'COMPLETED') {
+                    // compute now the grades
+                    $activityGrade = 0;
+                    $quizGrade = 0;
+                    $postAssessmentGrade = 0;
+                    $preAssessmentGrade = 0;
+                    $totalGrade = 0;
 
-                      // compute now the grades
-                      $activityGrade = 0;
-                      $quizGrade = 0;
-                      $postAssessmentGrade = 0;
-                      $preAssessmentGrade = 0;
-                      $totalGrade = 0;
-          
-                      // activity
-                      $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
-                      $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
-                      $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
-                      $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
-          
-          
-                      $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
-          
-                       
-                      if ($totalGrade >= 90) {
-                          $remarks = 'Excellent';
-                      } elseif ($totalGrade >= 80) {
-                          $remarks = 'Very Good';
-                      } elseif ($totalGrade >= 70) {
-                          $remarks = 'Good';
-                      } elseif ($totalGrade > 50) {
-                          $remarks = 'Satisfactory';
-                      } else {
-                          $remarks = 'Needs Improvement';
-                      }
+                    // activity
+                    $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
+                    $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
+                    $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
+                    $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
 
+
+                    $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
+
+                    
+                    if ($totalGrade >= 90) {
+                        $remarks = 'Excellent';
+                    } elseif ($totalGrade >= 80) {
+                        $remarks = 'Very Good';
+                    } elseif ($totalGrade >= 70) {
+                        $remarks = 'Good';
+                    } elseif ($totalGrade > 50) {
+                        $remarks = 'Satisfactory';
+                    } else {
+                        $remarks = 'Needs Improvement';
+                    }
+
+                }
+                  
                     $learnerBusinessData = DB::table('business')
                     ->select(
                         'business_name',
@@ -846,39 +848,70 @@ class LearnerCourseController extends Controller
                     ->where('learner_id', $learner->learner_id)
                     ->first();
 
-                $data = [
-                    'title' => 'Course Gradesheet',
-                    'scripts' => ['/learner_post_assessment.js'],
-                    'mainBackgroundCol' => '#00693e',
-                    'businessData' => $learnerBusinessData,
-                    'courseData' => $courseData,
-                    'activityScoresData' => $learnerActivityScoresData,
-                    'quizScoresData' => $learnerQuizScoresData,
-                    'preAssessmentData' => $learnerPreAssessmentGrade,
-                    'postAssessmentGrade' => $learnerPostAssessmentGrade,
-                    'postAssessmentData' => $learnerPostAssessmentData,
+                
+                if($courseData->course_progress === 'COMPLETED') {
+                    $data = [
+                        'title' => 'Course Gradesheet',
+                        'scripts' => ['/learner_post_assessment.js'],
+                        'mainBackgroundCol' => '#00693e',
+                        'businessData' => $learnerBusinessData,
+                        'courseData' => $courseData,
+                        'activityScoresData' => $learnerActivityScoresData,
+                        'quizScoresData' => $learnerQuizScoresData,
+                        'preAssessmentData' => $learnerPreAssessmentGrade,
+                        'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                        'postAssessmentData' => $learnerPostAssessmentData,
+    
+                        'learnerLessonsData' => $learnerLessonsData,
+    
+                        'activityLearnerSumScore' => $activityLearnerSumScore,
+                        'activityTotalSum' => $activityTotalSum,
+                        'activityGrade' => $activityGrade,
+    
+                        'quizLearnerSumScore' => $quizLearnerSumScore,
+                        'quizTotalSum' => $quizTotalSum,
+                        'quizGrade' => $quizGrade,
+    
+                        'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                        'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
+                        'postAssessmentScoreGrade' => $postAssessmentGrade,
+    
+                        'preAssessmentGradeData' => $preAssessmentGrade,
+                        'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                        'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+    
+                        'totalGrade' => $totalGrade,
+                        'remarks' => $remarks,
+                    ];
+                } else {
+                    $data = [
+                        'title' => 'Course Gradesheet',
+                        'scripts' => ['/learner_post_assessment.js'],
+                        'mainBackgroundCol' => '#00693e',
+                        'businessData' => $learnerBusinessData,
+                        'courseData' => $courseData,
+                        'activityScoresData' => $learnerActivityScoresData,
+                        'quizScoresData' => $learnerQuizScoresData,
+                        'preAssessmentData' => $learnerPreAssessmentGrade,
+                        'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                        'postAssessmentData' => $learnerPostAssessmentData,
+    
+                        'learnerLessonsData' => $learnerLessonsData,
+    
+                        'activityLearnerSumScore' => $activityLearnerSumScore,
+                        'activityTotalSum' => $activityTotalSum,
+    
+                        'quizLearnerSumScore' => $quizLearnerSumScore,
+                        'quizTotalSum' => $quizTotalSum,
 
-                    'learnerLessonsData' => $learnerLessonsData,
+                        'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                        'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
 
-                    'activityLearnerSumScore' => $activityLearnerSumScore,
-                    'activityTotalSum' => $activityTotalSum,
-                    'activityGrade' => $activityGrade,
+                        'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                        'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+                    ];
+                }
 
-                    'quizLearnerSumScore' => $quizLearnerSumScore,
-                    'quizTotalSum' => $quizTotalSum,
-                    'quizGrade' => $quizGrade,
-
-                    'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
-                    'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
-                    'postAssessmentScoreGrade' => $postAssessmentGrade,
-
-                    'preAssessmentGradeData' => $preAssessmentGrade,
-                    'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
-                    'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
-
-                    'totalGrade' => $totalGrade,
-                    'remarks' => $remarks,
-                ];
 
                 
                             // Render the view with the Blade template

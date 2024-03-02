@@ -1,5 +1,5 @@
 @include('partials.header')
-@include('partials.sidebar')
+{{-- @include('partials.sidebar') --}}
 
 <section id="view_learner_container" class="relative w-4/5 h-full left-80">
 
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div id="maincontainer" class="relative max-h-full px-5 py-5 shadow-2xl bg-white mt-7 rounded-2xl">
+    <div id="maincontainer" class="relative max-h-full px-5 py-5 bg-white shadow-2xl mt-7 rounded-2xl">
         <div class="mb-5">
             <a href="/admin/view_course/{{$course->course_id}}" class="">
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
@@ -20,31 +20,31 @@
 
 
         <div class="flex">
-            <div id="courseSidebar" class="py-10 w-1/5 bg-seagreen">
-                <ul class="px-5 py-5 text-white text-xl font-medium">
+            <div id="courseSidebar" class="w-1/5 py-10 bg-seagreen">
+                <ul class="px-5 py-5 text-xl font-medium text-white">
                     <a href="/admin/manage_course/course_overview/{{ $course->course_id }}">
-                        <li id="courseOverviewBtn" class="selected w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-book-open text-3xl pr-2"></i>
+                        <li id="courseOverviewBtn" class="w-full px-2 py-5 mt-2 selected rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-book-open"></i>
                             Course Overview
                     </li>
                     </a>
                     <a href="/admin/manage_course/enrollees/{{ $course->course_id }}">
-                        <li id="enrolledLearnersBtn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-users text-3xl pr-2"></i>
+                        <li id="enrolledLearnersBtn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-users"></i>
                             Enrolled Learners
                     </li>
                     </a>
                     <a href="/admin/manage_course/content/{{ $course->course_id }}">
-                        <li id="courseContentBtn" class="w-full py-5 rounded-xl px-2 mt-2 hover:bg-green-900">
-                            <i class="fa-solid fa-book text-3xl pr-2"></i>
+                        <li id="courseContentBtn" class="w-full px-2 py-5 mt-2 rounded-xl hover:bg-green-900">
+                            <i class="pr-2 text-3xl fa-solid fa-book"></i>
                             Course Content
                     </li>
                     </a>
                     
-                    <li class="w-full py-3 rounded-xl px-2 mt-2">
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl">
                       
                     </li>
-                    <li class="w-full py-3 rounded-xl px-2 mt-2">
+                    <li class="w-full px-2 py-3 mt-2 rounded-xl">
                       
                     </li>
                 </ul>
@@ -55,7 +55,7 @@
                 <div id="courseOverview" class="">
                     <div class="relative z-0 pb-4 bg-black border border-gray-400 rounded-lg shadow-lg text-mainwhitebg">
                         <img class="absolute top-0 left-0 object-cover w-full h-full pointer-events-none -z-10 opacity-30" src="{{asset('images/marketing-img.png')}}" alt="computer with microphone">
-                        <div class="z-50 p-2 flex items-center justify-between">
+                        <div class="z-50 flex items-center justify-between p-2">
                            
                             {{-- subheaders --}}
                             <div class="">
@@ -83,10 +83,10 @@
                                     </button>
                                 </div>
                             </div>
-                            <div id="icon" class="my-3 mx-5 rounded-full">
+                            <div id="icon" class="mx-5 my-3 rounded-full">
                                 <img class="w-32 h-32 mx-auto my-3 bg-gray-400 rounded-full" src="{{ asset('storage/'. $course->profile_picture)}}" alt="Profile Picture">
                                 <p>Instructor</p>
-                                <p class="text-white font-medium">{{$course->instructor_fname}} {{$course->instructor_lname}} </p>
+                                <p class="font-medium text-white">{{$course->instructor_fname}} {{$course->instructor_lname}} </p>
                             </div>
                         </div>
                         

@@ -766,7 +766,7 @@ $(document).ready(function() {
         var content = tinyMCE.get("reply_textarea").getContent();
         var filesToSend = replyNowFilesArray;
     
-        var isValid = content.trim().length > 0 && filesToSend.length > 0;
+        var isValid = content.trim().length > 0 || filesToSend.length > 0;
 
     
         if (!isValid) {

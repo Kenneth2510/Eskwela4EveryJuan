@@ -87,7 +87,7 @@
 
 
                 <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/enrollment') }}">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/course/enrollment') }}">
 
                         <svg class="mx-3 duration-500 group-hover:fill-white group-hover:animate-bounce" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M14 22V18C14 17.4696 13.7893 16.9609 13.4142 16.5858C13.0391 16.2107 12.5304 16 12 16C11.4696 16 10.9609 16.2107 10.5858 16.5858C10.2107 16.9609 10 17.4696 10 18V22" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -269,7 +269,7 @@
 
 
                 <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/enrollment') }}">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/course/enrollment') }}">
 
                         <svg class="mx-3 duration-500 group-hover:fill-white group-hover:animate-bounce" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M14 22V18C14 17.4696 13.7893 16.9609 13.4142 16.5858C13.0391 16.2107 12.5304 16 12 16C11.4696 16 10.9609 16.2107 10.5858 16.5858C10.2107 16.9609 10 17.4696 10 18V22" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -302,7 +302,7 @@
                         {{-- <h1 class="hidden md:block group-hover:text-white">Performance</h1> --}}
                     </a>
                 </li>
-
+                @if ($admin->role === 'SUPER_ADMIN' || $admin->role === 'IT_DEPT')
                 <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/admins') }}">
 
@@ -313,7 +313,7 @@
                         {{-- <h1 class="hidden md:block group-hover:text-white">Admin Management</h1> --}}
                     </a>
                 </li>
-
+                @endif
                 <li id="" class="w-full py-3 rounded-lg instructor_settings hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/profile') }}">
                         
