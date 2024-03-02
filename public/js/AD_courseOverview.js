@@ -94,13 +94,14 @@ $(document).ready(function() {
         $('#learnersEnrolledArea').addClass('hidden')
         $('#gradesheetArea').addClass('hidden')
         $('#filesArea').addClass('hidden')
+        $('#courseGradesArea').addClass('hidden')
 
         $(this).css({
             'background-color': '#FFFFFF',
             'color': '#025C26',
         });
 
-        $('#learnersEnrolledBtn , #gradesheetBtn , #courseFilesBtn').css({
+        $('#learnersEnrolledBtn , #gradesheetBtn , #courseFilesBtn, #courseGradingBtn').css({
             'background-color': '#025C26',
             'color': '#ffffff',
         });
@@ -113,12 +114,13 @@ $(document).ready(function() {
         $('#learnersEnrolledArea').removeClass('hidden')
         $('#gradesheetArea').addClass('hidden')
         $('#filesArea').addClass('hidden')
+        $('#courseGradesArea').addClass('hidden')
         $(this).css({
             'background-color': '#FFFFFF',
             'color': '#025C26',
         });
 
-        $('#courseDetailsBtn , #gradesheetBtn , #courseFilesBtn').css({
+        $('#courseDetailsBtn , #gradesheetBtn , #courseFilesBtn , #courseGradingBtn').css({
             'background-color': '#025C26',
             'color': '#ffffff',
         });
@@ -131,12 +133,13 @@ $(document).ready(function() {
         $('#learnersEnrolledArea').addClass('hidden')
         $('#gradesheetArea').removeClass('hidden')
         $('#filesArea').addClass('hidden')
+        $('#courseGradesArea').addClass('hidden')
         $(this).css({
             'background-color': '#FFFFFF',
             'color': '#025C26',
         });
 
-        $('#courseDetailsBtn , #learnersEnrolledBtn , #courseFilesBtn').css({
+        $('#courseDetailsBtn , #learnersEnrolledBtn , #courseFilesBtn, #courseGradingBtn').css({
             'background-color': '#025C26',
             'color': '#ffffff',
         });
@@ -149,17 +152,37 @@ $(document).ready(function() {
         $('#learnersEnrolledArea').addClass('hidden')
         $('#gradesheetArea').addClass('hidden')
         $('#filesArea').removeClass('hidden')
+        $('#courseGradesArea').addClass('hidden')
         $(this).css({
             'background-color': '#FFFFFF',
             'color': '#025C26',
         });
 
-        $('#courseDetailsBtn , #learnersEnrolledBtn , #gradesheetBtn').css({
+        $('#courseDetailsBtn , #learnersEnrolledBtn , #gradesheetBtn, #courseGradingBtn').css({
             'background-color': '#025C26',
             'color': '#ffffff',
         });
     })
 
+
+    $('#courseGradingBtn').on('click', function(e) {
+        e.preventDefault();
+
+        $('#courseInfoArea').addClass('hidden')
+        $('#learnersEnrolledArea').addClass('hidden')
+        $('#gradesheetArea').addClass('hidden')
+        $('#filesArea').addClass('hidden')
+        $('#courseGradesArea').removeClass('hidden')
+        $(this).css({
+            'background-color': '#FFFFFF',
+            'color': '#025C26',
+        });
+
+        $('#courseDetailsBtn , #learnersEnrolledBtn , #gradesheetBtn , #courseFilesBtn').css({
+            'background-color': '#025C26',
+            'color': '#ffffff',
+        });
+    })
 
     $('#viewDetailsBtn').on('click', function() {
 
@@ -331,5 +354,124 @@ $(document).ready(function() {
             }
         });
     })
+
+
+
+
+    $('#editCourseGradesBtn').on('click', function() {
+      
+        $('#activity_percent').prop('disabled', false).focus();
+        $('#quiz_percent').prop('disabled', false);
+        $('#pre_assessment_percent').prop('disabled', false);
+        $('#post_assessment_percent').prop('disabled', false); 
+      
+        $('#saveCourseGradesBtn').removeClass('hidden')
+        $('#cancelCourseGradesBtn').removeClass('hidden')
+        $(this).addClass('hidden')
+    })
+
+    $('#cancelCourseGradesBtn').on('click', function() {
+      
+        $('#activity_percent').prop('disabled', true);
+        $('#quiz_percent').prop('disabled', true);
+        $('#pre_assessment_percent').prop('disabled', true);
+        $('#post_assessment_percent').prop('disabled', true); 
+      
+        $('#saveCourseGradesBtn').addClass('hidden')
+        $('#cancelCourseGradesBtn').addClass('hidden')
+        $('#editCourseGradesBtn').removeClass('hidden')
+
+    })
+
+
+    $('#saveCourseGradesBtn').on('click', function() {
+ 
+        let activity_percent = parseFloat($('#activity_percent').val());
+        let quiz_percent = parseFloat($('#quiz_percent').val());
+        let pre_assessment_percent = parseFloat($('#pre_assessment_percent').val());
+        let post_assessment_percent = parseFloat($('#post_assessment_percent').val());
+        
+        let total_percent = (activity_percent + quiz_percent + post_assessment_percent).toFixed(2);
+        
+        
+        // alert(total_percent)
+        // $('#totalPercent').text(total_percent)
+        var isValid = true
+
+        if (activity_percent === '') {
+        $('#activityPercentError').text('Please enter a grade');
+        isValid = false;
+        } else {
+            $('#activityPercentError').text('');
+        }
+
+        if (quiz_percent === '') {
+        $('#quizPercentError').text('Please enter a grade.');
+        isValid = false;
+        } else {
+            $('#quizPercentError').text('');
+        }
+
+        if (pre_assessment_percent === '') {
+        $('#preAssessmentPercentError').text('Please enter a grade.');
+        isValid = false;
+        } else {
+            $('#preAssessmentPercentError').text('');
+        }
+
+        if (post_assessment_percent === '') {
+        $('#post_assessment_percent').text('Please enter a grade.');
+        isValid = false;
+        } else {
+            $('#post_assessment_percent').text('');
+        }
+
+        if (Math.abs(total_percent - 1.00) > 0.01) {
+            $('#totalPercentError').text('Total percentage must approximately equal 1.00');
+            isValid = false;
+        } else {
+            $('#totalPercentError').text('');
+        }
+        
+
+        if(isValid) {
+            // var gradeData = {
+            //     activity_percent: activity_percent,
+            //     quiz_percent: quiz_percent,
+            //     pre_assessment_percent: pre_assessment_percent,
+            //     post_assessment_percent: post_assessment_percent
+            // }
+
+
+            var url = baseUrl + "/gradingSystem";
+
+            $.ajax ({
+                type: "POST",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                data: {
+                    activity_percent: activity_percent,
+                    quiz_percent: quiz_percent,
+                    pre_assessment_percent: pre_assessment_percent,
+                    post_assessment_percent: post_assessment_percent,
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.redirect_url) {
+                        window.location.href = response.redirect_url;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+
+            })
+        }
+    
+    })
+
+
 
 })

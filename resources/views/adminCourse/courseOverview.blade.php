@@ -149,6 +149,7 @@
                 <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="learnersEnrolledBtn">Learners Enrolled</li>
                 <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="gradesheetBtn">Gradesheet</li>
                 <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseFilesBtn">Course Files</li>
+                <li class="flex items-center justify-center w-full h-24 px-5 py-3 text-xl font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseGradingBtn">Grading System</li>
             </ul>
         </div>
 
@@ -211,7 +212,7 @@
                                     <td>{{ $enrollee->created_at }}</td>
                                     <td>{{ $enrollee->course_progress }}</td>
                                     <td>
-                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="rounded-xl py-1 px-3 bg-darthmouthgreen text-white hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
                                     </td>
                                 </tr>
                             @empty
@@ -330,6 +331,45 @@
                         </tbody>
                     </table>
                     <button id="addNewFileBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Add New File</button>
+                </div>
+            </div>
+
+            <div class="hidden py-5 mx-5" id="courseGradesArea">
+                <h1 class="text-4xl font-semibold">Grading System</h1>
+                <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
+
+                    <div class="mt-3" id="activityPercentArea">
+                        <label for="activity_percent" class="text-xl text-darthmouthgreen">Activities Grade</label><br>
+                        <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="activity_percent" id="activity_percent" value="{{$gradingSystem->activity_percent}}" disabled>
+                        <span id="activityPercentError" class="text-red-500"></span>
+                    </div>
+
+                    <div class="mt-3" id="quizPercentArea">
+                        <label for="quiz_percent" class="text-xl text-darthmouthgreen">Quizzes Grade</label><br>
+                        <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="quiz_percent" id="quiz_percent" value="{{$gradingSystem->quiz_percent}}" disabled>
+                        <span id="quizPercentError" class="text-red-500"></span>
+                    </div>
+                
+                    <div class="mt-3" id="preAssessmentPercentArea">
+                        <label for="pre_assessment_percent" class="text-xl text-darthmouthgreen">Pre Assessment Grade</label><br>
+                        <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="pre_assessment_percent" id="pre_assessment_percent" value="{{$gradingSystem->pre_assessment_percent}}" disabled>
+                        <span id="preAssessmentPercentError" class="text-red-500"></span>
+                    </div>
+
+                    <div class="mt-3" id="postAssessmentPercentArea">
+                        <label for="post_assessment_percent" class="text-xl text-darthmouthgreen">Post Assessment Grade</label><br>
+                        <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-darthmouthgreen" type="text" name="post_assessment_percent" id="post_assessment_percent" value="{{$gradingSystem->post_assessment_percent}}" disabled>
+                        <span id="postAssessmentPercentError" class="text-red-500"></span>
+                    </div>
+
+                    <h1 id="totalPercent"></h1>
+                    <span id="totalPercentError" class="text-red-500"></span>
+
+                    <div class="flex mt-3" id="">
+                        <button class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen" id="editCourseGradesBtn">Edit</button>
+                        <button class="hidden px-5 py-3 mx-1 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen" id="saveCourseGradesBtn">Save</button>
+                        <button class="hidden px-5 py-3 mx-1 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen" id="cancelCourseGradesBtn">Cancel</button>
+                    </div>
                 </div>
             </div>
 

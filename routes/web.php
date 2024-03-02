@@ -205,6 +205,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/admin/courseManage/{course}/generate_pdf', 'AdminCourseManageController@generate_pdf');
     Route::post('/admin/courseManage/{course}/add_file', 'AdminCourseManageController@add_file');
     Route::get('/admin/courseManage/{course}/delete_file/{fileName}', 'AdminCourseManageController@delete_file');
+    Route::post('/admin/courseManage/{course}/gradingSystem', 'AdminCourseManageController@gradingSystem');
 
     Route::post('/admin/courseManage/{course}/delete', 'AdminCourseManageController@delete_course');
 
@@ -294,6 +295,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/admin/view_admin/{admin}', 'AdminManagementController@view_admin');
     Route::post('/admin/view_admin/{admin}/update', 'AdminManagementController@update_admin');
     Route::post('/admin/view_admin/{admin}/delete', 'AdminManagementController@delete_admin');
+
+    Route::get('/admin/profile', 'AdminManagementController@settings');
+    Route::post('/admin/profile/update', 'AdminManagementController@update_settings');
+    
 });
 
 

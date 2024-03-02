@@ -220,14 +220,14 @@ class AdminManagementController extends Controller
                 if($withPass == 1) {
                     $adminData = [
                         'admin_codename' => $request->input('admin_codename'),
-                        'admin_username' => $request->input('admin_codename'),
+                        'admin_username' => $request->input('admin_username'),
                         'role' => $request->input('role'),
                         'password' => bcrypt($request->input('newPassword')),
                     ];
                 } else {
                     $adminData = [
                         'admin_codename' => $request->input('admin_codename'),
-                        'admin_username' => $request->input('admin_codename'),
+                        'admin_username' => $request->input('admin_username'),
                         'role' => $request->input('role'),
                     ];
                 }
@@ -305,6 +305,82 @@ class AdminManagementController extends Controller
                 $errors = $e->validator->errors();
                 return response()->json(['errors' => $errors], 422);
             }
+        }  else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+    public function settings(Request $request) {
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+
+            $adminData = DB::table('admin')
+            ->select(
+                'admin_id',
+                'admin_codename',
+                'role',
+                'admin_username',
+            )
+            ->where('admin_id', $admin->admin_id)
+            ->first();
+
+            $data = [
+                'title' => 'View Profile',
+                // 'scripts' => ['AD_add_new_admin.js'],
+                'admin' => $admin,
+                'adminData' => $adminData,
+            ];
+
+            return view('admin.adminSettings')
+            ->with($data);
+    
+        }  else {
+            return redirect('/admin');
+        }
+    }
+
+
+    public function update_Settings(Request $request) {
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            try {
+                $withPass = $request->input('withPass');
+
+
+
+                if($withPass == 1) {
+                    $adminData = [
+                        'admin_codename' => $request->input('admin_codename'),
+                        'admin_username' => $request->input('admin_username'),
+                        'password' => bcrypt($request->input('password')),
+                    ];
+                } else {
+                    $adminData = [
+                        'admin_codename' => $request->input('admin_codename'),
+                        'admin_username' => $request->input('admin_username'),
+                    ];
+                }
+
+                DB::table('admin')
+                ->where('admin_id', $admin->admin_id)
+                ->update($adminData);
+
+
+            session()->flash('message', 'You have successfully updated your account');
+            $data = [
+                'message' => 'You have successfully updated your account',
+                'redirect_url' => '/admin/profile',
+            ];
+
+            return response()->json($data);
+
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+            return response()->json(['errors' => $errors], 422);
+        }
+
         }  else {
             return redirect('/admin');
         }

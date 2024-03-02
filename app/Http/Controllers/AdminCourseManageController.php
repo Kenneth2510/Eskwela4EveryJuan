@@ -344,6 +344,18 @@ class AdminCourseManageController extends Controller
                 $directory = "public/courses/$folderName/documents";
     
                 $courseFiles = Storage::files($directory);
+
+                $gradingSystem = DB::table('course_grading')
+                ->select(
+                    'course_grading_id',
+                    'course_id',
+                    'activity_percent',
+                    'quiz_percent',
+                    'pre_assessment_percent',
+                    'post_assessment_percent',
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
     
                     $data = [
                         'title' => 'Course Overview',
@@ -364,6 +376,7 @@ class AdminCourseManageController extends Controller
                         'activitySyllabus' => $activitySyllabusData,
                         'quizSyllabus' => $quizSyllabusData,
                         'courseFiles' => $courseFiles,
+                        'gradingSystem' => $gradingSystem
                     ];
     
                     // dd($data);
@@ -616,6 +629,57 @@ class AdminCourseManageController extends Controller
                 session()->flash('message', 'You cannot upload file');
                 $data = [
                     'message' => 'You cannot You cannot upload file',
+                    'redirect_url' => '/admin/courseManage/' . $course->course_id,
+                ];
+        
+                return response()->json($data);
+            }
+            }  else {
+                return redirect('/admin');
+            }
+    }
+
+    public function gradingSystem(Course $course, Request $request) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+    
+            if (in_array($adminSession->role, ['IT_DEPT', 'SUPER_ADMIN', 'COURSE_SUPERVISOR'])) {
+
+                try {
+
+                    // dd($request);
+
+                    $gradeData = [
+                        'activity_percent' => $request->input('activity_percent'),
+                        'quiz_percent' => $request->input('quiz_percent'),
+                        'pre_assessment_percent' => $request->input('pre_assessment_percent'),
+                        'post_assessment_percent' => $request->input('post_assessment_percent'),    
+                    ];
+
+
+                    // dd($gradeData);
+
+                    DB::table('course_grading')
+                    ->where('course_id' , $course->course_id)
+                    ->update($gradeData);
+
+                    session()->flash('message', 'Course Grading has been updated');
+                    $data = [
+                        'message' => 'Course Grading has been updated',
+                        'redirect_url' => '/admin/courseManage/' . $course->course_id,
+                    ];
+            
+                    return response()->json($data);
+
+                } catch (ValidationException $e) {
+                    $errors = $e->validator->errors();
+                    return response()->json(['errors' => $errors], 422);
+                }
+                
+            } else {
+                session()->flash('message', 'You do not have privilege to access');
+                $data = [
+                    'message' => 'You do not have privilege to access',
                     'redirect_url' => '/admin/courseManage/' . $course->course_id,
                 ];
         
