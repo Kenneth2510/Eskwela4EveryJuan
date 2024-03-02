@@ -88,9 +88,6 @@ class AdminMessageController extends Controller
             }  else {
                 return redirect('/admin');
             }
-    
-    
-
     }
 
     public function search_recipient(Request $request) {

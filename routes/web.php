@@ -284,6 +284,10 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/admin/performance', 'AdminPerformanceController@index');
+    Route::get('/admin/performance/learnerOverviewData', 'AdminPerformanceController@learner_overview');
+    Route::get('/admin/performance/instructorOverviewData', 'AdminPerformanceController@instructor_overview');
+    Route::get('/admin/performance/courseOverviewData', 'AdminPerformanceController@course_overview');
+
 });
 
 
