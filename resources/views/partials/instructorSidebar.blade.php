@@ -1,4 +1,4 @@
-<section class="fixed z-20 w-full h-auto overflow-hidden text-black md:w-1/3 lg:w-2/12 md:relative" id="sidebar_full">
+<section class="fixed z-20 w-full h-auto overflow-hidden text-black md:w-2/5 lg:w-2/12 md:relative" id="sidebar_full">
     
     <div class="fixed flex flex-col justify-between w-full bg-mainwhitebg md:h-screen md:relative lg:border-r-4 border-darthmouthgreen" id="instructorSidebar">
 
@@ -264,5 +264,9 @@
             $('#sidebar_full').removeClass('hidden');
             $('#sidebar_full, #sidebar_half').css('width', '23%');
         });
+
+        $('#instructor_profile').on('click', ()=>{
+            $('#sm-sidebar').toggleClass('hidden')
+        })
     });
 </script>

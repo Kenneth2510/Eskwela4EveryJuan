@@ -222,13 +222,13 @@
     $(document).ready(function() {
         $('.AIHelper').on('click', (e)=> {
             e.preventDefault();
-            $('.sideProfile').toggleClass('hidden')
+            $('.sideProfile').toggleClass('md:block')
             $('#AIHelper').toggleClass('hidden')
         })
 
         $('#AIClose').on('click', ()=> {
             $('#AIHelper').toggleClass('hidden')
-            $('.sideProfile').toggleClass('hidden')
+            $('.sideProfile').toggleClass('md:block')
         })
     })
 </script>

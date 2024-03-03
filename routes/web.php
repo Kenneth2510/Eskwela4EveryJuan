@@ -32,6 +32,7 @@ Route::controller(UserController::class)->group(function() {
 
 Route::controller(UserController::class)->group(function() {
     Route::get('/landing', 'landing');
+    Route::get('/terms', 'terms');
 });
 
 Route::controller(LearnerController::class)->group(function() {
