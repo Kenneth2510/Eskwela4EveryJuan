@@ -4661,22 +4661,32 @@ class LearnerCourseController extends Controller
                 $preAssessmentLearnerSumScore += $pre_assessment->score;
             }
 
-            // compute now the grades
-            $activityGrade = 0;
-            $quizGrade = 0;
-            $postAssessmentGrade = 0;
-            $preAssessmentGrade = 0;
-            $totalGrade = 0;
+            $courseGrading = DB::table('course_grading')
+            ->select(
+                'activity_percent',
+                'quiz_percent',
+                'pre_assessment_percent',
+                'post_assessment_percent',
+            )
+            ->where('course_id', $course->course_id)
+            ->first();
 
-            // activity
-            $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
-            $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
-            $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
-            $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
-
-
-            $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
-
+                      // compute now the grades
+                      $activityGrade = 0;
+                      $quizGrade = 0;
+                      $postAssessmentGrade = 0;
+                      $preAssessmentGrade = 0;
+                      $totalGrade = 0;
+          
+                      // activity
+                      $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * $courseGrading->activity_percent;
+                      $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * $courseGrading->quiz_percent;
+                      $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * $courseGrading->pre_assessment_percent;
+                      $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * $courseGrading->post_assessment_percent;
+          
+          
+                      $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
+          
              
             if ($totalGrade >= 90) {
                 $remarks = 'Excellent';

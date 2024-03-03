@@ -70,7 +70,7 @@
                         <label for="reply_document_upload" class="px-5 py-3 mx-1 text-white rounded-full bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen"><i class="fa-solid fa-file" style="color: #ffffff;"></i></label>
                         <input type="file" id="reply_document_upload" name="reply_document_upload[]" accept=".pdf,.doc,.docx" multiple style="display: none;">
                         
-                        <textarea style="height: 300px;" name="reply_textarea" id="reply_textarea" class="w-9/12 p-3 border rounded-lg max-w-10/12 border-darthmouthgreen"></textarea>
+                        <textarea style="height: 280px;" name="reply_textarea" id="reply_textarea" class="w-9/12 p-3 border rounded-lg max-w-10/12 border-darthmouthgreen"></textarea>
                         <button id="replyNowBtn" class="px-5 py-3 ml-2 text-white bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen rounded-xl">Send</button>
                     </div>
                     <div id="replyNowFileList"></div>

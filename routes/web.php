@@ -288,6 +288,22 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/admin/performance/instructorOverviewData', 'AdminPerformanceController@instructor_overview');
     Route::get('/admin/performance/courseOverviewData', 'AdminPerformanceController@course_overview');
 
+    Route::get('/admin/performance/learners', 'AdminPerformanceController@learners');
+    Route::get('/admin/performance/learners/view/{learner}', 'AdminPerformanceController@view_learner');
+    Route::get('/admin/performance/learners/view/{learner}/sessionData', 'AdminPerformanceController@sessionData');
+    Route::get('/admin/performance/learners/view/{learner}/totalEnrolledCourses', 'AdminPerformanceController@enrolledCoursesPerformances');
+    Route::get('/admin/performance/learners/view/{learner}/enrolledCoursesData', 'AdminPerformanceController@enrolledCoursesPerformancesData');
+    Route::get('/admin/performance/learners/view/{learner}/course/{course}', 'AdminPerformanceController@coursePerformance');
+    Route::get('/admin/performance/learners/view/{learner}/course/{course}/coursePerformance', 'AdminPerformanceController@coursePerformanceData');
+    Route::get('/admin/performance/learners/view/{learner}/course/{course}/syllabusPerformance', 'AdminPerformanceController@syllabusPerformanceData');
+
+    
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/pre_assessment/view_output', 'AdminPerformanceController@view_output_pre_assessment');
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/pre_assessment/view_output/json', 'AdminPerformanceController@view_output_pre_assessment_json');
+
+
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/post_assessment/view_output/{attempt}', 'AdminPerformanceController@view_output_post_assessment');
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/post_assessment/view_output/{attempt}/json', 'AdminPerformanceController@view_output_post_assessment_json');
 });
 
 

@@ -8,7 +8,7 @@
 
 <section class="w-screen px-2 pt-[40px] mx-2 mt-2  overscroll-auto md:overflow-auto">
     <div class="flex justify-between px-10">
-        <h1 class="text-6xl font-bold text-darthmouthgreen">Performance</h1>
+        <h1 class="text-6xl font-bold text-darthmouthgreen">Performance Overview</h1>
         <div class="">
             <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
         </div>
@@ -30,7 +30,7 @@
                     <p class="mt-10 text-xl font-semibold">total learners</p>
                 </div>
                 <div class="px-5 my-5 text-right">
-                    <a href="" class="text-right underline text-darthmouthgreen text-md">view list of learners</a>
+                    <a href="{{ url("/admin/performance/learners") }}" class="text-right underline text-darthmouthgreen text-md">view list of learners</a>
                 </div>
                 
             </div>
