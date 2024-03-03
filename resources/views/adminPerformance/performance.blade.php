@@ -96,7 +96,7 @@
                     <p class="mt-10 text-xl font-semibold">total instructors</p>
                 </div>
                 <div class="px-5 my-5 text-right">
-                    <a href="" class="text-right underline text-darthmouthgreen text-md">view list of instructors</a>
+                    <a href="{{ url("/admin/performance/instructors") }}" class="text-right underline text-darthmouthgreen text-md">view list of instructors</a>
                 </div>
                 
             </div>
@@ -162,7 +162,7 @@
                     <p class="mt-10 text-xl font-semibold">total courses</p>
                 </div>
                 <div class="px-5 my-5 text-right">
-                    <a href="" class="text-right underline text-darthmouthgreen text-md">view list of courses</a>
+                    <a href="{{ url("/admin/performance/courses") }}" class="text-right underline text-darthmouthgreen text-md">view list of courses</a>
                 </div>
                 
             </div>

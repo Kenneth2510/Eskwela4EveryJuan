@@ -1056,6 +1056,8 @@ class AdminPerformanceController extends Controller
             ->where('course_id', $course)
             ->first();
 
+
+            if($courseData->course_progress === 'COMPLETED') {
                       // compute now the grades
                       $activityGrade = 0;
                       $quizGrade = 0;
@@ -1071,7 +1073,7 @@ class AdminPerformanceController extends Controller
           
           
                       $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
-                      $totalGrade = round($totalGrade, 2);
+          
                        
                       if ($totalGrade >= 90) {
                           $remarks = 'Excellent';
@@ -1117,6 +1119,36 @@ class AdminPerformanceController extends Controller
                     'totalGrade' => $totalGrade,
                     'remarks' => $remarks,
                 ];
+            }
+
+            $data = [
+                'title' => 'Course Gradesheet',
+                'scripts' => ['/learner_post_assessment.js'],
+                'mainBackgroundCol' => '#00693e',
+                'courseData' => $courseData,
+                'activityScoresData' => $learnerActivityScoresData,
+                'quizScoresData' => $learnerQuizScoresData,
+                'preAssessmentData' => $learnerPreAssessmentGrade,
+                'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                'postAssessmentData' => $learnerPostAssessmentData,
+
+                'learnerLessonsData' => $learnerLessonsData,
+
+                'activityLearnerSumScore' => $activityLearnerSumScore,
+                'activityTotalSum' => $activityTotalSum,
+       
+
+                'quizLearnerSumScore' => $quizLearnerSumScore,
+                'quizTotalSum' => $quizTotalSum,
+
+                'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
+      
+
+                'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+
+            ];
 
                 // dd($data);
                 // return view('learner_course.courseGrades', compact('learner'))
@@ -2207,6 +2239,1479 @@ class AdminPerformanceController extends Controller
                 'learnerQuizCompletedPerformanceData' => $learnerQuizCompletedPerformanceData,
                 'averageQuizTimeFormatted' => $averageQuizTimeFormatted,
                 ];
+
+            return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+
+
+
+
+
+    public function instructors() {
+        return $this->search_instructor();
+    }
+
+    public function search_instructor() {
+
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+            $admin_codename = $admin['admin_codename'];
+        } else {
+            return redirect('/admin');
+        }
+
+        $search_by = request('searchBy');
+        $search_val = request('searchVal');
+        
+        $filter_date = request('filterDate');
+        $filter_status = request('filterStatus');
+
+
+        try {
+            $query = DB::table('instructor')
+                ->orderBy('created_at', 'DESC');
+
+            if(!empty($filter_date) || !empty($filter_status)) {
+                if(!empty($filter_date) && empty($filter_date)) {
+                    $query->where('created_at', 'LIKE', $filter_date.'%');
+                } elseif (empty($filter_date) && !empty($filter_status)) {
+                    $query->where('status', 'LIKE', $filter_status.'%');
+                } else {
+                    $query->where('created_at', 'LIKE', $filter_date.'%')
+                        ->where('status', 'LIKE', $filter_status.'%');
+                }
+            }
+
+            if(!empty($search_by) && !empty($search_val)) {
+                if($search_by == 'name') {
+                    $query->where(function ($query) use ($search_val) {
+                        $query->where('instructor_fname', 'LIKE', $search_val.'%')
+                            ->orWhere('instructor_lname', 'LIKE', $search_val.'%');
+                    });
+                } else {
+                    $query->where($search_by, 'LIKE', $search_val.'%');
+                }
+            }
+
+
+            $instructors = $query->paginate(10);
+
+            return view('adminPerformance.instructors', compact('instructors'))
+                ->with(['title' => 'Instructor Management', 'admin' => $admin]);
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+
+
+    public function view_instructor(Instructor $instructor) {
+        
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+
+            try {
+                $courses = DB::table('course')
+                    ->select(
+                        "course.course_id",
+                        "course.course_name",
+                        "course.course_code",
+                        "instructor.instructor_lname",
+                        "instructor.instructor_fname",
+                        "instructor.profile_picture"
+                    )
+                ->where('course.instructor_id', '=', $instructor->instructor_id)
+                ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                ->orderBy("course.created_at", "ASC")
+                ->get();
+
+                $instructorData = DB::table('instructor')
+                ->select(
+                    DB::raw('CONCAT(instructor_fname, " ", instructor_lname) as name'),
+                )
+                ->where('instructor_id', $instructor->instructor_id)
+                ->first();
+
+                $data = [
+                    'title' => 'Performance',
+                    'scripts' => ['AD_instructor_performance.js'],
+                    'courses' => $courses,
+                    'instructor' => $instructorData,
+                    'admin' => $adminSession,
+                ];
+        
+                // dd($data);
+                return view('adminPerformance.instructorPerformance')
+                ->with($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+    public function i_sessionData(Instructor $instructor) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+
+            try{
+                $totalsPerDay = DB::table('session_logs')
+                ->select(DB::raw('DATE(session_in) as date'), DB::raw('SUM(time_difference) as total_seconds'))
+                ->where('session_user_id', $instructor->instructor_id)
+                ->where('session_user_type', 'INSTRUCTOR')
+                ->groupBy(DB::raw('DATE(session_in)'))
+                ->get();
+
+                $data = [
+                    'title' => 'Performance',
+                    'totalsPerDay' => $totalsPerDay,
+                ];
+                
+        
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+    public function i_totalCourseNum (Instructor $instructor) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try{
+
+                $totalCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->count();
+
+                $totalPendingCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Pending')
+                ->count();
+
+                $totalApprovedCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Approved')
+                ->count();
+
+                $totalRejectedCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Rejected')
+                ->count();
+
+                $allInstructorCourses = DB::table('course')
+                ->select(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_description',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.created_at',
+                    'course.updated_at',
+                    DB::raw('COALESCE(COUNT(learner_course.learner_course_id), 0) as learnerCount'),
+                    DB::raw('COALESCE(COUNT(CASE WHEN learner_course.status = "Approved" THEN learner_course.learner_course_id END), 0) as approvedLearnerCount')
+                )
+                ->leftJoin('learner_course', 'learner_course.course_id', '=', 'course.course_id')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->groupBy(
+                    'course.course_id',
+                    'course.course_name',
+                    'course.course_code',
+                    'course.course_description',
+                    'course.course_status',
+                    'course.course_difficulty',
+                    'course.created_at',
+                    'course.updated_at'
+                )
+                ->get();
+            
+            // dd($allInstructorCourses);
+
+                $totalLearnersCount = 0;
+                $totalPendingLearnersCount = 0;
+                $totalApprovedLearnersCount = 0;
+                $totalRejectedLearnersCount = 0;
+
+                $totalSyllabusCount = 0;
+                $totalLessonsCount = 0;
+                $totalActivitiesCount = 0;
+                $totalQuizzesCount = 0;
+
+                foreach ($allInstructorCourses as $course) {
+
+                    $totalLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->count();
+
+                    $totalPendingLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->where('status', 'Pending')
+                    ->count();
+
+                    $totalApprovedLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->where('status', 'Approved')
+                    ->count();
+
+                    $totalRejectedLearnersCount += DB::table('learner_course')
+                    ->where('course_id', $course->course_id)
+                    ->where('status', 'Rejected')
+                    ->count();
+
+                    $totalSyllabusCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->count();
+
+                    $totalLessonsCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'LESSON')
+                    ->count();
+
+                    $totalActivitiesCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'ACTIVITY')
+                    ->count();
+
+                    $totalQuizzesCount += DB::table('syllabus')
+                    ->where('course_id', $course->course_id)
+                    ->where('category', 'QUIZ')
+                    ->count();
+                }
+
+                $data = [
+                    'title' => 'Performance',
+                    'scripts' => ['instructor_performance.js'],
+                    'totalCourseNum' => $totalCourseNum,
+                    'allInstructorCourses' => $allInstructorCourses,
+                    'totalLearnersCount' => $totalLearnersCount,
+                    'totalPendingLearnersCount' => $totalPendingLearnersCount,
+                    'totalApprovedLearnersCount' => $totalApprovedLearnersCount,
+                    'totalRejectedLearnersCount' => $totalRejectedLearnersCount,
+                    'totalSyllabusCount' => $totalSyllabusCount,
+                    'totalLessonsCount' => $totalLessonsCount,
+                    'totalActivitiesCount' => $totalActivitiesCount,
+                    'totalQuizzesCount' => $totalQuizzesCount,
+                    'totalPendingCourseNum' => $totalPendingCourseNum,
+                    'totalApprovedCourseNum' => $totalApprovedCourseNum,
+                    'totalRejectedCourseNum' => $totalRejectedCourseNum,
+                ];
+
+                // dd($data);
+        
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+    public function i_courseChartData(Instructor $instructor, Request $request) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try{
+                
+                $selectedCourse = $request->input('selectedCourse');
+
+                $totalCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->count();
+
+                $totalPendingCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Pending')
+                ->count();
+
+                $totalApprovedCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Approved')
+                ->count();
+
+                $totalRejectedCourseNum = DB::table('course')
+                ->where('instructor_id', $instructor->instructor_id)
+                ->where('course_status', 'Rejected')
+                ->count();
+
+                if ($selectedCourse === "ALL") {
+                    $courseData = DB::table('learner_course')
+                    ->select(
+                        'learner_course.learner_course_id',
+                        'learner_course.status',
+                        DB::raw('YEAR(learner_course.created_at) as year'), // Extract year
+                        DB::raw('MONTH(learner_course.created_at) as month'), // Extract month
+                        DB::raw('DAY(learner_course.created_at) as day'), // Extract day
+                        DB::raw('TIME(learner_course.created_at) as time'), // Extract time
+                        'course.course_name',
+                        'learner_course.course_id',
+                    )
+                    ->join('course', 'learner_course.course_id', '=', 'course.course_id')
+                    ->where('course.instructor_id', $instructor->instructor_id)
+                    ->get();
+
+                    $data = [
+                        'title' => 'Performance',
+                        'scripts' => ['instructor_performance.js'],
+                        'courseData' => $courseData,
+                        'totalCourseNum' => $totalCourseNum,
+                        'totalPendingCourseNum' => $totalPendingCourseNum,
+                        'totalApprovedCourseNum' => $totalApprovedCourseNum,
+                        'totalRejectedCourseNum' => $totalRejectedCourseNum
+                        ];
+                } else {
+                    $courseData = DB::table('learner_course')
+                    ->select(
+                        'learner_course.learner_course_id',
+                        'learner_course.status',
+                        DB::raw('YEAR(learner_course.created_at) as year'), // Extract year
+                        DB::raw('MONTH(learner_course.created_at) as month'), // Extract month
+                        DB::raw('DAY(learner_course.created_at) as day'), // Extract day
+                        DB::raw('TIME(learner_course.created_at) as time'), // Extract time
+                        'learner_course.course_id',
+
+                        'course.course_name',
+                        'course.course_status',
+                        'course.course_code',
+                        'course.created_at',
+                        'course.updated_at',
+                    )
+                    ->join('course', 'learner_course.course_id', '=', 'course.course_id')
+                    ->where('course.instructor_id', $instructor->instructor_id)
+                    ->where('learner_course.course_id', $selectedCourse)
+                    ->get();
+
+                    $totalLearnersCount = 0;
+                    $totalPendingLearnersCount = 0;
+                    $totalApprovedLearnersCount = 0;
+                    $totalRejectedLearnersCount = 0;
+    
+                    $totalSyllabusCount = 0;
+                    $totalLessonsCount = 0;
+                    $totalActivitiesCount = 0;
+                    $totalQuizzesCount = 0;
+
+                    if ($courseData->isNotEmpty()) {
+                        $course = $courseData->first();
+
+                        $totalLearnersCount += DB::table('learner_course')
+                        ->where('course_id', $course->course_id)
+                        ->count();
+    
+                        $totalPendingLearnersCount += DB::table('learner_course')
+                        ->where('course_id', $course->course_id)
+                        ->where('status', 'Pending')
+                        ->count();
+    
+                        $totalApprovedLearnersCount += DB::table('learner_course')
+                        ->where('course_id', $course->course_id)
+                        ->where('status', 'Approved')
+                        ->count();
+    
+                        $totalRejectedLearnersCount += DB::table('learner_course')
+                        ->where('course_id', $course->course_id)
+                        ->where('status', 'Rejected')
+                        ->count();
+    
+                        $totalSyllabusCount += DB::table('syllabus')
+                        ->where('course_id', $course->course_id)
+                        ->count();
+    
+                        $totalLessonsCount += DB::table('syllabus')
+                        ->where('course_id', $course->course_id)
+                        ->where('category', 'LESSON')
+                        ->count();
+    
+                        $totalActivitiesCount += DB::table('syllabus')
+                        ->where('course_id', $course->course_id)
+                        ->where('category', 'ACTIVITY')
+                        ->count();
+    
+                        $totalQuizzesCount += DB::table('syllabus')
+                        ->where('course_id', $course->course_id)
+                        ->where('category', 'QUIZ')
+                        ->count();
+
+
+                        $data = [
+                            'title' => 'Performance',
+                            'scripts' => ['instructor_performance.js'],
+                            'courseData' => $courseData,
+                            'totalLearnersCount' => $totalLearnersCount,
+                            'totalPendingLearnersCount' => $totalPendingLearnersCount,
+                            'totalApprovedLearnersCount' => $totalApprovedLearnersCount,
+                            'totalRejectedLearnersCount' => $totalRejectedLearnersCount,
+                            'totalSyllabusCount' => $totalSyllabusCount,
+                            'totalLessonsCount' => $totalLessonsCount,
+                            'totalActivitiesCount' => $totalActivitiesCount,
+                            'totalQuizzesCount' => $totalQuizzesCount,'totalCourseNum' => $totalCourseNum,
+                            'totalPendingCourseNum' => $totalPendingCourseNum,
+                            'totalApprovedCourseNum' => $totalApprovedCourseNum,
+                            'totalRejectedCourseNum' => $totalRejectedCourseNum
+                            ];
+                    } else {
+                        $data = [
+                            'title' => 'Performance',
+                            'scripts' => ['instructor_performance.js'],
+                            'courseData' => $courseData,
+                            'totalLearnersCount' => $totalLearnersCount,
+                            'totalPendingLearnersCount' => $totalPendingLearnersCount,
+                            'totalApprovedLearnersCount' => $totalApprovedLearnersCount,
+                            'totalRejectedLearnersCount' => $totalRejectedLearnersCount,
+                            'totalSyllabusCount' => $totalSyllabusCount,
+                            'totalLessonsCount' => $totalLessonsCount,
+                            'totalActivitiesCount' => $totalActivitiesCount,
+                            'totalQuizzesCount' => $totalQuizzesCount,'totalCourseNum' => $totalCourseNum,
+                            'totalPendingCourseNum' => $totalPendingCourseNum,
+                            'totalApprovedCourseNum' => $totalApprovedCourseNum,
+                            'totalRejectedCourseNum' => $totalRejectedCourseNum
+                            ];
+                    }
+                    
+
+                    
+                }
+
+    
+            return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+
+    public function courses() {
+        return $this->search_course();
+    }
+    
+    public function search_course() {
+    
+        if (auth('admin')->check()) {
+            $admin = session('admin');
+            // dd($admin);
+    
+    
+            $search_by = request('searchBy');
+            $search_val = request('searchVal');
+            
+            $filter_date = request('filterDate');
+            $filter_status = request('filterStatus');
+    
+    
+            try {
+                $query = DB::table('course')
+                    ->select(
+                        'course.course_id',
+                        'course.course_name',
+                        'course.course_code',
+                        'course.course_status',
+                        'course.course_difficulty',
+                        'course.course_description',
+                        'instructor.instructor_lname',
+                        'instructor.instructor_fname',
+                        'course.created_at',
+                    )
+                    ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                    ->orderBy('course.created_at', 'DESC');
+    
+                if(!empty($filter_date) || !empty($filter_status)) {
+                    if(!empty($filter_date) && empty($filter_date)) {
+                        $query->where('course.created_at', 'LIKE', $filter_date.'%');
+                    } elseif (empty($filter_date) && !empty($filter_status)) {
+                        $query->where('course.course_status', 'LIKE', $filter_status.'%');
+                    } else {
+                        $query->where('course.created_at', 'LIKE', $filter_date.'%')
+                            ->where('course.course_status', 'LIKE', $filter_status.'%');
+                    }
+                }
+    
+                if(!empty($search_by) && !empty($search_val)) {
+                    if($search_by == 'instructor') {
+                        $query->where(function ($query) use ($search_val) {
+                            $query->where('instructor_fname', 'LIKE', $search_val.'%')
+                                ->orWhere('instructor_lname', 'LIKE', $search_val.'%');
+                        });
+                    } else {
+                        $query->where('course.'.$search_by, 'LIKE', $search_val.'%');
+                    }
+                }
+    
+    
+                $courses = $query->paginate(10);
+    
+                $data = ['title' => 'Course Management',
+                     'admin' => $admin
+    
+                ];
+    
+                return view('adminPerformance.courses', compact('courses'))
+                    ->with($data);
+    
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+    public function view_course(Course $course) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            try {
+                $course = DB::table('course')
+                    ->select(
+                        "course.course_id",
+                        "course.course_name",
+                        "course.course_code",
+                        "instructor.instructor_lname",
+                        "instructor.instructor_fname",
+                        "instructor.profile_picture"
+                    )
+                ->join('instructor', 'instructor.instructor_id', '=', 'course.instructor_id')
+                ->orderBy("course.created_at", "ASC")
+                ->where('course.course_id', $course->course_id)
+                ->first();
+
+                $syllabus = DB::table('syllabus')
+                ->select(
+                    'syllabus_id',
+                    'topic_id',
+                    'topic_title',
+                    'category',
+                )
+                ->where('course_id', $course->course_id)
+                ->orderBy('topic_id', 'ASC')
+                ->get();
+
+
+                
+                $data = [
+                    'title' => 'Course Performance',
+                    'scripts' => ['AD_course_performance.js'],
+                    'course' => $course,
+                    'syllabus' => $syllabus,
+                    'admin' => $adminSession,
+                ];
+
+                // dd($data);
+                return view('adminPerformance.coursePerformance')
+                ->with($data);
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        }  else {
+            return redirect('/admin');
+        } 
+    }
+
+
+    public function selectedCoursePerformance(Course $course) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+
+            try {
+                $totalLearnerCourseCount = DB::table('learner_course')
+                ->where('course_id', $course->course_id)
+                ->count();
+                
+                $totalApprovedLearnerCourseCount = DB::table('learner_course')
+                ->where('course_id', $course->course_id)
+                ->where('status', 'Approved')
+                ->count();
+
+                $totalPendingLearnerCourseCount = DB::table('learner_course')
+                ->where('course_id', $course->course_id)
+                ->where('status', 'Pending')
+                ->count();
+
+                $totalRejectedLearnerCourseCount = DB::table('learner_course')
+                ->where('course_id', $course->course_id)
+                ->where('status', 'Rejected')
+                ->count();
+
+
+                $totalSyllabusCount = DB::table('syllabus')
+                ->where('course_id', $course->course_id)
+                ->count();
+
+                $totalLessonsCount = DB::table('syllabus')
+                ->where('course_id', $course->course_id)
+                ->where('category', 'LESSON')
+                ->count();
+
+                $totalActivitiesCount = DB::table('syllabus')
+                ->where('course_id', $course->course_id)
+                ->where('category', 'ACTIVITY')
+                ->count();
+
+                $totalQuizzesCount = DB::table('syllabus')
+                ->where('course_id', $course->course_id)
+                ->where('category', 'QUIZ')
+                ->count();
+
+                $data = [
+                    'title' => 'Performance',
+                    'totalLearnerCourseCount' => $totalLearnerCourseCount,
+                    'totalApprovedLearnerCourseCount' => $totalApprovedLearnerCourseCount,
+                    'totalPendingLearnerCourseCount' => $totalPendingLearnerCourseCount,
+                    'totalRejectedLearnerCourseCount' => $totalRejectedLearnerCourseCount,
+                    'totalSyllabusCount' => $totalSyllabusCount,
+                    'totalLessonsCount' => $totalLessonsCount,
+                    'totalActivitiesCount' => $totalActivitiesCount,
+                    'totalQuizzesCount' => $totalQuizzesCount,
+                    ];
+
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+    public function learnerCourseData(Course $course) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+
+            try {
+                // $learnerCourseData = DB::table('learner_course')
+                // ->select(
+                //     'learner_course.learner_course_id',
+                //     'learner_course.learner_id',
+                //     'learner_course.status',
+
+                //     'learner.learner_fname',
+                //     'learner.learner_lname',
+                // )
+                // ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                // ->where('learner_course.course_id', $course->course_id)
+                // ->get();
+
+                $learnerCourseProgressData = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress.learner_course_progress_id',
+                    'learner_course_progress.learner_course_id',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner', 'learner.learner_id', '=', 'learner_course_progress.learner_id')
+                ->where('learner_course_progress.course_id', $course->course_id)
+                ->get();
+
+                $data = [
+                    'title' => 'Performance',
+                    // 'learnerCourseData' => $learnerCourseData,
+                    'learnerCourseProgressData' => $learnerCourseProgressData,
+                    ];
+
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+    public function learnerSyllabusData(Course $course, Request $request) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try {
+
+                $syllabus_id = $request->input('syllabus_id');
+
+                $syllabusData = DB::table('syllabus')
+                ->select(
+                    'syllabus_id',
+                    'course_id',
+                    'topic_id',
+                    'topic_title',
+                    'category',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus_id)
+                ->first();
+
+                if($syllabusData->category == 'LESSON') {
+                    $learnerSyllabusData = DB::table('learner_lesson_progress')
+                    ->select(
+                        'learner_lesson_progress.learner_lesson_progress_id AS learner_progress_id',
+                        'learner_lesson_progress.learner_course_id',
+                        'learner_lesson_progress.course_id',
+                        'learner_lesson_progress.syllabus_id',
+                        'learner_lesson_progress.lesson_id AS topic_id',
+                        'learner_lesson_progress.status',
+                        'learner_lesson_progress.start_period',
+                        'learner_lesson_progress.finish_period',
+
+                        'learner.learner_fname',
+                        'learner.learner_lname',
+
+                        'learner_course.created_at',
+                    )
+                    ->join('learner', 'learner_lesson_progress.learner_id', '=', 'learner.learner_id')
+                    ->join('learner_course', 'learner.learner_id', '=', 'learner_course.learner_id')
+                    ->where('learner_lesson_progress.course_id', $course->course_id)
+                    ->where('learner_lesson_progress.syllabus_id', $syllabus_id)
+                    ->get();
+                } else if ($syllabusData->category == 'ACTIVITY') {
+                    $learnerSyllabusData = DB::table('learner_activity_progress')
+                    ->select(
+                        'learner_activity_progress.learner_activity_progress_id AS learner_progress_id',
+                        'learner_activity_progress.learner_course_id',
+                        'learner_activity_progress.course_id',
+                        'learner_activity_progress.syllabus_id',
+                        'learner_activity_progress.activity_id AS topic_id',
+                        'learner_activity_progress.status',
+                        'learner_activity_progress.start_period',
+                        'learner_activity_progress.finish_period',
+
+                        
+                        'learner.learner_fname',
+                        'learner.learner_lname',
+
+                        'learner_course.created_at',
+                    )
+                    ->join('learner', 'learner_activity_progress.learner_id', '=', 'learner.learner_id')
+                    ->join('learner_course', 'learner.learner_id', '=', 'learner_course.learner_id')
+                    ->where('learner_activity_progress.course_id', $course->course_id)
+                    ->where('learner_activity_progress.syllabus_id', $syllabus_id)
+                    ->get();
+                } else {
+                    $learnerSyllabusData = DB::table('learner_quiz_progress')
+                    ->select(
+                        'learner_quiz_progress.learner_quiz_progress_id AS learner_progress_id',
+                        'learner_quiz_progress.learner_course_id',
+                        'learner_quiz_progress.course_id',
+                        'learner_quiz_progress.syllabus_id',
+                        'learner_quiz_progress.quiz_id AS topic_id',
+                        'learner_quiz_progress.status',
+                        'learner_quiz_progress.start_period',
+                        'learner_quiz_progress.finish_period',
+                        'learner_quiz_progress.attempt',
+                      
+                        'learner.learner_fname',
+                        'learner.learner_lname',
+
+                        'learner_course.created_at',
+                    )
+                    ->join('learner', 'learner_quiz_progress.learner_id', '=', 'learner.learner_id')
+                    ->join('learner_course', 'learner.learner_id', '=', 'learner_course.learner_id')
+                    ->where('learner_quiz_progress.course_id', $course->course_id)
+                    ->where('learner_quiz_progress.syllabus_id', $syllabus_id)
+                    ->get();
+                }
+
+                $data = [
+                    'title' => 'Performance',
+                    'syllabusData' => $syllabusData,
+                    'learnerSyllabusData' => $learnerSyllabusData,
+                    ];
+
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+    public function courseSyllabusPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+
+            try {
+                $courseData = DB::table('course')
+                ->select(
+                    'course_id',
+                    'course_name',
+                    'course_code',
+                    'course_description',
+                    'course_status',
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                $syllabusData = DB::table('syllabus')
+                ->select(
+                    'syllabus_id',
+                    'course_id',
+                    'topic_id',
+                    'topic_title',
+                    'category',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->first();
+
+        
+        if($syllabusData->category === 'LESSON') {
+
+            $data = [
+                'title' => 'Course Performance',
+                'scripts' => ['AD_courseLessonPerformance.js'],
+                'courseData' => $courseData,
+                'syllabusData' => $syllabusData,
+                'admin' => $adminSession
+            ];
+    
+            // dd($data);
+
+            return view('adminPerformance.courseLessonPerformance')
+        ->with($data);
+        } else if($syllabusData->category === 'ACTIVITY') {
+            $data = [
+                'title' => 'Course Performance',
+                'scripts' => ['AD_courseActivityPerformance.js'],
+                'courseData' => $courseData,
+                'syllabusData' => $syllabusData,
+                'admin' => $adminSession
+            ];
+    
+            // dd($data);
+
+            return view('adminPerformance.courseActivityPerformance')
+        ->with($data);
+        } else {
+            $data = [
+                'title' => 'Course Performance',
+                'scripts' => ['AD_courseQuizPerformance.js'],
+                'courseData' => $courseData,
+                'syllabusData' => $syllabusData,
+                'admin' => $adminSession
+            ];
+    
+            // dd($data);
+
+            return view('adminPerformance.courseQuizPerformance')
+        ->with($data);
+        }
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
+    } else {
+        return redirect('/admin');
+    }
+
+    }
+
+
+
+    public function courseSyllabusLessonPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try {
+                $learnerLessonProgressData = DB::table('learner_lesson_progress')
+                ->select(
+                    'learner_lesson_progress.learner_lesson_progress_id',
+                    'learner_lesson_progress.learner_course_id',
+                    'learner_lesson_progress.course_id',
+                    'learner_lesson_progress.status',
+                    'learner_lesson_progress.start_period',
+                    'learner_lesson_progress.finish_period',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner', 'learner_lesson_progress.learner_id', '=', 'learner.learner_id')
+                ->where('learner_lesson_progress.course_id', $course->course_id)
+                ->where('learner_lesson_progress.syllabus_id', $syllabus->syllabus_id)
+                ->get();
+
+                $totalTimeDifference = 0;
+                $numberOfRows = count($learnerLessonProgressData);
+
+                foreach ($learnerLessonProgressData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                   
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    
+                    $totalTimeDifference += $timeDifference;
+                }
+
+                $averageTimeDifference = ($numberOfRows > 0) ? ($totalTimeDifference / $numberOfRows) : 0;
+                $averageTimeDifferenceInSeconds = $averageTimeDifference;
+                $averageTimeFormatted = gmdate("H:i:s", $averageTimeDifferenceInSeconds);
+                
+
+                $totalLearnerLessonProgressCount = DB::table('learner_lesson_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->count();
+
+                $totalLearnerLessonCompleteCount = DB::table('learner_lesson_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'COMPLETED')
+                ->count();
+
+                $totalLearnerLessonLockedCount = DB::table('learner_lesson_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'LOCKED')
+                ->count();
+
+
+                $totalLearnerLessonInProgressCount = DB::table('learner_lesson_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'IN PROGRESS')
+                ->count();
+
+                $data = [
+                    'title' => 'Performance',
+                    'learnerLessonProgressData' => $learnerLessonProgressData,
+                    'totalLearnerLessonProgressCount' => $totalLearnerLessonProgressCount,
+                    'totalLearnerLessonCompleteCount' => $totalLearnerLessonCompleteCount,
+                    'totalLearnerLessonLockedCount' => $totalLearnerLessonLockedCount,
+                    'totalLearnerLessonInProgressCount' => $totalLearnerLessonInProgressCount,
+                    'averageTimeDifference' => $averageTimeFormatted,
+                    ];
+
+                // dd($data);
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+    public function courseSyllabusActivityPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try {
+                $learnerActivityProgressData = DB::table('learner_activity_progress')
+                ->select(
+                    'learner_activity_progress.learner_activity_progress_id',
+                    'learner_activity_progress.learner_course_id',
+                    'learner_activity_progress.course_id',
+                    'learner_activity_progress.status',
+                    'learner_activity_progress.activity_id',
+                    'learner_activity_progress.syllabus_id',
+                    'learner_activity_progress.start_period',
+                    'learner_activity_progress.finish_period',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+
+                    'syllabus.topic_id',
+                )
+                ->join('syllabus', 'learner_activity_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->join('learner', 'learner_activity_progress.learner_id', '=', 'learner.learner_id')
+                ->where('learner_activity_progress.course_id', $course->course_id)
+                ->where('learner_activity_progress.syllabus_id', $syllabus->syllabus_id)
+                ->get();
+
+                $learnerActivityProgressData_first = $learnerActivityProgressData->first();
+
+                $totalTimeDifference = 0;
+                $numberOfRows = count($learnerActivityProgressData);
+
+                foreach ($learnerActivityProgressData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                // Calculate average time difference in seconds
+                $averageTimeDifference = ($numberOfRows > 0) ? ($totalTimeDifference / $numberOfRows) : 0;
+
+                // Format the average time difference
+                $averageTimeFormatted = gmdate("H:i:s", $averageTimeDifference);
+
+                $totalLearnerActivityProgressCount = DB::table('learner_activity_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->count();
+
+                $totalLearnerActivityCompleteCount = DB::table('learner_activity_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'COMPLETED')
+                ->count();
+
+                $totalLearnerActivityLockedCount = DB::table('learner_activity_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'LOCKED')
+                ->count();
+
+
+                $totalLearnerActivityInProgressCount = DB::table('learner_activity_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'IN PROGRESS')
+                ->count();
+
+                $learnerActivityOutputData = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id',
+                    'learner_course_id',
+                    'attempt',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('activity_id', $learnerActivityProgressData_first->activity_id)
+                ->get();
+
+                $learnerActivityOutputData_firstAttemptOnly = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id',
+                    'learner_course_id',
+                    'attempt',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('activity_id', $learnerActivityProgressData_first->activity_id)
+                ->where('attempt', 1)
+                ->count();
+
+                $learnerActivityOutputData_withSecondAttempt = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output_id',
+                    'learner_course_id',
+                    'attempt',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('activity_id', $learnerActivityProgressData_first->activity_id)
+                ->where('attempt', 2)
+                ->count();
+
+                $attemptCount = [
+                    'OneAttempt' => ($learnerActivityOutputData_firstAttemptOnly - $learnerActivityOutputData_withSecondAttempt),
+                    'ReAttempts' => $learnerActivityOutputData_withSecondAttempt,
+                ];
+
+                $data = [
+                    'title' => 'Performance',
+                    'learnerActivityProgressData' => $learnerActivityProgressData,
+                    'totalLearnerActivityProgressCount' => $totalLearnerActivityProgressCount,
+                    'totalLearnerActivityCompleteCount' => $totalLearnerActivityCompleteCount,
+                    'totalLearnerActivityLockedCount' => $totalLearnerActivityLockedCount,
+                    'totalLearnerActivityInProgressCount' => $totalLearnerActivityInProgressCount,
+                    'averageTimeDifference' => $averageTimeFormatted,
+                    'learnerActivityOutputData' => $learnerActivityOutputData,
+                    'attemptCount' => $attemptCount
+                    ];
+
+                // dd($data);
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+    public function courseSyllabusActivityScoresPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try {
+                $learnerActivityOutputOverallScoreData = DB::table('learner_activity_output')
+                ->select(
+                    'learner_activity_output.learner_activity_output_id',
+                    'learner_activity_output.learner_course_id',
+                    'learner_activity_output.activity_id',
+                    'learner_activity_output.total_score',
+                    'learner_activity_output.attempt',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner_course', 'learner_activity_output.learner_course_id', '=', 'learner_course.learner_course_id')
+                ->join('learner', 'learner_course.learner_id', '=', 'learner.learner_id')
+                ->where('learner_activity_output.course_id', $course->course_id)
+                ->where('learner_activity_output.syllabus_id', $syllabus->syllabus_id)
+                ->groupBy('learner_activity_output.learner_activity_output_id')
+                ->get();
+
+            $learnerActivityOutputCriteriaScoreData = [];
+
+            foreach ($learnerActivityOutputOverallScoreData as $learnerOutput) {
+                $criteriaScoreData = DB::table('learner_activity_criteria_score')
+                    ->select(
+                        'learner_activity_criteria_score.learner_activity_criteria_score_id',
+                        'learner_activity_criteria_score.learner_activity_output_id',
+                        'learner_activity_criteria_score.activity_content_criteria_id',
+                        'learner_activity_criteria_score.attempt',
+                        'learner_activity_criteria_score.score',
+                        'activity_content_criteria.criteria_title'
+                    )
+                    ->join('activity_content_criteria', 'learner_activity_criteria_score.activity_content_criteria_id', '=', 'activity_content_criteria.activity_content_criteria_id')
+                    ->where('learner_activity_criteria_score.learner_activity_output_id', $learnerOutput->learner_activity_output_id)
+                    ->get();
+
+                // Add the criteria score data to the result array
+                $learnerActivityOutputCriteriaScoreData[$learnerOutput->learner_activity_output_id] = $criteriaScoreData;
+            }
+
+            $data = [
+                'title' => 'Performance',
+                'learnerActivityOutputOverallScoreData' => $learnerActivityOutputOverallScoreData,
+                'learnerActivityOutputCriteriaScoreData' => $learnerActivityOutputCriteriaScoreData,
+            ];
+
+            return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+
+    public function courseSyllabusQuizPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            
+            try {
+                $learnerQuizProgressData = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.learner_quiz_progress_id',
+                    'learner_quiz_progress.learner_course_id',
+                    'learner_quiz_progress.course_id',
+                    'learner_quiz_progress.status',
+                    'learner_quiz_progress.quiz_id',
+                    'learner_quiz_progress.syllabus_id',
+                    'learner_quiz_progress.start_period',
+                    'learner_quiz_progress.finish_period',
+                    'learner_quiz_progress.attempt',
+                    'learner_quiz_progress.score',
+                    'learner_quiz_progress.remarks',
+
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+
+                    'syllabus.topic_id',
+                )
+                ->join('syllabus', 'learner_quiz_progress.syllabus_id', '=', 'syllabus.syllabus_id')
+                ->join('learner', 'learner_quiz_progress.learner_id', '=', 'learner.learner_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.syllabus_id', $syllabus->syllabus_id)
+                ->get();
+
+                $learnerQuizProgressData_first = $learnerQuizProgressData->first();
+
+                $totalTimeDifference = 0;
+                $numberOfRows = count($learnerQuizProgressData);
+
+                foreach ($learnerQuizProgressData as $row) {
+                    
+                    $startPeriod = new \DateTime($row->start_period);
+                    $finishPeriod = new \DateTime($row->finish_period);
+
+                    // Calculate time difference in seconds
+                    $timeDifference = $finishPeriod->getTimestamp() - $startPeriod->getTimestamp();
+
+                    // Calculate time difference in days
+                    $daysDifference = $finishPeriod->diff($startPeriod)->days;
+
+                    // Convert days to seconds and add to total time difference
+                    $totalTimeDifference += ($daysDifference * 24 * 60 * 60) + $timeDifference;
+                }
+
+                // Calculate average time difference in seconds
+                $averageTimeDifference = ($numberOfRows > 0) ? ($totalTimeDifference / $numberOfRows) : 0;
+
+                // Format the average time difference
+                $averageTimeFormatted = gmdate("H:i:s", $averageTimeDifference);
+
+                $totalLearnerQuizProgressCount = DB::table('learner_quiz_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->count();
+
+                $totalLearnerQuizCompleteCount = DB::table('learner_quiz_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'COMPLETED')
+                ->count();
+
+                $totalLearnerQuizLockedCount = DB::table('learner_quiz_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'LOCKED')
+                ->count();
+
+
+                $totalLearnerQuizInProgressCount = DB::table('learner_quiz_progress')
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('status', 'IN PROGRESS')
+                ->count();
+
+               
+
+                $learnerQuizOutputData_firstAttemptOnly = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress_id',
+                    'learner_course_id',
+                    'attempt',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('quiz_id', $learnerQuizProgressData_first->quiz_id)
+                ->where('attempt', 1)
+                ->count();
+
+                $learnerQuizOutputData_withSecondAttempt = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress_id',
+                    'learner_course_id',
+                    'attempt',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('quiz_id', $learnerQuizProgressData_first->quiz_id)
+                ->where('attempt', 2)
+                ->count();
+
+                $attemptCount = [
+                    'OneAttempt' => ($learnerQuizOutputData_firstAttemptOnly - $learnerQuizOutputData_withSecondAttempt),
+                    'ReAttempts' => $learnerQuizOutputData_withSecondAttempt,
+                ];
+
+                $data = [
+                    'title' => 'Performance',
+                    'learnerQuizProgressData' => $learnerQuizProgressData,
+                    'totalLearnerQuizProgressCount' => $totalLearnerQuizProgressCount,
+                    'totalLearnerQuizCompleteCount' => $totalLearnerQuizCompleteCount,
+                    'totalLearnerQuizLockedCount' => $totalLearnerQuizLockedCount,
+                    'totalLearnerQuizInProgressCount' => $totalLearnerQuizInProgressCount,
+                    'averageTimeDifference' => $averageTimeFormatted,
+                    'attemptCount' => $attemptCount
+                    ];
+
+                // dd($data);
+                return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+
+    public function courseSyllabusQuizScoresPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            try {
+                $learnerQuizOutputOverallScoreData = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.learner_quiz_progress_id',
+                    'learner_quiz_progress.learner_course_id',
+                    'learner_quiz_progress.quiz_id',
+                    'learner_quiz_progress.score',
+                    'learner_quiz_progress.attempt',
+                    'learner_quiz_progress.remarks',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner_course', 'learner_quiz_progress.learner_course_id', '=', 'learner_course.learner_course_id')
+                ->join('learner', 'learner_course.learner_id', '=', 'learner.learner_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.syllabus_id', $syllabus->syllabus_id)
+                ->get();
+
+           
+
+            $data = [
+                'title' => 'Performance',
+                'learnerQuizOutputOverallScoreData' => $learnerQuizOutputOverallScoreData,
+            ];
+
+            return response()->json($data);
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+
+                return response()->json(['errors' => $errors], 422);
+            }
+
+
+        } else {
+            return redirect('/admin');
+        }
+    }
+
+    public function courseSyllabusQuizContentOutputPerformance(Course $course, Syllabus $syllabus) {
+        if (auth('admin')->check()) {
+            $adminSession = session('admin');
+            try {
+                $learnerQuizOutputOverallScoreData = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.learner_quiz_progress_id',
+                    'learner_quiz_progress.learner_course_id',
+                    'learner_quiz_progress.quiz_id',
+                    'learner_quiz_progress.score',
+                    'learner_quiz_progress.attempt',
+                    'learner_quiz_progress.remarks',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner', 'learner_quiz_progress.learner_id', '=', 'learner.learner_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.syllabus_id', $syllabus->syllabus_id)
+                ->get();
+
+                $learnerQuizOutputOverallScoreData_firstRow = $learnerQuizOutputOverallScoreData->first();
+
+                $quizData = DB::table('quiz_content')
+                ->select(
+                    'quiz_content.quiz_content_id',
+                    'quiz_content.quiz_id',
+                    'quiz_content.syllabus_id',
+                    'quiz_content.question_id',
+
+                    'questions.question',
+                    'questions.category',
+
+                    'question_answer.question_answer_id',
+                    'question_answer.answer',
+                    'question_answer.isCorrect',
+                )
+                ->join('questions', 'quiz_content.question_id', '=', 'questions.question_id')
+                ->join('question_answer', 'questions.question_id', '=', 'question_answer.question_id')
+                ->where('quiz_content.quiz_id', $learnerQuizOutputOverallScoreData_firstRow->quiz_id)
+                ->get();
+
+            $learnerQuizOutputData = DB::table('learner_quiz_output')
+            ->select(
+                'learner_quiz_output.learner_quiz_output_id',
+                'learner_quiz_output.learner_course_id',
+                'learner_quiz_output.quiz_id',
+                'learner_quiz_output.quiz_content_id',
+                'learner_quiz_output.answer',
+                'learner_quiz_output.isCorrect',
+            
+                'quiz_content.question_id',
+                'questions.question',
+            )
+            ->join('quiz_content', 'learner_quiz_output.quiz_content_id', '=' , 'quiz_content.quiz_content_id')
+            ->join('questions', 'quiz_content.question_id', '=' , 'questions.question_id')
+            ->where('learner_quiz_output.course_id', $course->course_id)
+            ->where('learner_quiz_output.syllabus_id', $syllabus->syllabus_id)
+            ->where('learner_quiz_output.quiz_id', $learnerQuizOutputOverallScoreData_firstRow->quiz_id)
+            ->get();
+
+            $data = [
+                'title' => 'Performance',
+                'learnerQuizOutputOverallScoreData' => $learnerQuizOutputOverallScoreData,
+                'quizData' => $quizData,
+                'learnerQuizOutputData' => $learnerQuizOutputData,
+            ];
 
             return response()->json($data);
             } catch (ValidationException $e) {

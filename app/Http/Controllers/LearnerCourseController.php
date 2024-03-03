@@ -4903,6 +4903,7 @@ class LearnerCourseController extends Controller
             ->where('course_id', $course->course_id)
             ->first();
 
+            if($courseData->course_progress === 'COMPLETED') {
                       // compute now the grades
                       $activityGrade = 0;
                       $quizGrade = 0;
@@ -4964,7 +4965,36 @@ class LearnerCourseController extends Controller
                     'totalGrade' => $totalGrade,
                     'remarks' => $remarks,
                 ];
+            }
 
+            $data = [
+                'title' => 'Course Gradesheet',
+                'scripts' => ['/learner_post_assessment.js'],
+                'mainBackgroundCol' => '#00693e',
+                'courseData' => $courseData,
+                'activityScoresData' => $learnerActivityScoresData,
+                'quizScoresData' => $learnerQuizScoresData,
+                'preAssessmentData' => $learnerPreAssessmentGrade,
+                'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                'postAssessmentData' => $learnerPostAssessmentData,
+
+                'learnerLessonsData' => $learnerLessonsData,
+
+                'activityLearnerSumScore' => $activityLearnerSumScore,
+                'activityTotalSum' => $activityTotalSum,
+       
+
+                'quizLearnerSumScore' => $quizLearnerSumScore,
+                'quizTotalSum' => $quizTotalSum,
+
+                'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
+      
+
+                'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+
+            ];
                 // dd($data);
                 return view('learner_course.courseGrades', compact('learner'))
                 ->with($data);

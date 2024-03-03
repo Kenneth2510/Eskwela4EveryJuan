@@ -226,6 +226,8 @@
         </div>
     </div>
     @endif
+
+    @if($learnerPreAssessmentData)
     <hr class="my-6 border-t-2 border-gray-300">
 
     <h1 class="mx-5 mb-5 text-2xl">Pre Assessment Overview</h1>
@@ -255,6 +257,8 @@
             </table>
         </div>
     </div>
+    @endif
+    @if($learnerCourseData->course_progress === 'COMPLETED')
     <hr class="my-6 border-t-2 border-gray-300">
 
     <h1 class="mx-5 mb-5 text-2xl">Post Assessment Overview</h1>
@@ -293,6 +297,7 @@
             </table>
         </div>
     </div>
+    @endif
     <hr class="my-6 border-t-2 border-gray-300">
 
     <div class="flex p-10 mt-5 w-11/12 mx-auto h-[300px] border-2 border-darthmouthgreen  overflow-y-scroll" id="learnerSyllabusProgressTable">
