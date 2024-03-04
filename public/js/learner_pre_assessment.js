@@ -170,6 +170,10 @@ getLearnerAssessmentData();
         //         event.preventDefault();
             
         // });
+
+        window.onbeforeunload = function() {
+            $('#confirmSubmitQuizModal').removeClass('hidden');
+        }
     
         $('input[type="radio"]').on('change', function () {
             const questionCount = $(this).attr('name');

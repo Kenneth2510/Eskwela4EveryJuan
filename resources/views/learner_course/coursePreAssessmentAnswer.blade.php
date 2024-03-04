@@ -113,7 +113,7 @@
                     </button>
                 </div>
         
-                <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your quiz?</h2>
+                <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your assessment?</h2>
         
                 <p class="text-gray-600">Once you submit, you won't be able to make any changes. Make sure you have answered all the questions.</p>
         

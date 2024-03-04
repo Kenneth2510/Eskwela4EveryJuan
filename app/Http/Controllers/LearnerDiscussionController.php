@@ -203,7 +203,7 @@ class LearnerDiscussionController extends Controller
                 $this->upvoteJuggling();
 
             $data = [
-                'title' => 'Performance',
+                'title' => 'Discussion',
                 'scripts' => ['learner_discussion.js'],
 
             ];

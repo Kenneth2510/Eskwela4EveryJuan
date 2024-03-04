@@ -225,8 +225,8 @@ class LearnerPerformanceController extends Controller
     }
 
     public function enrolledCoursesPerformancesData(Request $request) {
-        if (auth('instructor')->check()) {
-            $learner = session('learner');
+        if (session()->has('learner')) {
+            $learner= session('learner');
             
             try{
                 $selectedCourse = $request->input('selectedCourse');

@@ -18,6 +18,8 @@ class Business extends Model
         'business_owner_name',
         'bplo_account_number',
         'business_category',
+        'business_classification',
+        'business_description',
         'learner_id', // Assuming you have a foreign key column
     ];
 

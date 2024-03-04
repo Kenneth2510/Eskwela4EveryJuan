@@ -13,18 +13,14 @@
         <div class="w-full h-screen pt-16 md:h-auto lg:h-screen lg:overflow-auto bg-mainwhitebg text-darthmouthgreen md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24">
             <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent ">
 
-                {{-- <x-header title="Create an Instructor Account" id="ins-head">
-                    <p class="text-sm md:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-                </x-header> --}}
 
                 <h1 class="text-6xl font-bold text-darthmouthgreen">Create New Instructor Account</h1>
                 <p class="mt-3 text-sm text-darthmouthgreen md:text-base">Welcome, future instructor! We're excited to have you join our teaching community. Please provide the necessary information below to create your new account.</p>
 
-                {{-- <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/instructor/register1') }}" method="POST" enctype="multipart/form-data"> --}}
+           
+                {{-- <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/instructor/register') }}" method="POST" enctype="multipart/form-data">
 
-                <form class="pb-4 mx-4 mt-10 text-sm" action="{{ url('/instructor/register') }}" method="POST" enctype="multipart/form-data">
-
-                    @csrf
+                    @csrf --}}
                     <div class="" id="first-form">
                         <div class="flex flex-col flex-nowrap lg:flex-row">
                             <div class=" FORM-CTNR lg:w-1/2 lg:mr-2">
@@ -35,7 +31,7 @@
                                     </span>
                                 @enderror
                                 <input class="border IN-V-INP border-darthmouthgreen" type="text" name="instructor_fname" id="instructor_fname" value="{{old('instructor_fname')}}">
-                                
+                                <span id="firstNameError" class="text-red-500"></span>
                             </div>
                             <div class=" FORM-CTNR lg:w-1/2 lg:ml-2">
                                 <label for="instructor_lname" class="text-lg text-darthmouthgreen">Lastname:</label>
@@ -45,7 +41,7 @@
                                     </span>
                                 @enderror
                                 <input class="border IN-V-INP border-darthmouthgreen" type="text" name="instructor_lname" id="instructor_lname" value="{{old('instructor_lname')}}">
-                                
+                                <span id="lastNameError" class="text-red-500"></span>
                             </div>
                         </div>
                         
@@ -58,7 +54,7 @@
                                     </span>
                                 @enderror
                                 <input class="border IN-V-INP border-darthmouthgreen" type="date" name="instructor_bday" id="instructor_bday" value="{{old('instructor_bday')}}">
-                                
+                                <span id="bdayError" class="text-red-500"></span>
                             </div>
                             
                             <div class="lg:ml-2 FORM-CTNR lg:w-1/2">
@@ -68,13 +64,13 @@
                                         {{$message}}
                                     </span>
                                 @enderror
-                                <select name="instructor_gender" id="gender" class="border IN-V-INP border-darthmouthgreen">
+                                <select name="instructor_gender" id="instructor_gender" class="border IN-V-INP border-darthmouthgreen">
                                     <option value="" {{old('instructor_gender') == "" ? 'selected' : ''}} class=""></option>
                                     <option value="Male" {{old('instructor_gender') == "Male" ? 'selected' : ''}} class="">Male</option>
                                     <option value="Female" {{old('instructor_gender') == "Female" ? 'selected' : ''}} class="">Female</option>
                                     <option value="Others" {{old('instructor_gender') == "Others" ? 'selected' : ''}} class="">Preferred not to say</option>
                                 </select>
-                                
+                                <span id="genderError" class="text-red-500"></span>
                             </div>
                         </div>
 
@@ -86,7 +82,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="email" name="instructor_email" id="instructor_email" value="{{old('instructor_email')}}">
-                           
+                            <span id="emailError" class="text-red-500"></span>
                         </div>
                         <div class="FORM-CTNR">
                             <label for="instructor_contactno" class="text-lg text-darthmouthgreen">Contact Number:</label>
@@ -97,7 +93,7 @@
                                 </span>
                             @enderror
                             <input type="tel" id="instructor_contactno" maxlength="11" pattern="[0-9]{11}" name="instructor_contactno" class="border IN-V-INP border-darthmouthgreen" placeholder="09" value="{{old('instructor_contactno')}}">
-                           
+                            <span id="contactnoError" class="text-red-500"></span>
                         </div>
                         <div class="FORM-CTNR">
                             <label for="instructor_username" class="text-lg text-darthmouthgreen">Username:</label>
@@ -107,7 +103,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="text" name="instructor_username" id="instructor_username" value="{{old('instructor_username')}}">
-                        
+                            <span id="usernameError" class="text-red-500"></span>
                         </div>
                         <div class="FORM-CTNR">
                             <label for="password" class="text-lg text-darthmouthgreen">Password:</label>
@@ -116,12 +112,20 @@
                                     {{$message}}
                                 </span>
                             @enderror
-                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password" id="">
-                           
+                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password" id="password">
+                            <span id="passwordError" class="text-red-500"></span>
+                            <span id="passwordRequirements" class="text-gray-500 text-sm">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
+                       
                         </div>
+
+                        <div class="text-darthmouthgreen">
+                            <input type="checkbox" id="showPassword"> Show Password
+                        </div>
+
                         <div class="FORM-CTNR">
                             <label for="password_confirmation" class="text-lg text-darthmouthgreen">Confirm Password:</label>
-                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="">
+                            <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="password_confirmation">
+                            <span id="passwordConfirmationError" class="text-red-500"></span>
                         </div>
 
                         
@@ -133,16 +137,10 @@
                     </div> 
                     
                     <div class="hidden overflow-hidden" id="resumeForm">
-                        {{-- <div>
-                            <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
-                                <svg class="pr-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                            </button>
-                        </div> --}}
+              
                         
                         <div class="px-4 mt-4">
-                            {{-- <x-header title="About Credentials">
-                                <p class="text-sm text-darthmouthgreen">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam quidem nobis quasi porro odio! Iusto, aliquam.</p>
-                            </x-header> --}}
+                       
 
                             <h1 class="text-2xl font-bold text-darthmouthgreen">About Credentials</h1>
                             <p class="mt-3 text-xs text-darthmouthgreen md:text-base">Welcome, future instructor! To get started, please provide the required information below to set up your new account. Your credentials will be securely stored to ensure a seamless and personalized experience on our teaching platform.</p>
@@ -157,29 +155,13 @@
                                     </span>
                                 @enderror
                             <input type="file" name="instructor_credentials" id="instructor_credentials" accept="application/pdf" class="text-darthmouthgreen">
-                            
+                            <span id="credentialsError" class="text-red-500"></span>
                         </div>
 
                         <div class="">
 
                             <div class="grid h-auto my-10 text-black place-items-end" >
                                 <div class="flex" >
-                                    {{-- <x-forms.secondary-button
-                                    name="Back"
-                                    id="prevBtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                                        </svg>
-                                    </x-forms.secondary-button>
-                                    <x-forms.primary-button
-                                    color="amber"
-                                    name="Next"
-                                    type="button"
-                                    id="nxtBtn2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                                        </svg>
-                                    </x-forms.primary-button> --}}
                                     <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="prevBtn" name="Back"><i class="fa-solid fa-arrow-left hover:text-darthmouthgreen"></i>Back</button>
                                     <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="nxtBtn2" name="Next">Next <i class="fa-solid fa-arrow-right hover:text-darthmouthgreen"></i></button>
                                 </div>
@@ -190,12 +172,7 @@
 
 
                     <div class="hidden overflow-hidden" id="security_code">
-                        {{-- <div>
-                            <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
-                                <svg class="pr-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                            </button>
-                        </div> --}}
-                        
+   
                         <div class="px-4 mt-4">
                             <h1 class="text-2xl font-bold text-darthmouthgreen">Set your Security Code</h1>
                             <p class="mt-3 text-xs text-darthmouthgreen md:text-base">Secure your account by setting a unique security code. This code will add an extra layer of protection to your account, ensuring that only you can access sensitive information. Please choose a memorable code that combines numbers and letters to maximize security.</p>
@@ -204,13 +181,13 @@
 
                     <div class="flex items-center pb-4 my-8 ml-5 font-semibold text-black border-b-2 security-code-container">
                             <label for="instructor_security_code" class="text-xl text-darthmouthgreen">Security Code:</label>
-                            <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_4" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
-
+                            <input class="code mx-1 h-16 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_1" id="security_code_1" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}" autofocus>
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_2" id="security_code_2" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_3" id="security_code_3" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_4" id="security_code_4" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="security_code_5" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <input class="code h-16 mx-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="security_code_6" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
+                            <span id="securityCodeError" class="text-red-500"></span>
                             
                             <script>
                             
@@ -266,20 +243,15 @@
                             
                             <div class="grid h-auto mt-5 text-black place-items-end" >
                                 <div class="flex">
-                                    {{-- <x-forms.secondary-button name="Return" id="prevBtn2"/>
-                                
-                                    <x-forms.primary-button
-                                    color="amber"
-                                    name="Create my account"/> --}}
-
+                        
                                     <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="prevBtn2" name="Back"><i class="fa-solid fa-arrow-left hover:text-darthmouthgreen"></i>Back</button>
-                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="" type="submit" name="Create my account">Create my account</button>
+                                    <button class="px-5 py-3 mx-2 text-xl text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-darthmouthgreen hover:border-2" id="register_submit_btn" type="button" name="Create my account">Create my account</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                </form>
+                {{-- </form> --}}
   
                 <div class="mx-auto mb-10 text-sm w-max md:text-base">
 

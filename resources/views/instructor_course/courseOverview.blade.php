@@ -193,6 +193,7 @@
                                 <th class="w-1/12">Enrollment Status</th>
                                 <th class="w-2/12">Date Enrolled</th>
                                 <th class="w-1/12">Course Progress</th>
+                                <th class="w-2/12"></th>
                             </thead>
                             <tbody class="">
                                 @forelse ($courseEnrollees as $enrollee)
@@ -202,6 +203,9 @@
                                     <td>{{ $enrollee->status }}</td>
                                     <td>{{ $enrollee->created_at }}</td>
                                     <td>{{ $enrollee->course_progress }}</td>
+                                    <td>
+                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="rounded-xl py-1 px-3 bg-darthmouthgreen text-white hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -223,7 +227,7 @@
                     <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
                     <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
                     <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
-                        <table id="gradesheet" class="table-fixed">
+                        <table id="gradesheet" class="table-fixed w-[3000px]">
                             <thead class="px-3 text-center text-white bg-darthmouthgreen">
                                 <th class="w-4/12 pl-5">Name</th>
                                 <th class="w-4/12">Status</th>
@@ -250,7 +254,7 @@
                                         <td class="py-3 pl-5">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
                                         <td>{{ $grade->course_progress }}</td>
                                         <td>{{ $grade->start_period }}</td>
-                                        <td>#</td>
+                                        <td>{{$grade->pre_assessment->score}}</td>
                                         
                                         {{-- Display activity scores --}}
                                         @foreach ($activitySyllabus as $activity)
@@ -268,9 +272,9 @@
                                             <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
                                         @endforeach
                                         
-                                        <td>#</td>
-                                        <td>#</td>
-                                        <td>#</td>
+                                        <td>{{$grade->post_assessment->average_score}}</td>
+                                        <td>{{$grade->grade}}</td>
+                                        <td>{{$grade->remarks}}</td>
                                         <td>{{ $grade->finish_period }}</td>
                                     </tr>
                                 @empty
@@ -357,7 +361,7 @@
 <div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
-            <button class="cancelEdit">
+            <button class="cancelAddNewFile">
                 <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
             </button>
         </div>
@@ -372,7 +376,7 @@
 
             <div class="flex justify-center w-full mt-5">
                 <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
-                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelEdit hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
             </div>
         </form>
     </div>

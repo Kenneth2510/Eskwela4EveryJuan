@@ -14,7 +14,7 @@
                 </div>
                 <div class="" id="logo_full">
                     <a href="{{ url('/instructor/dashboard') }}">
-                        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-black">
+                        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
                             Eskwela4EveryJuan
                         </span>
                     </a>
@@ -54,6 +54,17 @@
                         <h1 class="hidden md:block group-hover:text-white">Courses</h1>
                     </a>
                 </li>
+
+                
+                <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/message') }}">
+
+                        <i class="mx-3 text-xl duration-500 fa-regular fa-message fill-black group-hover:fill-white group-hover:animate-bounce"></i>
+    
+                        <h1 class="hidden md:block group-hover:text-white">Message</h1>
+                    </a>
+                </li>
+    
     
                 <li id="" class="instructor_performances w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url("/instructor/performances") }}">
@@ -66,21 +77,9 @@
                     </a>
                 </li>
      
-                {{-- <li id="instructor_calendar" class="w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="">
-                        
-                        <svg class="mx-2 duration-500 stroke-white group-hover:stroke-black group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.0835 12.5C2.0835 8.5719 2.0835 6.60731 3.30433 5.38752C4.52412 4.16669 6.4887 4.16669 10.4168 4.16669H14.5835C18.5116 4.16669 20.4762 4.16669 21.696 5.38752C22.9168 6.60731 22.9168 8.5719 22.9168 12.5V14.5834C22.9168 18.5115 22.9168 20.4761 21.696 21.6959C20.4762 22.9167 18.5116 22.9167 14.5835 22.9167H10.4168C6.4887 22.9167 4.52412 22.9167 3.30433 21.6959C2.0835 20.4761 2.0835 18.5115 2.0835 14.5834V12.5Z"  stroke-opacity="0.75" stroke-width="2"/>
-                        <path d="M7.29199 4.16669V2.60419M17.7087 4.16669V2.60419M2.60449 9.37502H22.3962"  stroke-opacity="0.75" stroke-width="2" stroke-linecap="round"/>
-                        <path class="duration-500 fill-white stroke-white group-hover:fill-black group-hover:stroke-black" d="M18.75 17.7083C18.75 17.9846 18.6403 18.2496 18.4449 18.4449C18.2496 18.6403 17.9846 18.75 17.7083 18.75C17.4321 18.75 17.1671 18.6403 16.9718 18.4449C16.7764 18.2496 16.6667 17.9846 16.6667 17.7083C16.6667 17.4321 16.7764 17.1671 16.9718 16.9718C17.1671 16.7764 17.4321 16.6667 17.7083 16.6667C17.9846 16.6667 18.2496 16.7764 18.4449 16.9718C18.6403 17.1671 18.75 17.4321 18.75 17.7083ZM18.75 13.5417C18.75 13.8179 18.6403 14.0829 18.4449 14.2782C18.2496 14.4736 17.9846 14.5833 17.7083 14.5833C17.4321 14.5833 17.1671 14.4736 16.9718 14.2782C16.7764 14.0829 16.6667 13.8179 16.6667 13.5417C16.6667 13.2654 16.7764 13.0004 16.9718 12.8051C17.1671 12.6097 17.4321 12.5 17.7083 12.5C17.9846 12.5 18.2496 12.6097 18.4449 12.8051C18.6403 13.0004 18.75 13.2654 18.75 13.5417ZM13.5417 17.7083C13.5417 17.9846 13.4319 18.2496 13.2366 18.4449C13.0412 18.6403 12.7763 18.75 12.5 18.75C12.2237 18.75 11.9588 18.6403 11.7634 18.4449C11.5681 18.2496 11.4583 17.9846 11.4583 17.7083C11.4583 17.4321 11.5681 17.1671 11.7634 16.9718C11.9588 16.7764 12.2237 16.6667 12.5 16.6667C12.7763 16.6667 13.0412 16.7764 13.2366 16.9718C13.4319 17.1671 13.5417 17.4321 13.5417 17.7083ZM13.5417 13.5417C13.5417 13.8179 13.4319 14.0829 13.2366 14.2782C13.0412 14.4736 12.7763 14.5833 12.5 14.5833C12.2237 14.5833 11.9588 14.4736 11.7634 14.2782C11.5681 14.0829 11.4583 13.8179 11.4583 13.5417C11.4583 13.2654 11.5681 13.0004 11.7634 12.8051C11.9588 12.6097 12.2237 12.5 12.5 12.5C12.7763 12.5 13.0412 12.6097 13.2366 12.8051C13.4319 13.0004 13.5417 13.2654 13.5417 13.5417ZM8.33333 17.7083C8.33333 17.9846 8.22359 18.2496 8.02824 18.4449C7.83289 18.6403 7.56793 18.75 7.29167 18.75C7.0154 18.75 6.75045 18.6403 6.5551 18.4449C6.35975 18.2496 6.25 17.9846 6.25 17.7083C6.25 17.4321 6.35975 17.1671 6.5551 16.9718C6.75045 16.7764 7.0154 16.6667 7.29167 16.6667C7.56793 16.6667 7.83289 16.7764 8.02824 16.9718C8.22359 17.1671 8.33333 17.4321 8.33333 17.7083ZM8.33333 13.5417C8.33333 13.8179 8.22359 14.0829 8.02824 14.2782C7.83289 14.4736 7.56793 14.5833 7.29167 14.5833C7.0154 14.5833 6.75045 14.4736 6.5551 14.2782C6.35975 14.0829 6.25 13.8179 6.25 13.5417C6.25 13.2654 6.35975 13.0004 6.5551 12.8051C6.75045 12.6097 7.0154 12.5 7.29167 12.5C7.56793 12.5 7.83289 12.6097 8.02824 12.8051C8.22359 13.0004 8.33333 13.2654 8.33333 13.5417Z"  fill-opacity="0.75"/>
-                        </svg>
-    
-                        <h1 class="hidden md:block group-hover:text-black">Calendar</h1>
-                    </a>
-                </li> --}}
     
                 <li id="" class="instructor_settings w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/settings') }}">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/profile') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M11.6656 2.69475C11.9209 2.55301 12.208 2.47864 12.5 2.47864C12.792 2.47864 13.0791 2.55301 13.3344 2.69475L20.8344 6.86142C21.3802 7.16454 21.7188 7.73954 21.7188 8.36454V16.6354C21.7188 17.2604 21.3802 17.8354 20.8344 18.1385L13.3344 22.3052C13.0791 22.4469 12.792 22.5213 12.5 22.5213C12.208 22.5213 11.9209 22.4469 11.6656 22.3052L4.16562 18.1385C3.89752 17.9896 3.67414 17.7717 3.51863 17.5074C3.36312 17.2431 3.28116 16.942 3.28125 16.6354V8.36454C3.28125 7.73954 3.61979 7.16454 4.16562 6.86142L11.6656 2.69475ZM12.576 4.06142C12.5528 4.04846 12.5266 4.04167 12.5 4.04167C12.4734 4.04167 12.4472 4.04846 12.424 4.06142L4.92396 8.22808C4.8998 8.24154 4.87965 8.26117 4.86556 8.28496C4.85147 8.30875 4.84394 8.33585 4.84375 8.3635V16.6354C4.84375 16.6927 4.875 16.7448 4.92396 16.7729L12.424 20.9395C12.4472 20.9525 12.4734 20.9593 12.5 20.9593C12.5266 20.9593 12.5528 20.9525 12.576 20.9395L20.076 16.7729C20.1005 16.7592 20.1209 16.7393 20.135 16.7151C20.1491 16.6909 20.1564 16.6634 20.1562 16.6354V8.36454C20.1562 8.33672 20.1488 8.30939 20.1347 8.28541C20.1206 8.26142 20.1004 8.24163 20.076 8.22808L12.576 4.06142Z" fill-opacity="0.75"/>
@@ -188,6 +187,15 @@
                         {{-- <h1 class="hidden md:block group-hover:text-white">Courses</h1> --}}
                     </a>
                 </li>
+
+                <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/message') }}">
+
+                        <i class="mx-3 text-xl duration-500 fa-regular fa-message fill-black group-hover:fill-white group-hover:animate-bounce"></i>
+    
+                        {{-- <h1 class="hidden md:block group-hover:text-white">Message</h1> --}}
+                    </a>
+                </li>
     
                 <li id="" class="instructor_performances w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url("/instructor/performances") }}">
@@ -214,7 +222,7 @@
                 </li> --}}
     
                 <li id="" class="instructor_settings w-full py-3 rounded-lg hover:bg-darthmouthgreen group md:py-4">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/settings') }}">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/profile') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce flex-shrink-0" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M11.6656 2.69475C11.9209 2.55301 12.208 2.47864 12.5 2.47864C12.792 2.47864 13.0791 2.55301 13.3344 2.69475L20.8344 6.86142C21.3802 7.16454 21.7188 7.73954 21.7188 8.36454V16.6354C21.7188 17.2604 21.3802 17.8354 20.8344 18.1385L13.3344 22.3052C13.0791 22.4469 12.792 22.5213 12.5 22.5213C12.208 22.5213 11.9209 22.4469 11.6656 22.3052L4.16562 18.1385C3.89752 17.9896 3.67414 17.7717 3.51863 17.5074C3.36312 17.2431 3.28116 16.942 3.28125 16.6354V8.36454C3.28125 7.73954 3.61979 7.16454 4.16562 6.86142L11.6656 2.69475ZM12.576 4.06142C12.5528 4.04846 12.5266 4.04167 12.5 4.04167C12.4734 4.04167 12.4472 4.04846 12.424 4.06142L4.92396 8.22808C4.8998 8.24154 4.87965 8.26117 4.86556 8.28496C4.85147 8.30875 4.84394 8.33585 4.84375 8.3635V16.6354C4.84375 16.6927 4.875 16.7448 4.92396 16.7729L12.424 20.9395C12.4472 20.9525 12.4734 20.9593 12.5 20.9593C12.5266 20.9593 12.5528 20.9525 12.576 20.9395L20.076 16.7729C20.1005 16.7592 20.1209 16.7393 20.135 16.7151C20.1491 16.6909 20.1564 16.6634 20.1562 16.6354V8.36454C20.1562 8.33672 20.1488 8.30939 20.1347 8.28541C20.1206 8.26142 20.1004 8.24163 20.076 8.22808L12.576 4.06142Z" fill-opacity="0.75"/>

@@ -1,90 +1,83 @@
 @include('partials.header')
+
+<section class="flex flex-row w-screen text-sm main-container bg-mainwhitebg md:text-base">
 @include('partials.sidebar')
 
 
-<section id="maincontent" class="relative w-4/5 left-80">
-    <div id="title" class="relative flex items-center justify-between h-16 px-3 mx-auto my-3 py-auto">
-        <h1 class="text-4xl font-semibold">Overview</h1>
-        <div id="adminuser" class="flex items-center">
-            <h3 class="text-lg">{{ $adminCodeName }}</h3>
-            <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
+
+
+<section class="w-screen px-2 pt-[40px] mx-2 mt-2  overscroll-auto md:overflow-auto">
+    <div class="flex justify-between px-10">
+        <h1 class="text-6xl font-bold text-darthmouthgreen">Overview</h1>
+        <div class="">
+            <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
         </div>
     </div>
 
-    <div id="mainvalue" class="relative w-full mt-5">
-        <div id="upper" class="flex items-center justify-around w-full py-3">
-            <div id="totallearner" class="h-48 px-5 py-5 text-center bg-green-700 shadow-2xl w-72 rounded-2xl">
-                <h3 class="text-2xl font-semibold text-white ">Total Learners</h3>
-                <h2 class="font-bold text-white text-7xl mt-7">{{ $totalLearner }}</h2>
+    <div class="w-full px-3 pb-4 mt-10 rounded-lg shadow-lg b">
+
+
+        <div class="flex justify-between w-full px-10 text-center" id="countDataMainArea">
+            <div class="w-3/12 py-10 mx-2 border-2 shadow-lg border-darthmouthgreen rounded-xl" id="totalLearnerCountArea">
+                
+                <p class="font-bold text-7xl text-darthmouthgreen">{{$totalLearner}}</p>
+                <h1 class="text-xl font-semibold text-darthmouthgreen">Total Learners</h1>
             </div>
-            <div id="totalinstructors" class="h-48 px-5 py-5 text-center bg-green-700 shadow-2xl w-72 rounded-2xl">
-                <h3 class="text-2xl font-semibold text-white ">Total Instructors</h3>
-                <h2 class="font-bold text-white text-7xl mt-7">{{ $totalInstructor }}</h2>
+            <div class="w-3/12 py-10 mx-2 border-2 shadow-lg border-darthmouthgreen rounded-xl" id="totalInstructorCountArea">
+                
+                <p class="font-bold text-7xl text-darthmouthgreen">{{$totalInstructor}}</p>
+                <h1 class="text-xl font-semibold text-darthmouthgreen">Total Instructors</h1>
             </div>
-            <div id="totalcourses" class="h-48 px-5 py-5 text-center bg-green-700 shadow-2xl w-72 rounded-2xl">
-                <h3 class="text-2xl font-semibold text-white ">Total Courses</h3>
-                <h2 class="font-bold text-white text-7xl mt-7">30</h2>
-            </div>
-            <div id="activecourses" class="h-48 px-5 py-5 text-center bg-green-700 shadow-2xl w-72 rounded-2xl">
-                <h3 class="text-2xl font-semibold text-white ">Active Courses</h3>
-                <h2 class="font-bold text-white text-7xl mt-7">30</h2>
+            <div class="w-3/12 py-10 mx-2 border-2 shadow-lg border-darthmouthgreen rounded-xl" id="totalCourseCountArea">
+                
+                <p class="font-bold text-7xl text-darthmouthgreen">{{$totalCourse}}</p>
+                <h1 class="text-xl font-semibold text-darthmouthgreen">Total Courses</h1>
             </div>
         </div>
 
-        <div id="lower" class="relative flex w-full h-full mt-3">
-            <div id="lowerleft" class="w-8/12 my-auto mr-5">
-                <div id="time" class="h-40 mb-10 shadow-2xl rounded-2xl bg-slate-400"></div>
-                <div id="calendar" class="bg-blue-400 shadow-2xl h-96 rounded-2xl"></div>
-            </div>
-            <div id="lowerright" class="w-4/12 rounded-2xl">
-                <div id="newadded" class="w-full px-5 py-5 mb-5 bg-white shadow-2xl rounded-2xl">
-                    <h3 class="text-3xl font-semibold">Newly Approved</h3>
-                    <div id="newlearner" class="flex items-center justify-between px-5 py-3 my-2 bg-green-600 rounded-xl">
-                        <h4 class="text-2xl font-medium">New Learners</h4>
-                        <h3 class="text-5xl">{{ $approvedLearner }}</h3>
+        
+        <hr class="my-6 border-2-t-2 border-2-gray-300">
+
+        <div class="flex w-full mt-10" id="mainChartDataArea">
+            <div class="w-1/2 mx-5" id="mainChartDataLeft">
+                <div class="flex">
+                    <div class="w-full p-2 my-3 flex flex-col justify-between mx-3 rounded-xl border-2 h-[250px] border-darthmouthgreen" id="learnerChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Learner Data</p>
+                        <canvas id="learnerData"></canvas>
                     </div>
-                    <div id="newinstructor" class="flex items-center justify-between px-5 py-3 my-2 bg-green-600 rounded-xl">
-                        <h4 class="text-2xl font-medium">New Instructors</h4>
-                        <h3 class="text-5xl">{{ $approvedInstructor }}</h3>
-                    </div>
-                    <div id="newcourses" class="flex items-center justify-between px-5 py-3 my-2 bg-green-600 rounded-xl">
-                        <h4 class="text-2xl font-medium">New Courses</h4>
-                        <h3 class="text-5xl">15</h3>
+                    <div class="w-full p-2 my-3 mx-3 flex flex-col justify-between rounded-xl border-2 h-[250px] border-darthmouthgreen" id="instructorChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Instructor Data</p>
+                        <canvas id="instructorData"></canvas>
                     </div>
                 </div>
-
-                <div id="pendingstatus" class="w-full px-5 py-5 bg-white shadow-2xl rounded-2xl">
-                    <h3 class="text-3xl font-semibold">Pending Status</h3>
-                    <div id="pendinglearner" class="flex items-center justify-between px-5 py-3 my-2 bg-green-600 rounded-xl">
-                        <h4 class="text-2xl font-medium">Pending Learners</h4>
-                        <h3 class="text-5xl">{{ $pendingLearner }}</h3>
+                <div class="flex">
+                    <div class="w-full p-2 my-3 mx-3 flex flex-col justify-between rounded-xl border-2 h-[250px] border-darthmouthgreen" id="courseChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Course Data</p>
+                        <canvas id="courseData"></canvas>
                     </div>
-                    <div id="pendinginstructor" class="flex items-center justify-between px-5 py-3 my-2 bg-green-600 rounded-xl">
-                        <h4 class="text-2xl font-medium">Pending Instructors</h4>
-                        <h3 class="text-5xl">{{ $pendingInstructor }}</h3>
+                    <div class="w-full p-2 my-3 mx-3 flex flex-col justify-between rounded-xl border-2 h-[250px] border-darthmouthgreen overflow-visible" id="adminRolesChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Admin Data</p>
+                        <canvas id="adminData" class="overflow-x-auto"></canvas>
                     </div>
-                    <div id="pendingcourses" class="flex items-center justify-between px-5 py-3 my-2 bg-green-600 rounded-xl">
-                        <h4 class="text-2xl font-medium">Pending Courses</h4>
-                        <h3 class="text-5xl">15</h3>
-                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 mx-5 mt-3" id="mainChartDataRight">
+                <h1 class="text-2xl font-semibold text-darthmouthgreen">Learner Course Progress</h1>
+                <select name="selectedCourse" id="selectedCourse" class="w-full px-3 py-3 mt-5 border-2 text-md rounded-xl border-darthmouthgreen">
+                    @foreach ($courses as $course)
+                        <option value="{{$course->course_id}}">{{$course->course_name}}</option>
+                    @endforeach
+                </select>
+                <div class="mt-3 rounded-xl border-2 border-darthmouthgreen w-full h-[400px]" id="courseProgressChartArea">
+                    <canvas id="courseProgressChart" class="overflow-x-auto"></canvas>
                 </div>
             </div>
         </div>
+    
     </div>
 </section>
 
-<script>
-    $(document).ready(function () {
-        $("#sidebarfull_menu").click(function () {
-            $("#sidebarfull, #sidebarmin").toggleClass("hidden");
-        });
-
-        $("#sidebarmin_menu").click(function () {
-            $("#sidebarfull, #sidebarmin").toggleClass("hidden");
-        });
-    });
-</script>
-
-
+    
+</section>
 
 @include('partials.footer')

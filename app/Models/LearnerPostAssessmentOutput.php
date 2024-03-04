@@ -20,6 +20,7 @@ class LearnerPostAssessmentOutput extends Model
         'syllabus_id',
         'answer',
         'isCorrect',
+        'attempt',
     ];
 
 

@@ -117,7 +117,17 @@
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
                     </button>
-
+                    <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">View your Gradesheet</h1>
+                    <a href="{{url("/learner/course/content/$course->course_id/$learnerCourse->learner_course_id/grades")}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                        onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
+                        <div class="flex items-center">
+                          
+                            <i class="text-4xl fa-solid fa-graduation-cap" style="color: #ffffff;"></i>
+                                
+                            <h1 class="mx-5 text-xl font-medium">View Your Gradesheet</h1>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+                    </a>
                     <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">Pre Assessment</h1>
                     <a href="{{url("/learner/course/content/$course->course_id/$learnerCourse->learner_course_id/pre_assessment")}}" 
                         style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
@@ -270,6 +280,16 @@
 
                   
                 <h1 class="px-3 my-5 text-2xl font-bold text-black border-b-2 border-black">View your Gradesheet</h1>
+                <a href="{{url("/learner/course/content/$course->course_id/$learnerCourse->learner_course_id/grades")}}" style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
+                    onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
+                    <div class="flex items-center">
+                      
+                        <i class="text-4xl fa-solid fa-graduation-cap" style="color: #ffffff;"></i>
+                            
+                        <h1 class="mx-5 text-xl font-medium">View Your Gradesheet</h1>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+                </a>
                 </div>
             </div>
             

@@ -1,5 +1,5 @@
 @include('partials.header')
-@include('partials.sidebar')
+{{-- @include('partials.sidebar') --}}
 
 <section id="view_learner_container" class="relative w-4/5 h-full left-80">
 
