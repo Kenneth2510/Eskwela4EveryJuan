@@ -67,7 +67,7 @@
         <div class="overflow-y-auto w-2/5 mx-3 text-center h-[300px] border-2 border-darthmouthgreen" id="overallGrade">
             
             <h1 class="mx-5 mt-5 mb-5 text-4xl">Course Grade</h1>
-            <p class="mx-5 mt-3 text-2xl font-bold py-14"><span class="text-darthmouthgreen text-[125px]" id="learnerPerformancePercent">{{$gradeComputation['totalGrade']}}</span><span class="text-darthmouthgreen text-[125px]"></span><br>{{$gradeComputation['remarks']}}</p>
+            <p class="mx-5 mt-3 text-2xl font-bold py-14"><span class="text-darthmouthgreen text-[125px]" id="learnerPerformancePercent">{{$learnerCourseData->grade}}</span><span class="text-darthmouthgreen text-[125px]"></span><br>{{$learnerCourseData->remarks}}</p>
             <div class=""> <div class="mt-10">
                 <h1 class="mx-2 text-2xl font-semibold">Pre Assessment</h1>
                 <h1 class="py-5 mx-16 text-4xl font-bold text-green-600">{{$gradeComputation['preAssessmentLearnerSumScore']}} <span class="text-2xl font-bold text-black"> / {{$gradeComputation['totalScoreCount_pre_assessment']}}</span></h1>

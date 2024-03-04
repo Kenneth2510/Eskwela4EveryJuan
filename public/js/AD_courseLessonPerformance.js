@@ -145,12 +145,13 @@ $(document).ready(function() {
             const learner_fname = learnerLessonProgressData[i]['learner_fname'];
             const learner_lname = learnerLessonProgressData[i]['learner_lname'];
             const course_id = learnerLessonProgressData[i]['course_id'];
+            const learner_id = learnerLessonProgressData[i]['learner_id'];
             const status = learnerLessonProgressData[i]['status'];
             const start_period = learnerLessonProgressData[i]['start_period'];
             const finish_period = learnerLessonProgressData[i]['finish_period'];
     
             const baseUrl = window.location.origin;
-            const absoluteUrl = `${baseUrl}/instructor/performances/course/${course_id}/learner/${learner_course_id}`;
+            const absoluteUrl = `/admin/performance/learners/view/${learner_id}/course/${course_id}`;
             
 
             learnerLessonProgressDisp += `

@@ -1087,6 +1087,16 @@ class AdminPerformanceController extends Controller
                           $remarks = 'Needs Improvement';
                       }
 
+            } else {
+                $activityGrade = null;
+                $quizGrade = null;
+                $preAssessmentGrade = null;
+                $postAssessmentGrade = null;
+                $totalGrade = null;
+                $remarks = null;
+            }
+
+
                 $data = [
                     'title' => 'Course Gradesheet',
                     'scripts' => ['/learner_post_assessment.js'],
@@ -1119,36 +1129,7 @@ class AdminPerformanceController extends Controller
                     'totalGrade' => $totalGrade,
                     'remarks' => $remarks,
                 ];
-            }
 
-            $data = [
-                'title' => 'Course Gradesheet',
-                'scripts' => ['/learner_post_assessment.js'],
-                'mainBackgroundCol' => '#00693e',
-                'courseData' => $courseData,
-                'activityScoresData' => $learnerActivityScoresData,
-                'quizScoresData' => $learnerQuizScoresData,
-                'preAssessmentData' => $learnerPreAssessmentGrade,
-                'postAssessmentGrade' => $learnerPostAssessmentGrade,
-                'postAssessmentData' => $learnerPostAssessmentData,
-
-                'learnerLessonsData' => $learnerLessonsData,
-
-                'activityLearnerSumScore' => $activityLearnerSumScore,
-                'activityTotalSum' => $activityTotalSum,
-       
-
-                'quizLearnerSumScore' => $quizLearnerSumScore,
-                'quizTotalSum' => $quizTotalSum,
-
-                'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
-                'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
-      
-
-                'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
-                'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
-
-            ];
 
                 // dd($data);
                 // return view('learner_course.courseGrades', compact('learner'))
@@ -1178,6 +1159,8 @@ class AdminPerformanceController extends Controller
                     'learner_course_progress.course_progress',
                     'learner_course_progress.start_period',
                     'learner_course_progress.finish_period',
+                    'learner_course_progress.grade',
+                    'learner_course_progress.remarks',
 
                     'course.course_id',
                     'course.course_name',
@@ -1400,6 +1383,7 @@ class AdminPerformanceController extends Controller
                 ->join('learner', 'learner_course.learner_id', 'learner.learner_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $postAssessmentData = DB::table('learner_post_assessment_progress')
@@ -1618,8 +1602,8 @@ class AdminPerformanceController extends Controller
                 ->join('learner', 'learner_course.learner_id', 'learner.learner_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
-
 
                 $preAssessmentData = DB::table('learner_pre_assessment_progress')
                 ->select(
@@ -2830,14 +2814,160 @@ class AdminPerformanceController extends Controller
                 ->orderBy('topic_id', 'ASC')
                 ->get();
 
+                $gradeData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'learner_course.created_at',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+                    'learner_course_progress.grade',
+                    'learner_course_progress.remarks',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=', 'learner_course.learner_course_id')
+                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                ->where('learner_course.course_id', $course->course_id);
 
+            $gradeWithActivityData = $gradeData->get();
+
+            foreach ($gradeWithActivityData as $key => $activityData) {
+                $activityData->activities = DB::table('learner_activity_output')
+                    ->select(
+                        'learner_activity_output.activity_id',
+                        'learner_activity_output.activity_content_id',
+                        'activities.activity_title',
+                        DB::raw('COALESCE(ROUND(AVG(IFNULL(attempts.total_score, 0)), 2), 0) as average_score')
+                    )
+                    ->leftJoin('activities', 'activities.activity_id', '=', 'learner_activity_output.activity_id')
+                    ->leftJoin(
+                        DB::raw('(SELECT learner_activity_output_id, AVG(total_score) as total_score FROM learner_activity_output GROUP BY learner_activity_output_id) as attempts'),
+                        'attempts.learner_activity_output_id',
+                        '=',
+                        'learner_activity_output.learner_activity_output_id'
+                    )
+                    ->where('learner_activity_output.course_id', $course->course_id)
+                    ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
+                    ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
+                    ->get();
+
+                // Retrieve quiz data for the current learner
+                $activityData->quizzes = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.quiz_id',
+                    'quizzes.quiz_title',
+                    DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_quiz_progress.score, 0)), 2), 0) as average_score')
+                )
+                ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
+                ->where('learner_quiz_progress.course_id', $course->course_id)
+                ->where('learner_quiz_progress.learner_course_id', $activityData->learner_course_id)
+                ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
+                ->get();
+
+
+                $activityData->pre_assessment = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'score'
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $activityData->learner_course_id)
+                ->first();
+
+                $activityData->post_assessment = DB::table('learner_post_assessment_progress')
+                ->select (
+                        DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_post_assessment_progress.score, 0)), 2), 0) as average_score')
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('learner_course_id', $activityData->learner_course_id)
+                    ->first();
+
+                // Add the updated $activityData back to the main array
+                $gradeWithActivityData[$key] = $activityData;
+            }
+
+
+
+            $activitySyllabusData = DB::table('activities')
+            ->select(
+                'activities.activity_id',
+                'activities.course_id',
+                'activities.syllabus_id',
+                'activities.topic_id',
+                'activities.activity_title',
+                'activity_content.total_score',
+            )
+            ->join('activity_content', 'activities.activity_id', 'activity_content.activity_id')
+            ->where('activities.course_id', $course->course_id)
+            ->orderBy('activities.topic_id',  'asc')
+            ->get();
+
+            $quizSyllabusData = DB::table('quizzes')
+            ->select(
+                'quizzes.quiz_id',
+                'quizzes.course_id',
+                'quizzes.syllabus_id',
+                'quizzes.topic_id',
+                'quizzes.quiz_title',
+                DB::raw('COUNT(quiz_content.question_id) AS total_score')
+            )
+            ->join('quiz_content', 'quizzes.quiz_id', 'quiz_content.quiz_id')
+            ->where('quizzes.course_id', $course->course_id)
+            ->groupBy('quizzes.quiz_id')
+            ->orderBy('quizzes.topic_id', 'asc')
+            ->get();
+
+
+            $learnerPreAssessmentData = DB::table('learner_pre_assessment_progress')
+                    ->select(
+                        'learner_pre_assessment_progress.learner_pre_assessment_progress_id',
+                        'learner_pre_assessment_progress.course_id',
+                        'learner_pre_assessment_progress.learner_id',
+                        'learner_pre_assessment_progress.learner_course_id',
+                        'learner_pre_assessment_progress.status',
+                        'learner_pre_assessment_progress.start_period',
+                        'learner_pre_assessment_progress.finish_period',
+                        'learner_pre_assessment_progress.score',
+                        'learner_pre_assessment_progress.remarks',
+
+                        'learner.learner_fname',
+                        'learner.learner_lname',
+                    )
+                    ->join('learner', 'learner.learner_id', 'learner_pre_assessment_progress.learner_id')
+                    ->where('learner_pre_assessment_progress.course_id', $course->course_id)
+                    ->get();
                 
+                $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
+                    ->select(
+                        'learner_post_assessment_progress.learner_post_assessment_progress_id',
+                        'learner_post_assessment_progress.course_id',
+                        'learner_post_assessment_progress.learner_course_id',
+                        'learner_post_assessment_progress.status',
+                        'learner_post_assessment_progress.start_period',
+                        'learner_post_assessment_progress.finish_period',
+                        'learner_post_assessment_progress.score',
+                        'learner_post_assessment_progress.remarks',
+                        'learner_post_assessment_progress.attempt',
+                        'learner.learner_fname',
+                        'learner.learner_lname',
+                    )
+                    ->join('learner', 'learner.learner_id', 'learner_post_assessment_progress.learner_id')
+                    ->where('learner_post_assessment_progress.course_id', $course->course_id)
+                    ->get();
+            
+            
                 $data = [
                     'title' => 'Course Performance',
                     'scripts' => ['AD_course_performance.js'],
                     'course' => $course,
                     'syllabus' => $syllabus,
                     'admin' => $adminSession,
+                    'gradesheet' => $gradeWithActivityData,
+                    'activitySyllabus' => $activitySyllabusData,
+                    'quizSyllabus' => $quizSyllabusData,
+                    'learnerPreAssessmentData' => $learnerPreAssessmentData,
+                    'learnerPostAssessmentData' => $learnerPostAssessmentData,
                 ];
 
                 // dd($data);
@@ -2946,6 +3076,8 @@ class AdminPerformanceController extends Controller
                 ->select(
                     'learner_course_progress.learner_course_progress_id',
                     'learner_course_progress.learner_course_id',
+                    'learner_course_progress.learner_id',
+                    'learner_course_progress.course_id',
                     'learner_course_progress.course_progress',
                     'learner_course_progress.start_period',
                     'learner_course_progress.finish_period',
@@ -3002,6 +3134,7 @@ class AdminPerformanceController extends Controller
                         'learner_lesson_progress.learner_lesson_progress_id AS learner_progress_id',
                         'learner_lesson_progress.learner_course_id',
                         'learner_lesson_progress.course_id',
+                        'learner_lesson_progress.learner_id',
                         'learner_lesson_progress.syllabus_id',
                         'learner_lesson_progress.lesson_id AS topic_id',
                         'learner_lesson_progress.status',
@@ -3025,6 +3158,7 @@ class AdminPerformanceController extends Controller
                         'learner_activity_progress.learner_course_id',
                         'learner_activity_progress.course_id',
                         'learner_activity_progress.syllabus_id',
+                        'learner_activity_progress.learner_id',
                         'learner_activity_progress.activity_id AS topic_id',
                         'learner_activity_progress.status',
                         'learner_activity_progress.start_period',
@@ -3048,6 +3182,7 @@ class AdminPerformanceController extends Controller
                         'learner_quiz_progress.learner_course_id',
                         'learner_quiz_progress.course_id',
                         'learner_quiz_progress.syllabus_id',
+                        'learner_quiz_progress.learner_id',
                         'learner_quiz_progress.quiz_id AS topic_id',
                         'learner_quiz_progress.status',
                         'learner_quiz_progress.start_period',
@@ -3181,6 +3316,7 @@ class AdminPerformanceController extends Controller
                     'learner_lesson_progress.learner_lesson_progress_id',
                     'learner_lesson_progress.learner_course_id',
                     'learner_lesson_progress.course_id',
+                    'learner_lesson_progress.learner_id',
                     'learner_lesson_progress.status',
                     'learner_lesson_progress.start_period',
                     'learner_lesson_progress.finish_period',

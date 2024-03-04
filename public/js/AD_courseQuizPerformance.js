@@ -341,7 +341,7 @@ $(document).ready(function() {
             const topic_id = learnerQuizProgressData[i]['topic_id'];
             const remarks = learnerQuizProgressData[i]['remarks'];
             
-            const absoluteUrl = `/instructor/course/content/${course_id}/${syllabus_id}/quiz/${topic_id}/view_learner_output/${learner_quiz_progress_id}`;
+            const absoluteUrl = `/admin/courseManage/content/${course_id}/${syllabus_id}/quiz/${topic_id}/view_learner_output/${learner_quiz_progress_id}`;
             
             learnerSyllabusProgressTableDisp += `
             <tr>

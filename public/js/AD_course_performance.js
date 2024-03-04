@@ -82,12 +82,14 @@ $(document).ready(function(){
             const learner_course_progress_id = learnerCourseProgressData[i]['learner_course_progress_id'];
             const learner_course_id = learnerCourseProgressData[i]['learner_course_id'];
             const course_progress = learnerCourseProgressData[i]['course_progress'];
+            const learner_id = learnerCourseProgressData[i]['learner_id'];
+            const course_id = learnerCourseProgressData[i]['course_id'];
             const learner_fname = learnerCourseProgressData[i]['learner_fname'];
             const learner_lname = learnerCourseProgressData[i]['learner_lname'];
             const start_period = learnerCourseProgressData[i]['start_period'];
             const finish_period = learnerCourseProgressData[i]['finish_period'];
             
-            const url = baseUrl + "/learner/" + learner_course_id
+            const url = `/admin/performance/learners/view/${learner_id}/course/${course_id}`
             learnerCourseProgressDataDisp += `
             <tr class="text-center">
                 <td class="mt-5 py-5">${learner_fname} ${learner_lname}</td>
@@ -232,6 +234,7 @@ $(document).ready(function(){
             const learner_progress_id = learnerSyllabusData[i]['learner_progress_id'];
             const learner_course_id = learnerSyllabusData[i]['learner_course_id'];
             const course_id = learnerSyllabusData[i]['course_id'];
+            const learner_id = learnerSyllabusData[i]['learner_id'];
             const syllabus_id = learnerSyllabusData[i]['syllabus_id'];
             const topic_id = learnerSyllabusData[i]['topic_id'];
             const status = learnerSyllabusData[i]['status'];
@@ -241,7 +244,7 @@ $(document).ready(function(){
             const finish_period = learnerSyllabusData[i]['finish_period'];
             const created_at = learnerSyllabusData[i]['created_at'];
             
-            const url = baseUrl + "/learner/" + learner_course_id
+            const url = `/admin/performance/learners/view/${learner_id}/course/${course_id}`
             learnerSyllabusProgressDisp += `
             <tr class="text-center">
                 <td class="mt-5 py-5">${learner_fname} ${learner_lname}</td>

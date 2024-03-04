@@ -355,8 +355,8 @@ $(document).ready(function(e) {
             const start_period = learnerActivityProgressData[i]['start_period'];
             const finish_period = learnerActivityProgressData[i]['finish_period'];
             
-            const absoluteUrl = `/instructor/course/content/${course_id}/${syllabus_id}/activity/${topic_id}/${learner_course_id}/1`;
-
+            // const absoluteUrl = `/instructor/course/content/${course_id}/${syllabus_id}/activity/${topic_id}/${learner_course_id}/1`;
+            const absoluteUrl = `/admin/courseManage/content/${course_id}/${syllabus_id}/activity/${topic_id}/${learner_course_id}/1`;
             learnerSyllabusProgressTableDisp += `
             <tr>
                 <td class="mt-5 py-5">${learner_fname} ${learner_lname}</td>

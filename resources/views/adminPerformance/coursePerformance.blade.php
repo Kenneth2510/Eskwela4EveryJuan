@@ -101,6 +101,158 @@
 
     <hr class="my-6 border-t-2 border-gray-300">
 
+    <h1 class="mx-5 mb-5 text-2xl h-">Grades Overview</h1>
+    <div class="w-full mx-3 h-[400px] overflow-y-auto border-2 border-darthmouthgreen" id="gradesheet">
+        <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
+        <div class="m-5 px-5 overflow-auto overflow-x-auto h-[350px]">
+            <table id="gradesheet" class="table-fixed w-[3000px]">
+                <thead class="px-3 text-center text-white bg-darthmouthgreen">
+                    <th class="w-4/12 pl-5">Name</th>
+                    <th class="w-4/12">Status</th>
+                    <th class="w-4/12">Date Started</th>
+                    <th class="w-4/12">Pre Assessment</th>
+                    
+                    @foreach ($activitySyllabus as $activity)
+                        <th class="w-4/12">{{ $activity->activity_title }} /({{$activity->total_score}})</th>
+                    @endforeach
+                    
+                    @foreach ($quizSyllabus as $quiz)
+                        <th class="w-4/12">{{ $quiz->quiz_title }} /({{$quiz->total_score}})</th>
+                    @endforeach
+            
+                    <th class="w-4/12">Post Assessment</th>
+                    <th class="w-4/12">Grade</th>
+                    <th class="w-4/12">Remarks</th>
+                    <th class="w-4/12">Date Finished</th>
+                </thead>
+            
+                <tbody class="text-center">
+                    @forelse ($gradesheet as $grade)
+                        <tr>
+                            <td class="py-3 pl-5">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                            <td>{{ $grade->course_progress }}</td>
+                            <td>{{ $grade->start_period }}</td>
+                            <td>{{$grade->pre_assessment->score}}</td>
+                            
+                            {{-- Display activity scores --}}
+                            @foreach ($activitySyllabus as $activity)
+                                @php
+                                    $activityScore = $grade->activities->firstWhere('activity_id', $activity->activity_id);
+                                @endphp
+                                <td>{{ $activityScore ? $activityScore->average_score : '#' }}</td>
+                            @endforeach
+                            
+                            {{-- Display quiz scores --}}
+                            @foreach ($quizSyllabus as $quiz)
+                                @php
+                                    $quizScore = $grade->quizzes->firstWhere('quiz_id', $quiz->quiz_id);
+                                @endphp
+                                <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
+                            @endforeach
+                            
+                            <td>{{$grade->post_assessment->average_score}}</td>
+                            <td>{{$grade->grade}}</td>
+                            <td>{{$grade->remarks}}</td>
+                            <td>{{ $grade->finish_period }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4">No gradesheet available</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+
+    @if($learnerPreAssessmentData)
+    <hr class="my-6 border-t-2 border-gray-300">
+
+    <h1 class="mx-5 mb-5 text-2xl">Pre Assessment Overview</h1>
+    <div class="flex p-10 mt-5" id="preAssessmentData">
+        <div class="w-full h-[250px] ml-5 border-2 overflow-y-auto border-darthmouthgreen" id="preAssessmentDataTableArea">
+            <table>
+                <thead class="py-3 text-lg text-white bg-darthmouthgreen">
+                    <th class="w-2/12">Name</th>
+                    <th class="w-2/12">Date Taken</th>
+                    <th class="w-1/12">Status</th>
+                    <th class="w-1/12">Score</th>
+                    <th class="w-1/12">Remarks</th>
+                    <th class="w-2/12">Finish Period</th>
+                    <th class="w-2/12"></th>
+                </thead>
+                <tbody class="text-lg text-center">
+                    @forelse ($learnerPreAssessmentData as $preAssessmentData)
+                    <tr>
+                        <td>{{$preAssessmentData->learner_fname}} {{$preAssessmentData->learner_lname}}</td>
+                        <td>{{$preAssessmentData->start_period}}</td>
+                        <td>{{$preAssessmentData->status}}</td>
+                        <td>{{$preAssessmentData->score}}</td>
+                        <td>{{$preAssessmentData->remarks}}</td>
+                        <td>{{$preAssessmentData->finish_period}}</td>
+                        <td>
+                            <a href="{{  url("/admin/performance/learners/view/$preAssessmentData->course_id/$preAssessmentData->learner_course_id/pre_assessment/view_output")}}" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">view</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td>No Data available</td>
+                    </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
+    @if($learnerPostAssessmentData)
+    <hr class="my-6 border-t-2 border-gray-300">
+
+    <h1 class="mx-5 mb-5 text-2xl">Post Assessment Overview</h1>
+    <div class="flex p-10 mt-5" id="postAssessmentData">
+        <div class="w-full h-[250px] ml-5 border-2 overflow-y-auto border-darthmouthgreen" id="postAssessmentDataTableArea">
+            <table>
+                <thead class="py-3 text-lg text-white bg-darthmouthgreen">
+                    
+                    <th class="w-2/12">Name</th>
+                    <th class="w-2/12">Date Taken</th>
+                    <th class="w-1/12">Status</th>
+                    <th class="w-1/12">Score</th>
+                    <th class="w-1/12">Attempts</th>
+                    <th class="w-1/12">Remarks</th>
+                    <th class="w-2/12">Finish Period</th>
+                    <th class="w-2/12"></th>
+                </thead>
+                <tbody class="text-lg text-center">
+                    @forelse ($learnerPostAssessmentData as $postAssessment)
+                    <tr>
+                        <td>{{$postAssessment->learner_fname}} {{$postAssessment->learner_lname}}</td>
+                        <td class="py-1">{{$postAssessment->start_period}}</td>
+                        <td>{{$postAssessment->status}}</td>
+                        <td>{{$postAssessment->score}}</td>
+                        <td>{{$postAssessment->attempt}}</td>
+                        <td>{{$postAssessment->remarks}}</td>
+                        <td>{{$postAssessment->finish_period}}</td>
+                        <td>
+                            <a href="{{  url("/admin/performance/learners/view/$postAssessment->course_id/$postAssessment->learner_course_id/post_assessment/view_output/$postAssessment->attempt")}}" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">view</a>
+                        </td>
+                    </tr>
+                    @empty
+                        <tr>
+                            <td>no data available</td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+    <hr class="my-6 border-t-2 border-gray-300">
+    <h1 class="mx-5 mb-5 text-2xl">Syllabus Overview</h1>
+
     <div class="flex flex-col items-center justify-center w-full mt-5" id="topicDetailsArea">
         <div class="w-full" id="selectTopicArea">
             <select name="" class="w-full px-5 py-3 text-lg border-2 border-darthmouthgreen" id="selectTopic">

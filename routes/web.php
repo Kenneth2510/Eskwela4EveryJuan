@@ -318,8 +318,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}', 'AdminPerformanceController@courseSyllabusPerformance');
     Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/lessonData', 'AdminPerformanceController@courseSyllabusLessonPerformance');
     Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/activityData', 'AdminPerformanceController@courseSyllabusActivityPerformance');
-    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/activityData/outputs', 'InstructorPerformanceController@courseSyllabusActivityScoresPerformance');
-    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData', 'InstructorPerformanceController@courseSyllabusQuizPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/activityData/outputs', 'AdminPerformanceController@courseSyllabusActivityScoresPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData', 'AdminPerformanceController@courseSyllabusQuizPerformance');
     Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData/outputs', 'AdminPerformanceController@courseSyllabusQuizScoresPerformance');
     Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData/contentOutputs', 'AdminPerformanceController@courseSyllabusQuizContentOutputPerformance');
     Route::get('/admin/performance/courses/view/{course}/learner/{learner_course}', 'AdminPerformanceController@learnerCoursePerformance');
