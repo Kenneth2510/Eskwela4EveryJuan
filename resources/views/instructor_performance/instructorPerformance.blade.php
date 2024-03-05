@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- MAIN --}}
-    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+    <section class="w-full h-auto md:h-screen md:w-3/4 lg:w-10/12">
         <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
 
             <div class="py-4">
@@ -36,12 +36,12 @@
                     
                 </div>
                 <div class="w-1/2 h-[300px] md:w-2/5 flex flex-col justify-between space-y-2" id="totalCourseSubInfoArea">
-                    <div class="relative flex flex-col items-center border-2 md:flex-row h-1/2 border-darthmouthgreen" id="enrolledLearnersArea">
-                        <div class="flex items-center ">
-                            <i class="absolute -translate-x-1/2 -translate-y-1/2 md:px-4 md:opacity-100 md:relative fa-solid fa-user text-darthmouthgreen fa-5x top-1/2 left-1/2 opacity-20 md:left-auto md:-translate-x-0 md:-translate-y-0"></i>
+                    <div class="relative flex flex-col items-center border-2 md:flex-row h-1/2 border-darthmouthgreen md:justify-center" id="enrolledLearnersArea">
+                        <div class="flex items-center">
+                            <i class="absolute -translate-x-1/2 -translate-y-1/2 lg:px-4 lg:opacity-100 lg:relative fa-solid fa-user text-darthmouthgreen fa-5x top-1/2 left-1/2 opacity-20 lg:left-auto lg:-translate-x-0 lg:-translate-y-0"></i>
                             <p class="font-bold text-center text-md"><span class="text-6xl text-darthmouthgreen" id="totalLearnersCount">0</span><br>Learners</p>
                         </div>
-                        <div class="font-xs md:font-base">
+                        <div class="text-xs lg:text-base">
                             <div class="flex items-center">
                                 <div class="w-3 h-3 mx-3 rounded-full bg-darthmouthgreen"></div>
                                 <p class="font-bold">Approved: <span id="totalApprovedLearnersCount" class="">0</span></p>
@@ -59,12 +59,12 @@
                         </div>
                     </div>
 
-                    <div class="relative flex flex-col items-center border-2 md:flex-row h-1/2 border-darthmouthgreen" id="syllabusContentsArea">
+                    <div class="relative flex flex-col items-center border-2 md:flex-row h-1/2 border-darthmouthgreen md:justify-center" id="syllabusContentsArea">
                         <div class="flex items-center ">
-                            <i class="absolute -translate-x-1/2 -translate-y-1/2 md:px-4 md:left-auto md:opacity-100 md:-translate-x-0 md:-translate-y-0 md:relative left-1/2 fa-solid fa-book-bookmark text-darthmouthgreen fa-5x top-1/2 opacity-20"></i>
+                            <i class="absolute -translate-x-1/2 -translate-y-1/2 lg:px-4 lg:left-auto lg:opacity-100 lg:-translate-x-0 lg:-translate-y-0 lg:relative left-1/2 fa-solid fa-book-bookmark text-darthmouthgreen fa-5x top-1/2 opacity-20"></i>
                             <p class="font-bold text-center text-md"><span class="text-6xl text-darthmouthgreen" id="totalSyllabusCount">0</span><br>Topics</p>
                         </div>
-                        <div class="font-xs md:font-base">
+                        <div class="text-xs lg:text-base">
                             <div class="flex items-center">
                                 <i class="mx-3 text-xl fa-solid fa-file text-darthmouthgreen"></i>
                                 <p class="font-bold ">Lessons: <span id="totalLessonsCount" class="">0</span></p>

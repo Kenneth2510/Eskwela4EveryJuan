@@ -1,14 +1,14 @@
-<section class="hidden w-full h-screen md:block md:w-1/5 lg:w-auto sideProfile">
+<section class="hidden w-auto h-screen md:block lg:w-auto sideProfile">
     <div class="h-full px-2 py-4">
         <div class="flex flex-col space-y-4">
             <button class="profile">
-                <img class="w-16 h-16 rounded-full bg-primary" src="" alt="">
+                <img class="w-12 h-12 rounded-full lg:w-16 lg:h-16 bg-primary" src="" alt="">
             </button>
             <button class="AIHelper">
-                <img class="w-16 h-16 rounded-full bg-secondary" src="" alt="">
+                <img class="w-12 h-12 rounded-full lg:w-16 lg:h-16 bg-secondary" src="" alt="">
             </button>
             <button class="">
-                <img class="w-16 h-16 rounded-full bg-accent" src="" alt="">
+                <img class="w-12 h-12 rounded-full lg:w-16 lg:h-16 bg-accent" src="" alt="">
             </button>
         </div>
     </div>

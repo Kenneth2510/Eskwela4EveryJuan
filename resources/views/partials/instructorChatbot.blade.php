@@ -1,8 +1,8 @@
-<section class="hidden w-full h-screen text-sm md:w-1/3 lg:w-2/5" id="AIHelper">
+<section class="hidden h-screen text-sm md:w-1/3 lg:w-2/5" id="AIHelper">
   <div class="flex flex-col justify-between h-full p-3 overflow-hidden rounded-lg shadow-lg">
     {{-- head --}}
     <div>
-        <div class="relative w-full py-3 text-center border-b-2 border-gray-300">
+        <div class="relative py-3 text-center border-b-2 border-gray-300">
             <i class="absolute top-0 right-0 px-3 fa-solid fa-xmark" id="AIClose"></i>
             <h1 class="text-2xl font-bold">AI Helper</h1>
         </div>        
