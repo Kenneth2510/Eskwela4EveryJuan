@@ -49,10 +49,7 @@
                         <button class="px-4 py-2 text-lg font-medium text-white bg-green-600 rounded-xl hover:bg-green-700" type="submit">Search</button>
                     </div>
                 </form>
-                
-           
             </div>
-        
 
             <div id="contenttable" class="mt-7">
                 <table class="w-full border-b border-black">

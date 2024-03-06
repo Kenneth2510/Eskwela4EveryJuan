@@ -1,20 +1,17 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
+@section('content')
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="p-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="relative w-full h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-4">
             <div style="background-color:{{$mainBackgroundCol}}" class="p-2 text-white fill-white rounded-xl">
                 <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
                     <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                 </a>
-                <h1 class="w-1/2 py-4 text-5xl font-bold"><span class="">{{ $course->course_name }}</span></h1>
+                <h1 class="w-1/2 py-4 text-2xl font-bold md:text-4xl"><span class="">{{ $course->course_name }}</span></h1>
             {{-- subheaders --}}
                 <div class="flex flex-col fill-mainwhitebg">
-                    <h1 class="w-1/2 py-4 text-4xl font-bold"><span class="">{{ $activityInfo->activity_title }}</span></h1>
+                    <h1 class="w-1/2 py-4 text-lg"><span class="">{{ $activityInfo->activity_title }}</span></h1>
                 </div>
             </div>
             
@@ -28,13 +25,13 @@
                 {{-- head --}}
                 <div class="flex flex-row items-center py-4 border-b-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M12 29a1 1 0 0 1-.92-.62L6.33 17H2v-2h5a1 1 0 0 1 .92.62L12 25.28l8.06-21.63A1 1 0 0 1 21 3a1 1 0 0 1 .93.68L25.72 15H30v2h-5a1 1 0 0 1-.95-.68L21 7l-8.06 21.35A1 1 0 0 1 12 29Z"/></svg>
-                    <h1 class="mx-2 text-2xl font-semibold">{{$activityInfo->activity_title}}</h1>
+                    <h1 class="mx-2 text-xl font-semibold">{{$activityInfo->activity_title}}</h1>
                 </div>
                 
                 {{-- body --}}
                 <div class="py-4 " id="defaultView">
                     <div class="flex flex-row items-center">
-                        <h3 class="my-2 text-xl font-medium">Instructions:</h3>
+                        <h3 class="my-2 text-xl font-medium md:text-2xl">Instructions:</h3>
                         <button id="editInstructionsBtn" class="hidden">
                             <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
                         </button>
@@ -44,21 +41,21 @@
                     {{-- <p>{{ $activity->activity_instructions }}</p> --}}
                     {{-- <input type="text" name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions" value="{{$activity->activity_instructions}}" disabled> --}}
 
-                    <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions h-[200px]" disabled>{{$activity->activity_instructions}}</textarea>
+                    <textarea name="activity_instructions" class="w-full max-w-full min-w-full activity_instructions max-h-[200px]" disabled>{{$activity->activity_instructions}}</textarea>
                     <div class="hidden mt-3 editInstructions_clickedBtn">
                         <button class="px-3 py-3 text-white bg-green-600 saveInstructionsBtn hover:bg-green-900 rounded-xl">Save</button>
                         <button class="px-3 py-3 text-white bg-red-600 cancelInstructionsBtn hover:bg-red-900 rounded-xl">Cancel</button>
                     </div>
 
                     <div class="flex flex-row items-center mt-5">
-                        <h3 class="my-2 text-xl font-medium">Criteria:</h3>
+                        <h3 class="my-2 text-xl font-medium md:text-2xl">Criteria:</h3>
                         <button id="editCriteriaBtn" class="hidden">
                             <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80 0v-160h800V0H80Zm80-240v-150l362-362 150 150-362 362H160Zm80-80h36l284-282-38-38-282 284v36Zm477-326L567-796l72-72q11-12 28-11.5t28 11.5l94 94q11 11 11 27.5T789-718l-72 72ZM240-320Z"/></svg>
                         </button>
                         
                     </div>
-                    <table class="rounded-xl">
-                        <thead class="text-xl text-white bg-green-700 rounded-xl">
+                    <table class="table w-full table-fixed rounded-xl">
+                        <thead class="w-full text-xl text-white bg-green-700 rounded-xl">
                             <th class="w-2/5">Criteria</th>
                             <th class="w-1/5">Score</th>
                             <th class="w-1/5"></th>
@@ -67,10 +64,10 @@
                             @forelse ($activityContentCriteria as $criteria)
                             <tr>
                                 <td>
-                                    <input type="text" class="" value="{{ $criteria->criteria_title }}" disabled>
+                                    <input type="text" class="w-full" value="{{ $criteria->criteria_title }}" disabled>
                                 </td>
                                 <td class="flex justify-end">
-                                    <input type="text" class="flex text-center" value="{{ $criteria->score }}" disabled></td>
+                                    <input type="text" class="flex w-full text-center" value="{{ $criteria->score }}" disabled></td>
                                 <td>
                                     <button class="hidden px-3 py-1 mx-2 font-semibold text-white bg-green-600 rounded-xl editCriteriaBtn hover:bg-green-900">Edit</button>
                                     <div class="flex edit_btns">
@@ -89,8 +86,8 @@
                     </table>
                     <button id="addNewCriteria" class="hidden px-3 py-1 mx-2 font-semibold text-white bg-darthmouthgreen rounded-xl hover:bg-green-900">Add Criteria</button>
                     <div class="hidden mt-3" id="editCriteria_clickedBtn"> 
-                        <button id="saveCriteriaBtn" data-activity-content-id="{{$activity->activity_content_id}}" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
-                        <button id="cancelCriteriaBtn" class="px-5 py-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
+                        <button id="saveCriteriaBtn" data-activity-content-id="{{$activity->activity_content_id}}" class="p-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-900">Save Criteria</button>
+                        <button id="cancelCriteriaBtn" class="p-3 text-white bg-red-600 hover:bg-red-900 rounded-xl">Cancel</button>
                     </div>
                     <br>
                     <br>
@@ -132,7 +129,10 @@
             </div>
             
         </div>
-    </section>
+    </section>    
+@endsection
+
+
 
     {{-- <x-modal >
         <div class="flex flex-col">
@@ -156,11 +156,10 @@
         </div>
     </x-modal> --}}
 
-    @include('partials.instructorProfile')
 </section>
 
-<div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
-    <div class="w-3/5 p-4 bg-white rounded-lg shadow-lg modal-content">
+<div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div class="w-3/5 max-h-[400px] p-4 bg-white rounded-lg shadow-lg modal-content">
 
         <div class="flex justify-end w-full">
             <button class="exitResponsesModalBtn">
@@ -170,7 +169,7 @@
 
         <h1 class="text-2xl font-bold ">View All Responses</h1>
         
-        <div id="responsesContent" class="mt-5 overflow-y-auto">
+        <div id="responsesContent" class="mt-5 overflow-y-auto ">
             <table class="w-full">
                 <thead class="text-white bg-darthmouthgreen">
                     <th class="w-1/12">Enrollee ID</th>
@@ -201,4 +200,3 @@
 
     </div>
 </div>
-@include('partials.footer')

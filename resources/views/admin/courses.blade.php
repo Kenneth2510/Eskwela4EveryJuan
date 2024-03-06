@@ -49,7 +49,6 @@
         
                         <button class="px-4 py-2 text-lg font-medium text-white bg-green-600 rounded-xl hover:bg-green-700" type="submit">Search</button>
                     </div>
-                </form>
             </div>
 
             <div id="contenttable" class="mt-7">
@@ -83,8 +82,7 @@
                     <tr>
                         <td class="py-1 text-lg font-normal" colspan="7">No courses found.</td>
                     </tr>
-                    @endforelse
-                    
+                    @endforelse            
                     
                 </tbody>
             </table>

@@ -1,5 +1,3 @@
-
-
 <section class="fixed relative z-20 w-1/3 h-auto overflow-hidden text-black" id="sidebar_full">
 
     

@@ -1,14 +1,7 @@
-@include('partials.header')
+@extends('layouts.learner_login')
 
-    <section class="flex flex-row w-full h-screen text-sm ">
-        
-        <header class="fixed top-0 left-0 z-40 flex flex-row items-center w-full px-4 py-4 bg-transparent">
-            <a href="#">
-                <span class="self-center font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
-                    Eskwela4EveryJuan
-                </span>
-            </a>
-        </header>
+@section('content')
+    <section class="flex flex-row w-full h-screen text-base ">
         
         {{-- MAIN --}}
         <div class="relative w-full h-screen text-black lg:overflow-auto md:flex md:justify-center md:items-center md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
@@ -162,6 +155,7 @@
             </button>
         </div>
         
-    </section>
+    </section>    
+@endsection
 
-@include('partials.footer')
+

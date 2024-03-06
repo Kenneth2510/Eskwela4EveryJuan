@@ -1,5 +1,3 @@
-@include('partials.header')
-
 <section class="w-screen h-screen bg-cover" style="background-image: url('{{ asset('assets/CityHall.jpg') }}')">
 
     {{-- <div class="p-5 text-3xl font-bold titlearea font-poppins">Eskwela4EveryJuan</div> --}}

@@ -20,6 +20,12 @@
                 <i class="text-2xl md:text-3xl fa-solid fa-arrow-left" style="color: #000000;"></i>
             </a>
         </div>
+        <div id="AD002_IA_maincontainer" class="relative w-full px-2 text-black shadow-lg rounded-2xl">
+            <div class="mb-5">
+                <a href="/admin/instructors" class="">
+                    <i class="text-xl fa-solid fa-arrow-left" style="color: #000000;"></i>
+                </a>
+            </div>
 
         <div class="flex justify-between">
             <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
