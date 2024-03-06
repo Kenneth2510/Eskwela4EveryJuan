@@ -163,7 +163,6 @@
                         </div>
                     </div>
 
-
                     <div class="hidden py-5 mx-5" id="learnersEnrolledArea">
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
@@ -204,18 +203,39 @@
                         <button id="generateEnrolledLearnersBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Download PDF</button>
                     </div>
 
-
-                    <div class="hidden py-5 mx-5" id="gradesheetArea">
-                        <div class="" id="exportExcelGrades">
-                            <h1 id="courseNamePdf" class="text-2xl font-semibold md:text-4xl">{{ $course->course_name }}</h1>
-                            <h1 class="text-xl">Enrollee Gradesheet</h1>
-                            <div class="overflow-auto overflow-x-auto ">
-                                <table id="gradesheet" class="table w-full table-fixed">
-                                    <thead class="text-center text-white bg-darthmouthgreen">
-                                        <th class="w-[130px]">Name</th>
-                                        <th class="w-[130px]">Status</th>
-                                        <th class="w-[130px]">Date Started</th>
-                                        <th class="w-[130px]">Pre Assessment</th>
+            <div class="hidden py-5 mx-5" id="gradesheetArea">
+                <div class="" id="exportExcelGrades">
+                    <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
+                    <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
+                    <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
+                        <table id="gradesheet" class="table-fixed w-[3000px]">
+                            <thead class="px-3 text-center text-white bg-darthmouthgreen">
+                                <th class="w-4/12 pl-5">Name</th>
+                                <th class="w-4/12">Status</th>
+                                <th class="w-4/12">Date Started</th>
+                                <th class="w-4/12">Pre Assessment</th>
+                                
+                                @foreach ($activitySyllabus as $activity)
+                                    <th class="w-4/12">{{ $activity->activity_title }}</th>
+                                @endforeach
+                                
+                                @foreach ($quizSyllabus as $quiz)
+                                    <th class="w-4/12">{{ $quiz->quiz_title }}</th>
+                                @endforeach
+                        
+                                <th class="w-4/12">Post Assessment</th>
+                                <th class="w-4/12">Grade</th>
+                                <th class="w-4/12">Remarks</th>
+                                <th class="w-4/12">Date Finished</th>
+                            </thead>
+                        
+                            <tbody class="text-center">
+                                @forelse ($gradesheet as $grade)
+                                    <tr>
+                                        <td class="py-3 pl-5">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                                        <td>{{ $grade->course_progress }}</td>
+                                        <td>{{ $grade->start_period }}</td>
+                                        <td>{{$grade->pre_assessment->score}}</td>
                                         
                                         @foreach ($activitySyllabus as $activity)
                                             <th class="w-[130px]">{{ $activity->activity_title }}</th>
@@ -374,8 +394,8 @@
             </div>
             
             <div class="flex justify-center w-full mt-5">
-                <button type="button" data-course-id="{{ $course->course_id }}" id="confirmDeleteCourseBtn" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Delete Course</button>
-                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelDelete hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+                <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
+                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
             </div>
         
         </div>

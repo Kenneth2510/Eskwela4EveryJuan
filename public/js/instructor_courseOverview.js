@@ -293,7 +293,7 @@ $(document).ready(function() {
         $('#addNewFileModal').removeClass('hidden')
     })
 
-    $('.cancelAdd').on('click', function() {
+    $('.cancelAddNewFile').on('click', function() {
         $('#addNewFileModal').addClass('hidden')
     })
 

@@ -41,6 +41,7 @@ use Carbon\Carbon;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 class LearnerCourseController extends Controller
 {
@@ -158,6 +159,7 @@ class LearnerCourseController extends Controller
                     'instructor.instructor_fname',
                     'instructor.instructor_lname',
                     'instructor.profile_picture',
+                    'instructor.instructor_email'
                 )
                 ->join('instructor', 'course.instructor_id', '=',  'instructor.instructor_id')
                 ->where('course_id', $course->course_id)
@@ -287,11 +289,10 @@ class LearnerCourseController extends Controller
                 ->where('learner_course.learner_id', '=', $learner->learner_id)
                 ->where('learner_course.course_id', '=', $course->course_id)
                 ->first();
-                    // dd($isEnrolled);
                 $totalLessonsDuration = $totalLessonsDuration->total_duration ?? 0;
                 $totalActivitiesDuration = $totalActivitiesDuration->total_duration ?? 0;
                 $totalQuizzesDuration = $totalQuizzesDuration->total_duration ?? 0;
-
+                    // dd($isEnrolled);
                 if($isEnrolled) {
                     $courseProgress = DB::table('learner_course_progress')
                     ->select(
@@ -306,10 +307,83 @@ class LearnerCourseController extends Controller
                     ->where('learner_course_id', $isEnrolled->learner_course_id)
                     ->first();
                     // dd($courseProgress);
+
+                    $learnerPreAssessmentGrade = DB::table('learner_pre_assessment_progress')
+                    ->select(
+                        'score'
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('learner_course_id', $isEnrolled->learner_course_id)
+                    ->first();
+        
+                    $learnerPostAssessmentGrade = DB::table('learner_post_assessment_progress')
+                    ->select (
+                            DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_post_assessment_progress.score, 0)), 2), 0) as average_score')
+                        )
+                        ->where('course_id', $course->course_id)
+                        ->where('learner_course_id', $isEnrolled->learner_course_id)
+                        ->first();
+
+
+                        $gradeData = DB::table('learner_course')
+                        ->select(
+                            'learner_course.learner_course_id',
+                            'learner_course.learner_id',
+                            'learner_course.created_at',
+                            'learner_course_progress.course_progress',
+                            'learner_course_progress.start_period',
+                            'learner_course_progress.finish_period',
+                            'learner.learner_fname',
+                            'learner.learner_lname',
+                        )
+                        ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=', 'learner_course.learner_course_id')
+                        ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                        ->where('learner_course.course_id', $course->course_id)
+                        ->where('learner_course.learner_id', $learner->learner_id);
+                    
+                        $gradeWithActivityData = $gradeData->get();
+                        
+                        foreach ($gradeWithActivityData as $activityData) {
+                            $activityData->activities = DB::table('learner_activity_output')
+                                ->select(
+                                    'learner_activity_output.activity_id',
+                                    'learner_activity_output.activity_content_id',
+                                    'activities.activity_title',
+                                    DB::raw('COALESCE(ROUND(AVG(IFNULL(attempts.total_score, 0)), 2), 0) as average_score')
+                                )
+                                ->leftJoin('activities', 'activities.activity_id', '=', 'learner_activity_output.activity_id')
+                                ->leftJoin(
+                                    DB::raw('(SELECT learner_activity_output_id, AVG(total_score) as total_score FROM learner_activity_output GROUP BY learner_activity_output_id) as attempts'),
+                                    'attempts.learner_activity_output_id',
+                                    '=',
+                                    'learner_activity_output.learner_activity_output_id'
+                                )
+                                ->where('learner_activity_output.course_id', $course->course_id)
+                                ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
+                                ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
+                                ->get();
+                        }
+                        
+                        $gradeWithQuizData = $gradeWithActivityData;
+                        
+                        foreach ($gradeWithQuizData as $quizData) {
+                            $quizData->quizzes = DB::table('learner_quiz_progress')
+                                ->select(
+                                    'learner_quiz_progress.quiz_id',
+                                    'quizzes.quiz_title',
+                                    DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_quiz_progress.score, 0)), 2), 0) as average_score')
+                                )
+                                ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
+                                ->where('learner_quiz_progress.course_id', $course->course_id)
+                                ->where('learner_quiz_progress.learner_course_id', $quizData->learner_course_id)
+                                ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
+                                ->get();
+                        }
+                    
                 }
          
                 $totalCourseTimeInSeconds = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
-                $totalCourseTimeInSeconds = 1927700 / 1000; // Convert milliseconds to seconds
+                $totalCourseTimeInSeconds = ($totalCourseTimeInSeconds) / 1000; // Convert milliseconds to seconds
 
                 $hours = floor($totalCourseTimeInSeconds / 3600);
                 $minutes = floor(($totalCourseTimeInSeconds % 3600) / 60);
@@ -343,76 +417,8 @@ class LearnerCourseController extends Controller
                 $progressPercent = ($syllabusProgressCompleted / $totalSyllabusCount) * 100;
 
 
-                $gradeData = DB::table('learner_course')
-                ->select(
-                    'learner_course.learner_course_id',
-                    'learner_course.learner_id',
-                    'learner_course.created_at',
-                    'learner_course_progress.course_progress',
-                    'learner_course_progress.start_period',
-                    'learner_course_progress.finish_period',
-                    'learner.learner_fname',
-                    'learner.learner_lname',
-                )
-                ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=', 'learner_course.learner_course_id')
-                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
-                ->where('learner_course.course_id', $course->course_id)
-                ->where('learner_course.learner_id', $learner->learner_id);
-            
-                $gradeWithActivityData = $gradeData->get();
-                
-                foreach ($gradeWithActivityData as $activityData) {
-                    $activityData->activities = DB::table('learner_activity_output')
-                        ->select(
-                            'learner_activity_output.activity_id',
-                            'learner_activity_output.activity_content_id',
-                            'activities.activity_title',
-                            DB::raw('COALESCE(ROUND(AVG(IFNULL(attempts.total_score, 0)), 2), 0) as average_score')
-                        )
-                        ->leftJoin('activities', 'activities.activity_id', '=', 'learner_activity_output.activity_id')
-                        ->leftJoin(
-                            DB::raw('(SELECT learner_activity_output_id, AVG(total_score) as total_score FROM learner_activity_output GROUP BY learner_activity_output_id) as attempts'),
-                            'attempts.learner_activity_output_id',
-                            '=',
-                            'learner_activity_output.learner_activity_output_id'
-                        )
-                        ->where('learner_activity_output.course_id', $course->course_id)
-                        ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
-                        ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
-                        ->get();
-                }
-                
-                $gradeWithQuizData = $gradeWithActivityData;
-                
-                foreach ($gradeWithQuizData as $quizData) {
-                    $quizData->quizzes = DB::table('learner_quiz_progress')
-                        ->select(
-                            'learner_quiz_progress.quiz_id',
-                            'quizzes.quiz_title',
-                            DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_quiz_progress.score, 0)), 2), 0) as average_score')
-                        )
-                        ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
-                        ->where('learner_quiz_progress.course_id', $course->course_id)
-                        ->where('learner_quiz_progress.learner_course_id', $quizData->learner_course_id)
-                        ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
-                        ->get();
-                }
-            
-            $learnerPreAssessmentGrade = DB::table('learner_pre_assessment_progress')
-            ->select(
-                'score'
-            )
-            ->where('course_id', $course->course_id)
-            ->where('learner_course_id', $courseProgress->learner_course_id)
-            ->first();
+   
 
-            $learnerPostAssessmentGrade = DB::table('learner_post_assessment_progress')
-            ->select (
-                    DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_post_assessment_progress.score, 0)), 2), 0) as average_score')
-                )
-                ->where('course_id', $course->course_id)
-                ->where('learner_course_id', $courseProgress->learner_course_id)
-                ->first();
 
 
             $activitySyllabusData = DB::table('activities')
@@ -797,36 +803,38 @@ class LearnerCourseController extends Controller
             ->orderBy('attempt', 'DESC')
             ->first();
 
+                if($courseData->course_progress === 'COMPLETED') {
+                    // compute now the grades
+                    $activityGrade = 0;
+                    $quizGrade = 0;
+                    $postAssessmentGrade = 0;
+                    $preAssessmentGrade = 0;
+                    $totalGrade = 0;
 
-                      // compute now the grades
-                      $activityGrade = 0;
-                      $quizGrade = 0;
-                      $postAssessmentGrade = 0;
-                      $preAssessmentGrade = 0;
-                      $totalGrade = 0;
-          
-                      // activity
-                      $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
-                      $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
-                      $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
-                      $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
-          
-          
-                      $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
-          
-                       
-                      if ($totalGrade >= 90) {
-                          $remarks = 'Excellent';
-                      } elseif ($totalGrade >= 80) {
-                          $remarks = 'Very Good';
-                      } elseif ($totalGrade >= 70) {
-                          $remarks = 'Good';
-                      } elseif ($totalGrade > 50) {
-                          $remarks = 'Satisfactory';
-                      } else {
-                          $remarks = 'Needs Improvement';
-                      }
+                    // activity
+                    $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
+                    $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
+                    $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
+                    $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
 
+
+                    $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
+
+                    
+                    if ($totalGrade >= 90) {
+                        $remarks = 'Excellent';
+                    } elseif ($totalGrade >= 80) {
+                        $remarks = 'Very Good';
+                    } elseif ($totalGrade >= 70) {
+                        $remarks = 'Good';
+                    } elseif ($totalGrade > 50) {
+                        $remarks = 'Satisfactory';
+                    } else {
+                        $remarks = 'Needs Improvement';
+                    }
+
+                }
+                  
                     $learnerBusinessData = DB::table('business')
                     ->select(
                         'business_name',
@@ -840,39 +848,70 @@ class LearnerCourseController extends Controller
                     ->where('learner_id', $learner->learner_id)
                     ->first();
 
-                $data = [
-                    'title' => 'Course Gradesheet',
-                    'scripts' => ['/learner_post_assessment.js'],
-                    'mainBackgroundCol' => '#00693e',
-                    'businessData' => $learnerBusinessData,
-                    'courseData' => $courseData,
-                    'activityScoresData' => $learnerActivityScoresData,
-                    'quizScoresData' => $learnerQuizScoresData,
-                    'preAssessmentData' => $learnerPreAssessmentGrade,
-                    'postAssessmentGrade' => $learnerPostAssessmentGrade,
-                    'postAssessmentData' => $learnerPostAssessmentData,
+                
+                if($courseData->course_progress === 'COMPLETED') {
+                    $data = [
+                        'title' => 'Course Gradesheet',
+                        'scripts' => ['/learner_post_assessment.js'],
+                        'mainBackgroundCol' => '#00693e',
+                        'businessData' => $learnerBusinessData,
+                        'courseData' => $courseData,
+                        'activityScoresData' => $learnerActivityScoresData,
+                        'quizScoresData' => $learnerQuizScoresData,
+                        'preAssessmentData' => $learnerPreAssessmentGrade,
+                        'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                        'postAssessmentData' => $learnerPostAssessmentData,
+    
+                        'learnerLessonsData' => $learnerLessonsData,
+    
+                        'activityLearnerSumScore' => $activityLearnerSumScore,
+                        'activityTotalSum' => $activityTotalSum,
+                        'activityGrade' => $activityGrade,
+    
+                        'quizLearnerSumScore' => $quizLearnerSumScore,
+                        'quizTotalSum' => $quizTotalSum,
+                        'quizGrade' => $quizGrade,
+    
+                        'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                        'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
+                        'postAssessmentScoreGrade' => $postAssessmentGrade,
+    
+                        'preAssessmentGradeData' => $preAssessmentGrade,
+                        'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                        'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+    
+                        'totalGrade' => $totalGrade,
+                        'remarks' => $remarks,
+                    ];
+                } else {
+                    $data = [
+                        'title' => 'Course Gradesheet',
+                        'scripts' => ['/learner_post_assessment.js'],
+                        'mainBackgroundCol' => '#00693e',
+                        'businessData' => $learnerBusinessData,
+                        'courseData' => $courseData,
+                        'activityScoresData' => $learnerActivityScoresData,
+                        'quizScoresData' => $learnerQuizScoresData,
+                        'preAssessmentData' => $learnerPreAssessmentGrade,
+                        'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                        'postAssessmentData' => $learnerPostAssessmentData,
+    
+                        'learnerLessonsData' => $learnerLessonsData,
+    
+                        'activityLearnerSumScore' => $activityLearnerSumScore,
+                        'activityTotalSum' => $activityTotalSum,
+    
+                        'quizLearnerSumScore' => $quizLearnerSumScore,
+                        'quizTotalSum' => $quizTotalSum,
 
-                    'learnerLessonsData' => $learnerLessonsData,
+                        'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                        'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
 
-                    'activityLearnerSumScore' => $activityLearnerSumScore,
-                    'activityTotalSum' => $activityTotalSum,
-                    'activityGrade' => $activityGrade,
+                        'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                        'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+                    ];
+                }
 
-                    'quizLearnerSumScore' => $quizLearnerSumScore,
-                    'quizTotalSum' => $quizTotalSum,
-                    'quizGrade' => $quizGrade,
-
-                    'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
-                    'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
-                    'postAssessmentScoreGrade' => $postAssessmentGrade,
-
-                    'preAssessmentGradeData' => $preAssessmentGrade,
-                    'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
-                    'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
-
-                    'totalGrade' => $totalGrade,
-                    'remarks' => $remarks,
-                ];
 
                 
                             // Render the view with the Blade template
@@ -1196,7 +1235,6 @@ class LearnerCourseController extends Controller
         return response()->json($response);
 
     }
-
 
 
     public function pre_assessment(Course $course, LearnerCourse $learner_course) {
@@ -4623,22 +4661,32 @@ class LearnerCourseController extends Controller
                 $preAssessmentLearnerSumScore += $pre_assessment->score;
             }
 
-            // compute now the grades
-            $activityGrade = 0;
-            $quizGrade = 0;
-            $postAssessmentGrade = 0;
-            $preAssessmentGrade = 0;
-            $totalGrade = 0;
+            $courseGrading = DB::table('course_grading')
+            ->select(
+                'activity_percent',
+                'quiz_percent',
+                'pre_assessment_percent',
+                'post_assessment_percent',
+            )
+            ->where('course_id', $course->course_id)
+            ->first();
 
-            // activity
-            $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
-            $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
-            $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
-            $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
-
-
-            $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
-
+                      // compute now the grades
+                      $activityGrade = 0;
+                      $quizGrade = 0;
+                      $postAssessmentGrade = 0;
+                      $preAssessmentGrade = 0;
+                      $totalGrade = 0;
+          
+                      // activity
+                      $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * $courseGrading->activity_percent;
+                      $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * $courseGrading->quiz_percent;
+                      $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * $courseGrading->pre_assessment_percent;
+                      $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * $courseGrading->post_assessment_percent;
+          
+          
+                      $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
+          
              
             if ($totalGrade >= 90) {
                 $remarks = 'Excellent';
@@ -4845,7 +4893,17 @@ class LearnerCourseController extends Controller
             ->orderBy('attempt', 'DESC')
             ->first();
 
+            $courseGrading = DB::table('course_grading')
+            ->select(
+                'activity_percent',
+                'quiz_percent',
+                'pre_assessment_percent',
+                'post_assessment_percent',
+            )
+            ->where('course_id', $course->course_id)
+            ->first();
 
+            if($courseData->course_progress === 'COMPLETED') {
                       // compute now the grades
                       $activityGrade = 0;
                       $quizGrade = 0;
@@ -4854,10 +4912,10 @@ class LearnerCourseController extends Controller
                       $totalGrade = 0;
           
                       // activity
-                      $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * 0.35;
-                      $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * 0.35;
-                      $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * 0.30;
-                      $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * 0.30;
+                      $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * $courseGrading->activity_percent;
+                      $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * $courseGrading->quiz_percent;
+                      $postAssessmentGrade = (($postAssessmentLearnerSumScore / $totalScoreCount_post_assessment) * 100) * $courseGrading->pre_assessment_percent;
+                      $preAssessmentGrade = (($preAssessmentLearnerSumScore / $totalScoreCount_pre_assessment) * 100) * $courseGrading->post_assessment_percent;
           
           
                       $totalGrade = $activityGrade + $quizGrade + $postAssessmentGrade;
@@ -4907,7 +4965,36 @@ class LearnerCourseController extends Controller
                     'totalGrade' => $totalGrade,
                     'remarks' => $remarks,
                 ];
+            }
 
+            $data = [
+                'title' => 'Course Gradesheet',
+                'scripts' => ['/learner_post_assessment.js'],
+                'mainBackgroundCol' => '#00693e',
+                'courseData' => $courseData,
+                'activityScoresData' => $learnerActivityScoresData,
+                'quizScoresData' => $learnerQuizScoresData,
+                'preAssessmentData' => $learnerPreAssessmentGrade,
+                'postAssessmentGrade' => $learnerPostAssessmentGrade,
+                'postAssessmentData' => $learnerPostAssessmentData,
+
+                'learnerLessonsData' => $learnerLessonsData,
+
+                'activityLearnerSumScore' => $activityLearnerSumScore,
+                'activityTotalSum' => $activityTotalSum,
+       
+
+                'quizLearnerSumScore' => $quizLearnerSumScore,
+                'quizTotalSum' => $quizTotalSum,
+
+                'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
+                'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
+      
+
+                'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
+                'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
+
+            ];
                 // dd($data);
                 return view('learner_course.courseGrades', compact('learner'))
                 ->with($data);
@@ -4920,5 +5007,101 @@ class LearnerCourseController extends Controller
         }
     }
 
+    protected $fpdf;
+ 
+    public function __construct()
+    {
+        $this->fpdf = new Fpdf;
+    }
+    public function generate_certificate(Course $course, LearnerCourse $learner_course) {
+        if (session()->has('learner')) {
+            $learner= session('learner'); 
+            try {
+                //get the data needed
 
+                $learnerCourseProgressData = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress.learner_course_progress_id',
+                    'learner_course_progress.course_id',
+                    'learner_course_progress.finish_period',
+                    'course.course_name',
+                    'course.course_code',
+                )
+                ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+                ->where('learner_course_progress.learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_course_progress.course_id', $course->course_id)
+                ->first();
+
+                $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s', $learnerCourseProgressData->finish_period)->format('F d, Y');
+
+
+                // generate the pdf
+                $filename = storage_path('app/public/images/cert_1.png');
+    
+                $this->fpdf->AddPage("L");
+    
+                // $font1Path = public_path('fonts/GreatVibes.ttf');
+                // $font2Path = public_path('fonts/DMSans.ttf');
+
+                // $font1Path = 'C:\Users\John Kenneth\OneDrive\Documents\Projects\Eskwela4EveryJuan\storage\app\public\fonts\GreatVibes.ttf';
+                // $font2Path = 'C:\Users\John Kenneth\OneDrive\Documents\Projects\Eskwela4EveryJuan\storage\app\public\fonts\DMSans.ttf';
+
+                                
+                // $this->fpdf->AddFont('GreatVibes', '', $font1Path);
+                // $this->fpdf->AddFont('DMSans', '', $font2Path);
+    
+
+    
+                // Set the background image with low opacity
+                $this->fpdf->Image($filename, 0, 0, $this->fpdf->GetPageWidth(), $this->fpdf->GetPageHeight(), '', '', 0, false, 300);
+                
+                // Set the font size for the large text
+                // $this->fpdf->SetFont('GreatVibes', 'B', 36);
+                $this->fpdf->SetFont('arial', 'B', 40);
+                $text = "$learner->learner_fname $learner->learner_lname";
+                // Get the width of the text
+                $textWidth = $this->fpdf->GetStringWidth($text);
+                // Calculate the X coordinate to center the text
+                $x = ($this->fpdf->GetPageWidth() - $textWidth) / 2;
+                // Set the X coordinate and draw the text
+                $this->fpdf->SetXY($x, 50);
+                $this->fpdf->Cell($textWidth, 110, $text, 0, 0, 'C');
+                
+                $this->fpdf->SetFont('Arial', 'B', 14);
+                $text3 = "Course: $learnerCourseProgressData->course_name";
+                // Get the width of the text
+                $text3Width = $this->fpdf->GetStringWidth($text);
+                // Calculate the X coordinate to center the text
+                $x = ($this->fpdf->GetPageWidth() - $text3Width) / 2;
+                // Set the X coordinate and draw the text
+                $this->fpdf->SetXY($x, 50);
+                $this->fpdf->Cell($text3Width, 130, $text3, 0, 0, 'C');
+
+
+                // Set the font size for the large text
+                // $this->fpdf->SetFont('GreatVibes', 'B', 36);
+                $this->fpdf->SetFont('Arial', 'i', 12);
+                $text2 = "This is to certify that $learner->learner_fname $learner->learner_lname has completed $learnerCourseProgressData->course_name with dedication\n
+                dedication and skill, demonstrating a commendable commitment to learning and personal\n
+                development. She has effectively fulfilled the requirements for this program.\n
+                Awarded on $formattedDate.";
+
+                $x = 10; // Set X-axis position
+                $this->fpdf->SetXY($x, 126);
+                $this->fpdf->MultiCell($this->fpdf->GetPageWidth() - ($x * 2), 3, $text2, 0, 'C');
+
+
+                $this->fpdf->Output();
+                
+    
+                exit;
+    
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/learner');
+        }
+    }
+    
 }

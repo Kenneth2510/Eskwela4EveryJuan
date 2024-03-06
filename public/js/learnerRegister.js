@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    var baseUrl = window.location.href
+    var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
+    
     const nextBtn = $("#nxtBtn");
     const nextBtn2 = $("#nxtBtn2");
     const backBtn = $("#bckBtn");
@@ -118,4 +121,295 @@ $(document).ready(function () {
 
     // Initialize the carousel on page load
     initCarousel();
+
+
+    $('#learner_contactno').on('input', function() {
+        var phoneNumber = $(this).val();
+        // Replace any non-digit characters with empty string
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+        // Check if the input starts with '09'
+        if (phoneNumber.length >= 2 && phoneNumber.substring(0, 2) !== '09') {
+            phoneNumber = '09' + phoneNumber.substring(2);
+        }
+        // Update the input value
+        $(this).val(phoneNumber);
+    });
+
+    $('#bplo_account_number').on('input', function() {
+        var phoneNumber = $(this).val();
+        // Replace any non-digit characters with empty string
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+        // Check if the input starts with '09'
+        if (phoneNumber.length >= 2 && phoneNumber.substring(0, 2) !== '09') {
+            phoneNumber = '09' + phoneNumber.substring(2);
+        }
+        // Update the input value
+        $(this).val(phoneNumber);
+    });
+
+
+    $('#password').keyup(function() {
+        var password = $(this).val();
+
+        // Remove previous error message
+        $('#passwordError').empty();
+
+        // Validate password complexity
+        var hasUpperCase = /[A-Z]/.test(password);
+        var hasLowerCase = /[a-z]/.test(password);
+        var hasNumbers = /\d/.test(password);
+        var hasSpecialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+        var isValid = true;
+
+        if (!hasUpperCase) {
+            isValid = false;
+            $('#passwordError').append('Password must contain at least one uppercase letter.<br>');
+        }
+        if (!hasLowerCase) {
+            isValid = false;
+            $('#passwordError').append('Password must contain at least one lowercase letter.<br>');
+        }
+        if (!hasNumbers) {
+            isValid = false;
+            $('#passwordError').append('Password must contain at least one number.<br>');
+        }
+        if (!hasSpecialChars) {
+            isValid = false;
+            $('#passwordError').append('Password must contain at least one special character.<br>');
+        }
+        if (password.length < 8) {
+            isValid = false;
+            $('#newPasswordError').append('Password must be at least 8 characters long.<br>');
+        }
+    });
+
+    $('#showPassword').change(function() {
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#password').attr('type', 'text');
+        } else {
+            $('#password').attr('type', 'password');
+        }
+    });
+
+    $('#register_submit_btn').on('click', function() {
+        var learner_fname = $('#learner_fname').val()
+        var learner_lname = $('#learner_lname').val()
+        var learner_bday = $('#learner_bday').val()
+        var learner_gender = $('#learner_gender').val()
+        var learner_email = $('#learner_email').val()
+        var learner_contactno = $('#learner_contactno').val()
+        var learner_username = $('#learner_username').val()
+        var password = $('#password').val()
+        var password_confirmation = $('#password_confirmation').val()
+
+        
+        var business_name = $('#business_name').val()
+        var business_address = $('#business_address').val()
+        var business_owner_name = $('#business_owner_name').val()
+        var bplo_account_number = $('#bplo_account_number').val()
+        var business_category = $('#business_category').val()
+
+        
+        var security_code_1 = $('#security_code_1').val()
+        var security_code_2 = $('#security_code_2').val()
+        var security_code_3 = $('#security_code_3').val()
+        var security_code_4 = $('#security_code_4').val()
+        var security_code_5 = $('#security_code_5').val()
+        var security_code_6 = $('#security_code_6').val()
+
+
+        var isValid = true;
+
+        if (learner_fname === '') {
+            $('#firstNameError').text('Please enter a first name.');
+            isValid = false;
+        } else {
+            $('#firstNameError').text('');
+        }
+    
+        if (learner_bday === '') {
+            $('#bdayError').text('Please enter a birthday.');
+            isValid = false;
+        } else {
+            $('#bdayError').text('');
+        }
+    
+        if (learner_lname === '') {
+            $('#lastNameError').text('Please enter a last name.');
+            isValid = false;
+        } else {
+            $('#lastNameError').text('');
+        }
+    
+        if (learner_gender === '') {
+            $('#genderError').text('Please select a gender.');
+            isValid = false;
+        } else {
+            $('#genderError').text('');
+        }
+    
+
+        if (learner_email === '') {
+            $('#emailError').text('Please enter your email.');
+            isValid = false;
+        } else {
+            $('#emailError').text('');
+        }
+
+        if (learner_contactno === '') {
+            $('#contactnoError').text('Please enter your contact number.');
+            isValid = false;
+        } else {
+            $('#contactError').text('');
+        }
+
+        if (business_name === '') {
+            $('#businessNameError').text('Please enter a business name.');
+            isValid = false;
+        } else {
+            $('#businessNameError').text('');
+        }
+    
+        if (business_address === '') {
+            $('#businessAddressError').text('Please enter a business address.');
+            isValid = false;
+        } else {
+            $('#businessAddressError').text('');
+        }
+    
+        if (business_owner_name === '') {
+            $('#businessOwnerNameError').text('Please enter a owner name.');
+            isValid = false;
+        } else {
+            $('#businessOwnerNameError').text('');
+        }
+    
+        if (business_category === '') {
+            $('#businessCategoryError').text('Please select a category.');
+            isValid = false;
+        } else {
+            $('#businessCategoryError').text('');
+        }
+
+        if (bplo_account_number === '') {
+            $('#bploCategoryError').text('Please enter your id.');
+            isValid = false;
+        } else {
+            $('#bploCategoryError').text('');
+        }
+
+
+
+        if (learner_username === '') {
+            $('#usernameError').text('Please enter a username.');
+            isValid = false;
+        } else {
+            $('#usernameError').text('');
+        }
+
+        $('#password').trigger('keyup');
+    
+        if (password === '') {
+            $('#passwordError').text('Please enter a password.');
+            isValid = false;
+        } else {
+            $('#passwordError').text('');
+        }
+    
+        if (password_confirmation === '') {
+            $('#passwordConfirmationError').text('Please enter a password confirmation.');
+            isValid = false;
+        } else if (password !== password_confirmation) {
+            $('#passwordConfirmationError').text('Your password does not match');
+            isValid = false;
+        } else {
+            $('#passwordConfirmationError').text('');
+        }
+    
+        if (security_code_1 === '' ||
+        security_code_2 === '' ||
+        security_code_3 === '' ||
+        security_code_4 === '' ||
+        security_code_5 === '' ||
+        security_code_6 === '') {
+            $('#securityCodeError').text('Please enter a security code.');
+            isValid = false;
+        } else {
+            $('#securityCodeError').text('');
+        }
+
+
+
+        if(isValid) {
+            var userInfo = {
+                learner_fname: learner_fname,
+                learner_lname: learner_lname,
+                learner_bday: learner_bday,
+                learner_gender: learner_gender,
+                learner_email: learner_email,
+                learner_contactno: learner_contactno,
+                learner_username: learner_username,
+                password: password,
+                password_confirmation: password_confirmation,
+
+                business_name: business_name,
+                business_address: business_address,
+                business_owner_name: business_owner_name,
+                bplo_account_number: bplo_account_number,
+                business_category: business_category,
+
+                security_code_1: security_code_1,
+                security_code_2: security_code_2,
+                security_code_3: security_code_3,
+                security_code_4: security_code_4,
+                security_code_5: security_code_5,
+                security_code_6: security_code_6,
+            }
+
+            var learner_fname = $('#learner_fname').val()
+            var learner_lname = $('#learner_lname').val()
+            var learner_bday = $('#learner_bday').val()
+            var learner_gender = $('#learner_gender').val()
+            var learner_email = $('#learner_email').val()
+            var learner_contactno = $('#learner_contactno').val()
+            var learner_username = $('#learner_username').val()
+            var password = $('#password').val()
+            var password_confirmation = $('#password_confirmation').val()
+    
+            
+            var business_name = $('#business_name').val()
+            var business_address = $('#business_address').val()
+            var business_owner_name = $('#business_owner_name').val()
+            var bplo_account_number = $('#bplo_account_number').val()
+            var business_category = $('#business_category').val()
+    
+            
+            var security_code_1 = $('#security_code_1').val()
+            var security_code_2 = $('#security_code_2').val()
+            var security_code_3 = $('#security_code_3').val()
+            var security_code_4 = $('#security_code_4').val()
+            var security_code_5 = $('#security_code_5').val()
+            var security_code_6 = $('#security_code_6').val()
+    
+            var url = "/learner/register";
+    
+            $.ajax ({
+                type: "POST",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                data: userInfo,
+                success: function (response){
+                    console.log(response)
+                    window.location.href = "/learner";
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        }
+    })
 });

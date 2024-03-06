@@ -1,87 +1,82 @@
-@extends('layouts.admin_layout')
+@include('partials.header')
 
-@section('content')
-    <section id="maincontent" class="relative w-full h-screen px-4 overflow-auto pt-28 md:w-3/4 lg:w-10/12 md:pt-16"> 
-        <div id="title" class="relative flex items-center justify-between px-3 mx-auto my-3 text-black">
-            <h1 class="py-4 text-2xl font-semibold md:text-4xl">Overview</h1>
-            <div id="adminuser" class="items-center hidden md:flex">
-                <h3 class="text-lg">{{ $adminCodeName }}</h3>
-                <div id="icon" class="w-10 h-10 mx-3 rounded-full bg-slate-400"></div>
+<section class="flex flex-row w-screen text-sm main-container bg-mainwhitebg md:text-base">
+@include('partials.sidebar')
+
+
+
+
+<section class="w-screen px-2 pt-[40px] mx-2 mt-2  overscroll-auto md:overflow-auto">
+    <div class="flex justify-between px-10">
+        <h1 class="text-6xl font-bold text-darthmouthgreen">Overview</h1>
+        <div class="">
+            <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
+        </div>
+    </div>
+
+    <div class="w-full px-3 pb-4 mt-10 rounded-lg shadow-lg b">
+
+
+        <div class="flex justify-between w-full px-10 text-center" id="countDataMainArea">
+            <div class="w-3/12 py-10 mx-2 border-2 shadow-lg border-darthmouthgreen rounded-xl" id="totalLearnerCountArea">
+                
+                <p class="font-bold text-7xl text-darthmouthgreen">{{$totalLearner}}</p>
+                <h1 class="text-xl font-semibold text-darthmouthgreen">Total Learners</h1>
+            </div>
+            <div class="w-3/12 py-10 mx-2 border-2 shadow-lg border-darthmouthgreen rounded-xl" id="totalInstructorCountArea">
+                
+                <p class="font-bold text-7xl text-darthmouthgreen">{{$totalInstructor}}</p>
+                <h1 class="text-xl font-semibold text-darthmouthgreen">Total Instructors</h1>
+            </div>
+            <div class="w-3/12 py-10 mx-2 border-2 shadow-lg border-darthmouthgreen rounded-xl" id="totalCourseCountArea">
+                
+                <p class="font-bold text-7xl text-darthmouthgreen">{{$totalCourse}}</p>
+                <h1 class="text-xl font-semibold text-darthmouthgreen">Total Courses</h1>
             </div>
         </div>
 
-        <div id="mainvalue" class="relative w-full">
-            <div id="upper" class="flex items-center justify-around w-full py-3 overflow-auto">
-                <div id="totallearner" class="flex flex-col items-center justify-center w-1/4 h-32 mx-2 text-center bg-green-700 shadow-2xl rounded-2xl md:h-40 lg:w-72">
-                    <h3 class="text-sm font-semibold text-white lg:text-2xl">Total Learners</h3>
-                    <h2 class="text-2xl font-bold text-white lg:text-4xl">{{ $totalLearner }}</h2>
+        
+        <hr class="my-6 border-2-t-2 border-2-gray-300">
+
+        <div class="flex w-full mt-10" id="mainChartDataArea">
+            <div class="w-1/2 mx-5" id="mainChartDataLeft">
+                <div class="flex">
+                    <div class="w-full p-2 my-3 flex flex-col justify-between mx-3 rounded-xl border-2 h-[250px] border-darthmouthgreen" id="learnerChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Learner Data</p>
+                        <canvas id="learnerData"></canvas>
+                    </div>
+                    <div class="w-full p-2 my-3 mx-3 flex flex-col justify-between rounded-xl border-2 h-[250px] border-darthmouthgreen" id="instructorChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Instructor Data</p>
+                        <canvas id="instructorData"></canvas>
+                    </div>
                 </div>
-                <div id="totalinstructors" class="flex flex-col items-center justify-center w-1/4 h-32 mx-2 text-center bg-green-700 shadow-2xl rounded-2xl md:h-40 lg:w-72">
-                    <h3 class="text-sm font-semibold text-white lg:text-2xl">Total Instructors</h3>
-                    <h2 class="text-2xl font-bold text-white lg:text-4xl">{{ $totalInstructor }}</h2>
-                </div>
-                <div id="totalcourses" class="flex flex-col items-center justify-center w-1/4 h-32 mx-2 text-center bg-green-700 shadow-2xl rounded-2xl md:h-40 lg:w-72">
-                    <h3 class="text-sm font-semibold text-white lg:text-2xl">Total Courses</h3>
-                    <h2 class="text-2xl font-bold text-white lg:text-4xl">30</h2>
-                </div>
-                <div id="activecourses" class="flex flex-col items-center justify-center w-1/4 h-32 mx-2 text-center bg-green-700 shadow-2xl rounded-2xl md:h-40 lg:w-72">
-                    <h3 class="text-sm font-semibold text-white lg:text-2xl">Active Courses</h3>
-                    <h2 class="text-2xl font-bold text-white lg:text-4xl">30</h2>
+                <div class="flex">
+                    <div class="w-full p-2 my-3 mx-3 flex flex-col justify-between rounded-xl border-2 h-[250px] border-darthmouthgreen" id="courseChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Course Data</p>
+                        <canvas id="courseData"></canvas>
+                    </div>
+                    <div class="w-full p-2 my-3 mx-3 flex flex-col justify-between rounded-xl border-2 h-[250px] border-darthmouthgreen overflow-visible" id="adminRolesChartArea">
+                        <p class="text-xl font-semibold text-darthmouthgreen">Admin Data</p>
+                        <canvas id="adminData" class="overflow-x-auto"></canvas>
+                    </div>
                 </div>
             </div>
-
-            <div id="lower" class="relative flex flex-col-reverse w-full h-auto px-2 lg:flex-row lg:justify-between">
-                <div id="lowerleft" class="w-full lg:w-4/5 lg:my-2">
-                    <div id="time" class="h-40 my-2 shadow-lg rounded-2xl bg-slate-400"></div>
-                    <div id="calendar" class="my-2 bg-blue-400 shadow-lg h-96 rounded-2xl"></div>
-                </div>
-                <div id="lowerright" class="flex w-full rounded-2xl lg:flex-col lg:w-1/5 lg:p-4">
-                    <div id="newadded" class="w-1/2 p-2 bg-white shadow-lg rounded-2xl lg:w-full">
-                        <h3 class="text-lg font-semibold text-black">Newly Approved</h3>
-                        <div id="newlearner" class="flex items-center justify-between px-2 py-4 my-2 bg-green-600 rounded-xl">
-                            <h4 class="font-medium text-md">New Learners</h4>
-                            <h3 class="text-2xl">{{ $approvedLearner }}</h3>
-                        </div>
-                        <div id="newinstructor" class="flex items-center justify-between px-2 py-4 my-2 bg-green-600 rounded-xl">
-                            <h4 class="font-medium text-md">New Instructors</h4>
-                            <h3 class="text-2xl">{{ $approvedInstructor }}</h3>
-                        </div>
-                        <div id="newcourses" class="flex items-center justify-between px-2 py-4 my-2 bg-green-600 rounded-xl">
-                            <h4 class="font-medium text-md">New Courses</h4>
-                            <h3 class="text-2xl">15</h3>
-                        </div>
-                    </div>
-
-                    <div id="pendingstatus" class="w-1/2 p-2 bg-white shadow-lg rounded-2xl lg:w-full lg:my-2">
-                        <h3 class="text-lg font-semibold text-black">Pending Status</h3>
-                        <div id="pendinglearner" class="flex items-center justify-between px-2 py-4 my-2 bg-green-600 rounded-xl">
-                            <h4 class="font-medium text-md">Pending Learners</h4>
-                            <h3 class="text-2xl">{{ $pendingLearner }}</h3>
-                        </div>
-                        <div id="pendinginstructor" class="flex items-center justify-between px-2 py-4 my-2 bg-green-600 rounded-xl">
-                            <h4 class="font-medium text-md">Pending Instructors</h4>
-                            <h3 class="text-2xl">{{ $pendingInstructor }}</h3>
-                        </div>
-                        <div id="pendingcourses" class="flex items-center justify-between px-2 py-4 my-2 bg-green-600 rounded-xl">
-                            <h4 class="font-medium text-md">Pending Courses</h4>
-                            <h3 class="text-2xl">15</h3>
-                        </div>
-                    </div>
+            <div class="w-1/2 mx-5 mt-3" id="mainChartDataRight">
+                <h1 class="text-2xl font-semibold text-darthmouthgreen">Learner Course Progress</h1>
+                <select name="selectedCourse" id="selectedCourse" class="w-full px-3 py-3 mt-5 border-2 text-md rounded-xl border-darthmouthgreen">
+                    @foreach ($courses as $course)
+                        <option value="{{$course->course_id}}">{{$course->course_name}}</option>
+                    @endforeach
+                </select>
+                <div class="mt-3 rounded-xl border-2 border-darthmouthgreen w-full h-[400px]" id="courseProgressChartArea">
+                    <canvas id="courseProgressChart" class="overflow-x-auto"></canvas>
                 </div>
             </div>
         </div>
-    </section>
-@endsection
+    </div>
+</section>
 
+    
+</section>
 
-<script>
-    $(document).ready(function () {
-        $("#sidebarfull_menu").click(function () {
-            $("#sidebarfull, #sidebarmin").toggleClass("hidden");
-        });
-
-        $("#sidebarmin_menu").click(function () {
-            $("#sidebarfull, #sidebarmin").toggleClass("hidden");
-        });
-    });
-</script>
+@include('partials.footer')

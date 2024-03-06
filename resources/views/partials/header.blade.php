@@ -84,6 +84,15 @@
             transition: width 2s ease;
         } */
 
+        .selectedMessage {
+            border-left: 4px solid #025C26; /* Green left border */
+            background-color: #f3f4f6; /* Optional: background color */
+        }
+
+        .notRead {
+            background-color: #f8d7da; /* Light red background color */
+        }
+
 
       </style>
 </head>

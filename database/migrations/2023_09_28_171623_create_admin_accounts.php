@@ -20,6 +20,8 @@ return new class extends Migration
         DB::table('admin')->insert([
             'admin_username' => 'admin1',
             'admin_codename' => 'Eskwela4EveryJuan_Admin1',
+            'role' => 'SUPER_ADMIN',
+            'email' => 'eskwela4everyjuan@gmail.com',
             'password' => bcrypt('eskwela4everyjuan_admin1'),
             'created_at' => now(),
             'updated_at' => now(),
@@ -28,6 +30,8 @@ return new class extends Migration
         DB::table('admin')->insert([
             'admin_username' => 'admin2',
             'admin_codename' => 'Eskwela4EveryJuan_Admin2',
+            'role' => 'SUPER_ADMIN',
+            'email' => 'eskwela4everyjuan@gmail.com',
             'password' => bcrypt('eskwela4everyjuan_admin2'),
             'created_at' => now(),
             'updated_at' => now(),
@@ -36,6 +40,8 @@ return new class extends Migration
         DB::table('admin')->insert([
             'admin_username' => 'admin3',
             'admin_codename' => 'Eskwela4EveryJuan_Admin3',
+            'role' => 'SUPER_ADMIN',
+            'email' => 'eskwela4everyjuan@gmail.com',
             'password' => bcrypt('eskwela4everyjuan_admin3'),
             'created_at' => now(),
             'updated_at' => now(),

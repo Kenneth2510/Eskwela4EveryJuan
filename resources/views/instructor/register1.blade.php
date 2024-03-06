@@ -51,7 +51,7 @@
                                 </span>
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="date" name="instructor_bday" id="instructor_bday" value="{{old('instructor_bday')}}">
-                            
+                         
                         </div>
                         
                         <div class="lg:ml-2 FORM-CTNR lg:w-1/2">
@@ -178,7 +178,6 @@
                     </div>
                 </div>
 
-
                 <div class="hidden py-2 overflow-hidden" id="security_code">
                     {{-- <div>
                         <button class="flex items-center w-24 h-8 rounded bg-mainwhitebg" id="bckBtn">
@@ -202,7 +201,6 @@
                             <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_5" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">
                             <input class="code h-16 m-1 text-center shadow outline-none focus:ring-black focus:ring-[1px]" type="password" name="security_code_6" id="" maxlength="1" size="1" min="0" max="9" pattern="{0-9}{1}">                                
                         </div>
-
 
                         
                         <script>

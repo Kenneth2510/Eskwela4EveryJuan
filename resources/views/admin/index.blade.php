@@ -1,55 +1,83 @@
+<section class="w-screen h-screen bg-cover" style="background-image: url('{{ asset('assets/CityHall.jpg') }}')">
 
-@extends('layouts.admin_login')
-
-@section('content')
-    <section class="relative flex flex-col h-screen py-10 mx-auto lg:px-10 md:items-center md:justify-center lg:flex-row lg:justify-between">
-        <div class="relative px-2 mx-auto border-white lg:py-10 lg:w-2/3 lg:border-r-2">
-            <div class="relative px-10">
-                <h1 class="text-2xl font-semibold lg:leading-[3.5rem] text-seagreen md:text-4xl lg:text-[5rem]">Eskwela4EveryJuan</h1>
-                <p class="hidden pt-5 text-base font-normal text-justify text-black lg:block">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
+    {{-- <div class="p-5 text-3xl font-bold titlearea font-poppins">Eskwela4EveryJuan</div> --}}
+    
+    <section class="relative flex items-center justify-center h-full  bg-white  bg-opacity-70">
+        {{-- <div class="relative left-0 w-3/5 h-full px-5 border-r-2 border-white">
+            <div class="relative pr-15">
+                <text class="font-semibold leading-none text-darthmouthgreen text-7xl">Eskwela4EveryJuan</text>
+                <p class="pt-5 text-2xl font-normal text-black">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto tempore aliquam aperiam iste et dolor, iure debitis! Adipisci ad libero eveniet molestias explicabo sunt eligendi. Autem similique suscipit amet neque.</p>
             </div>
 
+   
+        </div>
+     --}}
+     <div id="adminlogin" class="relative flex items-center justify-center h-full w-full transition-opacity duration-100">
+
+        <div class="border-gray-200 shadow-xl bg-white p-16 bg-opacity-70 rounded-xl h-3/5 w-4/12">
+            <div class="text-center" id="logoArea">
+                <h1 class="text-darthmouthgreen text-xl font-bold">Eskwela4EveryJuan</h1>
+            </div>
+            <div class="text-center mt-10" id="welcomeArea">
+                <p class="text-5xl text-darthmouthgreen">Welcome Back</p>
+                <p class="text-md text-gray-600">Welcome Back!  Please login to your account.</p>
+            </div>
+            <div class="mt-10 w-full" id="formArea">
+                <form action="/admin/login" method="POST">
+                    @csrf
+                    
+                    <div class="relative">
+                        <div class="my-3 w-full">
+                            <label for="admin_username" class=" text-xl font-semibold text-darthmouthgreen">Username:</label>
+                            <input type="text" name="admin_username" class="px-5 py-3 mt-2 rounded-md w-full border border-darthmouthgreen" placeholder="Username" value="{{ old('admin_username') }}" required>
+                        </div>
+                        <div class="my-3 w-full">
+                            <label for="password" class="text-xl font-semibold text-darthmouthgreen">Password:</label>
+                            <div class="relative items-center">
+                                <input type="password" class="px-5 py-3 mt-2 rounded-md w-full border border-darthmouthgreen" name="password" id="password" placeholder="Password" required>
+                                <button type="button" id="showPasswordBtn" class="absolute top-0 right-0 mr-3 mt-3 px-3 py-1 rounded-md text-xl">
+                                    <i id="eyeIcon" class="fa-regular fa-eye" style="color: #025c26;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @error('admin_username')
+                        <p class="p-1 mt-2 text-lg text-red-500">
+                            {{$message}}
+                        </p>
+                        @enderror
+                        <div class="relative flex mt-10 justify-between">
+                            <p></p>
+                            <button type="submit" class="w-full py-3 text-xl font-semibold text-white rounded-lg bg-seagreen hover:bg-green-900">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    
         </div>
     
-        <div id="adminlogin" class="relative px-4 py-16 transition-opacity duration-100 md:border-2 md:w-4/5 md:my-4 lg:border-none lg:w-1/3">
-            <form action="/admin/login" method="POST">
-                @csrf
-                <h3 class="text-lg font-semibold leading-none text-center text-black">Admin Login</h3>
-                <div class="relative">
-                    @error('admin_username')
-                    <p class="p-1 mt-2 text-lg text-red-500">
-                        {{$message}}
-                    </p>
-                    @enderror
-                    <div class="flex flex-col my-5 lg:items-center lg:flex-row lg:justify-between ">
-                        <label for="admin_username" class="my-2 font-medium text-black">Username:</label>
-                        <input type="text" name="admin_username" class="AD-INP" placeholder="Username" value="{{ old('admin_username') }}">
-                    </div>
-                    <div class="flex flex-col my-5 lg:flex-row lg:justify-between lg:items-center">
-                        <label for="password" class="my-2 font-medium text-black">Password:</label>
-                        <input type="password" class="AD-INP" name="password" placeholder="Password">
-                    </div>
-                    <div class="relative right-0 grid lg:justify-end md:flex">
-                        <x-forms.primary-button
-                        color="seagreen"
-                        name="Log in"
-                        type="submit">
-                        </x-forms.primary-button>
-                    </div>
-                </div>
-            </form>
-        </div>
+    </div>
+        {{-- </div> --}}
+    
     </section>
-@endsection
+
     
-    {{-- <script>
+   
+    </section>
+    <script>
         $(document).ready(function() {
-            const form1 = $('#adminlogin');
-            const showForm2Button = $('#showloginadmin');
-    
-            showForm2Button.on('click', function(event) {
-                event.preventDefault();
-                form1.removeClass('hidden');
+            $('#showPasswordBtn').click(function() {
+                var passwordField = $('#password');
+                var fieldType = passwordField.attr('type');
+                if (fieldType === 'password') {
+                    passwordField.attr('type', 'text');
+                    $('#eyeIcon').removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    passwordField.attr('type', 'password');
+                    $('#eyeIcon').removeClass('fa-eye-slash').addClass('fa-eye');
+                }
             });
         });
-      </script> --}}
+    </script>
+    
+@include('partials.footer')
+

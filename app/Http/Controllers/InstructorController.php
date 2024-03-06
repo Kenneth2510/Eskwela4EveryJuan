@@ -23,6 +23,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
 use Illuminate\Support\Facades\Cache;
+use Barryvdh\Snappy\Facades\SnappyPdf;
+use Illuminate\Support\Facades\URL;
 
 class InstructorController extends Controller
 {
@@ -452,6 +454,7 @@ class InstructorController extends Controller
             dd($e->getMessage());
            }
 
+           session()->flash('message', 'Instructor Account Created successfully');
            return redirect('/instructor')->with('title', 'Instructor Login')->with('message' , 'Account Successfully created');
         }
     }
@@ -741,5 +744,253 @@ class InstructorController extends Controller
    
 
     
+    public function profile() {
+        if (session()->has('instructor')) {
+            $instructor = session('instructor');
+            
+            try {
+            $instructorData = Instructor::where('instructor_id', $instructor->instructor_id)->first();
+                
+            // $courseData = DB::table('learner_course_progress')
+            // ->select(
+            //     DB::raw('COUNT(learner_course_progress.learner_course_id) as learner_count'),
+            //     'course.course_name'
+            // )
+            // ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+            // ->where('course.instructor_id', $instructorData->instructor_id)
+            // ->groupBy(
+            //     'course.course_name'
+            // )
+            // ->get();
+
+            $coursesManaged = DB::table('course')
+            ->select(
+                'course_id',
+                'course_name',
+                'course_status'
+            )
+            ->where('instructor_id', $instructorData->instructor_id)
+            ->get();
+
+            // $this->generate_profile_pdf();
+
+            // dd($instructorData);
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['instructorProfile.js'], 
+                'instructor' => $instructorData,
+                'courses' => $coursesManaged,
+            ];
+
+            return view('instructor.profile')
+            ->with($data);
+
+            } catch (\Exception $e) {
+                $e->getMessage();
+            }
+        } else {
+            return redirect('/instructor');
+        }  
+    }
+
+
+    public function update_user_info(Request $request) {
+        if (session()->has('instructor')) {
+            $instructor= session('instructor');
+
+            try {
+                // dd($request);
+                $updated_instructorData = $request->validate([
+                    "instructor_fname" => ['required'],
+                    "instructor_bday" => ['required'],
+                    "instructor_lname" => ['required'],
+                    "instructor_gender" => ['required'],
+                ]);
+
+                Instructor::where('instructor_id', $instructor->instructor_id)
+                ->update($updated_instructorData);
+
+                
+                session()->flash('message', 'User Info changed successfully');
+                
+                // return redirect('/learner/profile')->with('message' , 'Profile updated successfully');
+        
     
+                } catch (\Exception $e) {
+                    $e->getMessage();
+                }
+            } else {
+                return redirect('/instructor');
+            }  
+    }
+
+    public function update_login_info(Request $request) {
+        if (session()->has('instructor')) {
+            $instructor= session('instructor');
+
+            try {
+                
+                $instructorNewPassword = $request->input('instructorNewPassword');
+                $instructorNewPasswordConfirm = $request->input('instructorNewPasswordConfirm');
+                $instructor_security_code = $request->input('instructor_security_code');
+
+                 if($instructorNewPassword == $instructorNewPasswordConfirm && $instructor->instructor_security_code == $instructor_security_code) {
+
+                    $hashedPassword = bcrypt($instructorNewPassword);
+                    DB::table('instructor')
+                    ->where('instructor_id', $instructor->instructor_id)
+                    ->update([
+                        'password' => $hashedPassword,
+                    ]);
+
+                    session()->flash('message', 'User Info changed successfully');
+                    $message = 'User Info changed Successfully';
+                 } else {
+                    session()->flash('message', 'Your Security Code seems to be incorrect');
+                    $message = 'Error Occurred';
+                 }
+
+                
+                // return redirect('/learner/profile')->with('message' , 'Profile updated successfully');
+                return response()->json(['message' => $message]);
+
+                
+            } catch (ValidationException $e) {
+                $errors = $e->validator->errors();
+                return response()->json(['errors' => $errors], 422);
+            }
+            } else {
+                return redirect('/instructor'); 
+            }  
+    }
+
+
+    
+    public function update_profile_photo(Request $request) {
+        if (session()->has('instructor')) {
+            $instructor= session('instructor');
+       
+        $instructorData = $request->validate([
+            "profile_picture" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $folderName = "{$instructor->instructor_lname} {$instructor->instructor_fname}";
+        $folderName = Str::slug($folderName, '_');
+        $fileName = time() . '-' . $instructorData['profile_picture']->getClientOriginalName();
+        $folderPath = 'learners/' . $folderName; // Specify the public directory
+        $filePath = $instructorData['profile_picture']->storeAs($folderPath, $fileName, 'public');
+    
+        try {
+            // Update the instructor's profile_picture directly with the correct path
+            Instructor::where('instructor_id', $instructor->instructor_id)
+                ->update(['profile_picture' => $filePath]);
+
+                $instructor->profile_picture = $filePath;
+                session(['instructor' => $instructor]);
+
+                return redirect('/instructor/profile')->with('message', 'Profile picture updated successfully');
+    
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    
+        
+    } else {
+        return redirect('/instructor');
+    }
+
+    }
+
+
+    public function view_other_learner($email) {
+        if (session()->has('instructor')) {
+            $instructor= session('instructor');
+
+            try {
+                
+                $learnerData = DB::table('learner')
+                ->where('learner_email', $email)
+                ->first();
+
+                $businessData = DB::table('business')
+                ->where('learner_id', $learnerData->learner_id)
+                ->first();
+
+                $courseProgress = DB::table('learner_course_progress')
+                ->select(
+                    'learner_course_progress.learner_course_id',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+                    'learner_course_progress.course_id',
+                    'course.course_name',
+                )
+                ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+                ->where('learner_course_progress.learner_id', $learnerData->learner_id)
+                ->get();
+   
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['userProfile.js'], 
+                'learner' => $learnerData,
+                'business' => $businessData,
+                'courses' => $courseProgress,
+                'instructor' => $instructor,
+            ];
+
+            return view('instructor.viewLearnerProfile')
+            ->with($data);
+
+            } catch (\Exception $e) {
+                $e->getMessage();
+            }
+        } else {
+            return redirect('/instructor');
+        }  
+    }
+
+
+    public function view_other_instructor($email) {
+        if (session()->has('instructor')) {
+            $instructor= session('instructor');
+
+            try {
+                
+                $instructorData = DB::table('instructor')
+                ->where('instructor_email', $email)
+                ->first();
+
+                $courseData = DB::table('learner_course_progress')
+                ->select(
+                    DB::raw('COUNT(learner_course_progress.learner_course_id) as learner_count'),
+                    'course.course_name'
+                )
+                ->join('course', 'learner_course_progress.course_id', 'course.course_id')
+                ->where('course.instructor_id', $instructorData->instructor_id)
+                ->groupBy(
+                    'course.course_name'
+                )
+                ->get();
+            
+
+            $data = [
+                'title' => 'Profile',
+                'scripts' => ['userProfile.js'], 
+                'instructor' => $instructor,
+                'instructorData' => $instructorData,
+                'courses' => $courseData,
+            ];
+
+            return view('instructor.viewInstructorProfile')
+            ->with($data);
+
+            } catch (\Exception $e) {
+                $e->getMessage();
+            }
+        } else {
+            return redirect('/instructor');
+        }  
+    }
+
+   
 }
