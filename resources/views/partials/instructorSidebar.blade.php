@@ -87,7 +87,7 @@
                     </a>
                 </li> --}}
     
-                <li id="instructor_settings" class="instructor_settings w-full py-3 hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_settings" class="w-full py-3 instructor_settings hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/instructor/settings') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-pulse" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
