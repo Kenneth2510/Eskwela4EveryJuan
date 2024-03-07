@@ -1763,15 +1763,52 @@ class InstructorCourseController extends Controller
             
             // Retrieve the data from the session
             $lessonData = session('lesson_data');
+
             
-            if (!$lessonData) {
-                // Handle the case where the session data is not found
-                return response('Session data not found', 500);
-            }
+
+            $lessonInfo = DB::table('lessons')
+            ->select(
+                'lesson_id',
+                'course_id',
+                'syllabus_id',
+                'topic_id',
+                'lesson_title',
+                'picture',
+                'duration',
+            )
+            ->where('course_id', $course->course_id)
+            ->where('syllabus_id', $syllabus->syllabus_id)
+            ->where('topic_id', $topic_id)
+            ->first();
+
+
+            $lessonContent = DB::table('lesson_content')
+                            ->select(
+                                'lesson_content_id',
+                                'lesson_id',
+                                'lesson_content_title',
+                                'lesson_content',
+                                'lesson_content_order',
+                                'picture',
+                                'video_url'
+                            )
+                            ->where('lesson_id', $lessonInfo->lesson_id)
+                            ->orderBy('lesson_content_order', 'ASC')
+                            ->get();
+
+                            $durationInSeconds = $lessonInfo->duration;
+                            $hours = floor($durationInSeconds / 3600);
+                            $minutes = floor(($durationInSeconds % 3600) / 60);
+                            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
+
+
+            // if (!$lessonData) {
+            //     // Handle the case where the session data is not found
+            //     return response('Session data not found', 500);
+            // }
         
+            $response = $this->course_content($course);
             // Extract the data you need from the session
-            $lessonInfo = $lessonData['lessonInfo'];
-            $lessonContent = $lessonData['lessonContent'];
             $title = 'Course Lesson';
             $scripts = ['instructor_lesson_manage.js'];
             $courseData = $lessonData['courseData'];
@@ -1785,15 +1822,16 @@ class InstructorCourseController extends Controller
             // Render the view with the Blade template
             $html = view('instructor_course.courseLessonPreview', compact('instructor'))
                 ->with([
-                    'title' => $title,
-                    'scripts' => $scripts,
-                    'lessonCount' => $lessonCount,
-                    'activityCount' => $activityCount,
-                    'quizCount' => $quizCount,
-                    'course' => $course,
-                    'syllabus' => $syllabus,
-                    'lessonInfo' => $lessonInfo,
-                    'lessonContent' => $lessonContent,
+                    'title' => 'Course Lesson',
+                        'scripts' => ['instructor_lesson_manage.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'formattedDuration' => $formattedDuration,
                 ])
                 ->render();
     

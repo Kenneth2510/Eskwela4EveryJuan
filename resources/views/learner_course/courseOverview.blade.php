@@ -226,7 +226,7 @@
                     <h4 class="text-4xl">{{$course->course_code}}</h4>
                     <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
                     <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
-                    <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4>
+                    {{-- <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4> --}}
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
@@ -309,39 +309,41 @@
                         </thead>
                     
                         <tbody class="text-center">
-                            @forelse ($gradesheet as $grade)
-                                <tr>
-                                    <td class="w-1/2">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
-                                    <td>{{ $grade->course_progress }}</td>
-                                    <td>{{ $grade->start_period }}</td>
-                                    <td>{{ $preAssessmentGrade->score }}</td>
-                                    
-                                    {{-- Display activity scores --}}
-                                    @foreach ($activitySyllabus as $activity)
-                                        @php
-                                            $activityScore = $grade->activities->firstWhere('activity_id', $activity->activity_id);
-                                        @endphp
-                                        <td>{{ $activityScore ? $activityScore->average_score : '#' }}</td>
-                                    @endforeach
-                                    
-                                    {{-- Display quiz scores --}}
-                                    @foreach ($quizSyllabus as $quiz)
-                                        @php
-                                            $quizScore = $grade->quizzes->firstWhere('quiz_id', $quiz->quiz_id);
-                                        @endphp
-                                        <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
-                                    @endforeach
-                                    
-                                    <td>{{ $postAssessmentGrade }}</td>
-                                    <td>{{ $courseProgress->grade }}</td>
-                                    <td>{{ $courseProgress->remarks }}</td>
-                                    <td>{{ $courseProgress->finish_period }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4">No gradesheet available</td>
-                                </tr>
-                            @endforelse
+                            @if($syllabusProgress)
+                                @forelse ($gradesheet as $grade)
+                                    <tr>
+                                        <td class="w-1/2">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                                        <td>{{ $grade->course_progress }}</td>
+                                        <td>{{ $grade->start_period }}</td>
+                                        <td>{{ $preAssessmentGrade->score }}</td>
+                                        
+                                        {{-- Display activity scores --}}
+                                        @foreach ($activitySyllabus as $activity)
+                                            @php
+                                                $activityScore = $grade->activities->firstWhere('activity_id', $activity->activity_id);
+                                            @endphp
+                                            <td>{{ $activityScore ? $activityScore->average_score : '#' }}</td>
+                                        @endforeach
+                                        
+                                        {{-- Display quiz scores --}}
+                                        @foreach ($quizSyllabus as $quiz)
+                                            @php
+                                                $quizScore = $grade->quizzes->firstWhere('quiz_id', $quiz->quiz_id);
+                                            @endphp
+                                            <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
+                                        @endforeach
+                                        
+                                        <td>{{ $postAssessmentGrade }}</td>
+                                        <td>{{ $courseProgress->grade }}</td>
+                                        <td>{{ $courseProgress->remarks }}</td>
+                                        <td>{{ $courseProgress->finish_period }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No gradesheet available</td>
+                                    </tr>
+                                @endforelse
+                            @endif
                         </tbody>
                     </table>
                     

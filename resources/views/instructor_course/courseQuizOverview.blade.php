@@ -90,7 +90,7 @@
                                 <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
                         
                                 <label class="text-lg" for="minutes">Minutes:</label>
-                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="05" required>
                         
                                 <label class="text-lg" for="seconds">Seconds:</label>
                                 <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>

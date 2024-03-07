@@ -212,6 +212,37 @@
                             <span id="businessCategoryError" class="text-red-500"></span>
                         </div>
 
+                        <div class=" FORM-CTNR lg:w-1/2">
+                            <label for="business_classification" class="text-lg text-darthmouthgreen">Business Classification: </label>
+                            @error('business_classification')
+                            <span class="p-1 text-sm text-red-500">
+                                    {{$message}}
+                                </span>
+                            @enderror
+                            <select name="business_classification" id="business_classification" class="border IN-V-INP border-darthmouthgreen">
+                                <option value="" selected disabled>-- select an option --</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Wholesale">Wholesale</option>
+                                <option value="Food">Food</option>
+                                <option value="Financial Services">Financial Services</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Transportation and Logistics">Transportation and Logistics</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education and Training">Education and Training</option>
+                                <option value="Entertainment and Media">Entertainment and Media</option>
+                                <option value="Hospitality and Tourism">Hospitality and Tourism</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <span id="businessClassificationError" class="text-red-500"></span>
+                        </div>
+
+                        <div class=" FORM-CTNR lg:w-1/2">
+                            <label for="business_description">Business Description</label><br>
+                            <textarea name="business_description" class="w-full px-5 py-1 border-2 rounded-lg h-36 border-darthmouthgreen" id="business_description"></textarea>
+                            <span id="businessDescriptionError" class="text-red-500"></span>
+                        </div>
+
                         <div class="">
 
                             <div class="grid h-auto my-10 text-black place-items-end" >
@@ -293,7 +324,7 @@
 
                         <div class="">
                             <div class="flex flex-row">
-                                <input class="mx-2" type="checkbox" name="" id="">
+                                <input class="mx-2" type="checkbox" name="" id="" required>
                                 <p class="text-sm text-darthmouthgreen">I've read and accept <span class="font-bold text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
                             </div>
                             

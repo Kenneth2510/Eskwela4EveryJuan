@@ -416,6 +416,8 @@ class LearnerController extends Controller
             "business_owner_name" => ['required'],
             "bplo_account_number" => ['required'],
             "business_category" => ['required'],
+            "business_classification" => ['required'],
+            "business_description" => ['required'],
         ]);
 
         $LearnerLoginData = $request->validate([

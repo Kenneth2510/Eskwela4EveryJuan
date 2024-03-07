@@ -19,7 +19,7 @@
                     <h4 class="text-4xl">{{$course->course_code}}</h4>
                     <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
                     <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
-                    <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4>
+                    {{-- <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4> --}}
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
                     <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>

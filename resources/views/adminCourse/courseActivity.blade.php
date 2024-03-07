@@ -22,7 +22,7 @@
 
     <div class="p-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
         <div style="background-color:{{$mainBackgroundCol}}" class="p-2 text-white fill-white rounded-xl">
-            <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
+            <a href="{{ url("/admin/courseManage/content/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
             <h1 class="w-1/2 py-4 text-5xl font-bold"><span class="">{{ $course->course_name }}</span></h1>
