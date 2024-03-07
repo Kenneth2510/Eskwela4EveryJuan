@@ -19,6 +19,6 @@ class UserController extends Controller
     }
 
     public function terms() {
-        return view('terms&condition')->with('title', 'Terms & Services');
+        return view('terms&condition')->with('title', 'Terms & Conditions');
     }
 }

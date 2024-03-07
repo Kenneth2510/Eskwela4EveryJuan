@@ -150,7 +150,7 @@
                 <div class="my-4">
                     <div class="flex flex-row items-center">
                         <input class="mx-2" type="checkbox" name="" id="">
-                        <p>I've read and Accept <span class="font-semibold text-darthmouthgreen">Terms & Conditions</span></p>
+                        <p>I've read and Accept <span class="font-semibold text-darthmouthgreen"><a href="{{ url("/terms") }}">Terms & Conditions</a></span></p>
                     </div>
                     <div class="flex flex-row items-center">
                         <input class="mx-2" type="checkbox" name="" id="">

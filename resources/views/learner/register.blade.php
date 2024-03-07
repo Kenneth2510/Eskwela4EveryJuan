@@ -115,7 +115,7 @@
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="password" minlength="8" name="password" id="password">
                             <span id="passwordError" class="text-red-500"></span>
-                            <span id="passwordRequirements" class="text-gray-500 text-sm">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
+                            <span id="passwordRequirements" class="text-sm text-gray-500">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
                         </div>
 
                         <div class="text-darthmouthgreen">
@@ -294,7 +294,7 @@
                         <div class="">
                             <div class="flex flex-row">
                                 <input class="mx-2" type="checkbox" name="" id="">
-                                <p class="text-sm text-darthmouthgreen">I've read and accept <span class="font-bold text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
+                                <p class="text-sm text-darthmouthgreen">I've read and accept <span class="font-bold text-darthmouthgreen"><a href="{{ url("/terms") }}">Terms & Condition</a></span></p>
                             </div>
                             
                             <div class="grid h-auto mt-5 text-black place-items-end" >

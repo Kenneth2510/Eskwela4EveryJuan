@@ -1,20 +1,22 @@
 $(document).ready(function() {
+
     var baseUrl = window.location.href
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-    $('#enrollBtn').on('click', function(e) {
+    $('#l_enrollBtn').on('click', function(e) {
         e.preventDefault();
 
-        $('#enrollCourseModal').removeClass('hidden');
+
+        $('#l_enrollCourseModal').removeClass('hidden');
     });
 
-    $('.cancelEnroll').on('click', function(e) {
+    $('.l_cancelEnroll').on('click', function(e) {
         e.preventDefault();
 
-        $('#enrollCourseModal').addClass('hidden');
+        $('#l_enrollCourseModal').addClass('hidden');
     });
 
-    $("#enrollCourse").on('click', function (e) {
+    $("#l_enrollCourse").on('click', function (e) {
         e.preventDefault();
         var courseID = $(this).data("course-id");
 
@@ -39,17 +41,17 @@ $(document).ready(function() {
         });
         });
 
-    $('#unenrollBtn').on('click', function(e) {
+    $('#l_unenrollBtn').on('click', function(e) {
         e.preventDefault();
 
-        $('#unenrollCourseModal').removeClass('hidden');
+        $('#l_unenrollCourseModal').removeClass('hidden');
     });
 
-    $('.cancelUnenroll').on('click', function(e) {
-        $('#unenrollCourseModal').addClass('hidden');
+    $('.l_cancelUnenroll').on('click', function(e) {
+        $('#l_unenrollCourseModal').addClass('hidden');
     });
 
-    $('#unenrollCourse').on('click',function(e) {
+    $('#l_unenrollCourse').on('click',function(e) {
         
         e.preventDefault();
 
@@ -156,7 +158,7 @@ $(document).ready(function() {
     })
 
 
-    $('#viewDetailsBtn').on('click', function() {
+    $('#l_viewDetailsBtn').on('click', function() {
 
         $('#courseDetailsModal').removeClass('hidden')
     })

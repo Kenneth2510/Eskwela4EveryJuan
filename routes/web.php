@@ -47,7 +47,7 @@ use Illuminate\Support\Facades\Response;
 
 
 Route::controller(UserController::class)->group(function() {
-    Route::get('/', 'index');
+    Route::get('/', 'landing');
     // Route::get('/home', 'home');
 });
 
