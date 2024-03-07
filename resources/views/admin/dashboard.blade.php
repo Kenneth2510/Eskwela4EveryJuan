@@ -3,10 +3,10 @@
 @section('content')
 <section class="w-full h-auto md:h-screen lg:w-10/12">
     <div class="h-full px-2 py-4 pt-12 rounded-lg shadow-lg md:overflow-auto md:pt-0">
-        <div class="flex items-center justify-between p-3">
-            <h1 class="text-2xl font-bold text-darthmouthgreen">Overview</h1>
+        <div class="flex items-center justify-between p-3 border-b-2 border-gray-300 md:py-8">
+            <h1 class="text-2xl font-bold text-darthmouthgreen md:text-3xl lg:text-4xl">Overview</h1>
             <div class="">
-                <p class="semibold text- text-darthmouthgreen">{{$admin->admin_codename}}</p>
+                <p class="font-semibold text-darthmouthgreen md:text-lg">{{$admin->admin_codename}}</p>
             </div>
         </div>
 
