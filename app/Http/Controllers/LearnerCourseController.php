@@ -5067,16 +5067,7 @@ class LearnerCourseController extends Controller
     
                 $this->fpdf->AddPage("L");
     
-                // $font1Path = public_path('fonts/GreatVibes.ttf');
-                // $font2Path = public_path('fonts/DMSans.ttf');
 
-                // $font1Path = 'C:\Users\John Kenneth\OneDrive\Documents\Projects\Eskwela4EveryJuan\storage\app\public\fonts\GreatVibes.ttf';
-                // $font2Path = 'C:\Users\John Kenneth\OneDrive\Documents\Projects\Eskwela4EveryJuan\storage\app\public\fonts\DMSans.ttf';
-
-                                
-                // $this->fpdf->AddFont('GreatVibes', '', $font1Path);
-                // $this->fpdf->AddFont('DMSans', '', $font2Path);
-    
 
     
                 // Set the background image with low opacity

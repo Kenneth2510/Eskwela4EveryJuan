@@ -7,6 +7,10 @@ $(document).ready(function() {
     var durationVal;
     
 
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    var course_id
+    var syllabus_id
+
 getLearnerQuizData();
 
     function getLearnerQuizData () {
@@ -62,8 +66,8 @@ getLearnerQuizData();
             const learner_quiz_output_id = quizLearnerQuestions[i]['learner_quiz_output_id'];
             const quiz_content_id = quizLearnerQuestions[i]['quiz_content_id'];
             const quiz_id = quizLearnerQuestions[i]['quiz_id'];
-            const syllabus_id = quizLearnerQuestions[i]['syllabus_id'];
-            const course_id = quizLearnerQuestions[i]['course_id'];
+            syllabus_id = quizLearnerQuestions[i]['syllabus_id'];
+            course_id = quizLearnerQuestions[i]['course_id'];
             const question_id = quizLearnerQuestions[i]['question_id'];
             const category = quizLearnerQuestions[i]['category'];
             const question = quizLearnerQuestions[i]['question'];
@@ -331,5 +335,167 @@ getLearnerQuizData();
 
 
     
+   
+    getLearnerData()
+
+    function getLearnerData() {
+        var url = `/learner/learnerData`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    var learner = response['learner']
+                    // init_chatbot(learner);
+
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+
+                    getCourseData(learner)
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+    }
+    
+    
+    function getCourseData(learner) {
+        var course_id = course_id
+        var url = `/chatbot/courseData/${course_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                console.log(response);
+    
+                var courseData = response['course']
+                getSyllabusData(learner, courseData)
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+        
+    function getSyllabusData(learner, courseData) {
+        var course_id = course_id
+        var syllabus_id = syllabus_id
+        var url = `/chatbot/syllabusData/${course_id}/${syllabus_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function(response) {
+                console.log(response);
+    
+                var syllabusData = response['syllabus']
+
+                $('.submitQuestion').on('click', function(e) {
+                    e.preventDefault()
+                    var learner_id = learner['learner_id']
+                    var question = $('.question').val();
+                    var course = courseData['course_name']
+                    var lesson = syllabusData['topic_title']
+            
+            
+                    displayUserMessage(question, learner)
+                    $('.botloader').removeClass('hidden')
+                    var chatData = {
+                        question: question,
+                        course: course,
+                        lesson: lesson,
+                    }
+            
+                    var url = `/chatbot/chat/${learner_id}`;
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: chatData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            displayBotMessage(response)
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                })
+             
+
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function displayUserMessage(question, learner) {
+        var userMessageDisp = ``;
+        var profile = learner['profile_picture']
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        var timeString = hours + ':' + minutes;
+    
+        userMessageDisp += `
+        
+        <div class="mx-3 chat chat-end">
+            <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                <img class="bg-red-500" alt="" src="/storage/${profile}" />
+                </div>
+            </div>
+            <div class="mx-3 chat-header">
+                You
+            </div>
+            <div class="whitespace-pre-wrap chat-bubble chat-bubble-primary">${question}</div>
+            <div class="opacity-50 chat-footer">
+            ${timeString}
+            </div>
+        </div>
+        `;
+
+        $('.chatContainer').append(userMessageDisp);
+    }
+
+
+    function displayBotMessage(response) {
+
+        var message = response['message']
+
+        var botMessageDisp = ``
+        botMessageDisp += `
+        
+        <div class="chat chat-start">
+            <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                <img class="bg-white" alt="" src="/storage/app/public/images/chatbot.png" />
+                </div>
+            </div>
+            <div class="chat-bubble ">${message}</div>
+        </div>
+        `;
+
+        $('.botloader').addClass('hidden')
+        $('.chatContainer').append(botMessageDisp);
+    }
 
 })

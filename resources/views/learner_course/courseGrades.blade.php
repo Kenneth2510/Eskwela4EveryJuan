@@ -140,6 +140,7 @@
     </div>
 </section>
 
-@include('partials.learnerProfile')
+{{-- @include('partials.learnerProfile') --}}
+@include('partials.chatbot')
 </section>
 @include('partials.footer')

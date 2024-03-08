@@ -1,6 +1,9 @@
 $(document).ready(function() {
     var baseUrl = window.location.href;
 
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+
     $('#course_carousel_right_btn').on('click', function() {
         var container = $('#courseCardContainer');
         var containerWidth = container.outerWidth();
@@ -15,7 +18,6 @@ $(document).ready(function() {
 
 
     getTotalEnrolledCourse();
-
     function getTotalEnrolledCourse() {
         var url = baseUrl + "/overviewNum";
 
@@ -25,6 +27,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response)
 
+                var learner = response['learner']
                 var learnerCourseData = response['learnerCourseData']
                 var totalLearnerCourseCount = response['totalLearnerCourseCount']
                 var totalLearnerApprovedCourseCount = response['totalLearnerApprovedCourseCount']
@@ -54,12 +57,14 @@ $(document).ready(function() {
                 $('#completionRate').text(totalLearnerCourseCompleted)
 
                 courseProgressGraph(learnerCourseData);
+                init_chatbot(learner)
             },
             error: function(error) {
                 console.log(error);
             }
         });
     }
+
 
     function courseProgressGraph(learnerCourseData) {
 
@@ -202,5 +207,133 @@ $(document).ready(function() {
     
         ctx.data('chart', newChart);
     }
+
+    function init_chatbot(learner) {
+        // console.log(learner);
+        var learner_id = learner['learner_id']
+        var url = `/chatbot/init/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+                    add_learner_data(learner_id)
+                
+                                $('.submitQuestion').on('click', function(e) {
+                                    e.preventDefault()
+
+                                    var question = $('.question').val();
+                                    var course = 'ALL'
+                                    var lesson = 'LESSON'
+
+
+                                    displayUserMessage(question, learner)
+                                    $('.botloader').removeClass('hidden')
+                                    var chatData = {
+                                        question: question,
+                                        course: course,
+                                        lesson: lesson,
+                                    }
+
+                                    var url = `/chatbot/chat/${learner_id}`;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: url,
+                                        data: chatData,
+                                        headers: {
+                                            'X-CSRF-TOKEN': csrfToken
+                                        },
+                                        success: function(response) {
+                                            console.log(response);
+                                            displayBotMessage(response)
+                                        },
+                                        error: function(error) {
+                                            console.log(error);
+                                        }
+                                    });
+                                })
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    function add_learner_data(learner_id) {
+               // console.log(learner);
+               var url = `/chatbot/learner/${learner_id}`;
+               $.ajax({
+                   type: "GET",
+                   url: url,
+                   success: function(response) {
+                       console.log(response);
+       
+                           $('.loaderArea').addClass('hidden');
+                           $('.mainchatbotarea').removeClass('hidden');
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+    }
+
+    function displayUserMessage(question, learner) {
+        var userMessageDisp = ``;
+        var profile = learner['profile_picture']
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        var timeString = hours + ':' + minutes;
+    
+        userMessageDisp += `
+        
+        <div class="mx-3 chat chat-end">
+            <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                <img class="bg-red-500" alt="" src="/storage/${profile}" />
+                </div>
+            </div>
+            <div class="mx-3 chat-header">
+                You
+            </div>
+            <div class="whitespace-pre-wrap chat-bubble chat-bubble-primary">${question}</div>
+            <div class="opacity-50 chat-footer">
+            ${timeString}
+            </div>
+        </div>
+        `;
+
+        $('.chatContainer').append(userMessageDisp);
+    }
+
+
+    function displayBotMessage(response) {
+
+        var message = response['message']
+
+        var botMessageDisp = ``
+        botMessageDisp += `
+        
+        <div class="chat chat-start">
+            <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                <img class="bg-white" alt="" src="/storage/app/public/images/chatbot.png" />
+                </div>
+            </div>
+            <div class="chat-bubble ">${message}</div>
+        </div>
+        `;
+
+        $('.botloader').addClass('hidden')
+        $('.chatContainer').append(botMessageDisp);
+    }
+    
 
 })

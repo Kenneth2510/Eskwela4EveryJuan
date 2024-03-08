@@ -14,46 +14,46 @@
                 <h1 class="text-4xl font-semibold">Welcome back, {{$learner->learner_fname}}!</h1>
             </div>
 
-            <hr class="border-t-2 border-gray-300 my-6">
+            <hr class="my-6 border-t-2 border-gray-300">
 
             <h1 class="mx-5 text-2xl font-semibold">Overview</h1>
 
-            <div class="mx-10 mt-5 flex justify-between" id="overview_area">
+            <div class="flex justify-between mx-10 mt-5" id="overview_area">
                 <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
                     <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalCoursesText">#</h1>
-                    <p class="text-2xl mt-5  text-darthmouthgreen">Courses Enrolled</p>
+                    <p class="mt-5 text-2xl text-darthmouthgreen">Courses Enrolled</p>
                 </div>
                 <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
                     <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalTopicsText">#</h1>
-                    <p class="text-2xl mt-5  text-darthmouthgreen">Topics Finished</p>
+                    <p class="mt-5 text-2xl text-darthmouthgreen">Topics Finished</p>
                 </div>
                 <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
                     <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalDaysActiveText">#</h1>
-                    <p class="text-2xl mt-5  text-darthmouthgreen">Days Active</p>
+                    <p class="mt-5 text-2xl text-darthmouthgreen">Days Active</p>
                 </div>
             </div>
 
 
-            <hr class="border-t-2 border-gray-300 my-6">
+            <hr class="my-6 border-t-2 border-gray-300">
 
                 <div class="flex justify-between">
                     <h1 class="mx-5 text-2xl font-semibold">Continue your progress</h1>
-                    <a href="{{ url('/learner/courses') }}" class="text-lg mx-10">view all</a>
+                    <a href="{{ url('/learner/courses') }}" class="mx-10 text-lg">view all</a>
                 </div>
               
 
-                <div class="h-80 relative overflow-hidden px-20" id="courseCarouselArea">
-                    <button id="course_carousel_left_btn" class="mx-5 h-full absolute flex justify-center items-center left-0">
-                        <i class="fa-solid fa-angle-left text-2xl"></i>
+                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                    <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
-                    <button id="course_carousel_right_btn" class="mx-5 h-full absolute flex justify-center items-center right-0">
-                        <i class="fa-solid fa-angle-right text-2xl"></i>
+                    <button id="course_carousel_right_btn" class="absolute right-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-right"></i>
                     </button>
-                    <div class="h-80 flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
+                    <div class="flex overflow-x-auto h-80 scroll scroll-smooth" id="courseCardContainer">
                         
                         @foreach ($enrolledCourses as $course)
 
-                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
+                        <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">
                             <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
                                 <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $course->profile_picture) }}" alt="">
                             </div>
@@ -77,34 +77,34 @@
                 </div>
 
 
-                <hr class="border-t-2 border-gray-300 my-6">
+                <hr class="my-6 border-t-2 border-gray-300">
 
-                <div class="mx-5 flex justify-between" id="learnerProgressArea">
+                <div class="flex justify-between mx-5" id="learnerProgressArea">
                     <div class="mx-5 w-1/2 h-[350px] border-2 border-darthmouthgreen rounded-xl" id="courseProgressGraphArea">
                         <canvas id="courseProgressGraph"></canvas>
                     </div>
 
                     <div class="mx-5 w-1/2 h-[350px] flex flex-col justify-between" id="courseProgressDataArea">
                         <div class="w-full h-[170px] mb-3 border-2 flex items-center justify-center border-darthmouthgreen rounded-lg" id="courseCompletionRate">
-                            <p class="font-bold text-2xl flex items-center"><span class="px-5 text-darthmouthgreen text-[85px]" id="completionRate">#%</span><br>Completion Rate</p>
+                            <p class="flex items-center text-2xl font-bold"><span class="px-5 text-darthmouthgreen text-[85px]" id="completionRate">#%</span><br>Completion Rate</p>
                         </div>
                         <div class="w-full h-[170px] mt-3 border-2 flex flex-col justify-between items-center border-darthmouthgreen rounded-lg" id="courseTopicsCleared">
                             <div class="">
-                                <p class="font-bold text-2xl flex items-center justify-center pt-10 text-center"><span class="text-darthmouthgreen text-[85px]" id="totalSyllabusCompletedCount">0 <i class="fa-solid fa-book-bookmark text-[50px]"></i></span> Topics Completed</p>
+                                <p class="flex items-center justify-center pt-10 text-2xl font-bold text-center"><span class="text-darthmouthgreen text-[85px]" id="totalSyllabusCompletedCount">0 <i class="fa-solid fa-book-bookmark text-[50px]"></i></span> Topics Completed</p>
                             </div>
                             <div class="flex justify-between">
                                 <div class="flex flex-col items-center mx-1">
-                                    <i class="fa-solid fa-file text-darthmouthgreen text-xl mx-3"></i>
+                                    <i class="mx-3 text-xl fa-solid fa-file text-darthmouthgreen"></i>
                                     <p class="font-bold text-md"><span id="totalLessonsCompletedCount" class="">0</span></p>
                                 </div>
             
                                 <div class="flex flex-col items-center mx-1">
-                                    <i class="fa-solid fa-clipboard text-darthmouthgreen text-xl mx-3"></i>
+                                    <i class="mx-3 text-xl fa-solid fa-clipboard text-darthmouthgreen"></i>
                                     <p class="font-bold text-md"><span id="totalActivitiesCompletedCount" class="">0</span></p>
                                 </div>
             
                                 <div class="flex flex-col items-center mx-1">
-                                    <i class="fa-solid fa-pen-to-square text-darthmouthgreen text-xl mx-3"></i>
+                                    <i class="mx-3 text-xl fa-solid fa-pen-to-square text-darthmouthgreen"></i>
                                     <p class="font-bold text-md"><span id="totalQuizzesCompletedCount" class="">0</span></p>
                                 </div>
                             </div>
@@ -112,26 +112,26 @@
                     </div>
                 </div>
 
-            <hr class="border-t-2 border-gray-300 my-6">
+            <hr class="my-6 border-t-2 border-gray-300">
 
                 <div class="flex justify-between">
                     <h1 class="mx-5 text-2xl font-semibold">New Available Courses</h1>
-                    <a href="{{ url('/learner/courses') }}" class="text-lg mx-10">view all</a>
+                    <a href="{{ url('/learner/courses') }}" class="mx-10 text-lg">view all</a>
                 </div>
               
 
-                <div class="h-80 relative overflow-hidden px-20" id="courseCarouselArea">
-                    <button id="course_carousel_left_btn" class="mx-5 h-full absolute flex justify-center items-center left-0">
-                        <i class="fa-solid fa-angle-left text-2xl"></i>
+                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                    <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
-                    <button id="course_carousel_right_btn" class="mx-5 h-full absolute flex justify-center items-center right-0">
-                        <i class="fa-solid fa-angle-right text-2xl"></i>
+                    <button id="course_carousel_right_btn" class="absolute right-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-right"></i>
                     </button>
-                    <div class="h-80 flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
+                    <div class="flex overflow-x-auto h-80 scroll scroll-smooth" id="courseCardContainer">
                         
                         @foreach ($courses as $course)
 
-                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
+                        <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">
                             <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
                                 <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $course->profile_picture) }}" alt="">
                             </div>
@@ -154,14 +154,14 @@
                     </div>
                 </div>
         
-            <hr class="border-t-2 border-gray-300 my-6">
+            <hr class="my-6 border-t-2 border-gray-300">
 
             <div class="flex justify-between">
                 <h1 class="mx-5 text-2xl font-semibold">Your session data</h1>
-                <a href="{{ url('/learner/performances') }}" class="text-lg mx-10">view all</a>
+                <a href="{{ url('/learner/performances') }}" class="mx-10 text-lg">view all</a>
             </div>
 
-            <div class="mt-5 flex justify-center" id="learnerSessionDataArea">
+            <div class="flex justify-center mt-5" id="learnerSessionDataArea">
                     <div class="mx-5 w-11/12 h-[350px] border-2 border-darthmouthgreen rounded-xl" id="learnerSessionGraphArea">
                         <canvas id="learnerSessionGraph"></canvas>
                     </div>

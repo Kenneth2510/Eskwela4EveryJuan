@@ -62,7 +62,7 @@
                         <img src="{{ asset("storage/$lesson->picture") }}" class="object-contain w-full h-full" alt="">
                     @else
                     @endif
-                    <div class="contentArea text-xl font-normal lesson_content_input_disp mt-5 px-5" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
+                    <div class="px-5 mt-5 text-xl font-normal contentArea lesson_content_input_disp" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
                      
                     {{-- <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
                     <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea> --}}
@@ -123,6 +123,7 @@
 </section>
 
 
-@include('partials.learnerProfile')
+{{-- @include('partials.learnerProfile') --}}
+@include('partials.chatbot')
 </section>
 @include('partials.footer')
