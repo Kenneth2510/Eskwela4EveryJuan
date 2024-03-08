@@ -7,7 +7,7 @@
         
             <div class="relative z-0 w-full p-4 text-black border rounded-lg shadow-lg">
                             {{-- course name/title --}}
-                <a href="{{ url('/instructor/courses') }}" class="w-8 h-8">
+                <a href="{{ url('/instructor/courses') }}" class="w-8 h-8 m-2">
                     <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
                 </a>
                 <div class="flex justify-between w-full" id="courseInfo">
@@ -26,11 +26,11 @@
                             Approval Status: 
                             @if ($course->course_status === 'Approved')
                             <div class="w-5 h-5 mx-2 rounded-full bg-darthmouthgreen"></div>
-                        @elseif ($course->course_status ==='Pending')
+                            @elseif ($course->course_status ==='Pending')
                             <div class="w-5 h-5 mx-2 bg-yellow-500 rounded-full"></div>
-                        @else
+                            @else
                             <div class="w-5 h-5 mx-2 bg-red-500 rounded-full"></div>
-                        @endif
+                            @endif
                         
                         {{$course->course_status}}
                         </h4>

@@ -16,23 +16,23 @@
             <div class="flex md:space-x-2 " id="genInfo">
                 <div class="relative w-1/2 md:w-3/5 h-[300px] border-2 border-darthmouthgreen flex flex-col justify-between py-2 md:py-4" id="totalLearnersArea">
                     <div class="flex justify-center text-center item-center">
-                        <i class="absolute -translate-x-1/2 -translate-y-1/2 lg:px-4 lg:opacity-100 lg:relative fa-10x top-1/2 left-1/2 opacity-20 lg:left-auto lg:-translate-x-0 lg:top-auto lg:-translate-y-0 fa-solid fa-user text-darthmouthgreen text-[175px]"></i>
+                        <i class="absolute -translate-x-1/2 -translate-y-1/2 lg:px-4 lg:opacity-100 lg:relative fa-10x top-1/2 left-1/2 opacity-20 lg:left-auto lg:-translate-x-0 lg:top-auto lg:-translate-y-0 fa-solid fa-user text-darthmouthgreen"></i>
                         <p class="text-2xl font-bold "><span class="text-8xl text-darthmouthgreen" id="totalLearnerCourseCount">0</span><br>Total Learner</p>
                     </div>
                     <div class="flex flex-col justify-center lg:flex-row">
                         <div class="flex items-center">
                             <div class="w-3 h-3 mx-3 rounded-full bg-darthmouthgreen"></div>
-                            <p class="font-bold text-md">Approved: <span id="totalApprovedLearnerCourseCount" class="">0</span></p>
+                            <p class="font-bold md:text-md">Approved: <span id="totalApprovedLearnerCourseCount" class="">0</span></p>
                         </div>
 
                         <div class="flex items-center">
                             <div class="w-3 h-3 mx-3 bg-yellow-400 rounded-full"></div>
-                            <p class="font-bold text-md">Pending: <span id="totalPendingLearnerCourseCount" class="">0</span></p>
+                            <p class="font-bold md:text-md">Pending: <span id="totalPendingLearnerCourseCount" class="">0</span></p>
                         </div>
 
                         <div class="flex items-center">
                             <div class="w-3 h-3 mx-3 bg-red-700 rounded-full"></div>
-                            <p class="font-bold text-md">Rejected: <span id="totalRejectedLearnerCourseCount" class="">0</span></p>
+                            <p class="font-bold md:text-md">Rejected: <span id="totalRejectedLearnerCourseCount" class="">0</span></p>
                         </div>
                     </div>
                 </div>
