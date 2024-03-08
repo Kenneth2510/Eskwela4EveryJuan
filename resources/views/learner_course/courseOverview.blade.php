@@ -48,10 +48,10 @@
             </div>
             <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
                 <img class="w-40 h-40 my-4 mb-3 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
-                <div class="text-center mb-10">
+                <div class="mb-10 text-center">
                     <h1 class="text-xl font-semibold">{{$course->instructor_fname}} {{$course->instructor_lname}}</h1>
                     <p class="text-lg">INSTRUCTOR</p>
-                    <a href="{{ url("/learner/profile/instructor/$course->instructor_email") }}" class="rounded-xl py-1 px-3 bg-darthmouthgreen text-white hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                    <a href="{{ url("/learner/profile/instructor/$course->instructor_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
                 </div>
                 <div class="flex flex-col">
                     @if($isEnrolled)
@@ -157,7 +157,7 @@
 @include('partials.learnerProfile')
 </section>
 
-<div id="enrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+<div id="enrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelEnroll">
@@ -177,7 +177,7 @@
 </div>
 
 
-<div id="unenrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+<div id="unenrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelUnenroll">
@@ -200,7 +200,7 @@
 
 
 
-<div id="courseDetailsModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+<div id="courseDetailsModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75">
     <div class="p-4 bg-white rounded-lg shadow-lg modal-content">
         <div class="flex justify-end w-full">
             <button class="closeCourseDetailsModal">
@@ -266,7 +266,7 @@
                                 <td>{{ $enrollee->course_progress }}</td>
                                 <td>
                                     @if($enrollee->learner_id !== $learner->learner_id)
-                                    <a href="{{ url("/learner/profile/learner/$enrollee->learner_email") }}" class="rounded-xl py-1 px-3 bg-darthmouthgreen text-white hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                    <a href="{{ url("/learner/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
                                     @endif
                                 </td>
                             </tr>

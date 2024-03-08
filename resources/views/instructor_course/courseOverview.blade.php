@@ -117,7 +117,7 @@
         </div>
     </section>
 
-    <div id="courseDetailsModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full overflow-hidden bg-gray-200 bg-opacity-75 md:py-4 modal">
+    <div id="courseDetailsModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full overflow-hidden bg-gray-200 bg-opacity-75 md:py-4">
         <div class="w-full h-full p-4 overflow-x-hidden overflow-y-auto bg-white rounded-lg shadow-lg md:w-3/5 modal-content overscroll-y-auto md:overflow-y-hidden">
             <div class="flex justify-end w-full">
                 <button class="closeCourseDetailsModal">
@@ -297,7 +297,7 @@
         </div>
     </div>
 
-    <div id="courseDetailsEditModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div id="courseDetailsEditModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelEdit">
@@ -320,7 +320,7 @@
         </div>
     </div>
 
-    <div id="addNewFileModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div id="addNewFileModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelEdit">
@@ -336,7 +336,7 @@
                     <input type="file" name="file" id="file" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
 
-<div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+<div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelAddNewFile">
@@ -345,7 +345,7 @@
         </div>
     </div>
 
-    <div id="deleteCourseModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div id="deleteCourseModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelDelete">

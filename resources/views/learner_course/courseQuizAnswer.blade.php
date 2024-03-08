@@ -44,8 +44,8 @@
 
             {{-- main content --}}
             <div class="flex mt-5">
-                <div class="border-r-2 border-green-200 w-2/6 px-auto" id="quiz_info_area">
-                    <div class="border-2 px-3 py-5 border-gray-200 mt-5 mx-5 grid grid-cols-5 gap-2" id="isAnsweredMeter">
+                <div class="w-2/6 border-r-2 border-green-200 px-auto" id="quiz_info_area">
+                    <div class="grid grid-cols-5 gap-2 px-3 py-5 mx-5 mt-5 border-2 border-gray-200" id="isAnsweredMeter">
                         {{-- <div class="flex items-center justify-center question_isAnswered w-[35px] h-[45px] hover:cursor-pointer border border-darthmouthgreen transition-all duration-300">1</div>
                         <div class="flex items-center justify-center question_isAnswered w-[35px] h-[45px] hover:cursor-pointer border border-darthmouthgreen transition-all duration-300">2</div>
                         <div class="flex items-center justify-center question_isAnswered w-[35px] h-[45px] hover:cursor-pointer border border-darthmouthgreen transition-all duration-300">3</div>
@@ -58,38 +58,37 @@
                     </div>
                     
                 </div>
-                <div id="quiz_content_area" class="
-                px-auto w-full overflow-y-auto">
-                    <div id="questionContainer" class="mx-auto  my-5 p-5 rounded-lg w-4/5">
+                <div id="quiz_content_area" class="w-full overflow-y-auto  px-auto">
+                    <div id="questionContainer" class="w-4/5 p-5 mx-auto my-5 rounded-lg">
                         
-                        {{-- <div class="my-5 py-5 px-3 questionData border-darthmouthgreen border-2 rounded-lg">
+                        {{-- <div class="px-3 py-5 my-5 border-2 rounded-lg questionData border-darthmouthgreen">
                             <div class="questionContent">
-                                <h6 class="opacity-40 text-right">Question 1</h6>
-                                <p class="text-xl font-normal p-2 font-semibold">question 1</p>
+                                <h6 class="text-right opacity-40">Question 1</h6>
+                                <p class="p-2 text-xl font-normal font-semibold">question 1</p>
                             </div>
-                            <div class="questionChoices mt-2 text-lg">
-                                <input type="radio" name="1" class=" w-5 h-5 questionChoice mx-3">Option 1<br>
-                                <input type="radio" name="1" class=" w-5 h-5 questionChoice mx-3">Option 1<br>
-                                <input type="radio" name="1" class=" w-5 h-5 questionChoice mx-3">Option 1<br>
+                            <div class="mt-2 text-lg questionChoices">
+                                <input type="radio" name="1" class="w-5 h-5 mx-3  questionChoice">Option 1<br>
+                                <input type="radio" name="1" class="w-5 h-5 mx-3  questionChoice">Option 1<br>
+                                <input type="radio" name="1" class="w-5 h-5 mx-3  questionChoice">Option 1<br>
                             </div>
                         </div> --}}
 
 
-                        {{--<div class="my-5 py-5 px-3 questionData border-darthmouthgreen border-2 rounded-lg">
+                        {{--<div class="px-3 py-5 my-5 border-2 rounded-lg questionData border-darthmouthgreen">
                             <div class="questionContent">
-                                <h6 class="opacity-40 text-right">Question 3</h6>
-                                <p class="text-xl font-normal p-2 font-semibold">question 3</p>
+                                <h6 class="text-right opacity-40">Question 3</h6>
+                                <p class="p-2 text-xl font-normal font-semibold">question 3</p>
                             </div>
-                            <div class="questionChoices mt-2 text-lg">
-                                <textarea type="text" class="border-2 border-gray-200 p-3 text-lg w-full identificationAns " placeholder=""></textarea>
+                            <div class="mt-2 text-lg questionChoices">
+                                <textarea type="text" class="w-full p-3 text-lg border-2 border-gray-200 identificationAns " placeholder=""></textarea>
                             </div>
                         </div> --}}
 
                     </div>
-                    <div id="pagination" class="mt-4 mb-8 mx-10">
-                        <button id="prevPage" class="py-2 px-4 bg-gray-200 text-gray-600 rounded-lg">Previous</button>
+                    <div id="pagination" class="mx-10 mt-4 mb-8">
+                        <button id="prevPage" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg">Previous</button>
                         <span id="currentPage" class="mx-4 text-lg font-semibold">Page 1</span>
-                        <button id="nextPage" class="py-2 px-4 bg-gray-200 text-gray-600 rounded-lg">Next</button>
+                        <button id="nextPage" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg">Next</button>
                     </div>
                     
                 
@@ -98,13 +97,13 @@
             </div>
 
             <div class="w-full text-center" id="quizSubmitBtn">
-                <button class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white rounded-lg">Submit Quiz</button>
+                <button class="px-5 py-3 text-lg text-white rounded-lg bg-darthmouthgreen hover:bg-green-950">Submit Quiz</button>
             </div>
 
         </div>
 
 
-        <div id="confirmSubmitQuizModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
+        <div id="confirmSubmitQuizModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                 <div class="flex justify-end w-full">
                     <button class="cancelConfirmSubmitQuiz">
@@ -118,7 +117,7 @@
         
                 <div class="flex justify-center w-full mt-5">
                     <button id="confirmSubmitQuizBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Submit Quiz</button>
-                    <button id="" class="cancelConfirmSubmitQuiz px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+                    <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded cancelConfirmSubmitQuiz">Cancel</button>
                 </div>
             </div>
         </div>

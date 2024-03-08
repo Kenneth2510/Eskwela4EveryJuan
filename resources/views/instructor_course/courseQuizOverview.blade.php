@@ -115,7 +115,7 @@
     </section>
 
     {{-- area for modals --}}
-    <div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="w-full p-4 bg-white rounded-lg shadow-lg md:w-3/5 modal-content">
 
             <div class="flex justify-end w-full">

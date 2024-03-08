@@ -239,7 +239,7 @@
         </div>
     </section> 
 
-                <div id="addExistingQuestionModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+                <div id="addExistingQuestionModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
                 <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                     <div class="flex justify-end w-full">
                         <button class="cancelAddExistingQuestionBtn">
@@ -264,7 +264,7 @@
             </div>
 
 
-            <div id="confirmSaveQuizContentModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+            <div id="confirmSaveQuizContentModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
                 <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                     <div class="flex justify-end w-full">
                         <button class="cancelSaveQuizContentBtn">

@@ -62,7 +62,7 @@
                         <img src="{{ asset("storage/$lesson->picture") }}" class="object-contain w-full h-full" alt="">
                     @else
                     @endif
-                    <div class="contentArea text-xl font-normal lesson_content_input_disp mt-5 px-5" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
+                    <div class="px-5 mt-5 text-xl font-normal contentArea lesson_content_input_disp" style="white-space: pre-wrap">{!! $lesson->lesson_content !!}</div>
                      
                     {{-- <p class="w-[80%] max-w-full min-w-full text-xl lesson_content_input_disp" style="white-space: pre-wrap">{{$lesson->lesson_content}}</p>
                     <textarea name="lesson_content_input" id="" class="hidden text-xl lesson_content_input w-[80%] min-w-[80%] max-w-[80%] h-[120px] resize-none" disabled>{{ $lesson->lesson_content }}</textarea> --}}
@@ -103,7 +103,7 @@
         </div>
         
 
-        <div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+        <div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                 <div class="flex justify-end w-full">
                     <button class="cancelFinishLessonBtn">
