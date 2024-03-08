@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('certificates', function (Blueprint $table) {
-            $table->id();
+            $table->id('certificate_id');
+            $table->string('reference_id', 11);
+            $table->string('user_type');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('course_id');
             $table->timestamps();
         });
     }

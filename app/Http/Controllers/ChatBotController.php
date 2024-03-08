@@ -152,6 +152,24 @@ class ChatBotController extends Controller
             // Output the response for debugging
             echo $response->getBody();
         }
+
+    }
+
+
+    public function process($session_id) {
+                // Create a Guzzle HTTP client instance
+                $client = new Client();
+    
+                try {
+                    // Send the reset request to the Flask application
+                    $response = $client->request('POST', "http://127.0.0.1:5000/process_session/$session_id");
+            
+                    // Output the response for debugging
+                    echo $response->getBody();
+                } catch (\Exception $e) {
+                    // Output any errors that occur
+                    echo "Error resetting session $session_id: " . $e->getMessage();
+                }
     }
 
 

@@ -218,8 +218,6 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
 
-                    $('.loaderArea').addClass('hidden');
-                    $('.mainchatbotarea').removeClass('hidden');
                     add_learner_data(learner_id)
                 
                                 $('.submitQuestion').on('click', function(e) {

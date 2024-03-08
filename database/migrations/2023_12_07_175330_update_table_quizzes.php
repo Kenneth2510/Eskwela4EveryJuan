@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->bigInteger('duration')->after('quiz_title')->nullable();
+            $table->bigInteger('duration')->after('quiz_title')->default(300000);
         });
     }
 

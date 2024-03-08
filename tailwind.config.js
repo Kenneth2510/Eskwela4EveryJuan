@@ -42,22 +42,22 @@ export default {
             },
         },
     },
-    daisyui: {
-        themes: [
-            {
-                mytheme: {
-                    primary: "#025C26",
-                    secondary: "#048A37",
-                    accent: "#FFB300",
-                    neutral: "#E0E0E0",
-                    "base-100": "#F5F5F5",
-                    info: "#2196F3",
-                    success: "#4CAF50",
-                    warning: "#FFC107",
-                    error: "#FF5252",
-                },
-            },
-        ],
-    },
-    plugins: [require("daisyui")],
+    // daisyui: {
+    //     themes: [
+    //         {
+    //             mytheme: {
+    //                 primary: "#025C26",
+    //                 secondary: "#048A37",
+    //                 accent: "#FFB300",
+    //                 neutral: "#E0E0E0",
+    //                 "base-100": "#F5F5F5",
+    //                 info: "#2196F3",
+    //                 success: "#4CAF50",
+    //                 warning: "#FFC107",
+    //                 error: "#FF5252",
+    //             },
+    //         },
+    //     ],
+    // },
+    // plugins: [require("daisyui")],
 };

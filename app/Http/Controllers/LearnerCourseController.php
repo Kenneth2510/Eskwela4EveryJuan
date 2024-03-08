@@ -27,6 +27,7 @@ use App\Models\LearnerPreAssessmentProgress;
 use App\Models\LearnerPreAssessmentOutput;
 use App\Models\LearnerPostAssessmentProgress;
 use App\Models\LearnerPostAssessmentOutput;
+use App\Models\Certificates;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -4929,15 +4930,17 @@ class LearnerCourseController extends Controller
             )
             ->where('course_id', $course->course_id)
             ->first();
+            $activityGrade = 0;
+            $quizGrade = 0;
+            $postAssessmentGrade = 0;
+            $preAssessmentGrade = 0;
+            $totalGrade = 0;
+            $remarks = '';
+
 
             if($courseData->course_progress === 'COMPLETED') {
                       // compute now the grades
-                      $activityGrade = 0;
-                      $quizGrade = 0;
-                      $postAssessmentGrade = 0;
-                      $preAssessmentGrade = 0;
-                      $totalGrade = 0;
-          
+
                       // activity
                       $activityGrade = (($activityLearnerSumScore / $activityTotalSum) * 100) * $courseGrading->activity_percent;
                       $quizGrade = (($quizLearnerSumScore / $quizTotalSum) * 100) * $courseGrading->quiz_percent;
@@ -4959,7 +4962,7 @@ class LearnerCourseController extends Controller
                       } else {
                           $remarks = 'Needs Improvement';
                       }
-
+                    }
                 $data = [
                     'title' => 'Course Gradesheet',
                     'scripts' => ['/learner_post_assessment.js'],
@@ -4992,37 +4995,11 @@ class LearnerCourseController extends Controller
                     'totalGrade' => $totalGrade,
                     'remarks' => $remarks,
                 ];
-            }
 
-            $data = [
-                'title' => 'Course Gradesheet',
-                'scripts' => ['/learner_post_assessment.js'],
-                'mainBackgroundCol' => '#00693e',
-                'courseData' => $courseData,
-                'activityScoresData' => $learnerActivityScoresData,
-                'quizScoresData' => $learnerQuizScoresData,
-                'preAssessmentData' => $learnerPreAssessmentGrade,
-                'postAssessmentGrade' => $learnerPostAssessmentGrade,
-                'postAssessmentData' => $learnerPostAssessmentData,
-
-                'learnerLessonsData' => $learnerLessonsData,
-
-                'activityLearnerSumScore' => $activityLearnerSumScore,
-                'activityTotalSum' => $activityTotalSum,
-       
-
-                'quizLearnerSumScore' => $quizLearnerSumScore,
-                'quizTotalSum' => $quizTotalSum,
-
-                'postAssessmentLearnerSumScore' => $postAssessmentLearnerSumScore,
-                'totalScoreCount_post_assessment' => $totalScoreCount_post_assessment,
-      
-
-                'preAssessmentLearnerSumScore' => $preAssessmentLearnerSumScore,
-                'totalScoreCount_pre_assessment' => $totalScoreCount_pre_assessment,
-
-            ];
                 // dd($data);
+    
+
+
                 return view('learner_course.courseGrades', compact('learner'))
                 ->with($data);
 
@@ -5062,8 +5039,40 @@ class LearnerCourseController extends Controller
                 $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s', $learnerCourseProgressData->finish_period)->format('F d, Y');
 
 
+
+                $certData = DB::table('certificates')
+                ->select(
+                    'certificate_id',
+                    'reference_id',
+                    'user_type',
+                    'user_id',
+                    'course_id'
+                )
+                ->where('user_type', 'LEARNER')
+                ->where('user_id', $learner->learner_id)
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                if($certData) {
+                    $referenceNumber = $certData->reference_id;
+                } else {
+                    $datePart = Carbon::now()->format('Ymd');
+                    do {
+                        $randomPart = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                        $referenceNumber = $datePart . $randomPart;
+                    } while (Certificates::where('reference_id', $referenceNumber)->exists());
+
+                    Certificates::create([
+                        'reference_id' => $referenceNumber,
+                        'user_type' => 'LEARNER',
+                        'user_id' => $learner->learner_id,
+                        'course_id' => $course->course_id
+                    ]);
+
+
+                }
                 // generate the pdf
-                $filename = storage_path('app/public/images/cert_1.png');
+                $filename = storage_path('app/public/images/cert_3.png');
     
                 $this->fpdf->AddPage("L");
     
@@ -5086,7 +5095,7 @@ class LearnerCourseController extends Controller
                 $this->fpdf->Cell($textWidth, 110, $text, 0, 0, 'C');
                 
                 $this->fpdf->SetFont('Arial', 'B', 14);
-                $text3 = "Course: $learnerCourseProgressData->course_name";
+                $text3 = "LEARNER - Course: $learnerCourseProgressData->course_name";
                 // Get the width of the text
                 $text3Width = $this->fpdf->GetStringWidth($text);
                 // Calculate the X coordinate to center the text
@@ -5107,6 +5116,15 @@ class LearnerCourseController extends Controller
                 $x = 10; // Set X-axis position
                 $this->fpdf->SetXY($x, 126);
                 $this->fpdf->MultiCell($this->fpdf->GetPageWidth() - ($x * 2), 3, $text2, 0, 'C');
+
+
+
+                $this->fpdf->SetFont('Arial', 'B', 11);
+                $text4 = "Reference Number: $referenceNumber";
+
+                $this->fpdf->SetXY(10, $this->fpdf->GetPageHeight() - 39);
+                $this->fpdf->Cell(0, 10, $text4, 0, 0, 'L');
+                
 
 
                 $this->fpdf->Output();

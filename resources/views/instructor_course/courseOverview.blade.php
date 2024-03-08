@@ -37,6 +37,13 @@
                     
                     {{$course->course_status}}
                     </h4>
+
+                    @if($course->course_status === 'Approved') 
+                    <div class="mt-10">
+                        <a href="{{ url("/instructor/course/$course->course_id/certificate") }}" target="_blank" class="px-5 mt-5 py-3 mb-5 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">Download Certificate of Recognition</a>
+                    </div>
+                    
+                    @endif
                 </div>
                 <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
                     <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">

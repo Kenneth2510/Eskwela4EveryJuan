@@ -347,6 +347,21 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 
 
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/report', 'AdminReportsController@index');
+    Route::get('/admin/report/Users', 'AdminReportsController@Users');
+    Route::get('/admin/report/Session', 'AdminReportsController@Session');
+    Route::get('/admin/report/UserSession', 'AdminReportsController@UserSession');
+    Route::get('/admin/report/Courses', 'AdminReportsController@Courses');
+    Route::get('/admin/report/Enrollees', 'AdminReportsController@Enrollees');
+    Route::get('/admin/report/CourseGradesheets', 'AdminReportsController@CourseGradesheets');
+    Route::get('/admin/report/CoursePerformances', 'AdminReportsController@CoursePerformances');
+    Route::get('/admin/report/LearnerGradesheets', 'AdminReportsController@LearnerGradesheets');
+
+});
+
+
+
 
 Route::get('storage/{folder}/{filename}', function ($folder, $filename) {
     $path = storage_path("app/public/{$folder}/{$filename}");
@@ -443,6 +458,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::post('/instructor/course/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content/empty', 'InstructorCourseController@empty_quiz_question');
     
 
+    Route::get('/instructor/course/{course}/certificate', 'InstructorCourseController@generate_certificate');
 
     // // })->middleware('web');
 });
@@ -623,6 +639,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/chatbot/init/{id}', 'ChatBotController@index');
     Route::get('/chatbot/learner/{id}', 'ChatBotController@learner');
+    Route::get('/chatbot/process/{id}', 'ChatBotController@process');
     Route::post('/chatbot/chat/{id}', 'ChatBotController@chat');
     Route::get('/chatbot/reset/{id}', 'ChatBotController@reset');
 

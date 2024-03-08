@@ -29,6 +29,7 @@ use App\Models\QuizReferences;
 use App\Models\Questions;
 use App\Models\QuestionAnswers;
 use App\Models\LearnerQuizOutputs;
+use App\Models\Certificates;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -46,6 +47,7 @@ use Illuminate\Support\Facades\File;
 use Dompdf\Dompdf;
 use Carbon\Carbon;
 use Barryvdh\Snappy\Facades\SnappyPdf;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 
 class InstructorCourseController extends Controller
@@ -3577,4 +3579,132 @@ class InstructorCourseController extends Controller
 
 
 
+    protected $fpdf;
+ 
+    public function __construct()
+    {
+        $this->fpdf = new Fpdf;
+    }
+    public function generate_certificate(Course $course) {
+        if (session()->has('instructor')) {
+            $instructor = session('instructor');
+
+            try {
+                //get the data needed
+
+                $courseData = DB::table('course')
+                ->select(
+                    'course_name',
+                    'updated_at',
+                    'course_status',
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s', $courseData->updated_at)->format('F d, Y');
+
+                if($courseData->course_status === 'Approved') {
+                    $certData = DB::table('certificates')
+                    ->select(
+                        'certificate_id',
+                        'reference_id',
+                        'user_type',
+                        'user_id',
+                        'course_id'
+                    )
+                    ->where('user_type', 'INSTRUCTOR')
+                    ->where('user_id', $instructor->instructor_id)
+                    ->where('course_id', $course->course_id)
+                    ->first();
+    
+                    if($certData) {
+                        $referenceNumber = $certData->reference_id;
+                    } else {
+                        $datePart = Carbon::now()->format('Ymd');
+                        do {
+                            $randomPart = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                            $referenceNumber = $datePart . $randomPart;
+                        } while (Certificates::where('reference_id', $referenceNumber)->exists());
+    
+                        Certificates::create([
+                            'reference_id' => $referenceNumber,
+                            'user_type' => 'INSTRUCTOR',
+                            'user_id' => $instructor->instructor_id,
+                            'course_id' => $course->course_id
+                        ]);
+    
+    
+                    }
+                    // generate the pdf
+                    $filename = storage_path('app/public/images/cert_4.png');
+        
+                    $this->fpdf->AddPage("L");
+        
+    
+    
+        
+                    // Set the background image with low opacity
+                    $this->fpdf->Image($filename, 0, 0, $this->fpdf->GetPageWidth(), $this->fpdf->GetPageHeight(), '', '', 0, false, 300);
+                    
+                    // Set the font size for the large text
+                    // $this->fpdf->SetFont('GreatVibes', 'B', 36);
+                    $this->fpdf->SetFont('arial', 'B', 40);
+                    $text = "$instructor->instructor_fname $instructor->instructor_lname";
+                    // Get the width of the text
+                    $textWidth = $this->fpdf->GetStringWidth($text);
+                    // Calculate the X coordinate to center the text
+                    $x = ($this->fpdf->GetPageWidth() - $textWidth) / 2;
+                    // Set the X coordinate and draw the text
+                    $this->fpdf->SetXY($x, 50);
+                    $this->fpdf->Cell($textWidth, 110, $text, 0, 0, 'C');
+                    
+                    $this->fpdf->SetFont('Arial', 'B', 14);
+                    $text3 = "INSTRUCTOR - Course: $courseData->course_name";
+                    // Get the width of the text
+                    $text3Width = $this->fpdf->GetStringWidth($text);
+                    // Calculate the X coordinate to center the text
+                    $x = ($this->fpdf->GetPageWidth() - $text3Width) / 2;
+                    // Set the X coordinate and draw the text
+                    $this->fpdf->SetXY($x, 50);
+                    $this->fpdf->Cell($text3Width, 130, $text3, 0, 0, 'C');
+    
+    
+                    // Set the font size for the large text
+                    // $this->fpdf->SetFont('GreatVibes', 'B', 36);
+                    $this->fpdf->SetFont('Arial', 'i', 12);
+                    $text2 = "This is to recognize and appreciate $instructor->instructor_fname $instructor->instructor_lname for their dedication and skill as the instructor/facilitator of
+                    \n $courseData->course_name. They have demonstrated commendable commitment to learning and personal development. \n
+                    Their efforts have contributed significantly to the success of this program.\n
+                    Awarded on $formattedDate.";
+
+    
+                    $x = 10; // Set X-axis position
+                    $this->fpdf->SetXY($x, 126);
+                    $this->fpdf->MultiCell($this->fpdf->GetPageWidth() - ($x * 2), 3, $text2, 0, 'C');
+    
+    
+    
+                    $this->fpdf->SetFont('Arial', 'B', 11);
+                    $text4 = "Reference Number: $referenceNumber";
+    
+                    $this->fpdf->SetXY(10, $this->fpdf->GetPageHeight() - 39);
+                    $this->fpdf->Cell(0, 10, $text4, 0, 0, 'L');
+                    
+    
+    
+                    $this->fpdf->Output();
+                    
+        
+                }
+
+             
+                exit;
+    
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/instructor');
+        }
+    }
 }
