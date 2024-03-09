@@ -1,8 +1,8 @@
 @extends('layouts.learner_layout')
 
 @section('content')
-    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 overflow-auto rounded-lg shadow-lg md:pt-6">
+<section class="w-full h-screen md:w-3/4 lg:w-10/12">
+    <div class="h-full px-2 py-4 pt-24 overflow-auto rounded-lg shadow-lg md:pt-6">
         <div style="background-color:{{$mainBackgroundCol}};" class="z-50 p-2 text-white rounded-xl">
             <a href="{{ url("/learner/course/manage/$syllabus->course_id/overview") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>

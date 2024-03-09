@@ -1,17 +1,15 @@
-@include('partials.header')
+@extends('layouts.learner_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-    @include('partials.instructorNav')
-    @include('partials.learnerSidebar')
-
+@section('content')
         {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
-            <h1 class="mx-5 text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>
-            <hr class="my-6 border-t-2 border-gray-300">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
+            <div class="py-4">
+                <h1 class="text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>                
+            </div>
 
-            <div class="w-full px-40 my-5" id="mainContainer">
-                <div class="w-full mt-5" id="createThread">
+            <div class="w-full" id="mainContainer">
+                <div class="w-full py-4 border-t-2 border-gray-300" id="createThread">
                     <a href="/learner/discussions/create">
                         <div class="flex items-center w-full p-5 border-2 border-opacity-75 rounded-lg border-darthmouthgreen" id="createThreadBtnContent">
                             <div class="rounded-full w-[50px] h-[50px]">
@@ -23,9 +21,7 @@
                     </a>
                 </div>
 
-                <hr class="my-6 border-t-2 border-gray-300">
-
-                <div class="" id="threadMainContainer">
+                <div class="py-4 border-t-2 border-gray-300" id="threadMainContainer">
 
                     {{-- <div class="flex w-full my-5 border-2 border-opacity-75 rounded-lg border-darthmouthgreen" id="thread">
                         <div class="w-1/12 border-r-2 border-opacity-50 border-darthmouthgreen" id="upvoteArea">
@@ -68,19 +64,10 @@
 
                         </div>
                     </div> --}}
-
-                    
                 </div>
-
             </div>
-
         </div>
     </section>
 
-
-
-{{-- @include('partials.learnerProfile') --}}
-
 @include('partials.chatbot')
-</section>
-@include('partials.footer')
+@endsection

@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="relative w-full text-sm scroll-smooth">
-        <nav class="fixed top-0 z-50 w-full border-b-2 bg-mainwhitebg start-0 text-seagreen border-darthmouthgreen">
+        {{-- <nav class="fixed top-0 z-50 w-full border-b-2 bg-mainwhitebg start-0 text-seagreen border-darthmouthgreen">
             <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
                 <a href="">
                     <h1 class="self-center text-xl font-semibold whitespace-nowrap">Eskwela4EveryJuan</h1>
@@ -11,7 +11,7 @@
                     <li><a class="px-3 py-2 hover:font-semibold hover:text-base" href="#home">Home</a></li>
                     <li><a class="px-3 py-2 hover:font-semibold hover:text-base" href="#about">About</a></li>
                     <li><a class="px-3 py-2 hover:font-semibold hover:text-base" href="#bplo">BPLO</a></li>
-                    {{-- <li><a class="px-3 py-2 hover:font-semibold hover:text-base" href="#services">BPLO</a></li> --}}
+                    <li><a class="px-3 py-2 hover:font-semibold hover:text-base" href="#services">BPLO</a></li>
                     <li><a class="px-3 py-2 hover:font-semibold hover:text-base" href="#contact">Contacts</a></li>
                 </ul>
                 <div class="flex flex-row items-center divide-x divide-seagreen">
@@ -19,9 +19,37 @@
                     <h3><a class="px-2 hover:font-medium hover:text-base" href="{{ url('/instructor') }}">Instructor</a></h3>
                 </div>                
             </div>
+        </nav> --}}
+
+        <nav class="fixed z-50 text-black navbar bg-base-100">
+            <div class="navbar-start">
+                <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#bplo">BPLO</a></li>
+                    <li><a href="#contact">Contacts</a></li>
+                </ul>
+                </div>
+                <a class="text-xl btn btn-ghost">Eskwela4EveryJuan</a>
+            </div>
+            <div class="hidden navbar-center lg:flex text-primary">
+                <ul class="px-1 menu menu-horizontal">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#bplo">BPLO</a></li>
+                    <li><a href="#contact">Contacts</a></li>
+                </ul>
+            </div>
+            <div class="navbar-end">
+                <a class="btn">Button</a>
+            </div>
         </nav>
 
-        <section class="relative w-full h-screen px-2 py-4 pt-16 text-black" id="home">
+        {{-- <section class="relative w-full h-screen px-2 py-4 pt-16 text-black" id="home">
             <div class="flex flex-wrap justify-between h-full max-w-screen-xl mx-auto">
                 <div id="left" class="flex flex-col justify-center w-1/2">
                     <div class="space-y-4">
@@ -57,16 +85,28 @@
                     </div>
                 </div>            
             </div>
+        </section> --}}
+        {{-- hero section --}}
+        <section class="min-h-screen hero" style="background-image: url('{{ asset('assets/CityHall.jpg') }}')" id="home">
+            <div class="hero-overlay bg-opacity-80"></div>
+            <div class="text-center hero-content text-neutral-content">
+                <div class="max-w-md">
+                <h1 class="mb-5 text-5xl font-bold">Next-Level Learning, Made Easy.</h1>
+                <p class="mb-5">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+                <button class="w-32 btn btn-primary">Student</button>
+                <button class="w-32 btn btn-secondary">Instructor</button>
+                </div>
+            </div>
         </section>
 
-        <section class="relative w-full h-screen px-2 py-4 pt-16 text-black" id="about">
-            <div class="flex flex-wrap justify-between h-full max-w-screen-xl mx-auto">
-                <div id="left" class="w-1/2">
-                    <div class="flex items-center justify-center w-full h-full">
-                        <div class="w-3/5 bg-seagreen h-4/5"></div>
+        <section class="relative w-full h-screen text-black lg:py-4 lg:px-2 lg:pt-16" id="about">
+            <div class="flex-wrap justify-between h-full max-w-screen-xl mx-auto lg:flex">
+                <div id="left" class="absolute w-full h-full lg:relative lg:w-1/2">
+                    <div class="flex items-center justify-center w-full h-full ">
+                        <div class="w-full h-full lg:w-3/5 opacity-30 lg:opacity-100 bg-seagreen lg:h-4/5"></div>
                     </div>
                 </div>                       
-                <div id="right" class="flex flex-col justify-center w-1/2">
+                <div id="right" class="flex flex-col justify-center p-3 lg:w-1/2">
                     <div class="space-y-4">
                         <div class="flex flex-row w-4/5">
                             <span class="mx-2 text-4xl">&#8212;</span>
@@ -86,7 +126,7 @@
             </div>
         </section>
 
-        <section class="relative w-full px-2 py-4 text-black bg-opacity-50 h-72 bg-seagreen">
+        {{-- <section class="relative w-full px-2 py-4 text-black bg-opacity-50 h-72 bg-seagreen">
             <div class="flex flex-wrap items-center justify-between h-full max-w-screen-xl mx-auto">
                 <div class="flex items-center">
                     <div class="mx-2">
@@ -128,25 +168,67 @@
                     </div>
                 </div>
             </div>
+        </section> --}}
+        <section class="relative w-full px-4">
+            <div class="w-full mx-auto shadow stats stats-vertical lg:stats-horizontal">
+    
+                <div class="stat">
+                    <div class="stat-figure text-primary">
+                        <i class="fa-solid fa-user fa-2xl"></i>
+                    </div>
+                    <div class="stat-title">Students Enrolled</div>
+                    <div class="stat-value text-primary">25.6K</div>
+                    <div class="stat-desc">21% more than last month</div>
+                </div>
+                
+                <div class="stat">
+                    <div class="stat-figure text-secondary">
+                        <i class="fa-solid fa-user-tie fa-2xl"></i>
+                    </div>
+                    <div class="stat-title">Instructor Teaching</div>
+                    <div class="stat-value text-secondary">2.6M</div>
+                    <div class="stat-desc">21% more than last month</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-figure text-secondary">
+                        <i class="fa-solid fa-book fa-2xl"></i>
+                    </div>
+                    <div class="stat-title">Courses Available</div>
+                    <div class="stat-value text-secondary">2.6M</div>
+                    <div class="stat-desc">21% more than last month</div>
+                </div>
+                
+                <div class="stat">
+                    <div class="stat-figure text-secondary">
+                        <i class="fa-solid fa-award fa-2xl"></i>
+                    </div>
+                    <div class="stat-value">86%</div>
+                    <div class="stat-title">Tasks done</div>
+                    <div class="stat-desc text-secondary">31 tasks remaining</div>
+                </div>
+                
+            </div>            
         </section>
+
         
-        <section class="relative w-full h-screen px-2 py-4 pt-16 text-black" id="bplo">
+        <section class="relative w-full px-2 py-4 text-black lg:h-screen lg:pt-16" id="bplo">
             <div class="h-full max-w-screen-xl mx-auto space-y-10">
                 <div class="flex flex-row w-4/5 my-2">
                     <span class="text-4xl ">&#8212;</span>
                     <h1 class="text-3xl font-bold">Business Permits and Licensing Office</h1>
                 </div>
-                <div class="flex items-center w-full">
-                    <div id="left" class="w-1/2 leading-loose">
+                <div class="flex flex-col items-center w-full lg:flex-row">
+                    <div id="left" class="leading-loose lg:w-1/2">
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum beatae optio, assumenda sint est deserunt voluptatum ut commodi autem accusamus maiores consequatur rerum illum saepe culpa laborum corrupti itaque. Similique.
                         Neque dolor vitae voluptatem incidunt numquam, temporibus ipsum, veritatis, dicta ut aliquam minus nostrum obcaecati consequuntur magnam aut quos vel deleniti aliquid repellendus nesciunt totam at necessitatibus similique commodi. Recusandae!</p>
                     </div>
                     
-                    <div id="right" class="w-1/2">
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="flex items-center justify-center">
-                                <img class="w-1/2 m-1 rounded-lg" src="https://tse4.mm.bing.net/th?id=OIP.1d6tBbNiJTFQNEK_k0sSjQHaFj&pid=Api" alt="">
-                                <img class="w-1/2 m-1 rounded-lg" src="https://tse4.mm.bing.net/th?id=OIP.1d6tBbNiJTFQNEK_k0sSjQHaFj&pid=Api" alt="">
+                    <div id="right" class="lg:w-1/2">
+                        <div class="flex flex-col items-center justify-center space-y-1">
+                            <div class="flex items-center justify-center space-x-1">
+                                <img class="w-1/2 rounded-lg" src="https://tse4.mm.bing.net/th?id=OIP.1d6tBbNiJTFQNEK_k0sSjQHaFj&pid=Api" alt="">
+                                <img class="w-1/2 rounded-lg" src="https://tse4.mm.bing.net/th?id=OIP.1d6tBbNiJTFQNEK_k0sSjQHaFj&pid=Api" alt="">
                             </div>
                             <div class="w-full">
                                 <img class="object-cover w-full h-48 rounded-lg" src="https://tse4.mm.bing.net/th?id=OIP.1d6tBbNiJTFQNEK_k0sSjQHaFj&pid=Api" alt="">
@@ -160,16 +242,17 @@
 
         <section class="relative w-full px-2 py-4 text-black bg-opacity-50 h-72" id="contact">
             <div class="flex flex-wrap items-center justify-center h-full max-w-screen-xl mx-auto">
-                <h1 class="text-3xl font-semibold text-seagreen">Email to know more about us.</h1>
+                <h1 class="text-3xl font-bold text-seagreen">Email to know more about us.</h1>
                 <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum et minus praesentium veritatis quis dicta sequi, sint quas tempora error nihil saepe eligendi corrupti quasi porro, ad impedit, sunt cumque.</p>
                 <form action="">
-                    <div class="relative flex items-center">
-                        <input class="p-4 rounded-xl w-96" type="email" name="" id="">
-                        <x-forms.primary-button color="darthmouthgreen" name="Send" type="submit" class="mx-0 text-white"/>                
+                    <div class="join">
+                        <input class="input input-bordered join-item" placeholder="Email"/>
+                        <button class="rounded-r-full btn join-item btn-primary">Subscribe</button>
                     </div>
                 </form>
             </div>
         </section>
+
 
         {{-- <section class="relative w-full h-screen px-2 py-4 pt-16 text-black">
             <div class="h-full max-w-screen-xl mx-auto space-y-10">
@@ -367,13 +450,22 @@
     </section>
 
 <script>
-    $("nav").find("a").click(function(e) {
+$("nav").find("a").click(function(e) {
     e.preventDefault();
     var section = $(this).attr("href");
-    $("html, body").animate({
-        scrollTop: $(section).offset().top
-    });
+    var $target = $(section);
+    
+    // Check if the target element exists
+    if ($target.length) {
+        // Scroll to the target element
+        $("html, body").animate({
+            scrollTop: $target.offset().top
+        });
+    } else {
+        console.error("Target element not found:", section);
+    }
 });
+
 </script>
 
 @endsection
