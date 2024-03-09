@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css','resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/index.css')}}">
     <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
@@ -14,9 +14,8 @@
     
 
 
-    <title>{{ $title !== "" ? $title : 'Eskwela4EveryJuan'}}</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+<title>{{ $title !== "" ? $title : 'Eskwela4EveryJuan'}}</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
     
     <script src="https://kit.fontawesome.com/fd323b0f11.js" crossorigin="anonymous"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -84,6 +83,15 @@
         /* #sidebar_full, #sidebar_half {
             transition: width 2s ease;
         } */
+
+        .selectedMessage {
+            border-left: 4px solid #025C26; /* Green left border */
+            background-color: #f3f4f6; /* Optional: background color */
+        }
+
+        .notRead {
+            background-color: #f8d7da; /* Light red background color */
+        }
 
 
       </style>

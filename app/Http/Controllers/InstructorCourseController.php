@@ -8,6 +8,7 @@ use App\Models\Learner;
 use App\Models\Instructor;
 use App\Models\Admin;
 use App\Models\Course;
+use App\Models\CourseGrading;
 use App\Models\LearnerCourse;
 use App\Models\LessonContents;
 use App\Models\ActivityContents;
@@ -153,6 +154,10 @@ class InstructorCourseController extends Controller
     
                 
                 $course = Course::create($courseData);
+
+                CourseGrading::create([
+                    'course_id' => $course->course_id,
+                ]);
                 
                 $folderName = $course->course_id . ' ' . $courseData['course_name'];
                 $folderName = Str::slug($folderName, '_');
@@ -237,6 +242,7 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
             // dd($instructor);
 
+            
             try {
                 $course = DB::table('course')
                 ->select(
@@ -246,6 +252,7 @@ class InstructorCourseController extends Controller
                     'course.course_description',
                     'course.course_status',
                     'course.course_difficulty',
+                    'course.instructor_id',
                     'instructor.instructor_fname',
                     'instructor.instructor_lname',
                     'instructor.profile_picture',
@@ -253,6 +260,11 @@ class InstructorCourseController extends Controller
                 ->join('instructor', 'course.instructor_id', '=',  'instructor.instructor_id')
                 ->where('course_id', $course->course_id)
                 ->first();
+
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $syllabus = DB::table('syllabus')
                 ->select(
@@ -295,7 +307,7 @@ class InstructorCourseController extends Controller
 
                 $totalCourseTime = $totalLessonsDuration + $totalActivitiesDuration + $totalQuizzesDuration;
 
-                $totalCourseTimeInSeconds = $totalCourseTime;
+                $totalCourseTimeInSeconds = $totalCourseTime / 1000;
 
                 $hours = floor($totalCourseTimeInSeconds / 3600);
                 $minutes = floor(($totalCourseTimeInSeconds % 3600) / 60);
@@ -353,6 +365,8 @@ class InstructorCourseController extends Controller
                     'learner_course_progress.course_progress',
                     'learner_course_progress.start_period',
                     'learner_course_progress.finish_period',
+                    'learner_course_progress.grade',
+                    'learner_course_progress.remarks',
                     'learner.learner_fname',
                     'learner.learner_lname',
                 )
@@ -394,6 +408,23 @@ class InstructorCourseController extends Controller
                 ->where('learner_quiz_progress.learner_course_id', $activityData->learner_course_id)
                 ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
                 ->get();
+
+
+                $activityData->pre_assessment = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'score'
+                )
+                ->where('course_id', $course->course_id)
+                ->where('learner_course_id', $activityData->learner_course_id)
+                ->first();
+
+                $activityData->post_assessment = DB::table('learner_post_assessment_progress')
+                ->select (
+                        DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_post_assessment_progress.score, 0)), 2), 0) as average_score')
+                    )
+                    ->where('course_id', $course->course_id)
+                    ->where('learner_course_id', $activityData->learner_course_id)
+                    ->first();
 
                 // Add the updated $activityData back to the main array
                 $gradeWithActivityData[$key] = $activityData;
@@ -463,7 +494,7 @@ class InstructorCourseController extends Controller
                     'courseFiles' => $courseFiles,
                 ];
 
-                // dd($courseEnrollees);
+                // dd($data);
 
                 return view('instructor_course.courseOverview', compact('course'))
                 ->with($data);
@@ -484,6 +515,11 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
 
             try{
+
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $enrolleeProgress = DB::table('learner_course_progress')
                 ->select(
@@ -520,6 +556,11 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
 
             try{
+
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $courseData = $request->validate([
                     'course_name' => ['required'],
@@ -818,23 +859,10 @@ class InstructorCourseController extends Controller
             } else {
                 try {
 
-                    // if (!function_exists('getRandomColor')) {
-                    //     function getRandomColor() {
-                    //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    //     }
-                    // }
-                    
-                    // // Generate a random color for mainBackgroundCol
-                    // $mainBackgroundCol = getRandomColor();
-        
-                    // // Darken the mainBackgroundCol
-                    // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-        
-                    // // Darken the mainBackgroundCol further for darkenedColor
-                    // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
-                    
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
 
                     $response = $this->course_content($course);
 
@@ -1145,6 +1173,11 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {
+
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
 
                     $lessonInfo = DB::table('lessons')
                         ->select(
@@ -1810,25 +1843,10 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {
-
-                    // if (!function_exists('getRandomColor')) {
-                    //     function getRandomColor() {
-                    //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    //     }
-                    // }
-                    
-                    // // Generate a random color for mainBackgroundCol
-                    // $mainBackgroundCol = getRandomColor();
-        
-                    // // Darken the mainBackgroundCol
-                    // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-        
-                    // // Darken the mainBackgroundCol further for darkenedColor
-                    // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
-    
-    
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
             $activityInfo = DB::table('activities')
             ->select(
                 'activity_id',
@@ -1905,7 +1923,6 @@ class InstructorCourseController extends Controller
             }
         }
 
-                                // dd($lessonContent);
 
                     $response = $this->course_content($course);
 
@@ -2164,24 +2181,10 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
 
             try {
-
-                // if (!function_exists('getRandomColor')) {
-                //         function getRandomColor() {
-                //         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //         }
-                //     }
-                    
-                //     // Generate a random color for mainBackgroundCol
-                //     $mainBackgroundCol = getRandomColor();
-        
-                //     // Darken the mainBackgroundCol
-                //     $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                //     $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-        
-                //     // Darken the mainBackgroundCol further for darkenedColor
-                //     $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
-    
-    
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $activityData = DB::table('activities')
                 ->select(
@@ -2430,16 +2433,46 @@ class InstructorCourseController extends Controller
                             ]);
 
                         $learnerSyllabusProgress = DB::table('learner_syllabus_progress')
-                            ->select('learner_syllabus_progress_id', 'syllabus_id', 'category', 'status', /* add other columns as needed */)
+                            ->select(
+                                'learner_syllabus_progress_id', 
+                                'syllabus_id', 
+                                'category', 
+                                'status',
+                                )
                             ->where('learner_course_id', $learnerActivityOutputData->learner_course_id)
-                            ->where('status', '=', 'LOCKED')
+                            ->where('syllabus_id', $learnerActivityOutputData->syllabus_id)
                             ->orderBy('learner_syllabus_progress_id', 'ASC')
                             ->first();
 
                         if ($learnerSyllabusProgress) {
-                            DB::table('learner_syllabus_progress')
-                                ->where('learner_syllabus_progress_id', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                            $nextSyllabusProgress = DB::table('learner_syllabus_progress')
+                            ->select(
+                                'learner_syllabus_progress_id', 
+                                'syllabus_id', 
+                                'category', 
+                                'status',
+                                )
+                            ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                            ->orderBy('learner_syllabus_progress_id', 'ASC')
+                            ->limit(1)
+                            ->first();
+
+                            if($nextSyllabusProgress) {
+                                DB::table('learner_syllabus_progress')
+                                ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                                ->orderBy('learner_syllabus_progress_id', 'ASC')
+                                ->limit(1)
                                 ->update(['status' => 'NOT YET STARTED']);
+                            } else {
+                                DB::table('learner_post_assessment_progress')
+                                ->where('learner_course_id', $learner_course->learner_course_id)
+                                ->where('course_id', $learnerActivityOutputData->course_id)
+                                ->update(['status' => 'NOT YET STARTED']);
+                                
+                                session()->flash('message', "You have finished all of the topics! \n Be ready for the Post Assessment to finish this course!");
+                            }
+
+
                         }
                     }
                 }
@@ -2624,24 +2657,11 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {       
-
-                // if (!function_exists('getRandomColor')) {
-                //     function getRandomColor() {
-                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //     }
-                // }
-                
-                // // Generate a random color for mainBackgroundCol
-                // $mainBackgroundCol = getRandomColor();
-    
-                // // Darken the mainBackgroundCol
-                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-    
-                // // Darken the mainBackgroundCol further for darkenedColor
-                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
-
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
+  
                 $quizInfo = DB::table('quizzes')
                     ->select(
                         'quiz_id',
@@ -2723,22 +2743,6 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {       
-
-                // if (!function_exists('getRandomColor')) {
-                //     function getRandomColor() {
-                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //     }
-                // }
-                
-                // // Generate a random color for mainBackgroundCol
-                // $mainBackgroundCol = getRandomColor();
-    
-                // // Darken the mainBackgroundCol
-                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-    
-                // // Darken the mainBackgroundCol further for darkenedColor
-                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
 
                 $quizInfo = DB::table('quizzes')
@@ -2941,21 +2945,10 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
     
             try {
-                // if (!function_exists('getRandomColor')) {
-                //     function getRandomColor() {
-                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //     }
-                // }
-                
-                // // Generate a random color for mainBackgroundCol
-                // $mainBackgroundCol = getRandomColor();
-    
-                // // Darken the mainBackgroundCol
-                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-    
-                // // Darken the mainBackgroundCol further for darkenedColor
-                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
+                if($course->instructor_id !== $instructor->instructor_id) {
+                    // abort(404);
+                    return view('error.error');
+                }
 
                 $quizInfo = DB::table('quizzes')
                 ->select(
@@ -3052,21 +3045,6 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
     
             try {
-                // if (!function_exists('getRandomColor')) {
-                //     function getRandomColor() {
-                //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                //     }
-                // }
-                
-                // // Generate a random color for mainBackgroundCol
-                // $mainBackgroundCol = getRandomColor();
-    
-                // // Darken the mainBackgroundCol
-                // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-    
-                // // Darken the mainBackgroundCol further for darkenedColor
-                // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
 
                 $quizInfo = DB::table('quizzes')
                 ->select(
@@ -3141,11 +3119,6 @@ class InstructorCourseController extends Controller
                 ->where('questions.course_id', $course->course_id)
                 ->groupBy('questions.question_id')
                 ->get();
-
-
-             
-
-
 
 
             $response = $this->course_content($course);
@@ -3325,23 +3298,11 @@ class InstructorCourseController extends Controller
                 return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
             } else {
                 try {  
-
-                    // if (!function_exists('getRandomColor')) {
-                    //     function getRandomColor() {
-                    //     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-                    //     }
-                    // }
-                    
-                    // // Generate a random color for mainBackgroundCol
-                    // $mainBackgroundCol = getRandomColor();
-        
-                    // // Darken the mainBackgroundCol
-                    // $mainColorRGB = sscanf($mainBackgroundCol, "#%02x%02x%02x");
-                    // $mainBackgroundCol = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.6, $mainColorRGB[1] * 0.6, $mainColorRGB[2] * 0.6);
-        
-                    // // Darken the mainBackgroundCol further for darkenedColor
-                    // $darkenedColor = sprintf("#%02x%02x%02x", $mainColorRGB[0] * 0.4, $mainColorRGB[1] * 0.4, $mainColorRGB[2] * 0.4);
-
+                    if($course->instructor_id !== $instructor->instructor_id) {
+                        // abort(404);
+                        return view('error.error');
+                    }
+   
                     $quizInfo = DB::table('quizzes')
                     ->select(
                         'quiz_id',

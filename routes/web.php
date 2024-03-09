@@ -4,6 +4,27 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LearnerController;
 use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\InstructorCourseController;
+use App\Http\Controllers\InstructorPerformanceController;
+use App\Http\Controllers\InstructorDiscussionController;
+use App\Http\Controllers\InstructorMessageController;
+
+use App\Http\Controllers\LearnerCourseController;
+use App\Http\Controllers\LearnerPerformanceController;
+use App\Http\Controllers\LearnerDiscussionController;
+use App\Http\Controllers\LearnerMessageController;
+
+use App\Http\Controllers\MailController;
+
+use App\Http\Controllers\AdminLearnerController;
+use App\Http\Controllers\AdminInstructorController;
+use App\Http\Controllers\AdminCourseController;
+use App\Http\Controllers\AdminCourseManageController;
+use App\Http\Controllers\AdminPerformanceController;
+use App\Http\Controllers\AdminMessageController;
+use App\Http\Controllers\AdminManagementController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
@@ -30,6 +51,10 @@ Route::controller(UserController::class)->group(function() {
     // Route::get('/home', 'home');
 });
 
+Route::controller(UserController::class)->group(function() {
+    Route::get('/landing', 'landing');
+    Route::get('/terms', 'terms');
+});
 
 Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner', 'index');
@@ -47,13 +72,24 @@ Route::controller(LearnerController::class)->group(function() {
     Route::get('/learner/dashboard', 'dashboard');
     Route::get('/learner/dashboard/overviewNum', 'overviewNum');
     Route::get('/learner/dashboard/sessionData', 'sessionData');
-    Route::get('/learner/settings', 'settings');
+    // Route::get('/learner/settings', 'settings');
 
     Route::get('/learner/register1', 'register1');
 
-    Route::put('/learner/settings', 'update_info');
-    Route::put('/learner/update_profile', 'update_profile');
+    // Route::put('/learner/settings', 'update_info');
+    // Route::put('/learner/update_profile', 'update_profile');
 
+    Route::get('/learner/profile', 'profile');
+    Route::post('/learner/profile/update_user_info', 'update_user_info');
+    Route::post('/learner/profile/update_business_info', 'update_business_info');
+    Route::post('/learner/profile/update_login_info', 'update_login_info');
+    Route::put('/learner/profile/update_profile_photo', 'update_profile_photo');
+    
+    Route::get('/learner/profile/generate_profile_pdf', 'generate_profile_pdf');
+
+    
+    Route::get('/learner/profile/learner/{email}', 'view_other_learner');
+    Route::get('/learner/profile/instructor/{email}', 'view_other_instructor');
 });
 
 Route::controller(InstructorController::class)->group(function() {
@@ -77,62 +113,242 @@ Route::controller(InstructorController::class)->group(function() {
     Route::put('/instructor/update_profile', 'update_profile');
 
     // Route::get('/instructor/activities', 'activity');
-    Route::get('/instructor/quiz', 'quiz');
+    // Route::get('/instructor/quiz', 'quiz');
+
+    Route::get('/instructor/profile', 'profile');
+    Route::post('/instructor/profile/update_user_info', 'update_user_info');
+    Route::post('/instructor/profile/update_business_info', 'update_business_info');
+    Route::post('/instructor/profile/update_login_info', 'update_login_info');
+    Route::put('/instructor/profile/update_profile_photo', 'update_profile_photo');
+    
+    Route::get('/instructor/profile/learner/{email}', 'view_other_learner');
+    Route::get('/instructor/profile/instructor/{email}', 'view_other_instructor');
 });
 
 
 
 Route::controller(AdminController::class)->group(function() {
-    // Route::get('/admin', 'index')->name('login')->middleware('web', 'guest:admin');
     Route::get('/admin', 'index');
     Route::post('/admin/login', 'login_process');
     Route::post('/admin/logout', 'logout');
-    // Route::get('/admin/dashboard', 'dashboard')->middleware('auth:admin');
     Route::get('/admin/dashboard', 'dashboard');
-    // learner area---------------
-    Route::get('/admin/learners', 'learners');
-    Route::get('/admin/add_learner', 'add_learner');
-    Route::post('/admin/add_learner' ,'store_new_learner');
-    Route::get('/admin/view_learner/{learner}', 'view_learner');
-    Route::put('/admin/approve_learner/{learner}', 'approveLearner');
-    Route::put('/admin/reject_learner/{learner}', 'rejectLearner');
-    Route::put('/admin/pending_learner/{learner}', 'pendingLearner');
-    Route::put('/admin/view_learner/{learner}' , 'update_learner');
-    Route::post('/admin/delete_learner/{learner}', 'destroy_learner');
-    // instructor area -------------------
-    Route::get('/admin/instructors' , 'instructors');
-    Route::get('/admin/add_instructor' , 'add_instructor');
-    Route::post('/admin/add_instructor', 'store_new_instructor');
-    Route::get('/admin/view_instructor/{instructor}' , 'view_instructor');
-    Route::put('/admin/approve_instructor/{instructor}', 'approveInstructor');
-    Route::put('/admin/reject_instructor/{instructor}', 'rejectInstructor');
-    Route::put('/admin/pending_instructor/{instructor}', 'pendingInstructor');
-    Route::put('/admin/view_instructor/{instructor}' , 'update_instructor');
-    Route::post('/admin/delete_instructor/{instructor}', 'destroy_instructor');
-    // courses area ----------------------
-    Route::get('/admin/courses' , 'courses');
-    Route::get('/admin/add_course', 'add_course');
-    Route::post('/admin/add_course', 'store_new_course');
-    Route::get('/admin/view_course/{course}', 'view_course');
-    Route::post('/admin/view_course/{course}', 'update_course');
-    Route::post('/admin/delete_course/{course}', 'delete_course');
-    Route::put('/admin/approve_course/{course}', 'approveCourse');
-    Route::put('/admin/reject_course/{course}', 'rejectCourse');
-    Route::put('/admin/pending_course/{course}', 'pendingCourse');
-    Route::get('/admin/manage_course/course_overview/{course}' , 'manage_course');
-    Route::get('/admin/manage_course/enrollees/{course}' , 'course_enrollees');
-    Route::put('/admin/manage_course/enrollee/approve/{learner_course}', 'approve_learner_course');
-    Route::put('/admin/manage_course/enrollee/pending/{learner_course}', 'pending_learner_course');
-    Route::put('/admin/manage_course/enrollee/reject/{learner_course}', 'reject_learner_course');
+    Route::get('/admin/dashboard/getCountData', 'getCountData');
+    Route::get('/admin/dashboard/getCourseProgressData', 'getCourseProgressData');
+
 });
 
-// Route::controller(InstructorCourseController::class)->group(function() {
-//     Route::get('/instructor/courses', 'courses');
-//     Route::get('/instructor/courses/create', 'courseCreate');
-// });
 
-// Route::get('/instructor/courses', 'App\Http\Controllers\InstructorCourseController@courses');
-// Route::get('/instructor/courses/create', 'App\Http\Controllers\InstructorCourseController@courseCreate');
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/learners', 'AdminLearnerController@learners');
+    Route::get('/admin/add_learner', 'AdminLearnerController@add_learner');
+    Route::post('/admin/add_learner' ,'AdminLearnerController@store_new_learner');
+    Route::get('/admin/view_learner/{learner}', 'AdminLearnerController@view_learner');
+    Route::put('/admin/approve_learner/{learner}', 'AdminLearnerController@approveLearner');
+    Route::put('/admin/reject_learner/{learner}', 'AdminLearnerController@rejectLearner');
+    Route::put('/admin/pending_learner/{learner}', 'AdminLearnerController@pendingLearner');
+    Route::put('/admin/view_learner/{learner}' , 'AdminLearnerController@update_learner');
+    Route::post('/admin/view_learner/{learner}/delete_learner', 'AdminLearnerController@destroy_learner');
+});
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/instructors' , 'AdminInstructorController@instructors');
+    Route::get('/admin/add_instructor' , 'AdminInstructorController@add_instructor');
+    Route::post('/admin/add_instructor', 'AdminInstructorController@store_new_instructor');
+    Route::get('/admin/view_instructor/{instructor}' , 'AdminInstructorController@view_instructor');
+    Route::put('/admin/approve_instructor/{instructor}', 'AdminInstructorController@approveInstructor');
+    Route::put('/admin/reject_instructor/{instructor}', 'AdminInstructorController@rejectInstructor');
+    Route::put('/admin/pending_instructor/{instructor}', 'AdminInstructorController@pendingInstructor');
+    Route::post('/admin/view_instructor/{instructor}/update' , 'AdminInstructorController@update_instructor');
+    Route::post('/admin/view_instructor/{instructor}/delete_instructor', 'AdminInstructorController@destroy_instructor');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/courses' , 'AdminCourseController@courses');
+    Route::get('/admin/add_course', 'AdminCourseController@add_course');
+    Route::post('/admin/add_course', 'AdminCourseController@store_new_course');
+    Route::get('/admin/view_course/{course}', 'AdminCourseController@view_course');
+    Route::post('/admin/view_course/{course}', 'AdminCourseController@update_course');
+    Route::post('/admin/view_course/{course}/delete_course', 'AdminCourseController@delete_course');
+    Route::put('/admin/approve_course/{course}', 'AdminCourseController@approveCourse');
+    Route::put('/admin/reject_course/{course}', 'AdminCourseController@rejectCourse');
+    Route::put('/admin/pending_course/{course}', 'AdminCourseController@pendingCourse');
+
+    Route::get('/admin/manage_course/course_overview/{course}' , 'AdminCourseController@manage_course');
+
+    
+    Route::get('/admin/course/enrollment' , 'AdminCourseController@course_manage_enrollees');
+    Route::get('/admin/course/enrollment/learnerCoursesData' , 'AdminCourseController@getLearnerCourseData');
+    Route::get('/admin/course/enrollment/search' , 'AdminCourseController@search');
+
+    Route::get('/admin/course/enrollment/addNew' , 'AdminCourseController@add_new_enrollee');
+    Route::get('/admin/course/enrollment/addNew/getData' , 'AdminCourseController@getData');
+    Route::post('/admin/course/enrollment/addNew/enrollNew' , 'AdminCourseController@enrollNew');
+
+    Route::get('/admin/course/enrollment/view/{learner_course}' , 'AdminCourseController@view_learner_course');
+
+    Route::get('/admin/course/enrollment/learnerCourse/{learner_course}' , 'AdminCourseController@view_learner_course');
+
+
+
+    
+    Route::get('/admin/manage_course/enrollees/{course}' , 'AdminCourseController@course_enrollees');
+    Route::put('/admin/manage_course/enrollee/approve/{learner_course}', 'AdminCourseController@approve_learner_course');
+    Route::put('/admin/manage_course/enrollee/pending/{learner_course}', 'AdminCourseController@pending_learner_course');
+    Route::put('/admin/manage_course/enrollee/reject/{learner_course}', 'AdminCourseController@reject_learner_course');
+
+
+});
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/courseManage', 'AdminCourseManageController@coursesManage');
+    Route::get('/admin/courseManage/{course}', 'AdminCourseManageController@coursesOverview');
+
+    Route::get('/admin/courseManage/{course}/overviewNum', 'AdminCourseManageController@overviewNum');
+    Route::post('/admin/courseManage/{course}/editCourseDetails', 'AdminCourseManageController@editCourseDetails');
+    Route::post('/admin/courseManage/{course}/generate_pdf', 'AdminCourseManageController@generate_pdf');
+    Route::post('/admin/courseManage/{course}/add_file', 'AdminCourseManageController@add_file');
+    Route::get('/admin/courseManage/{course}/delete_file/{fileName}', 'AdminCourseManageController@delete_file');
+    Route::post('/admin/courseManage/{course}/gradingSystem', 'AdminCourseManageController@gradingSystem');
+
+    Route::post('/admin/courseManage/{course}/delete', 'AdminCourseManageController@delete_course');
+
+    Route::post('/admin/courseManage/create/syllabus/{course}', 'AdminCourseManageController@create_syllabus');
+
+    Route::get('/admin/courseManage/content/{course}', 'AdminCourseManageController@display_course_syllabus_view');
+    Route::get('/admin/courseManage/content/{course}/json', 'AdminCourseManageController@course_content_json');
+
+    Route::post('/admin/courseManage/content/syllabus/{course}/manage', 'AdminCourseManageController@update_syllabus');
+    Route::post('/admin/courseManage/content/syllabus/{course}/manage_add', 'AdminCourseManageController@update_syllabus_add_new');
+    Route::post('/admin/courseManage/content/syllabus/{course}/manage_delete', 'AdminCourseManageController@update_syllabus_delete');
+
+    // lesson management
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}', 'AdminCourseManageController@view_lesson');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/json', 'AdminCourseManageController@lesson_content_json');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/addCompletionTime', 'AdminCourseManageController@addCompletionTime');
+
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson_id}', 'AdminCourseManageController@update_lesson_title');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/picture', 'AdminCourseManageController@update_lesson_picture');
+    Route::post('/admin/courseManage/content/lesson/{lesson}/title/{lesson_content}', 'AdminCourseManageController@update_lesson_content');
+    Route::post('/admin/courseManage/content/lesson/{lesson}/title/{lesson_content}/delete', 'AdminCourseManageController@delete_lesson_content');
+
+    
+
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save', 'AdminCourseManageController@save_lesson_content');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/save_add', 'AdminCourseManageController@save_add_lesson_content');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_file/{lesson_content}', 'AdminCourseManageController@lesson_content_store_file');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/delete_file/{lesson_content}', 'AdminCourseManageController@lesson_content_delete_file');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/pdf_view', 'AdminCourseManageController@view_lesson_pdf');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/generate_pdf', 'AdminCourseManageController@lesson_generate_pdf');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/store_video_url/{lesson_content}', 'AdminCourseManageController@lesson_content_embed_url');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/lesson/{topic_id}/title/{lesson}/delete_url/{lesson_content}', 'AdminCourseManageController@lesson_content_delete_url');
+    
+    // activity management
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}', 'AdminCourseManageController@view_activity');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}/json', 'AdminCourseManageController@activity_content_json');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/instructions', 'AdminCourseManageController@update_activity_instructions');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/score', 'AdminCourseManageController@update_activity_score');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/criteria', 'AdminCourseManageController@update_activity_criteria');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}/title/{activity}/{activity_content}/criteria_add', 'AdminCourseManageController@add_activity_criteria');
+
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/activity/{topic_id}/{learner_course}/{attempt}', 'AdminCourseManageController@view_learner_activity_response');
+    Route::post('/admin/courseManage/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}/{attempt}', 'AdminCourseManageController@learnerResponse_overallScore');
+    Route::post('/admin/courseManage/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}/{attempt}/criteria_score', 'AdminCourseManageController@learnerResponse_criteriaScore');
+    Route::get('/admin/courseManage/content/activity/{learner_activity_output}/{learner_course}/{activities}/{activity_content}/{attempt}/reattempt', 'AdminCourseManageController@reattempt_activity');
+
+    // quiz management
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}', 'AdminCourseManageController@view_quiz');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/json', 'AdminCourseManageController@quiz_info_json');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/view_learner_output/{learner_quiz_progress}', 'AdminCourseManageController@view_learner_output');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/view_learner_output/{learner_quiz_progress}/json', 'AdminCourseManageController@view_learner_output_json');
+    
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/add', 'AdminCourseManageController@manage_add_reference');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/update', 'AdminCourseManageController@manage_update_reference');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz}/duration', 'AdminCourseManageController@manage_update_duration');
+
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content', 'AdminCourseManageController@quiz_content');
+    Route::get('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content/json', 'AdminCourseManageController@quiz_content_json');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content/add', 'AdminCourseManageController@add_quiz_question');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content/update', 'AdminCourseManageController@update_quiz_question');
+    Route::post('/admin/courseManage/content/{course}/{syllabus}/quiz/{topic_id}/{quiz_id}/content/empty', 'AdminCourseManageController@empty_quiz_question');
+    
+});
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/message', 'AdminMessageController@index');
+    Route::get('/admin/message/search_recipient', 'AdminMessageController@search_recipient');
+    Route::post('/admin/message/send', 'AdminMessageController@send');
+    
+    Route::get('/admin/message/getMessages', 'AdminMessageController@getMessages');
+    Route::get('/admin/message/getSelectedMessage', 'AdminMessageController@getSelectedMessage');
+
+    Route::post('/admin/message/reply', 'AdminMessageController@reply');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/performance', 'AdminPerformanceController@index');
+    Route::get('/admin/performance/learnerOverviewData', 'AdminPerformanceController@learner_overview');
+    Route::get('/admin/performance/instructorOverviewData', 'AdminPerformanceController@instructor_overview');
+    Route::get('/admin/performance/courseOverviewData', 'AdminPerformanceController@course_overview');
+
+    Route::get('/admin/performance/learners', 'AdminPerformanceController@learners');
+    Route::get('/admin/performance/learners/view/{learner}', 'AdminPerformanceController@view_learner');
+    Route::get('/admin/performance/learners/view/{learner}/sessionData', 'AdminPerformanceController@sessionData');
+    Route::get('/admin/performance/learners/view/{learner}/totalEnrolledCourses', 'AdminPerformanceController@enrolledCoursesPerformances');
+    Route::get('/admin/performance/learners/view/{learner}/enrolledCoursesData', 'AdminPerformanceController@enrolledCoursesPerformancesData');
+    Route::get('/admin/performance/learners/view/{learner}/course/{course}', 'AdminPerformanceController@coursePerformance');
+    Route::get('/admin/performance/learners/view/{learner}/course/{course}/coursePerformance', 'AdminPerformanceController@coursePerformanceData');
+    Route::get('/admin/performance/learners/view/{learner}/course/{course}/syllabusPerformance', 'AdminPerformanceController@syllabusPerformanceData');
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/pre_assessment/view_output', 'AdminPerformanceController@view_output_pre_assessment');
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/pre_assessment/view_output/json', 'AdminPerformanceController@view_output_pre_assessment_json');
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/post_assessment/view_output/{attempt}', 'AdminPerformanceController@view_output_post_assessment');
+    Route::get('/admin/performance/learners/view/{course}/{learner_course}/post_assessment/view_output/{attempt}/json', 'AdminPerformanceController@view_output_post_assessment_json');
+
+    
+    Route::get('/admin/performance/instructors', 'AdminPerformanceController@instructors');
+    Route::get('/admin/performance/instructor/view/{instructor}', 'AdminPerformanceController@view_instructor');
+    Route::get('/admin/performance/instructor/view/{instructor}/sessionData', 'AdminPerformanceController@i_sessionData');
+    Route::get('/admin/performance/instructor/view/{instructor}/totalCourseNum', 'AdminPerformanceController@i_totalCourseNum');
+    Route::get('/admin/performance/instructor/view/{instructor}/courseChartData', 'AdminPerformanceController@i_courseChartData');
+
+
+    Route::get('/admin/performance/courses', 'AdminPerformanceController@courses');
+    Route::get('/admin/performance/courses/view/{course}', 'AdminPerformanceController@view_course');
+    Route::get('/admin/performance/courses/view/{course}/performanceData', 'AdminPerformanceController@selectedCoursePerformance');
+    Route::get('/admin/performance/courses/view/{course}/learnerCourseData', 'AdminPerformanceController@learnerCourseData');
+    Route::get('/admin/performance/courses/view/{course}/learnerSyllabusData', 'AdminPerformanceController@learnerSyllabusData');
+
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}', 'AdminPerformanceController@courseSyllabusPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/lessonData', 'AdminPerformanceController@courseSyllabusLessonPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/activityData', 'AdminPerformanceController@courseSyllabusActivityPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/activityData/outputs', 'AdminPerformanceController@courseSyllabusActivityScoresPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData', 'AdminPerformanceController@courseSyllabusQuizPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData/outputs', 'AdminPerformanceController@courseSyllabusQuizScoresPerformance');
+    Route::get('/admin/performance/courses/view/{course}/syllabus/{syllabus}/quizData/contentOutputs', 'AdminPerformanceController@courseSyllabusQuizContentOutputPerformance');
+    Route::get('/admin/performance/courses/view/{course}/learner/{learner_course}', 'AdminPerformanceController@learnerCoursePerformance');
+    Route::get('/admin/performance/courses/view/{course}/learner/{learner_course}/coursePerformance', 'AdminPerformanceController@learnerCourseOverallPerformance');
+    Route::get('/admin/performance/courses/view/{course}/learner/{learner_course}/syllabusPerformance', 'AdminPerformanceController@learnerCourseSyllabusPerformance');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/admin/admins', 'AdminManagementController@index');
+    Route::get('/admin/admins/add_admin', 'AdminManagementController@add_new_admin');
+    Route::post('/admin/admins/add_admin/submit_new_admin', 'AdminManagementController@submit_new_admin');
+
+    Route::get('/admin/view_admin/{admin}', 'AdminManagementController@view_admin');
+    Route::post('/admin/view_admin/{admin}/update', 'AdminManagementController@update_admin');
+    Route::post('/admin/view_admin/{admin}/delete', 'AdminManagementController@delete_admin');
+
+    Route::get('/admin/profile', 'AdminManagementController@settings');
+    Route::post('/admin/profile/update', 'AdminManagementController@update_settings');
+    
+});
+
+
+
+
 Route::get('storage/{folder}/{filename}', function ($folder, $filename) {
     $path = storage_path("app/public/{$folder}/{$filename}");
 
@@ -241,6 +457,7 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/learner/course/manage/{course}', 'LearnerCourseController@manage_course');
     Route::get('/learner/course/manage/{course}/overview', 'LearnerCourseController@course_overview');
     Route::get('/learner/course/manage/{course}/view_syllabus', 'LearnerCourseController@view_syllabus');
+    // Route::get('/learner/course/{course}/print_certificate', 'LearnerCourseController@print_certificate');
 
     Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment', 'LearnerCourseController@pre_assessment');
     Route::get('/learner/course/content/{course}/{learner_course}/pre_assessment/answer', 'LearnerCourseController@answer_pre_assessment');
@@ -271,6 +488,19 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
     
     Route::get('/learner/course/content/{course}/{learner_course}/post_assessment', 'LearnerCourseController@post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/answer/{attempt}', 'LearnerCourseController@answer_post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/answer/{attempt}/json', 'LearnerCourseController@answer_post_assessment_json');
+    Route::post('/learner/course/content/{course}/{learner_course}/post_assessment/answer/{attempt}/submit', 'LearnerCourseController@submit_post_assessment');
+    Route::post('/learner/course/content/{course}/{learner_course}/post_assessment/answer/{attempt}/score', 'LearnerCourseController@score_post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/view_output/{attempt}', 'LearnerCourseController@view_output_post_assessment');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/view_output/{attempt}/json', 'LearnerCourseController@view_output_post_assessment_json');
+    Route::get('/learner/course/content/{course}/{learner_course}/post_assessment/reattempt', 'LearnerCourseController@post_assessment_reattempt');
+
+    Route::get('/learner/course/content/{course}/{learner_course}/grades', 'LearnerCourseController@grades');
+    Route::get('/learner/course/content/{course}/{learner_course}/gradespdf', 'LearnerCourseController@gradespdf');
+
+    
+    Route::get('/learner/course/{course}/{learner_course}/certificate', 'LearnerCourseController@generate_certificate');
     // // })->middleware('web');
 });
 
@@ -363,4 +593,28 @@ Route::namespace('App\Http\Controllers')->group(function () {
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/send', 'MailController@index');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/learner/message', 'LearnerMessageController@index');
+    Route::get('/learner/message/search_recipient', 'LearnerMessageController@search_recipient');
+    Route::post('/learner/message/send', 'LearnerMessageController@send');
+    
+    Route::get('/learner/message/getMessages', 'LearnerMessageController@getMessages');
+    Route::get('/learner/message/getSelectedMessage', 'LearnerMessageController@getSelectedMessage');
+
+    Route::post('/learner/message/reply', 'LearnerMessageController@reply');
+});
+
+
+Route::namespace('App\Http\Controllers')->group(function () {
+    Route::get('/instructor/message', 'InstructorMessageController@index');
+    Route::get('/instructor/message/search_recipient', 'InstructorMessageController@search_recipient');
+    Route::post('/instructor/message/send', 'InstructorMessageController@send');
+    
+    Route::get('/instructor/message/getMessages', 'InstructorMessageController@getMessages');
+    Route::get('/instructor/message/getSelectedMessage', 'InstructorMessageController@getSelectedMessage');
+
+    Route::post('/instructor/message/reply', 'InstructorMessageController@reply');
 });

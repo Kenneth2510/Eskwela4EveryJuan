@@ -105,7 +105,7 @@
         </div>
 
 
-        <div id="confirmSubmitQuizModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+        <div id="confirmSubmitQuizModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                 <div class="flex justify-end w-full">
                     <button class="cancelConfirmSubmitQuiz">
@@ -113,7 +113,7 @@
                     </button>
                 </div>
         
-                <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your quiz?</h2>
+                <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your assessment?</h2>
         
                 <p class="text-gray-600">Once you submit, you won't be able to make any changes. Make sure you have answered all the questions.</p>
         

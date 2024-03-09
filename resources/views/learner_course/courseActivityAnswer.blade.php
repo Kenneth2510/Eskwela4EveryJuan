@@ -36,7 +36,7 @@
                     @if ($activityOutput)
                         <p class="px-10 text-4xl">{{$activityOutput->total_score ?? 'N/A'}} / {{$activity->total_score ?? 'N/A'}}</p>
                     @else
-                        <p class="px-10 text-4xl">N/A</p>
+                        <p class="px-10 text-4xl">0</p>
                     @endif
                 </div>
             </div>

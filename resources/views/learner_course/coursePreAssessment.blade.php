@@ -114,7 +114,7 @@
                 @endif
                 <div class="p-6 bg-gray-100 shadow-md rounded-xl">
                     <h1 class="mb-4 text-3xl font-bold">Score:</h1>
-                    <h1 class="text-4xl font-bold text-green-600">{{$preAssessmentData->score}} <span class="text-2xl font-bold text-black"> / 25</span></h1>
+                    <h1 class="text-4xl font-bold text-green-600">{{$preAssessmentData->score}} <span class="text-2xl font-bold text-black"> / {{ $questionsCount }}</span></h1>
                     
                     <div class="my-5">
                         <h1 class="text-xl font-semibold">Remarks:</h1>
