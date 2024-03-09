@@ -656,6 +656,7 @@ class LearnerPerformanceController extends Controller
                 'learnerLessonCompletedData' => $learnerLessonCompletedData,
                 'learnerActivityCompletedData' => $learnerActivityCompletedData,
                 'learnerQuizCompletedData' => $learnerQuizCompletedData,
+                'course' => $course,
             ];
 
             return response()->json($data);

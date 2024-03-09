@@ -129,15 +129,8 @@
                                     </div>
                                 </div> --}}
                             </div>
-                            
-
-
-
                         </div>
                     </div>
-
-
-                    
                     <div class="w-full" style="height: 35%;" id="conversationReplyArea">
                         <span id="replyError" class="text-red-500"></span>
                         <div class="flex items-end">
@@ -150,15 +143,11 @@
                             <button id="replyNowBtn" class="px-5 py-3 ml-2 text-white bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen rounded-xl">Send</button>
                         </div>
                         <div id="replyNowFileList"></div>
-                    </div>
-                    
-                    
+                    </div>  
                 </div>
-    
-
             </div>
-            
         </div>
+@include('partials.chatbot')
     </div>
 </section>
 

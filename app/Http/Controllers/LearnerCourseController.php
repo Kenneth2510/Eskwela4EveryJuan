@@ -548,7 +548,7 @@ class LearnerCourseController extends Controller
                         "course_id" => $course->course_id,
                     ]);
 
-                    LearnerCourse::create($courseEnrollData);
+                    LearnerCourse::firstOrCreate($courseEnrollData);
 
                     session()->flash('message', 'Course enrolled Successfully');
                     return response()->json(['message' => 'Course enrolled successfully', 'redirect_url' => '/learner/courses']);
@@ -1273,12 +1273,12 @@ class LearnerCourseController extends Controller
                     'start_period',
                     'finish_period',
                 )
-                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_course_id', $courseData->learner_course_id)
                 ->where('course_id', $course->course_id)
                 ->first();
 
                 $totalNumofQuestions = DB::table('learner_pre_assessment_output')
-                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_course_id', $courseData->learner_course_id)
                 ->where('course_id', $course->course_id)
                 ->count();
 
@@ -1337,7 +1337,7 @@ class LearnerCourseController extends Controller
                     'start_period',
                     'finish_period',
                 )
-                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('learner_course_id', $courseData->learner_course_id)
                 ->where('course_id', $course->course_id)
                 ->first();
 
@@ -1365,7 +1365,7 @@ class LearnerCourseController extends Controller
                             'question_id',
                             'syllabus_id',
                         )
-                        ->where('learner_course_id', $learner_course->learner_course_id)
+                        ->where('learner_course_id', $courseData->learner_course_id)
                         ->where('course_id', $course->course_id)
                         ->get();
 
@@ -1541,6 +1541,7 @@ class LearnerCourseController extends Controller
                 ->join('course', 'learner_course.course_id', 'course.course_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $preAssessmentData = DB::table('learner_pre_assessment_progress')
@@ -1615,7 +1616,7 @@ class LearnerCourseController extends Controller
         if (session()->has('learner')) {
             $learner= session('learner'); 
             try {
-
+                // dd($request);
             $learner_pre_assessment_output_id = $request->input('learner_pre_assessment_output_id');
             $question_id = $request->input('question_id');
 
@@ -1778,6 +1779,7 @@ class LearnerCourseController extends Controller
                 ->join('course', 'learner_course.course_id', 'course.course_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $preAssessmentData = DB::table('learner_pre_assessment_progress')
@@ -1873,6 +1875,7 @@ class LearnerCourseController extends Controller
                 ->join('course', 'learner_course.course_id', 'course.course_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $preAssessmentData = DB::table('learner_pre_assessment_progress')
@@ -2811,7 +2814,7 @@ class LearnerCourseController extends Controller
 
         $data = [
             'title' => 'Course Lesson',
-            'scripts' => ['/.js'],
+            'scripts' => ['/L_course_quiz.js'],
             'mainBackgroundCol' => '#00693e',
             'darkenedColor' => '#00693e',
             'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
@@ -3765,6 +3768,7 @@ class LearnerCourseController extends Controller
                 ->join('course', 'learner_course.course_id', 'course.course_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $postAssessmentData_recent = DB::table('learner_post_assessment_progress')
@@ -3897,6 +3901,7 @@ class LearnerCourseController extends Controller
                 ->join('course', 'learner_course.course_id', 'course.course_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $postAssessmentData = DB::table('learner_post_assessment_progress')
@@ -4118,6 +4123,7 @@ class LearnerCourseController extends Controller
                 ->join('course', 'learner_course.course_id', 'course.course_id')
                 ->join('instructor', 'course.instructor_id', 'instructor.instructor_id')
                 ->where('learner_course.course_id', $course->course_id)
+                ->where('learner_course.learner_course_id', $learner_course->learner_course_id)
                 ->first();
 
                 $postAssessmentData = DB::table('learner_post_assessment_progress')
@@ -4965,7 +4971,7 @@ class LearnerCourseController extends Controller
                     }
                 $data = [
                     'title' => 'Course Gradesheet',
-                    'scripts' => ['/learner_post_assessment.js'],
+                    'scripts' => ['/learner_gradesheet.js'],
                     'mainBackgroundCol' => '#00693e',
                     'courseData' => $courseData,
                     'activityScoresData' => $learnerActivityScoresData,

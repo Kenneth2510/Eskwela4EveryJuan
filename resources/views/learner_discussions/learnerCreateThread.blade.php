@@ -7,7 +7,7 @@
             {{-- MAIN --}}
     <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
         <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
-            <a href="{{ url("/instructor/discussions") }}" class="my-2 bg-gray-300 rounded-full ">
+            <a href="{{ url("/learner/discussions") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
             <h1 class="mx-5 text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>
@@ -74,6 +74,36 @@
 
         </div>
     </section>
-@include('partials.learnerProfile')
+
+    <div id="loaderModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <div class="three-body">
+                <div class="three-body__dot"></div>
+                <div class="three-body__dot"></div>
+                <div class="three-body__dot"></div>
+            </div>
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+        </div>
+    </div>
+
+
+    <div id="successModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <i class="fa-regular fa-circle-check text-[75px] text-darthmouthgreen"></i>
+            <p class="mt-5 text-xl text-darthmouthgreen">Successful</p>  
+        </div>
+    </div>
+
+
+    <div id="errorModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <i class="fa-regular fa-circle-xmark text-[75px] text-red-500"></i>
+            <p class="mt-5 text-xl text-darthmouthgreen">Error</p>  
+        </div>
+    </div>
+{{-- @include('partials.learnerProfile') --}}
+
+@include('partials.chatbot')
 </section>
 @include('partials.footer')

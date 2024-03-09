@@ -133,4 +133,6 @@
 
     </div>
 </section>
+@include('partials.chatbot')
 @endsection
+

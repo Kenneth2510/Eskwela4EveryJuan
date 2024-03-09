@@ -1,10 +1,6 @@
 @extends('layouts.instructor_layout')
 
 @section('content')
-
-    {{-- @include('partials.instructorNav') --}}
-    {{-- @include('partials.instructorSidebar') --}}
-
     {{-- MAIN --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
         <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
@@ -27,7 +23,6 @@
                         @endforeach
                     </select>
                 </div>
-
                 <div class="w-full p-5 mt-5 border-2 rounded-lg border-darthmouthgreen border-opacity-60" id="threadContentArea">
                     <div class="flex w-full divide-x-2" id="threadContentCategoryArea">
                         <button class="w-1/3 py-3 text-white px3 bg-darthmouthgreen hover:bg-green-950 discussionBtn_selected rounded-s-xl" id="textCategoryBtn">Post/Text</button>
@@ -73,6 +68,32 @@
         </div>
     </section>
     {{-- @include('partials.instructorProfile') --}}
- 
+     <div id="loaderModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <div class="three-body">
+                <div class="three-body__dot"></div>
+                <div class="three-body__dot"></div>
+                <div class="three-body__dot"></div>
+            </div>
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+        </div>
+    </div>
+
+
+    <div id="successModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <i class="fa-regular fa-circle-check text-[75px] text-darthmouthgreen"></i>
+            <p class="mt-5 text-xl text-darthmouthgreen">Successful</p>  
+        </div>
+    </div>
+
+
+    <div id="errorModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <i class="fa-regular fa-circle-xmark text-[75px] text-red-500"></i>
+            <p class="mt-5 text-xl text-darthmouthgreen">Error</p>  
+        </div>
+    </div>
 @endsection
 

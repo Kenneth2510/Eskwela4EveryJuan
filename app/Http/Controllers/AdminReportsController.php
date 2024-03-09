@@ -204,7 +204,7 @@ class AdminReportsController extends Controller
 
                 // Generate PDF from HTML
                 $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
                 // Return the PDF content as a download
                 return $pdf->download('user_list.pdf');
@@ -263,7 +263,7 @@ class AdminReportsController extends Controller
             ])->render();
     
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('session_data.pdf');
@@ -325,7 +325,7 @@ class AdminReportsController extends Controller
             ])->render();
     
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('session_data.pdf');
@@ -384,7 +384,7 @@ class AdminReportsController extends Controller
                 ])->render();
         
                 $pdf = PDF::loadHTML($html)
-                    ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                    ->setOption('zoom', 1.0); // Set the scale factor to 80%
                 
                 // Return the PDF content as a download
                 return $pdf->download('course_data.pdf');
@@ -443,7 +443,7 @@ class AdminReportsController extends Controller
                     ])->render();
             
                     $pdf = PDF::loadHTML($html)
-                        ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                        ->setOption('zoom', 1.0); // Set the scale factor to 80%
                     
                     // Return the PDF content as a download
                     return $pdf->download('enrollees_data.pdf');
@@ -628,7 +628,7 @@ class AdminReportsController extends Controller
             $html = view('adminReports.courseGradesheet', $data)->render();
     
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('course_gradesheet.pdf');
@@ -679,10 +679,9 @@ class AdminReportsController extends Controller
                 ->where('learner_course.course_id', $course)
                 ->where('learner_course.learner_course_id', $learnerCourse);
 
-            $gradeWithActivityData = $gradeData->get();
-
-            foreach ($gradeWithActivityData as $key => $activityData) {
-                $activityData->activities = DB::table('learner_activity_output')
+            $gradeWithActivityData = $gradeData->first();
+            // foreach ($gradeWithActivityData as $key => $activityData) {
+                $gradeWithActivityData->activities = DB::table('learner_activity_output')
                     ->select(
                         'learner_activity_output.activity_id',
                         'learner_activity_output.activity_content_id',
@@ -697,12 +696,12 @@ class AdminReportsController extends Controller
                         'learner_activity_output.learner_activity_output_id'
                     )
                     ->where('learner_activity_output.course_id', $course)
-                    ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
+                    ->where('learner_activity_output.learner_course_id', $gradeWithActivityData->learner_course_id)
                     ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
                     ->get();
 
                 // Retrieve quiz data for the current learner
-                $activityData->quizzes = DB::table('learner_quiz_progress')
+                $gradeWithActivityData->quizzes = DB::table('learner_quiz_progress')
                 ->select(
                     'learner_quiz_progress.quiz_id',
                     'quizzes.quiz_title',
@@ -710,30 +709,30 @@ class AdminReportsController extends Controller
                 )
                 ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
                 ->where('learner_quiz_progress.course_id', $course)
-                ->where('learner_quiz_progress.learner_course_id', $activityData->learner_course_id)
+                ->where('learner_quiz_progress.learner_course_id', $gradeWithActivityData->learner_course_id)
                 ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
                 ->get();
 
 
-                $activityData->pre_assessment = DB::table('learner_pre_assessment_progress')
+                $gradeWithActivityData->pre_assessment = DB::table('learner_pre_assessment_progress')
                 ->select(
                     'score'
                 )
                 ->where('course_id', $course)
-                ->where('learner_course_id', $activityData->learner_course_id)
+                ->where('learner_course_id', $gradeWithActivityData->learner_course_id)
                 ->first();
 
-                $activityData->post_assessment = DB::table('learner_post_assessment_progress')
+                $gradeWithActivityData->post_assessment = DB::table('learner_post_assessment_progress')
                 ->select (
                         DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_post_assessment_progress.score, 0)), 2), 0) as average_score')
                     )
                     ->where('course_id', $course)
-                    ->where('learner_course_id', $activityData->learner_course_id)
+                    ->where('learner_course_id', $gradeWithActivityData->learner_course_id)
                     ->first();
 
                 // Add the updated $activityData back to the main array
-                $gradeWithActivityData[$key] = $activityData;
-            }
+                // $gradeWithActivityData[$key] = $activityData;
+            // }
 
             $activitySyllabusData = DB::table('activities')
             ->select(
@@ -781,6 +780,7 @@ class AdminReportsController extends Controller
             )
             ->join('learner', 'learner.learner_id', 'learner_pre_assessment_progress.learner_id')
             ->where('learner_pre_assessment_progress.course_id', $course)
+            ->where('learner_pre_assessment_progress.learner_id', $gradeWithActivityData->learner_id)
             ->get();
         
         $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
@@ -799,6 +799,7 @@ class AdminReportsController extends Controller
             )
             ->join('learner', 'learner.learner_id', 'learner_post_assessment_progress.learner_id')
             ->where('learner_post_assessment_progress.course_id', $course)
+            ->where('learner_post_assessment_progress.learner_id', $gradeWithActivityData->learner_id)
             ->get();
     
 
@@ -813,10 +814,10 @@ class AdminReportsController extends Controller
 
             // dd($data);
 
-            $html = view('adminReports.courseGradesheet', $data)->render();
-    
+            $html = view('adminReports.learnerGradesheet', $data)->render();
+
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('learner_gradesheet.pdf');
@@ -839,7 +840,7 @@ class AdminReportsController extends Controller
                 'learner_course.learner_course_id',
                 DB::raw('CONCAT(learner.learner_fname, " ", learner.learner_lname) as name'),
             )
-            ->join('learner', 'learner.learner_id', 'learner_course.learner_course_id')
+            ->join('learner', 'learner.learner_id', 'learner_course.learner_id')
             ->where('learner_course.course_id' , $course->course_id)
             ->get();
 

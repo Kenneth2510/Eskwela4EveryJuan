@@ -137,9 +137,65 @@ class InstructorCourseController extends Controller
         
     }
 
+    // public function courseCreate_process(Request $request) {
+    //     $instructor = session('instructor');
+
+    //     if($instructor->status !== 'Approved') {
+    //         session()->flash('message', 'Account is not yet Approved');
+    //         return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+    //     } else {
+    //         try {
+    //             $courseData = $request->validate([
+    //                 'course_name' => ['required'],
+    //                 'course_description' => ['required'],
+    //                 'course_difficulty' => ['required'],
+    //             ]);
+
+    //             $courseData['course_code'] = Str::random(6);
+    //             $courseData['instructor_id'] = $instructor->instructor_id;
+    
+                
+    //             $course = Course::create($courseData);
+
+    //             CourseGrading::create([
+    //                 'course_id' => $course->course_id,
+    //             ]);
+                
+    //             $folderName = $course->course_id . ' ' . $courseData['course_name'];
+    //             $folderName = Str::slug($folderName, '_');
+    //             $folderPath = 'public/courses/' . $folderName;
+    
+    //             if(!Storage::exists($folderPath)) {
+    //                 Storage::makeDirectory($folderPath);
+    //             }
+
+       
+    //             // $latestCourse = DB::table('course')->orderBy('created_at', 'DESC')->first();
+    //             // $latestCourseID = $latestCourse->course_id;
+    
+    //             session()->flash('message', 'Course created Successfully');
+
+    //             $response = [
+    //                 'message' => 'Course created successfully',
+    //                 'redirect_url' => '/instructor/courses',
+    //                 'course_id' => $course->course_id,
+    //             ];
+        
+    //             return response()->json($response);
+
+
+    //             // return response()->json(['message' => 'Course created successfully', 'redirect_url' => '/instructor/courses']);
+    //         } catch (ValidationException $e) {
+    //             $errors = $e->validator->errors();
+        
+    //             return response()->json(['errors' => $errors], 422);
+    //         }
+    //     }
+    // }
+
     public function courseCreate_process(Request $request) {
         $instructor = session('instructor');
-
+    
         if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
@@ -150,17 +206,26 @@ class InstructorCourseController extends Controller
                     'course_description' => ['required'],
                     'course_difficulty' => ['required'],
                 ]);
-
+    
+                $existingCourse = Course::where('course_name', $courseData['course_name'])
+                                        ->where('course_description', $courseData['course_description'])
+                                        ->where('course_difficulty', $courseData['course_difficulty'])
+                                        ->where('instructor_id', $instructor->instructor_id)
+                                        ->first();
+    
+                if ($existingCourse) {
+                    return response()->json(['message' => 'Course already exists', 'redirect_url' => '/instructor/courses']);
+                }
+    
                 $courseData['course_code'] = Str::random(6);
                 $courseData['instructor_id'] = $instructor->instructor_id;
     
-                
                 $course = Course::create($courseData);
-
+    
                 CourseGrading::create([
                     'course_id' => $course->course_id,
                 ]);
-                
+    
                 $folderName = $course->course_id . ' ' . $courseData['course_name'];
                 $folderName = Str::slug($folderName, '_');
                 $folderPath = 'public/courses/' . $folderName;
@@ -168,31 +233,22 @@ class InstructorCourseController extends Controller
                 if(!Storage::exists($folderPath)) {
                     Storage::makeDirectory($folderPath);
                 }
-
-       
-                // $latestCourse = DB::table('course')->orderBy('created_at', 'DESC')->first();
-                // $latestCourseID = $latestCourse->course_id;
     
                 session()->flash('message', 'Course created Successfully');
-
+    
                 $response = [
                     'message' => 'Course created successfully',
                     'redirect_url' => '/instructor/courses',
                     'course_id' => $course->course_id,
                 ];
-        
+    
                 return response()->json($response);
-
-
-                // return response()->json(['message' => 'Course created successfully', 'redirect_url' => '/instructor/courses']);
             } catch (ValidationException $e) {
                 $errors = $e->validator->errors();
-        
                 return response()->json(['errors' => $errors], 422);
             }
         }
     }
-
 
     public function courseCreateUploadFiles(Course $course, Request $request) {
         $instructor = session('instructor');

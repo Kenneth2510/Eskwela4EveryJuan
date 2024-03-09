@@ -189,4 +189,5 @@
         </div>
     </div>
 </section>
+@include('partials.chatbot')
 @endsection

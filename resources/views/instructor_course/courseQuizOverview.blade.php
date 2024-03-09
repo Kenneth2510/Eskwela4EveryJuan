@@ -87,7 +87,7 @@
                                 <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
                         
                                 <label class="text-lg" for="minutes">Minutes:</label>
-                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="0" required>
                         
                                 <label class="text-lg" for="seconds">Seconds:</label>
                                 <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
@@ -117,13 +117,11 @@
     {{-- area for modals --}}
     <div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="w-full p-4 bg-white rounded-lg shadow-lg md:w-3/5 modal-content">
-
             <div class="flex justify-end w-full">
                 <button class="exitResponsesModalBtn">
                     <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
                 </button>
             </div>
-
             <h1 class="text-2xl font-bold ">View All Responses</h1>
             
             <div id="responsesContent" class="mt-5 overflow-y-auto text-sm">

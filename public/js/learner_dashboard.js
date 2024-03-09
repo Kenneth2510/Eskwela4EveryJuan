@@ -209,50 +209,74 @@ $(document).ready(function() {
     }
 
     function init_chatbot(learner) {
-        // console.log(learner);
-        var learner_id = learner['learner_id']
+        var learner_id = learner['learner_id'];
         var url = `/chatbot/init/${learner_id}`;
         $.ajax({
             type: "GET",
             url: url,
             success: function(response) {
                 console.log(response);
+    
+                add_learner_data(learner_id);
+                process_files(learner_id);
+    
+                $('.submitQuestion').on('click', function(e) {
+                    e.preventDefault();
+                    submitQuestion();
+                });
+    
+                $('.question').on('keydown', function(e) {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        submitQuestion();
+                    }
+                });
+    
+                function submitQuestion() {
+                    var question = $('.question').val();
+                    var course = 'ALL';
+                    var lesson = 'LESSON';
+    
+                    displayUserMessage(question, learner);
+                    $('.botloader').removeClass('hidden');
+                    var chatData = {
+                        question: question,
+                        course: course,
+                        lesson: lesson,
+                    };
+    
+                    var url = `/chatbot/chat/${learner_id}`;
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: chatData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            displayBotMessage(response);
+                            $('.question').val('')
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
 
-                    add_learner_data(learner_id)
-                
-                                $('.submitQuestion').on('click', function(e) {
-                                    e.preventDefault()
-
-                                    var question = $('.question').val();
-                                    var course = 'ALL'
-                                    var lesson = 'LESSON'
-
-
-                                    displayUserMessage(question, learner)
-                                    $('.botloader').removeClass('hidden')
-                                    var chatData = {
-                                        question: question,
-                                        course: course,
-                                        lesson: lesson,
-                                    }
-
-                                    var url = `/chatbot/chat/${learner_id}`;
-                                    $.ajax({
-                                        type: "POST",
-                                        url: url,
-                                        data: chatData,
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrfToken
-                                        },
-                                        success: function(response) {
-                                            console.log(response);
-                                            displayBotMessage(response)
-                                        },
-                                        error: function(error) {
-                                            console.log(error);
-                                        }
-                                    });
-                                })
+    function process_files(session_id) {
+        var url = `/chatbot/process/${session_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
             },
             error: function(error) {
                 console.log(error);
@@ -322,7 +346,7 @@ $(document).ready(function() {
         <div class="chat chat-start">
             <div class="chat-image avatar">
                 <div class="w-10 rounded-full">
-                <img class="bg-white" alt="" src="/storage/app/public/images/chatbot.png" />
+                <img class="bg-white" alt="" src="../storage/app/public/images/chatbot.png" />
                 </div>
             </div>
             <div class="chat-bubble ">${message}</div>

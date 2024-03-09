@@ -162,7 +162,7 @@ class ChatBotController extends Controller
     
                 try {
                     // Send the reset request to the Flask application
-                    $response = $client->request('POST', "http://127.0.0.1:5000/process_session/$session_id");
+                    $response = $client->request('GET', "http://127.0.0.1:5000/process_session/$session_id");
             
                     // Output the response for debugging
                     echo $response->getBody();

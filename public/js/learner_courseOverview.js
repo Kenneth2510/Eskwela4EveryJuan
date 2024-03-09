@@ -17,8 +17,9 @@ $(document).ready(function() {
     $("#enrollCourse").on('click', function (e) {
         e.preventDefault();
         var courseID = $(this).data("course-id");
-
+        var button = $(this)
     
+        button.prop('disabled', true)
         $.ajax({
             type: 'POST',
             url: '/learner/course/enroll/' + courseID,
@@ -27,6 +28,8 @@ $(document).ready(function() {
             },
             success: function (response) {
                 if (response && response.redirect_url) {
+                    
+                    button.prop('disabled', false)
                     window.location.href = response.redirect_url;
                 } else {
                 
@@ -34,6 +37,7 @@ $(document).ready(function() {
             },
             error: function (xhr, status, error) {
     
+                button.prop('disabled', false)
                 console.log(xhr.responseText);
             }
         });
@@ -52,9 +56,10 @@ $(document).ready(function() {
     $('#unenrollCourse').on('click',function(e) {
         
         e.preventDefault();
-
+        var button = $(this)
         var lessonCourseID = $(this).data("learner-course-id");
-
+        button.prop('disabled', true)
+    
         $.ajax({
             type: 'POST',
             url: '/learner/course/unEnroll/' + lessonCourseID,
@@ -62,14 +67,16 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function (response) {
+                button.prop('disabled', false)
                 if (response && response.redirect_url) {
+                    button.prop('disabled', false)
                     window.location.href = response.redirect_url;
                 } else {
                 
                 }
             },
             error: function (xhr, status, error) {
-    
+                button.prop('disabled', false)
                 console.log(xhr.responseText);
             }
 
@@ -199,7 +206,7 @@ $(document).ready(function() {
     }
 
     function getCourseData(learner) {
-        var course_id = $('#enrollCourse').data("course-id")
+        var course_id = $('#enrollCourse').data("course-id");
         var url = `/chatbot/courseData/${course_id}`;
         $.ajax({
             type: "GET",
@@ -210,23 +217,34 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
     
-                var courseData = response['course']
+                var courseData = response['course'];
+    
                 $('.submitQuestion').on('click', function(e) {
-                    e.preventDefault()
-                    var learner_id = learner['learner_id']
+                    e.preventDefault();
+                    submitQuestion();
+                });
+    
+                $('.question').on('keydown', function(e) {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        submitQuestion();
+                    }
+                });
+    
+                function submitQuestion() {
+                    var learner_id = learner['learner_id'];
                     var question = $('.question').val();
-                    var course = courseData['course_name']
-                    var lesson = 'ALL'
-            
-            
-                    displayUserMessage(question, learner)
-                    $('.botloader').removeClass('hidden')
+                    var course = courseData['course_name'];
+                    var lesson = 'ALL';
+    
+                    displayUserMessage(question, learner);
+                    $('.botloader').removeClass('hidden');
                     var chatData = {
                         question: question,
                         course: course,
                         lesson: lesson,
-                    }
-            
+                    };
+    
                     var url = `/chatbot/chat/${learner_id}`;
                     $.ajax({
                         type: "POST",
@@ -237,13 +255,14 @@ $(document).ready(function() {
                         },
                         success: function(response) {
                             console.log(response);
-                            displayBotMessage(response)
+                            displayBotMessage(response);
+                            $('.question').val('')
                         },
                         error: function(error) {
                             console.log(error);
                         }
                     });
-                })
+                }
             },
             error: function(error) {
                 console.log(error);
@@ -295,7 +314,7 @@ $(document).ready(function() {
         <div class="chat chat-start">
             <div class="chat-image avatar">
                 <div class="w-10 rounded-full">
-                <img class="bg-white" alt="" src="/storage/app/public/images/chatbot.png" />
+                <img class="bg-white" alt="" src="/storage/public/images/chatbot.png" />
                 </div>
             </div>
             <div class="chat-bubble ">${message}</div>

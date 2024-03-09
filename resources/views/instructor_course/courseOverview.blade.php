@@ -38,7 +38,6 @@
                     <button class="px-5 py-3 mt-5 mb-5 rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">
                         <a href="{{ url("/instructor/course/$course->course_id/certificate") }}" target="_blank" class="space-x-2 text-white hover:text-darthmouthgreen"><span>Certificate of Recognition</span><i class="fa-solid fa-download"></i></a>
                     </button>
-                    
                     @endif
                 </div>
                 <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
@@ -123,7 +122,6 @@
                     </tbody>
                 </table>
             </div>
-            
         </div>
         </div>
     </div>
@@ -374,6 +372,10 @@
                 <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
                 <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
             </div>
+        </form>
+    </div>
+</div>
+
         
         </div>
     </div>
