@@ -225,14 +225,6 @@
                 @endforelse
                 <!-- end-generate-pdf -->
             </div>
-
-
-
-
-
-
-
-
         {{-- <div id="editLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
                 <div class="flex justify-end w-full">

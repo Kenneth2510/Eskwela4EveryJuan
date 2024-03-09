@@ -160,16 +160,16 @@
                 </div>
 
                 <div class="lg:w-2/3 h-[350px] border-2 overflow-y-auto border-darthmouthgreen" id="learnerQuizProgressChartTable">
-                    <table>
+                    <table class="table w-full table-fixed">
                         <thead class="py-3 text-white text-md bg-darthmouthgreen">
-                            <th class="w-2/12">Quiz Title</th>
-                            <th class="w-1/12">Status</th>
-                            <th class="w-1/12">Attempt</th>flex flex-col justify-between space-y-2 lg:flex-row lg:space-x-2 lg:space-y-0
-                            <th class="w-1/12">Score</th>
-                            <th class="w-1/12">Remarks</th>
-                            <th class="w-2/12">Start Period</th>
-                            <th class="w-2/12">Finish Period</th>
-                            <th class="w-2/12"></th>
+                            <th class="w-[150px]">Quiz Title</th>
+                            <th class="w-[150px]">Status</th>
+                            <th class="w-[150px]">Attempt</th>
+                            <th class="w-[150px]">Score</th>
+                            <th class="w-[150px]">Remarks</th>
+                            <th class="w-[150px]">Start Period</th>
+                            <th class="w-[150px]">Finish Period</th>
+                            <th class="w-[150px]"></th>
                         </thead>
                         <tbody class="text-sm text-center learnerQuizProgressRowData">
         
