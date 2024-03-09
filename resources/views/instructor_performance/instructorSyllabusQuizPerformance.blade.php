@@ -1,128 +1,124 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
+@section('content')
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
+    <section class="w-full h-auto md:h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
             <a href="{{ url("/instructor/performances/course/$courseData->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
-            <h1 class="mx-5 text-xl font-normal  md:text-3xl">
+            <h1 class="text-xl font-normal md:text-3xl">
                 <span class="text-4xl font-bold text-darthmouthgreen">{{ $courseData->course_name }}</span><br>
                 <span class="mt-3 text-2xl font-semibold text-darthmouthgreen">{{ $syllabusData->topic_title }}</span>
-                <hr class="border-t-2 border-gray-300 mt-6">
+                <hr class="mt-6 border-t-2 border-gray-300">
                 <br>
                 PERFORMANCE DASHBOARD</h1>
 
-                <div class="mt-5 p-10 flex" id="genInfo">
-                    <div class="w-1/2 mx-3 h-[300px] border-2 border-darthmouthgreen" id="totalLearnerProgressCount">
-                        <div class=" mt-10 mx-10 h-2/3 text-center item-center flex justify-center">
-                            
-                            <i class="fa-solid fa-user text-darthmouthgreen text-[175px]"></i>
-                            <p class="font-bold mt-3 py-14 mx-5 text-2xl"><span class="text-darthmouthgreen text-[125px]" id="totalLearnerSyllabusCompleteStatus">0</span><br>Learners Completed</p>
-                        </div>
-                        <div class="flex mt-5 justify-center">
-                            <div class="flex items-center mx-1">
-                                <div class="rounded-full w-3 h-3 mx-2 bg-darthmouthgreen"></div>
-                                <p class="font-bold text-md">TOTAL: <span id="totalLearnersCount" class="">0</span></p>
-                            </div>
-    
-                            <div class="flex items-center mx-1">
-                                <div class="rounded-full w-3 h-3 mx-2 bg-yellow-400"></div>
-                                <p class="font-bold text-md">IN PROGRESS: <span id="totalLearnerSyllabusInProgressStatus" class="">0</span></p>
-                            </div>
-    
-                            <div class="flex items-center mx-1">
-                                <div class="rounded-full w-3 h-3 mx-2 bg-red-700"></div>
-                                <p class="font-bold text-md">NOT YET STARTED: <span id="totalLearnerSyllabusNotYetStatus" class="">0</span></p>
-                            </div>
-                        </div>
+            <div class="flex w-full space-x-2" id="genInfo">
+                <div class="relative w-1/2 md:w-3/5 h-[300px] border-2 border-darthmouthgreen flex flex-col justify-between py-2 md:py-4" id="totalLearnerProgressCount">
+                    <div class="flex justify-center text-center item-center">
+                        
+                        <i class="absolute -translate-x-1/2 -translate-y-1/2 lg:px-4 lg:opacity-100 lg:relative fa-10x top-1/2 left-1/2 opacity-20 lg:top-auto lg:left-auto lg:-translate-x-0 lg:-translate-y-0 fa-solid fa-user text-darthmouthgreen"></i>
+                        <p class="text-2xl font-bold"><span class="text-darthmouthgreen text-8xl" id="totalLearnerSyllabusCompleteStatus">0</span><br>Learners Completed</p>
                     </div>
-    
-    
-                    <div class="w-1/2 mx-3 h-[300px] border-2 border-darthmouthgreen" id="averageLearnerProgressTime">
-                        <div class=" mt-10 mx-10 h-2/3 text-center item-center flex justify-center">
-            
-                            <i class="fa-solid fa-clock text-darthmouthgreen text-[175px]"></i>
-                            <p class="font-bold mt-3 py-14 mx-5 text-2xl"><span class="text-darthmouthgreen text-[50px]" id="averageLearnerProgress">0</span><br>Average Time of Completion</p>
+                    <div class="flex flex-col justify-center text-xs md:flex-row">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 mx-2 rounded-full bg-darthmouthgreen"></div>
+                            <p class="font-bold ">TOTAL: <span id="totalLearnersCount" class="">0</span></p>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 mx-2 bg-yellow-400 rounded-full"></div>
+                            <p class="font-bold ">IN PROGRESS: <span id="totalLearnerSyllabusInProgressStatus" class="">0</span></p>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 mx-2 bg-red-700 rounded-full"></div>
+                            <p class="font-bold ">NOT YET STARTED: <span id="totalLearnerSyllabusNotYetStatus" class="">0</span></p>
                         </div>
                     </div>
                 </div>
 
-                <hr class="border-t-2 border-gray-300 my-6">
 
-                <h1 class="text-2xl mx-5 mb-5">Quiz Progress</h1>
-                <div class="flex px-7 justify-between" id="learnerSyllabusChartsArea">
-
-                    <div class="w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusStatusChartArea">
-                        <canvas id="learnerSyllabusStatusChart"></canvas>
-                    </div>
-
-                    <div class="w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusStatusTimeChartArea">
-                        <canvas id="learnerSyllabusStatusTimeChart"></canvas>
-                    </div>
-
-                    <div class="w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusAttemptNumberChartArea">
-                        <canvas id="learnerSyllabusAttemptNumberChart"></canvas>
+                <div class="relative w-1/2 md:w-3/5 h-[300px] border-2 border-darthmouthgreen flex flex-col justify-between py-2 md:py-4 items-center" id="averageLearnerProgressTime">
+                    <div class="flex items-center justify-center h-full text-center">
+        
+                        <i class="absolute -translate-x-1/2 -translate-y-1/2 lg:px-4 lg:opacity-100 lg:relative fa-10x top-1/2 left-1/2 opacity-20 lg:top-auto lg:left-auto lg:-translate-x-0 lg:-translate-y-0 fa-solid fa-clock text-darthmouthgreen "></i>
+                        <p class="text-2xl font-bold"><span class="text-darthmouthgreen" id="averageLearnerProgress">0</span><br>Average Time of Completion</p>
                     </div>
                 </div>
+            </div>
 
-                <hr class="border-t-2 border-gray-300 my-6">
+            <hr class="my-6 border-t-2 border-gray-300">
 
-                <h1 class="text-2xl mx-5 mb-5">Quiz Outputs</h1>
-                <div class="flex px-7 justify-between" id="learnerSyllabusOutputChartsArea">
+            <h1 class="mb-5 text-2xl ">Quiz Progress</h1>
+            <div class="flex flex-col justify-between space-y-2 md:flex-row md:space-x-2 md:space-y-0" id="learnerSyllabusChartsArea">
 
-                    <div class="w-2/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusOverallScoreChartArea">
-                        <canvas id="learnerSyllabusOverallScoreChart"></canvas>
+                <div class="md:w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusStatusChartArea">
+                    <canvas id="learnerSyllabusStatusChart"></canvas>
+                </div>
+
+                <div class="md:w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusStatusTimeChartArea">
+                    <canvas id="learnerSyllabusStatusTimeChart"></canvas>
+                </div>
+
+                <div class="md:w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusAttemptNumberChartArea">
+                    <canvas id="learnerSyllabusAttemptNumberChart"></canvas>
+                </div>
+            </div>
+
+            <hr class="my-6 border-t-2 border-gray-300">
+
+            <h1 class="mb-5 text-2xl ">Quiz Outputs</h1>
+            <div class="flex flex-col justify-between space-y-2 md:flex-row md:space-x-2 md:space-y-0" id="learnerSyllabusOutputChartsArea">
+
+                <div class="md:w-2/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusOverallScoreChartArea">
+                    <canvas id="learnerSyllabusOverallScoreChart"></canvas>
+                </div>
+
+                <div class="md:w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusRemarksChartArea">
+                    <canvas id="learnerSyllabusRemarksChart"></canvas>
+                </div>
+            </div>
+
+
+            <hr class="my-6 border-t-2 border-gray-300">
+
+            <div class="flex flex-col w-full mt-5 overflow-auto" id="learnerSyllabusProgressTableArea" style="height: 500px;">
+                <table class="w-full mt-5 table-fixed">
+                    <thead class="text-xl text-white bg-darthmouthgreen">
+                        <th class="py-2 w-[130px]">Name</th>
+                        <th class="py-2 w-[130px]">Status</th>
+                        <th class="py-2 w-[130px]">Attempt</th>
+                        <th class="py-2 w-[130px]">Score</th>
+                        <th class="py-2 w-[130px]">Remarks</th>
+                        <th class="py-2 w-[130px]">Start Period</th>
+                        <th class="py-2 w-[130px]">Finish Period</th>
+                        <th class="py-2 w-[130px]"></th>
+                    </thead>
+                    <tbody class="text-lg text-center learnerSyllabusProgressRowData">
+                        
+                    </tbody>
+                </table>
+            </div>
+
+
+            <hr class="my-6 border-t-2 border-gray-300">
+
+            <h1 class="mb-5 text-2xl ">Quiz Content</h1>
+            <div class="justify-between " id="learnerSyllabusQuizOutputArea">
+
+                {{-- <div class="flex">
+                    <div class="w-2/3 h-[350px] ml-5 border-2 border-darthmouthgreen learnerSyllabusQuizContentOutputArea" id="">
+                        <canvas id="learnerSyllabusQuizContentOutputArea"></canvas>
                     </div>
+                </div> --}}
 
-                    <div class="w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerSyllabusRemarksChartArea">
-                        <canvas id="learnerSyllabusRemarksChart"></canvas>
-                    </div>
-                </div>
-
-
-                <hr class="border-t-2 border-gray-300 my-6">
-
-                <div class="mt-5 w-full px-10 flex flex-col" id="learnerSyllabusProgressTableArea" style="height: 500px; overflow-y: scroll;">
-                    <table class="w-full mt-5">
-                        <thead class="bg-darthmouthgreen text-white text-xl py-3">
-                            <th class="w-2/12">Name</th>
-                            <th class="w-1/12">Status</th>
-                            <th class="w-1/12">Attempt</th>
-                            <th class="w-1/12">Score</th>
-                            <th class="w-1/12">Remarks</th>
-                            <th class="w-2/12">Start Period</th>
-                            <th class="w-2/12">Finish Period</th>
-                            <th class="w-1/12"></th>
-                        </thead>
-                        <tbody class="text-center text-lg learnerSyllabusProgressRowData">
-                           
-                        </tbody>
-                    </table>
-                </div>
-
-
-                <hr class="border-t-2 border-gray-300 my-6">
-
-                <h1 class="text-2xl mx-5 mb-5">Quiz Content</h1>
-                <div class="px-7 justify-between" id="learnerSyllabusQuizOutputArea">
-
-                    {{-- <div class="flex">
-                        <div class="w-2/3 h-[350px] ml-5 border-2 border-darthmouthgreen learnerSyllabusQuizContentOutputArea" id="">
-                            <canvas id="learnerSyllabusQuizContentOutputArea"></canvas>
-                        </div>
-                    </div> --}}
-
-                    
-                    
-                </div>
+                
+                
+            </div>
 
         </div>
     </section>
-@include('partials.instructorProfile')
-</section>
-@include('partials.footer')
+@endsection
+

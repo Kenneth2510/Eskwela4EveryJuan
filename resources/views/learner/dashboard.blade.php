@@ -1,9 +1,4 @@
-@include('partials.header')
-
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-
-    @include('partials.instructorNav')
-    @include('partials.learnerSidebar')
+@extends('layouts.learner_layout')
 
         
     {{-- MAIN --}}
@@ -22,6 +17,13 @@
                 <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
                     <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalCoursesText">#</h1>
                     <p class="mt-5 text-2xl text-darthmouthgreen">Courses Enrolled</p>
+@section('content')
+        {{-- MAIN --}}
+        <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+            <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
+            
+                <div class="py-4" id="welcome">
+                    <h1 class="text-2xl font-semibold md:text-3xl">Welcome back, {{$learner->learner_fname}}!</h1>
                 </div>
                 <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
                     <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalTopicsText">#</h1>
@@ -72,10 +74,12 @@
                             </a>
                         </div>
 
-                        @endforeach
-                    </div>
+                            @endforeach
+                        </div>
+                    </div>    
                 </div>
 
+                    
 
                 <hr class="my-6 border-t-2 border-gray-300">
 
@@ -150,8 +154,9 @@
                             </a>
                         </div>
 
-                        @endforeach
-                    </div>
+                            @endforeach
+                        </div>
+                    </div>                    
                 </div>
         
             <hr class="my-6 border-t-2 border-gray-300">
@@ -167,13 +172,10 @@
                     </div>
             </div>
 
-        
-        </div>
-    </section>
+            
+            </div>
+        </section>
 
-    {{-- @include('partials.learnerProfile') --}}
-    @include('partials.chatbot')
-        
-    </section>
-
-@include('partials.footer')
+        {{-- @include('partials.learnerSideProfile') --}}
+        @include('partials.chatbot')
+@endsection

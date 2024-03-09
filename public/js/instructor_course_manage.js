@@ -1,9 +1,4 @@
 $(document).ready(function() {
-
-    
-
-
-
     // course overview
 
     $('#showCourseManageModal').on('click', function(e) {

@@ -11,7 +11,7 @@
            
             <div id="personinfo" class="relative w-4/5 mx-auto mt-10">
                 <div id="Registertitle" class="relative w-full mx-auto my-14">
-                    <text class="text-5xl font-bold text-black text-white">Create an Instructor Account</text>
+                    <text class="text-5xl font-bold text-white">Create an Instructor Account</text>
                     <p class="mt-2 text-lg font-light text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est voluptate ut, facere repellendus earum, at corrupti praesentium consectetur dignissimos,</p>
                 </div>
                 <div class="flex justify-around my-5">
