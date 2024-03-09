@@ -186,7 +186,6 @@
                                     @endif
 
                         @elseif ($topic->category == 'ACTIVITY')
-
                                     @if($topic->status == "LOCKED")
                                         <h1 style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
                                             onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
@@ -317,7 +316,6 @@
         </div>
 
     </section>
-    @include('partials.learnerProfile')
     @include('partials.chatbot')
 @endsection
 

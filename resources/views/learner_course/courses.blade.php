@@ -23,7 +23,7 @@
                 </div>
               
         
-                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                <div class="relative h-full px-20 overflow-hidden" id="courseCarouselArea">
                     <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
                         <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
@@ -139,5 +139,6 @@
             </div>
         </div>
     </section>
+    @include('partials.chatbot')
         {{-- MAIN END --}}
 @endsection

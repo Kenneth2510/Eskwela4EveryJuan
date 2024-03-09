@@ -1,4 +1,4 @@
-<section class="relative h-screen text-sm md:w-1/3 lg:w-3/12" id="AIHelper">
+<section class="relative hidden h-screen text-sm md:w-1/3 lg:w-3/12 lg:block" id="AIHelper">
     
     <div class="flex flex-col justify-between hidden h-full p-3 overflow-hidden rounded-lg shadow-lg mainchatbotarea">
       {{-- head --}}

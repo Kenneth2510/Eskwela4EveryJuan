@@ -303,7 +303,6 @@
         </div>
     </div>
 
-
     <div id="lesson_content_pictureModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
         <div class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md">
             <div class="px-6 py-4 text-left modal-content">

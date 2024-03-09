@@ -1,26 +1,23 @@
-@include('partials.header')
-<section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
+@extends('layouts.learner_layout')
 
-
-@include('partials.learnerSidebar')
-
-<section class="w-full px-2 pt-[100px] mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12">
-    <div  class="p-3 pb-4 overflow-auto bg-white rounded-lg shadow-lg overscroll-auto">
+@section('content')
+<section class="w-full h-screen md:w-3/4 lg:w-10/12">
+    <div class="h-full px-2 py-4 pt-24 overflow-auto rounded-lg shadow-lg md:pt-6">
         
-        <div style="background-color:{{$mainBackgroundCol}};" class="p-2 text-white fill-white rounded-xl">
+        <div style="background-color:{{$mainBackgroundCol}};" class="z-50 p-2 text-white fill-white rounded-xl">
             <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
-            <h1 class="w-1/2 py-4 text-5xl font-bold"><span class="">{{ $learnerSyllabusProgressData->course_name }}</span></h1>
+            <h1 class="w-1/2 py-4 text-2xl font-bold md:text-4xl"><span class="">{{ $learnerSyllabusProgressData->course_name }}</span></h1>
         {{-- subheaders --}}
             <div class="flex flex-col justify-between fill-mainwhitebg">
-                <h1 class="w-1/2 py-4 text-4xl font-bold"><span class="">{{ $learnerSyllabusProgressData->quiz_title }}</span></h1>
+                <h1 class="w-1/2 py-4 text-lg"><span class="">{{ $learnerSyllabusProgressData->quiz_title }}</span></h1>
             </div>
         </div> 
 
 
-        <div class="mx-2">
-            <div class="mt-1 text-gray-600 text-l">
+        <div class="px-2">
+            <div class="mt-1 text-gray-600">
                 <a href="{{ url('/learner/courses') }}" class="">course></a>
                 <a href="{{ url("/learner/course/$learnerSyllabusProgressData->course_id") }}">{{$learnerSyllabusProgressData->course_name}}></a>
                 <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}">content></a>
@@ -236,14 +233,9 @@
 
             @endif
         </div>
-        
-
-
-        
     </div>
 </section>
 
-{{-- @include('partials.learnerProfile') --}}
 @include('partials.chatbot')
-</section>
-@include('partials.footer')
+@endsection
+
