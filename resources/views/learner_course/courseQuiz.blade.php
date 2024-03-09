@@ -78,13 +78,13 @@
                 <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
                 <div class="">
                     <label class="text-lg" for="hours">Hours:</label>
-                    <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
+                    <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
             
                     <label class="text-lg" for="minutes">Minutes:</label>
-                    <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+                    <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
             
                     <label class="text-lg" for="seconds">Seconds:</label>
-                    <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                    <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
                 </div>
             </div>
 
@@ -106,14 +106,14 @@
             </script>
 
             @foreach ($learnerQuizProgressData as $quizAttemptData)
-            <div class="mt-8 px-10" id="score_area">
-                <h1 class="text-2xl font-semibold mb-2">Attempt Number: {{$quizAttemptData->attempt}}</h1>
+            <div class="px-10 mt-8" id="score_area">
+                <h1 class="mb-2 text-2xl font-semibold">Attempt Number: {{$quizAttemptData->attempt}}</h1>
 
                 @if($quizAttemptData->remarks)
-                <h1 class="text-2xl font-semibold mb-2">Attempt Taken on {{$quizAttemptData->updated_at}}</h1>
+                <h1 class="mb-2 text-2xl font-semibold">Attempt Taken on {{$quizAttemptData->updated_at}}</h1>
                 @endif
-                <div class="bg-gray-100 p-6 rounded-xl shadow-md">
-                    <h1 class="text-3xl font-bold mb-4">Score:</h1>
+                <div class="p-6 bg-gray-100 shadow-md rounded-xl">
+                    <h1 class="mb-4 text-3xl font-bold">Score:</h1>
                     <h1 class="text-4xl font-bold text-green-600">{{$quizAttemptData->score}} <span class="text-2xl font-bold text-black"> / {{$totalQuestionCount}}</span></h1>
                     
                     <div class="my-5">
@@ -128,7 +128,7 @@
 
                     <div class="my-3">
                         @if($quizAttemptData->remarks)
-                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$quizAttemptData->attempt") }}" method="GET" class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">
+                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$quizAttemptData->attempt") }}" method="GET" class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">
                             View Output
                         </a> 
                         @endif
@@ -155,7 +155,7 @@
                             Return    
                         </a>
 
-                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$quizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
+                        <a href="{{ url("/learner/course/content/$quizAttemptData->course_id/$quizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$quizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
                         View Output
                         </a>
 
@@ -202,7 +202,7 @@
                         Return    
                     </a>
 
-                    <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
+                    <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
                     View Output
                     </a>
 
@@ -213,7 +213,7 @@
                     </a>
 
 
-                    <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 rounded-xl cursor-not-allowed opacity-50">
+                    <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/view_output/$lastRowQuizAttemptData->attempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-gray-400 opacity-50 cursor-not-allowed rounded-xl">
                         View Output
                     </a>
                     {{-- <a href="{{ url("/learner/course/content/$lastRowQuizAttemptData->course_id/$lastRowQuizAttemptData->learner_course_id/quiz/$learnerSyllabusProgressData->syllabus_id/reattempt") }}" class="flex justify-center w-1/2 py-5 mx-3 text-xl font-semibold text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
@@ -243,6 +243,7 @@
     </div>
 </section>
 
-@include('partials.learnerProfile')
+{{-- @include('partials.learnerProfile') --}}
+@include('partials.chatbot')
 </section>
 @include('partials.footer')

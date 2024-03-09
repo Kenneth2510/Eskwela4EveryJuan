@@ -42,17 +42,17 @@
                     @endif
                     
 
+            </div>
+            <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
+                <img class="w-40 h-40 my-4 mb-3 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
+                <div class="mb-10 text-center">
+                    <h1 class="text-xl font-semibold">{{$course->instructor_fname}} {{$course->instructor_lname}}</h1>
+                    <p class="text-lg">INSTRUCTOR</p>
+                    <a href="{{ url("/learner/profile/instructor/$course->instructor_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
                 </div>
-                <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
-                    <img class="w-40 h-40 my-4 mb-3 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
-                    <div class="mb-10 text-center">
-                        <h1 class="text-xl font-semibold">{{$course->instructor_fname}} {{$course->instructor_lname}}</h1>
-                        <p class="text-lg">INSTRUCTOR</p>
-                        <a href="{{ url("/learner/profile/instructor/$course->instructor_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
-                    </div>
-                    <div class="flex flex-col">
-                        @if($isEnrolled)
-                        <a href="{{ url("/learner/course/manage/$course->course_id/overview") }}" id="" class="px-5 py-3 my-1 text-xl text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
+                <div class="flex flex-col">
+                    @if($isEnrolled)
+                    <a href="{{ url("/learner/course/manage/$course->course_id/overview") }}" id="" class="px-5 py-3 my-1 text-xl text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
 
                         <button id="unenrollBtn" class="px-5 py-3 my-1 text-xl text-white bg-red-600 rounded-xl hover:bg-white hover:text-red-600 hover:border-2 hover:border-red-600">Unenroll</button>
                         @else
@@ -152,7 +152,10 @@
     </div>
 </section>
 
-<div id="enrollCourseModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+@include('partials.learnerProfile')
+</section>
+
+<div id="enrollCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelEnroll">
@@ -215,132 +218,132 @@
             <div class="w-full min-h-[500px]" id="courseDetailsContentArea">
                 <div class="flex justify-between w-full" id="courseInfoArea">
 
-                    <div class="" id="courseInfo_left">
-                        <h1 class="text-2xl font-semibold md:text-4xl">{{$course->course_name}}</h1>
-                        <h4 class="text-xl">{{$course->course_code}}</h4>
-                        <h4 class="mt-10">Course Level: <span class="font-medium text-darhmouthgreen">{{$course->course_difficulty}}</span></h4>
-                        <h4 class=""><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
-                        <h4 class="mt-3">Total  Units: {{$totalSyllabusCount}}</h4>
-                        <h4>&emsp;<i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
-                        <h4>&emsp;<i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
-                        <h4>&emsp;<i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
-                        <h4 class="mt-10 text-xl">Course Description</h4>
-                        <div class="w-full overflow-y-auto whitespace-pre-line">
-                            {{$course->course_description}}
-                        </div>
+                <div class="w-4/5 py-5 mx-10" id="courseInfo_left">
+                    <h1 class="text-6xl font-semibold">{{$course->course_name}}</h1>
+                    <h4 class="text-4xl">{{$course->course_code}}</h4>
+                    <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
+                    <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
+                    <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+                    <h4 class="mt-10 text-xl">Course Description</h4>
+                    <div class="whitespace-pre-line w-full overflow-y-auto h-[200px]">
+                        {{$course->course_description}}
                     </div>
-                    <div class="flex flex-col items-center justify-center" id="courseInfo_right">
-                        <img class="w-40 h-40 my-4 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
-                        <h4 class="text-xl">{{$course->instructor_fname}} {{$course->instructor_lname}}</h4>
-                        <h4 class="text-xl">INSTRUCTOR</h4>
+                </div>
+                <div class="flex flex-col items-center justify-center w-1/5" id="courseInfo_right">
+                    <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
+                    <h4 class="text-xl">{{$course->instructor_fname}} {{$course->instructor_lname}}</h4>
+                    <h4 class="text-xl">INSTRUCTOR</h4>
+                </div>
+            </div>
+
+
+            <div class="hidden py-5 mx-5" id="learnersEnrolledArea">
+                <h1 class="text-4xl font-semibold">Learners Enrolled</h1>
+                
+                <div class="m-5 px-5 overflow-auto h-[600px]">
+                    <table class="">
+                        <thead class="text-left">
+                            <th class="w-3/12">Name</th>
+                            <th class="w-2/12">Email</th>
+                            <th class="w-1/12">Enrollment Status</th>
+                            <th class="w-2/12">Date Enrolled</th>
+                            <th class="w-1/12">Course Progress</th>
+                            <th class="w-2/12"></th>
+                        </thead>
+                        <tbody class="">
+                            @foreach ($enrollees as $enrollee)
+                            <tr class="border-b-2 border-gray-500">
+                                <td class="py-3">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
+                                <td>{{ $enrollee->learner_email }}</td>
+                                <td>{{ $enrollee->status }}</td>
+                                <td>{{ $enrollee->created_at }}</td>
+                                <td>{{ $enrollee->course_progress }}</td>
+                                <td>
+                                    @if($enrollee->learner_id !== $learner->learner_id)
+                                    <a href="{{ url("/learner/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                            @empty($enrollees)
+                            <tr>
+                                <td class="py-3">No enrollees enrolled</td>
+                            </tr>
+                            @endempty
+
+                                
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
 
-                <div class="hidden w-full py-5" id="learnersEnrolledArea">
-                    <h1 class="text-2xl font-semibold md:text-4xl">Learners Enrolled</h1>
+            <div class="hidden py-5 mx-5" id="gradesheetArea">
+                <h1 class="text-4xl font-semibold">Your Grades</h1>
+                <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
+                    <table class="table-fixed w-[3000px]">
+                        <thead class="text-left">
+                            <th class="w-6/12">Name</th>
+                            <th class="w-6/12">Status</th>
+                            <th class="w-4/12">Date Started</th>
+                            <th class="w-4/12">Pre Assessment</th>
+                            
+                            @foreach ($activitySyllabus as $activity)
+                                <th class="w-4/12">{{ $activity->activity_title }}</th>
+                            @endforeach
+                            
+                            @foreach ($quizSyllabus as $quiz)
+                                <th class="w-4/12">{{ $quiz->quiz_title }}</th>
+                            @endforeach
                     
-                    <div class="overflow-auto">
-                        <table class="table w-full table-auto">
-                            <thead class="text-left">
-                                <th class="w-[150px]">Name</th>
-                                <th class="w-[150px]">Email</th>
-                                <th class="w-[150px]">Enrollment Status</th>
-                                <th class="w-[150px]">Date Enrolled</th>
-                                <th class="w-[150px]">Course Progress</th>
-                                <th class="w-[150px]"></th>
-                            </thead>
-                            <tbody class="">
-                                @foreach ($enrollees as $enrollee)
-                                <tr class="border-b-2 border-gray-500">
-                                    <td class="py-3">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
-                                    <td>{{ $enrollee->learner_email }}</td>
-                                    <td>{{ $enrollee->status }}</td>
-                                    <td>{{ $enrollee->created_at }}</td>
-                                    <td>{{ $enrollee->course_progress }}</td>
-                                    <td>
-                                        @if($enrollee->learner_id !== $learner->learner_id)
-                                        <a href="{{ url("/learner/profile/learner/$enrollee->learner_email") }}" class="py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                                @empty($enrollees)
+                            <th class="w-4/12">Post Assessment</th>
+                            <th class="w-4/12">Grade</th>
+                            <th class="w-4/12">Remarks</th>
+                            <th class="w-4/12">Date Finished</th>
+                        </thead>
+                    
+                        <tbody class="text-center">
+                            @forelse ($gradesheet as $grade)
                                 <tr>
-                                    <td class="py-3">No enrollees enrolled</td>
+                                    <td class="w-1/2">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                                    <td>{{ $grade->course_progress }}</td>
+                                    <td>{{ $grade->start_period }}</td>
+                                    <td>{{ $preAssessmentGrade->score }}</td>
+                                    
+                                    {{-- Display activity scores --}}
+                                    @foreach ($activitySyllabus as $activity)
+                                        @php
+                                            $activityScore = $grade->activities->firstWhere('activity_id', $activity->activity_id);
+                                        @endphp
+                                        <td>{{ $activityScore ? $activityScore->average_score : '#' }}</td>
+                                    @endforeach
+                                    
+                                    {{-- Display quiz scores --}}
+                                    @foreach ($quizSyllabus as $quiz)
+                                        @php
+                                            $quizScore = $grade->quizzes->firstWhere('quiz_id', $quiz->quiz_id);
+                                        @endphp
+                                        <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
+                                    @endforeach
+                                    
+                                    <td>{{ $postAssessmentGrade }}</td>
+                                    <td>{{ $courseProgress->grade }}</td>
+                                    <td>{{ $courseProgress->remarks }}</td>
+                                    <td>{{ $courseProgress->finish_period }}</td>
                                 </tr>
-                                @endempty
-
-                                
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="4">No gradesheet available</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    
                 </div>
-
-
-                <div class="hidden w-full py-5" id="gradesheetArea">
-                    <h1 class="text-2xl font-semibold md:text-4xl">Your Grades</h1>
-                    <div class="overflow-auto ">
-                        <table class="table w-full table-auto">
-                            <thead class="text-left">
-                                <th class="w-[150px]">Name</th>
-                                <th class="w-[150px]">Status</th>
-                                <th class="w-[150px]">Date Started</th>
-                                <th class="w-[150px]">Pre Assessment</th>
-                                
-                                @foreach ($activitySyllabus as $activity)
-                                    <th class="w-[150px]">{{ $activity->activity_title }}</th>
-                                @endforeach
-                                
-                                @foreach ($quizSyllabus as $quiz)
-                                    <th class="w-[150px]">{{ $quiz->quiz_title }}</th>
-                                @endforeach
-                        
-                                <th class="w-[150px]">Post Assessment</th>
-                                <th class="w-[150px]">Grade</th>
-                                <th class="w-[150px]">Remarks</th>
-                                <th class="w-[150px]">Date Finished</th>
-                            </thead>
-                        
-                            <tbody class="text-center">
-                                @forelse ($gradesheet as $grade)
-                                    <tr>
-                                        <td class="w-1/2">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
-                                        <td>{{ $grade->course_progress }}</td>
-                                        <td>{{ $grade->start_period }}</td>
-                                        <td>{{ $preAssessmentGrade->score }}</td>
-                                        
-                                        {{-- Display activity scores --}}
-                                        @foreach ($activitySyllabus as $activity)
-                                            @php
-                                                $activityScore = $grade->activities->firstWhere('activity_id', $activity->activity_id);
-                                            @endphp
-                                            <td>{{ $activityScore ? $activityScore->average_score : '#' }}</td>
-                                        @endforeach
-                                        
-                                        {{-- Display quiz scores --}}
-                                        @foreach ($quizSyllabus as $quiz)
-                                            @php
-                                                $quizScore = $grade->quizzes->firstWhere('quiz_id', $quiz->quiz_id);
-                                            @endphp
-                                            <td>{{ $quizScore ? $quizScore->average_score : '#' }}</td>
-                                        @endforeach
-                                        
-                                        <td>{{ $postAssessmentGrade }}</td>
-                                        <td>{{ $courseProgress->grade }}</td>
-                                        <td>{{ $courseProgress->remarks }}</td>
-                                        <td>{{ $courseProgress->finish_period }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4">No gradesheet available</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        
-                    </div>
-                </div>
+            </div>
 
 
                 <div class="hidden w-full py-5" id="filesArea">

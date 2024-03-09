@@ -112,6 +112,7 @@
         </div>
 
         
+        @if($courseData->course_progress === 'COMPLETED')
         <hr class="my-6 border-t-2 border-gray-300">
         <h1 class="mx-2 text-2xl font-semibold">Computation of Grades</h1>
         <div class="px-10 mt-3">
@@ -135,10 +136,11 @@
             <h1 class="text-2xl font-bold">Final Grade: <span class="text-green-600">{{$totalGrade}}%</span></h1>
             <h1 class="text-2xl font-bold">Remarks: <span class="text-green-600">{{$remarks}}</span></h1>
         </div>
-
+        @endif
     </div>
 </section>
 
-@include('partials.learnerProfile')
+{{-- @include('partials.learnerProfile') --}}
+@include('partials.chatbot')
 </section>
 @include('partials.footer')

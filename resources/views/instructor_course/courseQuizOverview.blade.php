@@ -80,21 +80,21 @@
                             </div>
                     </div>
 
-                    <div class="mt-16" id="durationArea">
-                        <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
-                        <div class="">
-                            <label class="text-lg" for="hours">Hours:</label>
-                            <input disabled class="w-16 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
-                    
-                            <label class="text-lg" for="minutes">Minutes:</label>
-                            <input disabled class="w-16 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
-                    
-                            <label class="text-lg" for="seconds">Seconds:</label>
-                            <input disabled class="w-16 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
-                    
-                            <button id="saveDurationBtn" class="hidden p-3 m-2 text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">Set Duration</button>
+                        <div class="mt-16" id="durationArea">
+                            <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
+                            <div class="">
+                                <label class="text-lg" for="hours">Hours:</label>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
+                        
+                                <label class="text-lg" for="minutes">Minutes:</label>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+                        
+                                <label class="text-lg" for="seconds">Seconds:</label>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                        
+                                <button id="saveDurationBtn" class="hidden px-3 py-1 text-lg text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">Set Duration</button>
+                            </div>
                         </div>
-                    </div>
                         
 
                     <button id="editQuizInfoBtn" class="w-32 px-5 py-3 mx-3 mt-10 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Edit</button>

@@ -416,6 +416,8 @@ class LearnerController extends Controller
             "business_owner_name" => ['required'],
             "bplo_account_number" => ['required'],
             "business_category" => ['required'],
+            "business_classification" => ['required'],
+            "business_description" => ['required'],
         ]);
 
         $LearnerLoginData = $request->validate([
@@ -561,6 +563,7 @@ class LearnerController extends Controller
                 ->select(
                     'learner_course_progress.learner_course_progress_id',
                     'learner_course_progress.learner_course_id',
+                    'learner_course_progress.learner_id',
                     'learner_course_progress.course_id',
                     'learner_course_progress.course_progress',
                     'learner_course_progress.start_period',
@@ -672,6 +675,7 @@ class LearnerController extends Controller
 
                 $data = [
                     'title' => 'Performance',
+                    'learner' => $learner,
                     'learnerCourseData' => $learnerCourseData,
                     'totalLearnerCourseCount' => $totalLearnerCourseCount,
                     'totalLearnerApprovedCourseCount' => $totalLearnerApprovedCourseCount,
@@ -1166,6 +1170,17 @@ class LearnerController extends Controller
             // Optionally, return an error response or redirect the user
             return response()->json(['success' => false, 'message' => 'Failed to generate PDF']);
             }
+        } else {
+            return redirect('/learner');
+        }  
+    }
+
+
+    public function learnerData() {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            return response()->json(['learner' => $learner]);
         } else {
             return redirect('/learner');
         }  

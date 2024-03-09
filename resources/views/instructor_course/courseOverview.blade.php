@@ -2,48 +2,54 @@
 
 @section('content')
     {{-- MAIN --}}
-    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-6">
+    <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
+        {{-- course name/title --}}
+        <a href="{{ url('/instructor/courses') }}" class="w-8 h-8 m-2">
+            <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+        </a>
         
-            <div class="relative z-0 w-full p-4 text-black border rounded-lg shadow-lg">
-                            {{-- course name/title --}}
-                <a href="{{ url('/instructor/courses') }}" class="w-8 h-8 m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-                </a>
-                <div class="flex justify-between w-full" id="courseInfo">
-                    <div class="" id="courseInfo_left">
-                        <h1 class="text-2xl font-semibold md:text-4xl">{{$course->course_name}}</h1>
-                        <h4 class="text-xl">{{$course->course_code}}</h4>
-                        <h4 class="mt-10">Course Level: <span class="font-medium text-darhmouthgreen">{{$course->course_difficulty}}</span></h4>
-                        <h4 class=""><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  <span class="font-medium text-darhmouthgreen">{{$totalCourseTime}}</span></h4>
-                        <h4 class="mt-3">Total  Units: {{$totalSyllabusCount}}</h4>
-                        <h4>&emsp;<i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
-                        <h4>&emsp;<i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
-                        <h4>&emsp;<i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+        <div class="relative z-0 pb-4 text-black border rounded-lg shadow-lg">
+            <div class="flex justify-between px-5 mx-3" id="courseInfo">
+                <div class="" id="courseInfo_left">
+                    <h1 class="text-6xl font-semibold">{{$course->course_name}}</h1>
+                    <h4 class="text-4xl">{{$course->course_code}}</h4>
+                    <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
+                    <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
+                    <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
+                    <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+                
+                
+                    <h4 class="flex items-center mt-10 text-xl">
+                        Approval Status: 
+                        @if ($course->course_status === 'Approved')
+                        <div class="w-5 h-5 mx-2 rounded-full bg-darthmouthgreen"></div>
+                    @elseif ($course->course_status ==='Pending')
+                        <div class="w-5 h-5 mx-2 bg-yellow-500 rounded-full"></div>
+                    @else
+                        <div class="w-5 h-5 mx-2 bg-red-500 rounded-full"></div>
+                    @endif
                     
-                    
-                        <h4 class="flex items-center mt-10">
-                            Approval Status: 
-                            @if ($course->course_status === 'Approved')
-                            <div class="w-5 h-5 mx-2 rounded-full bg-darthmouthgreen"></div>
-                            @elseif ($course->course_status ==='Pending')
-                            <div class="w-5 h-5 mx-2 bg-yellow-500 rounded-full"></div>
-                            @else
-                            <div class="w-5 h-5 mx-2 bg-red-500 rounded-full"></div>
-                            @endif
-                        
-                        {{$course->course_status}}
-                        </h4>
+                    {{$course->course_status}}
+                    </h4>
+
+                    @if($course->course_status === 'Approved') 
+                    <div class="mt-10">
+                        <a href="{{ url("/instructor/course/$course->course_id/certificate") }}" target="_blank" class="px-5 py-3 mt-5 mb-5 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">Download Certificate of Recognition</a>
                     </div>
-                    <div class="flex flex-col items-center justify-between" id="courseInfo_right">
-                        <img class="w-40 h-40 my-4 mb-10 bg-red-500 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
-                        <div class="flex flex-col">
-                            <a href="{{ url("/instructor/course/content/$course->course_id") }}" id="" class="px-5 py-3 my-1 text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
-                            <button id="viewDetailsBtn"  class="px-5 py-3 my-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">View Details</button>    
-                        </div>
+                    
+                    @endif
+                </div>
+                <div class="flex flex-col items-center justify-between mr-10" id="courseInfo_right">
+                    <img class="w-40 h-40 my-4 mb-10 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
+                    <div class="flex flex-col">
+                        <a href="{{ url("/instructor/course/content/$course->course_id") }}" id="" class="px-5 py-3 my-1 text-xl text-center text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Enter</a>
+                        <button id="viewDetailsBtn"  class="px-5 py-3 my-1 text-lg text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">View Details</button>    
                     </div>
                 </div>
             </div>
+        </div>
 
 
             <div class="relative z-0 flex justify-between p-4 mt-10 text-black border rounded-lg shadow-lg min-h-[400px]" id="courseDescAndTopics">

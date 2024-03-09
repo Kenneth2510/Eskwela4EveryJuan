@@ -148,7 +148,7 @@
                                 <option value="Education and Training">Education and Training</option>
                                 <option value="Entertainment and Media">Entertainment and Media</option>
                                 <option value="Hospitality and Tourism">Hospitality and Tourism</option>
-
+                                <option value="Others">Others</option>
                             </select>
                             <span id="businessClassificationError" class="text-red-500"></span>
                         </div>

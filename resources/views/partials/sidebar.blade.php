@@ -119,6 +119,21 @@
                     </a>
                 </li>
 
+
+                <li id="" class="w-full py-3 rounded-lg instructor_performances hover:bg-darthmouthgreen group md:py-4">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url("/admin/report") }}">
+                        
+                        <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 6.5L10.625 0.5H2.125C1.56141 0.5 1.02091 0.710714 0.622398 1.08579C0.223883 1.46086 0 1.96957 0 2.5V18.5C0 19.0304 0.223883 19.5391 0.622398 19.9142C1.02091 20.2893 1.56141 20.5 2.125 20.5H14.875C15.4386 20.5 15.9791 20.2893 16.3776 19.9142C16.7761 19.5391 17 19.0304 17 18.5V6.5ZM5.3125 17.5H3.1875V8.5H5.3125V17.5ZM9.5625 17.5H7.4375V11.5H9.5625V17.5ZM13.8125 17.5H11.6875V14.5H13.8125V17.5ZM10.625 7.5H9.5625V2.5L14.875 7.5H10.625Z" fill="black"/>
+                            </svg>
+
+    
+                        <h1 class="hidden md:block group-hover:text-white">Reports</h1>
+                    </a>
+                </li>
+
+
+                    
                 @if ($admin->role === 'SUPER_ADMIN' || $admin->role === 'IT_DEPT')
                 <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/admins') }}">
@@ -285,6 +300,20 @@
                         {{-- <h1 class="hidden md:block group-hover:text-white">Performance</h1> --}}
                     </a>
                 </li>
+
+                <li id="" class="w-full py-3 rounded-lg instructor_performances hover:bg-darthmouthgreen group md:py-4">
+                    <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url("/admin/report") }}">
+                        
+                        <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 6.5L10.625 0.5H2.125C1.56141 0.5 1.02091 0.710714 0.622398 1.08579C0.223883 1.46086 0 1.96957 0 2.5V18.5C0 19.0304 0.223883 19.5391 0.622398 19.9142C1.02091 20.2893 1.56141 20.5 2.125 20.5H14.875C15.4386 20.5 15.9791 20.2893 16.3776 19.9142C16.7761 19.5391 17 19.0304 17 18.5V6.5ZM5.3125 17.5H3.1875V8.5H5.3125V17.5ZM9.5625 17.5H7.4375V11.5H9.5625V17.5ZM13.8125 17.5H11.6875V14.5H13.8125V17.5ZM10.625 7.5H9.5625V2.5L14.875 7.5H10.625Z" fill="black"/>
+                            </svg>
+
+    
+                        {{-- <h1 class="hidden md:block group-hover:text-white">Reports</h1> --}}
+                    </a>
+                </li>
+
+
                 @if ($admin->role === 'SUPER_ADMIN' || $admin->role === 'IT_DEPT')
                 <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/admin/admins') }}">

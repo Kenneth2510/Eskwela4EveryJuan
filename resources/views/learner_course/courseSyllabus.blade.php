@@ -317,4 +317,7 @@
         </div>
 
     </section>
+    @include('partials.learnerProfile')
+    @include('partials.chatbot')
 @endsection
+
