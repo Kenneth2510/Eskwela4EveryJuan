@@ -172,6 +172,5 @@
             </div>
         </section>
 
-        @include('partials.learnerSideProfile')
-        @include('partials.learnerChatbot')
+        @include('partials.chatbot')
 @endsection
