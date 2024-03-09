@@ -266,27 +266,30 @@
 
 
                 <div class="mt-5 hidden" id="learnerPerformanceArea">
-
-                    <div class="mt-5" id="learnerArea">
-                        <h1 class="text-xl font-semibold">Choose Learner</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="learner" id="learner">
-                            <option value="" selected disabled>--choose user--</option>
-                            @foreach ($learners as $learner)
-                            <option value="{{$learner->learner_id}}">{{$learner->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-
+                    
+                    <form action="{{ url('admin/report/LearnerGradesheets') }}"  method="GET">
                     <div class="mt-5" id="courseArea">
                         <h1 class="text-xl font-semibold">Choose Course</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="courseCategory" id="courseCategory">
+                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="learnerCourseCategory" id="learnerCourseCategory">
                             <option value="" selected disabled>--choose course--</option>
                             @foreach ($approvedCourses as $course)
                             <option value="{{$course->course_id}}">{{$course->course_name}}</option>
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="mt-5" id="learnerArea">
+                        <h1 class="text-xl font-semibold">Choose Learner</h1>
+                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="learnerCourseUser" id="learnerCourseUser">
+                            
+                        </select>
+                    </div>
+                    <div class="w-3/12 mt-10" id="generateArea">
+                        <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                    </div>
+                    </form>
+
+
                 </div>
 
 

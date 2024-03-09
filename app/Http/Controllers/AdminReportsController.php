@@ -631,7 +631,7 @@ class AdminReportsController extends Controller
                 ->setOption('zoom', 0.8); // Set the scale factor to 80%
             
             // Return the PDF content as a download
-            return $pdf->download('enrollees_data.pdf');
+            return $pdf->download('course_gradesheet.pdf');
 
                     
                 } catch (\Exception $e) {
@@ -640,25 +640,217 @@ class AdminReportsController extends Controller
 
     }
 
-    public function CoursePerformance() {
+    public function LearnerGradesheets(Request $request) {
 
                 try {
+                    $category = $request->input('category');
+                    $course = $request->input('learnerCourseCategory');
+                    $learnerCourse = $request->input('learnerCourseUser');
+                    
+                    
+                    $syllabus = DB::table('syllabus')
+                    ->select(
+                        'syllabus_id',
+                        'course_id',
+                        'topic_id',
+                        'topic_title',
+                        'category',
+                    )
+                    ->where('course_id', $course)
+                    ->orderBy('topic_id')
+                    ->get();
+
+
+                    $gradeData = DB::table('learner_course')
+                ->select(
+                    'learner_course.learner_course_id',
+                    'learner_course.learner_id',
+                    'learner_course.created_at',
+                    'learner_course_progress.course_progress',
+                    'learner_course_progress.start_period',
+                    'learner_course_progress.finish_period',
+                    'learner_course_progress.grade',
+                    'learner_course_progress.remarks',
+                    'learner.learner_fname',
+                    'learner.learner_lname',
+                )
+                ->join('learner_course_progress', 'learner_course_progress.learner_course_id', '=', 'learner_course.learner_course_id')
+                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
+                ->where('learner_course.course_id', $course)
+                ->where('learner_course.learner_course_id', $learnerCourse);
+
+            $gradeWithActivityData = $gradeData->get();
+
+            foreach ($gradeWithActivityData as $key => $activityData) {
+                $activityData->activities = DB::table('learner_activity_output')
+                    ->select(
+                        'learner_activity_output.activity_id',
+                        'learner_activity_output.activity_content_id',
+                        'activities.activity_title',
+                        DB::raw('COALESCE(ROUND(AVG(IFNULL(attempts.total_score, 0)), 2), 0) as average_score')
+                    )
+                    ->leftJoin('activities', 'activities.activity_id', '=', 'learner_activity_output.activity_id')
+                    ->leftJoin(
+                        DB::raw('(SELECT learner_activity_output_id, AVG(total_score) as total_score FROM learner_activity_output GROUP BY learner_activity_output_id) as attempts'),
+                        'attempts.learner_activity_output_id',
+                        '=',
+                        'learner_activity_output.learner_activity_output_id'
+                    )
+                    ->where('learner_activity_output.course_id', $course)
+                    ->where('learner_activity_output.learner_course_id', $activityData->learner_course_id)
+                    ->groupBy('learner_activity_output.activity_id', 'learner_activity_output.activity_content_id', 'activities.activity_title')
+                    ->get();
+
+                // Retrieve quiz data for the current learner
+                $activityData->quizzes = DB::table('learner_quiz_progress')
+                ->select(
+                    'learner_quiz_progress.quiz_id',
+                    'quizzes.quiz_title',
+                    DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_quiz_progress.score, 0)), 2), 0) as average_score')
+                )
+                ->leftJoin('quizzes', 'quizzes.quiz_id', '=', 'learner_quiz_progress.quiz_id')
+                ->where('learner_quiz_progress.course_id', $course)
+                ->where('learner_quiz_progress.learner_course_id', $activityData->learner_course_id)
+                ->groupBy('learner_quiz_progress.quiz_id', 'quizzes.quiz_title')
+                ->get();
+
+
+                $activityData->pre_assessment = DB::table('learner_pre_assessment_progress')
+                ->select(
+                    'score'
+                )
+                ->where('course_id', $course)
+                ->where('learner_course_id', $activityData->learner_course_id)
+                ->first();
+
+                $activityData->post_assessment = DB::table('learner_post_assessment_progress')
+                ->select (
+                        DB::raw('COALESCE(ROUND(AVG(IFNULL(learner_post_assessment_progress.score, 0)), 2), 0) as average_score')
+                    )
+                    ->where('course_id', $course)
+                    ->where('learner_course_id', $activityData->learner_course_id)
+                    ->first();
+
+                // Add the updated $activityData back to the main array
+                $gradeWithActivityData[$key] = $activityData;
+            }
+
+            $activitySyllabusData = DB::table('activities')
+            ->select(
+                'activities.activity_id',
+                'activities.course_id',
+                'activities.syllabus_id',
+                'activities.topic_id',
+                'activities.activity_title',
+                'activity_content.total_score',
+            )
+            ->join('activity_content', 'activities.activity_id', 'activity_content.activity_id')
+            ->where('activities.course_id', $course)
+            ->orderBy('activities.topic_id',  'asc')
+            ->get();
+
+            $quizSyllabusData = DB::table('quizzes')
+            ->select(
+                'quizzes.quiz_id',
+                'quizzes.course_id',
+                'quizzes.syllabus_id',
+                'quizzes.topic_id',
+                'quizzes.quiz_title',
+                DB::raw('COUNT(quiz_content.question_id) AS total_score')
+            )
+            ->join('quiz_content', 'quizzes.quiz_id', 'quiz_content.quiz_id')
+            ->where('quizzes.course_id', $course)
+            ->groupBy('quizzes.quiz_id')
+            ->orderBy('quizzes.topic_id', 'asc')
+            ->get();
+
+            $learnerPreAssessmentData = DB::table('learner_pre_assessment_progress')
+            ->select(
+                'learner_pre_assessment_progress.learner_pre_assessment_progress_id',
+                'learner_pre_assessment_progress.course_id',
+                'learner_pre_assessment_progress.learner_id',
+                'learner_pre_assessment_progress.learner_course_id',
+                'learner_pre_assessment_progress.status',
+                'learner_pre_assessment_progress.start_period',
+                'learner_pre_assessment_progress.finish_period',
+                'learner_pre_assessment_progress.score',
+                'learner_pre_assessment_progress.remarks',
+
+                'learner.learner_fname',
+                'learner.learner_lname',
+            )
+            ->join('learner', 'learner.learner_id', 'learner_pre_assessment_progress.learner_id')
+            ->where('learner_pre_assessment_progress.course_id', $course)
+            ->get();
+        
+        $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
+            ->select(
+                'learner_post_assessment_progress.learner_post_assessment_progress_id',
+                'learner_post_assessment_progress.course_id',
+                'learner_post_assessment_progress.learner_course_id',
+                'learner_post_assessment_progress.status',
+                'learner_post_assessment_progress.start_period',
+                'learner_post_assessment_progress.finish_period',
+                'learner_post_assessment_progress.score',
+                'learner_post_assessment_progress.remarks',
+                'learner_post_assessment_progress.attempt',
+                'learner.learner_fname',
+                'learner.learner_lname',
+            )
+            ->join('learner', 'learner.learner_id', 'learner_post_assessment_progress.learner_id')
+            ->where('learner_post_assessment_progress.course_id', $course)
+            ->get();
+    
+
+            $data = [
+                'gradeWithActivityData' => $gradeWithActivityData,
+                'syllabus' => $syllabus,
+                'activitySyllabusData' => $activitySyllabusData,
+                'quizSyllabusData' => $quizSyllabusData,
+                'learnerPreAssessmentData' => $learnerPreAssessmentData,
+                'learnerPostAssessmentData' => $learnerPostAssessmentData,
+            ];
+
+            // dd($data);
+
+            $html = view('adminReports.courseGradesheet', $data)->render();
+    
+            $pdf = PDF::loadHTML($html)
+                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+            
+            // Return the PDF content as a download
+            return $pdf->download('learner_gradesheet.pdf');
 
                     
+
+
                 } catch (\Exception $e) {
                     dd($e->getMessage());
                 }
 
     }
 
-    public function LearnerGradesheets() {
 
-                try {
+    public function learnerCourseData(Course $course) {
 
+        try {
+            $learnerCourseData = DB::table('learner_course')
+            ->select(
+                'learner_course.learner_course_id',
+                DB::raw('CONCAT(learner.learner_fname, " ", learner.learner_lname) as name'),
+            )
+            ->join('learner', 'learner.learner_id', 'learner_course.learner_course_id')
+            ->where('learner_course.course_id' , $course->course_id)
+            ->get();
+
+            $data = [
+                'learnerCourseData' => $learnerCourseData,
+            ];
+
+            return response()->json($data);
                     
-                } catch (\Exception $e) {
-                    dd($e->getMessage());
-                }
-
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+            }
     }
 }

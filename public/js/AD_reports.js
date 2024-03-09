@@ -134,4 +134,45 @@ $(document).ready(function() {
         }
     })
 
+
+    $('#learnerCourseCategory').on('change', function() {
+        var category = $(this).val()
+
+        var url = baseUrl + "/" + category + "/learnerCourseData";
+
+        $.ajax ({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            success: function (response){
+                console.log(response)
+                var learnerCourseData = response['learnerCourseData']
+                displayLearnerCoursePerformance(learnerCourseData)
+            },
+            error: function(error) {
+                console.log(error);
+            }
+      })
+    })
+
+
+    function displayLearnerCoursePerformance(learnerCourseData) {
+        var learnerCourseDisp = `<option value="" selected disabled>--choose user--</option>`
+
+
+        for (let i = 0; i < learnerCourseData.length; i++) {
+            const learner_course_id = learnerCourseData[i]['learner_course_id'];
+            const name = learnerCourseData[i]['name'];
+
+
+            learnerCourseDisp += `<option value="${learner_course_id}">${name}</option>`
+            
+        }
+
+
+        $('#learnerCourseUser').empty();
+        $('#learnerCourseUser').append(learnerCourseDisp);
+        
+    }
+
 })

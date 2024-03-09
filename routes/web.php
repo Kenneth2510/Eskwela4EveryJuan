@@ -358,6 +358,8 @@ Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/admin/report/CoursePerformances', 'AdminReportsController@CoursePerformances');
     Route::get('/admin/report/LearnerGradesheets', 'AdminReportsController@LearnerGradesheets');
 
+    
+    Route::get('/admin/report/{course}/learnerCourseData', 'AdminReportsController@learnerCourseData');
 });
 
 
