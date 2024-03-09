@@ -22,7 +22,7 @@
 
         <div class="flex w-full">
             <div class="w-3/12 mt-10" id="reportCategoryArea">
-                <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="reportCategory" id="reportCategory">
+                <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="reportCategory" id="reportCategory">
                     <option value="" selected disabled>--choose category--</option>
                     <option value="Users">List of Users</option>
                     <option value="Session">Session Logs</option>
@@ -37,11 +37,11 @@
 
             <div class="w-6/12 " id="selectedReportSubCategoryArea">
 
-                <div class="mt-5 hidden" id="listUsersArea">
+                <div class="hidden mt-5" id="listUsersArea">
                     <form action="{{ url('admin/report/Users') }}"  method="GET">
                         <div class="mt-5" id="userCategoryArea">
                             <h1 class="text-xl font-semibold">Choose Category</h1>
-                            <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="userCategory" id="userCategory">
+                            <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="userCategory" id="userCategory">
                                 <option value="ALL" selected disabled>--choose user--</option>
                                 <option value="Learners">Learners</option>
                                 <option value="Instructors">Instructors</option>
@@ -50,7 +50,7 @@
     
                         <div class="mt-5" id="userStatusArea">
                             <h1 class="text-xl font-semibold">Choose Status</h1>
-                            <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="userStatus" id="userStatus">
+                            <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="userStatus" id="userStatus">
                                 <option value="" selected>ALL</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Approved">Approved</option>
@@ -64,26 +64,26 @@
                             <label for="userSelectedDayCheck" class="text-lg">Custom Time</label><br>
     
                             <label for="userDateStart">Start Date</label>
-                            <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateStart" id="userDateStart">
+                            <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateStart" id="userDateStart">
                             
                             <label for="userDateFinish">Fisnish Date</label>
-                            <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateFinish" id="userDateFinish">
+                            <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateFinish" id="userDateFinish">
                         </div>
 
 
                         <div class="w-3/12 mt-10" id="generateArea">
-                            <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                            <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                         </div>
                     </form>
 
                 </div>
 
 
-                <div class="mt-5 hidden " id="sessionDataArea">
+                <div class="hidden mt-5 " id="sessionDataArea">
                     <form action="{{ url('admin/report/Session') }}"  method="GET">
                         <div class="mt-5" id="userCategoryArea">
                             <h1 class="text-xl font-semibold">Choose Category</h1>
-                            <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="userCategory" id="userCategory">
+                            <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="userCategory" id="userCategory">
                                 <option value="ALL" selected>ALL Users</option>
                                 <option value="Learners">Learners</option>
                                 <option value="Instructors">Instructors</option>
@@ -95,33 +95,33 @@
                             <label for="userSelectedDayCheck" class="text-lg">Custom Time</label><br>
 
                             <label for="userDateStart">Start Date</label>
-                            <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateStart" id="userDateStart">
+                            <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateStart" id="userDateStart">
                             
                             <label for="userDateFinish">Fisnish Date</label>
-                            <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateFinish" id="userDateFinish">
+                            <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateFinish" id="userDateFinish">
                         </div>
 
                         <div class="w-3/12 mt-10" id="generateArea">
-                            <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                            <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                         </div>
                     </form>
                 </div>
 
                 
-                <div class="mt-5 hidden " id="userSessionDataArea">
+                <div class="hidden mt-5 " id="userSessionDataArea">
                     <form action="{{ url('admin/report/UserSession') }}"  method="GET">
                         <div class="mt-5" id="userCategoryArea">
                             <h1 class="text-xl font-semibold">Choose Category</h1>
-                            <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="userSessionCategory" id="userSessionCategory">
+                            <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="userSessionCategory" id="userSessionCategory">
                                 <option value="" selected disabled>--choose user--</option>
                                 <option value="Learners">Learners</option>
                                 <option value="Instructors">Instructors</option>
                             </select>
                         </div>
     
-                        <div class="mt-5 hidden" id="userSessionLearnerArea">
+                        <div class="hidden mt-5" id="userSessionLearnerArea">
                             <h1 class="text-xl font-semibold">Choose Learner</h1>
-                            <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="userSession" id="userSession">
+                            <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="userSession" id="userSession">
                                 <option value="" selected disabled>--choose user--</option>
                                 @foreach ($learners as $learner)
                                 <option value="{{$learner->learner_id}}">{{$learner->name}}</option>
@@ -129,9 +129,9 @@
                             </select>
                         </div>
 
-                        <div class="mt-5 hidden" id="userSessionInstructorArea">
+                        <div class="hidden mt-5" id="userSessionInstructorArea">
                             <h1 class="text-xl font-semibold">Choose Instructor</h1>
-                            <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="userSession" id="userSession">
+                            <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="userSession" id="userSession">
                                 <option value="" selected disabled>--choose user--</option>
                                 @foreach ($instructors as $instructor)
                                 <option value="{{$instructor->instructor_id}}">{{$instructor->name}}</option>
@@ -144,26 +144,26 @@
                             <label for="userSelectedDayCheck" class="text-lg">Custom Time</label><br>
     
                             <label for="userDateStart">Start Date</label>
-                            <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateStart" id="userDateStart">
+                            <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateStart" id="userDateStart">
                             
                             <label for="userDateFinish">Fisnish Date</label>
-                            <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateFinish" id="userDateFinish">
+                            <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateFinish" id="userDateFinish">
                         </div>
 
                         <div class="w-3/12 mt-10" id="generateArea">
-                            <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                            <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                         </div>
                     </form>
 
                 </div>
 
 
-                <div class="mt-5 hidden" id="listCourseArea">
+                <div class="hidden mt-5" id="listCourseArea">
 
                     <form action="{{ url('admin/report/Courses') }}"  method="GET">
                     <div class="mt-5" id="userCategoryArea">
                         <h1 class="text-xl font-semibold">Choose Category</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="courseCategory" id="courseCategory">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="courseCategory" id="courseCategory">
                             <option value="Simple" selected>Simple</option>
                             <option value="Detailed">Detailed</option>
                         </select>
@@ -171,7 +171,7 @@
 
                     <div class="mt-5" id="courseStatusArea">
                         <h1 class="text-xl font-semibold">Choose Status</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="courseStatus" id="courseStatus">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="courseStatus" id="courseStatus">
                             <option value="" selected>ALL</option>
                             <option value="Pending">Pending</option>
                             <option value="Approved">Approved</option>
@@ -180,18 +180,18 @@
                     </div>
 
                     <div class="w-3/12 mt-10" id="generateArea">
-                        <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                        <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                     </div>
                     </form>
 
                 </div>
     
-                <div class="mt-5 hidden" id="listCourseEnrolleesArea">
+                <div class="hidden mt-5" id="listCourseEnrolleesArea">
                     
                     <form action="{{ url('admin/report/Enrollees') }}"  method="GET">
                     <div class="mt-5" id="courseArea">
                         <h1 class="text-xl font-semibold">Choose Course</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="course" id="course">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="course" id="course">
                             
                             <option value="" selected disabled>--choose course--</option>
                             @foreach ($approvedCourses as $course)
@@ -202,7 +202,7 @@
 
                     <div class="mt-5" id="userStatusArea">
                         <h1 class="text-xl font-semibold">Choose Status</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="enrollmentStatus" id="enrollmentStatus">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="enrollmentStatus" id="enrollmentStatus">
                             <option value="" selected>ALL</option>
                             <option value="Pending">Pending</option>
                             <option value="Approved">Approved</option>
@@ -215,26 +215,26 @@
                         <label for="userSelectedDayCheck" class="text-lg">Custom Time</label><br>
 
                         <label for="userDateStart">Start Date</label>
-                        <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateStart" id="userDateStart">
+                        <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateStart" id="userDateStart">
                         
                         <label for="userDateFinish">Fisnish Date</label>
-                        <input type="date" class="w-1/5 border border-darthmouthgreen rounded-xl mx-5 px-3 py-2 " name="userDateFinish" id="userDateFinish">
+                        <input type="date" class="w-1/5 px-3 py-2 mx-5 border border-darthmouthgreen rounded-xl " name="userDateFinish" id="userDateFinish">
                     </div>
 
                     <div class="w-3/12 mt-10" id="generateArea">
-                        <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                        <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                     </div>
                     </form>
                 </div>
 
 
 
-                <div class="mt-5 hidden" id="courseGradesheetArea">
+                <div class="hidden mt-5" id="courseGradesheetArea">
                     
                     <form action="{{ url('admin/report/CourseGradesheets') }}"  method="GET">
                     <div class="mt-5" id="courseArea">
                         <h1 class="text-xl font-semibold">Choose Course</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="course" id="course">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="course" id="course">
                             <option value="" selected disabled>--choose course--</option>
                             @foreach ($approvedCourses as $course)
                             <option value="{{$course->course_id}}">{{$course->course_name}}</option>
@@ -242,36 +242,36 @@
                         </select>
                     </div>
                     <div class="w-3/12 mt-10" id="generateArea">
-                        <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                        <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                     </div>
                     </form>
                 </div>
 
 
-                {{-- <div class="mt-5 hidden" id="coursePerformanceArea">
+                {{-- <div class="hidden mt-5" id="coursePerformanceArea">
                     <div class="mt-5" id="courseArea">
                         <h1 class="text-xl font-semibold">Choose Course</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="course" id="course">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="course" id="course">
                             <option value="" selected disabled>--choose course--</option>
                         </select>
                     </div>
 
                     <div class="mt-5" id="syllabusArea">
                         <h1 class="text-xl font-semibold">Choose Syllabus</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="syllabusCategory" id="syllabusCategory">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="syllabusCategory" id="syllabusCategory">
                             <option value="" selected disabled>--choose course--</option>
                         </select>
                     </div>
                 </div> --}}
 
 
-                <div class="mt-5 hidden" id="learnerPerformanceArea">
+                <div class="hidden mt-5" id="learnerPerformanceArea">
                     
                     <form action="{{ url('admin/report/LearnerGradesheets') }}"  method="GET">
                     <div class="mt-5" id="courseArea">
                         <h1 class="text-xl font-semibold">Choose Course</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="learnerCourseCategory" id="learnerCourseCategory">
-                            <option value="" selected disabled>--choose course--</option>
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="learnerCourseCategory" id="learnerCourseCategory">
+                            <option value="" selected>--choose course--</option>
                             @foreach ($approvedCourses as $course)
                             <option value="{{$course->course_id}}">{{$course->course_name}}</option>
                             @endforeach
@@ -280,12 +280,12 @@
 
                     <div class="mt-5" id="learnerArea">
                         <h1 class="text-xl font-semibold">Choose Learner</h1>
-                        <select class="w-4/5 px-5 py-3 border-darthmouthgreen border text-xl rounded-xl" name="learnerCourseUser" id="learnerCourseUser">
+                        <select class="w-4/5 px-5 py-3 text-xl border border-darthmouthgreen rounded-xl" name="learnerCourseUser" id="learnerCourseUser">
                             
                         </select>
                     </div>
                     <div class="w-3/12 mt-10" id="generateArea">
-                        <button type="submit" id="generateBtn" class="px-5 py-3 bg-darthmouthgreen text-white text-xl rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
+                        <button type="submit" id="generateBtn" class="px-5 py-3 text-xl text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">Generate Report</button>
                     </div>
                     </form>
 
