@@ -115,7 +115,7 @@
                             @enderror
                             <input class="border IN-V-INP border-darthmouthgreen" type="password" minlength="8" name="password" id="password">
                             <span id="passwordError" class="text-red-500"></span>
-                            <span id="passwordRequirements" class="text-gray-500 text-sm">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
+                            <span id="passwordRequirements" class="text-sm text-gray-500">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
                         </div>
 
                         <div class="text-darthmouthgreen">
@@ -238,8 +238,8 @@
                         </div>
 
                         <div class=" FORM-CTNR lg:w-1/2">
-                            <label for="business_description">Business Description</label><br>
-                            <textarea name="business_description" class="w-full px-5 py-1 border-2 rounded-lg h-36 border-darthmouthgreen" id="business_description"></textarea>
+                            <label for="business_description" class="text-lg text-darthmouthgreen">Business Description</label><br>
+                            <textarea name="business_description" class="w-full px-5 py-1 border-2 rounded-lg h-36 border-darthmouthgreen text-darthmouthgreen" id="business_description"></textarea>
                             <span id="businessDescriptionError" class="text-red-500"></span>
                         </div>
 

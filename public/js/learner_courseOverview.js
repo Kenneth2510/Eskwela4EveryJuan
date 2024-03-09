@@ -17,8 +17,9 @@ $(document).ready(function() {
     $("#enrollCourse").on('click', function (e) {
         e.preventDefault();
         var courseID = $(this).data("course-id");
-
+        var button = $(this)
     
+        button.prop('disabled', true)
         $.ajax({
             type: 'POST',
             url: '/learner/course/enroll/' + courseID,
@@ -27,6 +28,8 @@ $(document).ready(function() {
             },
             success: function (response) {
                 if (response && response.redirect_url) {
+                    
+                    button.prop('disabled', false)
                     window.location.href = response.redirect_url;
                 } else {
                 
@@ -34,6 +37,7 @@ $(document).ready(function() {
             },
             error: function (xhr, status, error) {
     
+                button.prop('disabled', false)
                 console.log(xhr.responseText);
             }
         });
@@ -52,9 +56,10 @@ $(document).ready(function() {
     $('#unenrollCourse').on('click',function(e) {
         
         e.preventDefault();
-
+        var button = $(this)
         var lessonCourseID = $(this).data("learner-course-id");
-
+        button.prop('disabled', true)
+    
         $.ajax({
             type: 'POST',
             url: '/learner/course/unEnroll/' + lessonCourseID,
@@ -62,14 +67,16 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function (response) {
+                button.prop('disabled', false)
                 if (response && response.redirect_url) {
+                    button.prop('disabled', false)
                     window.location.href = response.redirect_url;
                 } else {
                 
                 }
             },
             error: function (xhr, status, error) {
-    
+                button.prop('disabled', false)
                 console.log(xhr.responseText);
             }
 

@@ -219,7 +219,8 @@ $(document).ready(function() {
                 console.log(response);
 
                     add_learner_data(learner_id)
-                
+                    process_files(learner_id)
+                    
                                 $('.submitQuestion').on('click', function(e) {
                                     e.preventDefault()
 
@@ -253,6 +254,20 @@ $(document).ready(function() {
                                         }
                                     });
                                 })
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function process_files(session_id) {
+        var url = `/chatbot/process/${session_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
             },
             error: function(error) {
                 console.log(error);

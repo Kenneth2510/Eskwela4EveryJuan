@@ -65,38 +65,37 @@ class LearnerDiscussionController extends Controller
                 ->select('last_randomized_datetime')
                 ->first();
 
-            $last_randomized_datetime = $last_randomized_datetime_object->last_randomized_datetime;
-
-
-            if (Carbon::parse($now)->diffInDays(Carbon::parse($last_randomized_datetime)) > 0) {
-                $threadUpvotesData = DB::table('thread_upvotes')
-                ->select(
-                    'thread_upvote_id',
-                    'thread_id',
-                    'base_upvote',
-                    'randomized_display_upvote',
-                    'last_randomized_datetime',
-                )
-                ->get();
-                
-
-                foreach ($threadUpvotesData as $threadUpvote) {
+            if($last_randomized_datetime_object) {
+                $last_randomized_datetime = $last_randomized_datetime_object->last_randomized_datetime;
+    
+                if (Carbon::parse($now)->diffInDays(Carbon::parse($last_randomized_datetime)) > 0) {
+                    $threadUpvotesData = DB::table('thread_upvotes')
+                    ->select(
+                        'thread_upvote_id',
+                        'thread_id',
+                        'base_upvote',
+                        'randomized_display_upvote',
+                        'last_randomized_datetime',
+                    )
+                    ->get();
                     
-                    $min = 100;
-                    $max = 9999;
+    
+                    foreach ($threadUpvotesData as $threadUpvote) {
+                        
+                        $min = 100;
+                        $max = 9999;
+    
+                        $randomNumber = rand($min, $max);
+    
+                        DB::table('thread_upvotes')
+                        ->where('thread_upvote_id', $threadUpvote->thread_upvote_id)
+                        ->update([
+                            'randomized_display_upvote' => $randomNumber,
+                            'last_randomized_datetime' => $timestampString
+                        ]);
+                    }
 
-                    $randomNumber = rand($min, $max);
-
-                    DB::table('thread_upvotes')
-                    ->where('thread_upvote_id', $threadUpvote->thread_upvote_id)
-                    ->update([
-                        'randomized_display_upvote' => $randomNumber,
-                        'last_randomized_datetime' => $timestampString
-                    ]);
-                }
-
-
-                $threadCommentsUpvotesData = DB::table('thread_comment_upvotes')
+                    $threadCommentsUpvotesData = DB::table('thread_comment_upvotes')
                 ->select(
                     'thread_comment_upvote_id',
                     'thread_id',
@@ -182,8 +181,7 @@ class LearnerDiscussionController extends Controller
                         'last_randomized_datetime' => $timestampString
                     ]);
                 }
-
-
+            }
             }
 
         } catch (\Exception $e) {

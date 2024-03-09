@@ -312,7 +312,7 @@ $(document).ready(function () {
     
 
         if (business_description === '') {
-            $('#businessDescriptionError').text('Please select a description.');
+            $('#businessDescriptionError').text('Please enter your business description.');
             isValid = false;
         } else {
             $('#businessDescriptionError').text('');

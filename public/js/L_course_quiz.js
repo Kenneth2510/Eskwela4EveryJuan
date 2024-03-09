@@ -329,10 +329,13 @@ getLearnerQuizData();
 
        $('#confirmSubmitQuizBtn').on('click', function(e) {
         e.preventDefault();
+
         submitQuizContent();
         $('#confirmSubmitQuizModal').addClass('hidden');
     })
 
+
+    
 
     
    
