@@ -1,22 +1,6 @@
 @extends('layouts.learner_layout')
 
-        
-    {{-- MAIN --}}
-    <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 rounded-lg shadow-lg b">
-        
-            <div class="" id="welcome">
-                <h1 class="text-4xl font-semibold">Welcome back, {{$learner->learner_fname}}!</h1>
-            </div>
 
-            <hr class="my-6 border-t-2 border-gray-300">
-
-            <h1 class="mx-5 text-2xl font-semibold">Overview</h1>
-
-            <div class="flex justify-between mx-10 mt-5" id="overview_area">
-                <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
-                    <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalCoursesText">#</h1>
-                    <p class="mt-5 text-2xl text-darthmouthgreen">Courses Enrolled</p>
 @section('content')
         {{-- MAIN --}}
         <section class="w-full h-screen md:w-3/4 lg:w-10/12">
