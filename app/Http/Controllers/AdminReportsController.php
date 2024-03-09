@@ -204,7 +204,7 @@ class AdminReportsController extends Controller
 
                 // Generate PDF from HTML
                 $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
                 // Return the PDF content as a download
                 return $pdf->download('user_list.pdf');
@@ -263,7 +263,7 @@ class AdminReportsController extends Controller
             ])->render();
     
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('session_data.pdf');
@@ -325,7 +325,7 @@ class AdminReportsController extends Controller
             ])->render();
     
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('session_data.pdf');
@@ -384,7 +384,7 @@ class AdminReportsController extends Controller
                 ])->render();
         
                 $pdf = PDF::loadHTML($html)
-                    ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                    ->setOption('zoom', 1.0); // Set the scale factor to 80%
                 
                 // Return the PDF content as a download
                 return $pdf->download('course_data.pdf');
@@ -443,7 +443,7 @@ class AdminReportsController extends Controller
                     ])->render();
             
                     $pdf = PDF::loadHTML($html)
-                        ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                        ->setOption('zoom', 1.0); // Set the scale factor to 80%
                     
                     // Return the PDF content as a download
                     return $pdf->download('enrollees_data.pdf');
@@ -628,7 +628,7 @@ class AdminReportsController extends Controller
             $html = view('adminReports.courseGradesheet', $data)->render();
     
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('course_gradesheet.pdf');
@@ -817,7 +817,7 @@ class AdminReportsController extends Controller
             $html = view('adminReports.learnerGradesheet', $data)->render();
 
             $pdf = PDF::loadHTML($html)
-                ->setOption('zoom', 0.8); // Set the scale factor to 80%
+                ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
             return $pdf->download('learner_gradesheet.pdf');

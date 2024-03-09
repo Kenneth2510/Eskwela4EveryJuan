@@ -87,15 +87,15 @@
                             <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
                             <div class="">
                                 <label class="text-lg" for="hours">Hours:</label>
-                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
                         
                                 <label class="text-lg" for="minutes">Minutes:</label>
-                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="0" required>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="0" required>
                         
                                 <label class="text-lg" for="seconds">Seconds:</label>
-                                <input disabled class="duration_input mx-3 px-1 w-1/12 border-2 border-gray-400 text-lg rounded-lg" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
                         
-                                <button id="saveDurationBtn" class="hidden px-3 py-1 bg-darthmouthgreen hover:bg-green-950 text-white text-lg rounded-xl">Set Duration</button>
+                                <button id="saveDurationBtn" class="hidden px-3 py-1 text-lg text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">Set Duration</button>
                             </div>
                         </div>
                         
@@ -108,7 +108,7 @@
                             <button id="viewResponsesBtn" class="w-1/2 px-5 py-5 mx-3 mt-3 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                                 View Responses
                             </button>
-                            <a href="{{ url("/instructor/course/content/$quizInfo->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id/$quizInfo->quiz_id/content") }}" class="w-1/2 px-5 py-5 mx-3 mt-3 text-white text-center bg-darthmouthgreen hover:bg-green-900 rounded-xl">
+                            <a href="{{ url("/instructor/course/content/$quizInfo->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id/$quizInfo->quiz_id/content") }}" class="w-1/2 px-5 py-5 mx-3 mt-3 text-center text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">
                                 Enter Quiz Editor
                             </a>
                         </div>
@@ -121,8 +121,8 @@
 @include('partials.instructorProfile')
 
             {{-- area for modals --}}
-            <div id="responsesModal" class="fixed hidden top-0 left-0 flex items-center justify-center w-full h-full bg-gray-200 bg-opacity-75 modal">
-                <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-3/5">
+            <div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+                <div class="w-3/5 p-4 bg-white rounded-lg shadow-lg modal-content">
 
                     <div class="flex justify-end w-full">
                         <button class="exitResponsesModalBtn">
@@ -134,7 +134,7 @@
                     
                     <div id="responsesContent" class="mt-5 overflow-y-auto">
                         <table class="w-full">
-                            <thead class="bg-darthmouthgreen text-white">
+                            <thead class="text-white bg-darthmouthgreen">
                                 <th class="w-1/6 py-3 font-semibold">Enrollee ID</th>
                                 <th class="w-1/6 py-3 font-semibold">Name</th>
                                 <th class="w-1/6 py-3 font-semibold">Attempt</th>
@@ -152,7 +152,7 @@
                                     <td>December 10, 2023</td>
                                     <td>5/6</td>
                                     <td>
-                                        <button class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-white rounded-xl">View</button>
+                                        <button class="px-5 py-3 text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">View</button>
                                     </td>
                                 </tr> --}}
                             </tbody>

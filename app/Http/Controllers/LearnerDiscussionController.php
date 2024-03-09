@@ -510,7 +510,7 @@ class LearnerDiscussionController extends Controller
 
                 $data = [
                     'title' => 'Discussion',
-                    'scripts' => ['instructor_view_discussion.js'],
+                    'scripts' => ['learner_view_discussion.js'],
                     'thread' => $threadData,
                 ];
 

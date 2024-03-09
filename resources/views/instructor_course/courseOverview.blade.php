@@ -40,7 +40,7 @@
 
                     @if($course->course_status === 'Approved') 
                     <div class="mt-10">
-                        <a href="{{ url("/instructor/course/$course->course_id/certificate") }}" target="_blank" class="px-5 mt-5 py-3 mb-5 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">Download Certificate of Recognition</a>
+                        <a href="{{ url("/instructor/course/$course->course_id/certificate") }}" target="_blank" class="px-5 py-3 mt-5 mb-5 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">Download Certificate of Recognition</a>
                     </div>
                     
                     @endif
@@ -136,7 +136,7 @@
 
 
 
-<div id="courseDetailsModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+<div id="courseDetailsModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 ">
     <div class="p-4 bg-white rounded-lg shadow-lg modal-content">
         <div class="flex justify-end w-full">
             <button class="closeCourseDetailsModal">
@@ -211,7 +211,7 @@
                                     <td>{{ $enrollee->created_at }}</td>
                                     <td>{{ $enrollee->course_progress }}</td>
                                     <td>
-                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="rounded-xl py-1 px-3 bg-darthmouthgreen text-white hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
                                     </td>
                                 </tr>
                             @empty
@@ -341,7 +341,7 @@
 </div>
 
 
-<div id="courseDetailsEditModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+<div id="courseDetailsEditModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 ">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelEdit">
@@ -365,7 +365,7 @@
 </div>
 
 
-<div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+<div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 ">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelAddNewFile">
@@ -389,7 +389,7 @@
     </div>
 </div>
 
-<div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 modal">
+<div id="deleteCourseModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75 ">
     <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
         <div class="flex justify-end w-full">
             <button class="cancelDelete">

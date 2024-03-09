@@ -2814,7 +2814,7 @@ class LearnerCourseController extends Controller
 
         $data = [
             'title' => 'Course Lesson',
-            'scripts' => ['/.js'],
+            'scripts' => ['/L_course_quiz.js'],
             'mainBackgroundCol' => '#00693e',
             'darkenedColor' => '#00693e',
             'learnerSyllabusProgressData' => $learnerSyllabusProgressData,
@@ -4971,7 +4971,7 @@ class LearnerCourseController extends Controller
                     }
                 $data = [
                     'title' => 'Course Gradesheet',
-                    'scripts' => ['/learner_post_assessment.js'],
+                    'scripts' => ['/learner_gradesheet.js'],
                     'mainBackgroundCol' => '#00693e',
                     'courseData' => $courseData,
                     'activityScoresData' => $learnerActivityScoresData,

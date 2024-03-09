@@ -33,7 +33,7 @@
                     
                         {{-- <h1 class="pl-[50px] text-3xl font-bold">{{ $lessonInfo->lesson_title }}</h1> --}}
                         {{-- <input class="ml-[50px] w-[750px] text-3xl font-bold border-none" disabled type="text" name="lesson_title" id="lesson_title" value="{{ $syllabus->lesson_title }}"> --}}
-                        <div id="lesson_title" class="pl-[50px] text-3xl font-bold border-none" contenteditable="false">{{ $syllabus->lesson_title }}</div>
+                        <div id="lesson_title" data-course-id="{{$syllabus->course_id}}" data-syllabus-id="{{$syllabus->syllabus_id}}" class="pl-[50px] text-3xl font-bold border-none" contenteditable="false">{{ $syllabus->lesson_title }}</div>
                     </div>
                 </div> 
             </div>
@@ -103,7 +103,7 @@
         </div>
         
 
-        <div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+        <div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                 <div class="flex justify-end w-full">
                     <button class="cancelFinishLessonBtn">

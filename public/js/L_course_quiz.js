@@ -8,8 +8,8 @@ $(document).ready(function() {
     
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
-    var course_id
-    var syllabus_id
+
+    getLearnerData()
 
 getLearnerQuizData();
 
@@ -66,8 +66,8 @@ getLearnerQuizData();
             const learner_quiz_output_id = quizLearnerQuestions[i]['learner_quiz_output_id'];
             const quiz_content_id = quizLearnerQuestions[i]['quiz_content_id'];
             const quiz_id = quizLearnerQuestions[i]['quiz_id'];
-            syllabus_id = quizLearnerQuestions[i]['syllabus_id'];
-            course_id = quizLearnerQuestions[i]['course_id'];
+            const syllabus_id = quizLearnerQuestions[i]['syllabus_id'];
+            const course_id = quizLearnerQuestions[i]['course_id'];
             const question_id = quizLearnerQuestions[i]['question_id'];
             const category = quizLearnerQuestions[i]['category'];
             const question = quizLearnerQuestions[i]['question'];
@@ -338,9 +338,6 @@ getLearnerQuizData();
     
 
     
-   
-    getLearnerData()
-
     function getLearnerData() {
         var url = `/learner/learnerData`;
             $.ajax({
@@ -354,21 +351,19 @@ getLearnerQuizData();
 
                     var learner = response['learner']
                     // init_chatbot(learner);
-
-                    $('.loaderArea').addClass('hidden');
-                    $('.mainchatbotarea').removeClass('hidden');
-
                     getCourseData(learner)
+
+
+
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
     }
-    
-    
+
     function getCourseData(learner) {
-        var course_id = course_id
+        var course_id = $('#quiz_title').data('course-id');
         var url = `/chatbot/courseData/${course_id}`;
         $.ajax({
             type: "GET",
@@ -379,8 +374,10 @@ getLearnerQuizData();
             success: function(response) {
                 console.log(response);
     
-                var courseData = response['course']
+                var courseData = response['course'];
+
                 getSyllabusData(learner, courseData)
+
             },
             error: function(error) {
                 console.log(error);
@@ -388,12 +385,11 @@ getLearnerQuizData();
         });
     }
 
-
-        
     function getSyllabusData(learner, courseData) {
-        var course_id = course_id
-        var syllabus_id = syllabus_id
+        var course_id = $('#quiz_title').data('course-id');
+        var syllabus_id = $('#quiz_title').data('syllabus-id');
         var url = `/chatbot/syllabusData/${course_id}/${syllabus_id}`;
+        
         $.ajax({
             type: "GET",
             url: url,
@@ -402,25 +398,39 @@ getLearnerQuizData();
             },
             success: function(response) {
                 console.log(response);
-    
+
                 var syllabusData = response['syllabus']
+                
+                $('.loaderArea').addClass('hidden');
+                $('.mainchatbotarea').removeClass('hidden');
+
 
                 $('.submitQuestion').on('click', function(e) {
-                    e.preventDefault()
-                    var learner_id = learner['learner_id']
+                    e.preventDefault();
+                    submitQuestion();
+                });
+    
+                $('.question').on('keydown', function(e) {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        submitQuestion();
+                    }
+                });
+    
+                function submitQuestion() {
+                    var learner_id = learner['learner_id'];
                     var question = $('.question').val();
-                    var course = courseData['course_name']
-                    var lesson = syllabusData['topic_title']
-            
-            
-                    displayUserMessage(question, learner)
-                    $('.botloader').removeClass('hidden')
+                    var course = courseData['course_name'];
+                    var lesson = `${syllabusData['category']} - ${syllabusData['topic_title']}`;
+    
+                    displayUserMessage(question, learner);
+                    $('.botloader').removeClass('hidden');
                     var chatData = {
                         question: question,
                         course: course,
                         lesson: lesson,
-                    }
-            
+                    };
+    
                     var url = `/chatbot/chat/${learner_id}`;
                     $.ajax({
                         type: "POST",
@@ -431,21 +441,21 @@ getLearnerQuizData();
                         },
                         success: function(response) {
                             console.log(response);
-                            displayBotMessage(response)
+                            displayBotMessage(response);
+                            $('.question').val('')
                         },
                         error: function(error) {
                             console.log(error);
                         }
                     });
-                })
-             
-
+                }
             },
             error: function(error) {
                 console.log(error);
             }
         });
     }
+    
 
     function displayUserMessage(question, learner) {
         var userMessageDisp = ``;
@@ -500,5 +510,6 @@ getLearnerQuizData();
         $('.botloader').addClass('hidden')
         $('.chatContainer').append(botMessageDisp);
     }
+    
 
 })

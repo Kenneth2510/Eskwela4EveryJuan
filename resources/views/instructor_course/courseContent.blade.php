@@ -210,7 +210,7 @@
             
         </div>
 
-        <div id="syllabusModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+        <div id="syllabusModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px] overflow-y-auto">
                 <div class="flex justify-end w-full">
                     <button id="removeModalBtn">
@@ -244,7 +244,7 @@
         </div>
 
 
-        <div id="addTopicModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+        <div id="addTopicModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
             <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                 <div class="flex justify-end w-full">
                     <button id="closeAddTopicModal">

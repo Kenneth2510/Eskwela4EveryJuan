@@ -171,7 +171,9 @@
 
 
 
-@include('partials.learnerProfile')
+{{-- @include('partials.learnerProfile') --}}
+
+@include('partials.chatbot')
 </section>
 
 <div id="createNewMessage" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
