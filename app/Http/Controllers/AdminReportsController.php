@@ -207,7 +207,8 @@ class AdminReportsController extends Controller
                 ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
                 // Return the PDF content as a download
-                return $pdf->download('user_list.pdf');
+                $filename = $userCategory . "_list.pdf";
+                return $pdf->download($filename);
 
             } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -265,8 +266,11 @@ class AdminReportsController extends Controller
             $pdf = PDF::loadHTML($html)
                 ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
-            // Return the PDF content as a download
-            return $pdf->download('session_data.pdf');
+            // Return the PDF content as a download                
+            $filename = $userCategory . "_sessionData.pdf";
+            return $pdf->download($filename);
+
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -328,7 +332,8 @@ class AdminReportsController extends Controller
                 ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
-            return $pdf->download('session_data.pdf');
+            $filename = $userSessionCategory . $userSession . "_sessionData.pdf";
+            return $pdf->download($filename);
 
                 } catch (\Exception $e) {
                     dd($e->getMessage());
@@ -387,7 +392,8 @@ class AdminReportsController extends Controller
                     ->setOption('zoom', 1.0); // Set the scale factor to 80%
                 
                 // Return the PDF content as a download
-                return $pdf->download('course_data.pdf');
+            $filename = $courseCategory . "_coursesData.pdf";
+            return $pdf->download($filename);
 
                 } catch (\Exception $e) {
                     dd($e->getMessage());
@@ -445,8 +451,9 @@ class AdminReportsController extends Controller
                     $pdf = PDF::loadHTML($html)
                         ->setOption('zoom', 1.0); // Set the scale factor to 80%
                     
-                    // Return the PDF content as a download
-                    return $pdf->download('enrollees_data.pdf');
+                    // Return the PDF content as a download          
+                    $filename = $courseName . "_enrolleesData.pdf";
+                    return $pdf->download($filename);
 
 
                 } catch (\Exception $e) {
@@ -461,16 +468,26 @@ class AdminReportsController extends Controller
                     $category = $request->input('category');
                     $course = $request->input('course');
 
-                    $syllabus = DB::table('syllabus')
+                    $courseData = DB::table('course')
                     ->select(
-                        'syllabus_id',
                         'course_id',
-                        'topic_id',
-                        'topic_title',
-                        'category',
+                        'course_name',
                     )
                     ->where('course_id', $course)
-                    ->orderBy('topic_id')
+                    ->first();
+
+                    $syllabus = DB::table('syllabus')
+                    ->select(
+                        'syllabus.syllabus_id',
+                        'syllabus.course_id',
+                        'syllabus.topic_id',
+                        'syllabus.topic_title',
+                        'syllabus.category',
+
+                    )
+                    ->join('course', 'course.course_id', 'syllabus.course_id')
+                    ->where('syllabus.course_id', $course)
+                    ->orderBy('syllabus.topic_id')
                     ->get();
 
 
@@ -630,8 +647,9 @@ class AdminReportsController extends Controller
             $pdf = PDF::loadHTML($html)
                 ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
-            // Return the PDF content as a download
-            return $pdf->download('course_gradesheet.pdf');
+            // Return the PDF content as a download    
+                    $filename = $courseData->course_name . "_gradesheet.pdf";
+                    return $pdf->download($filename);
 
                     
                 } catch (\Exception $e) {
@@ -647,19 +665,20 @@ class AdminReportsController extends Controller
                     $course = $request->input('learnerCourseCategory');
                     $learnerCourse = $request->input('learnerCourseUser');
                     
-                    
                     $syllabus = DB::table('syllabus')
                     ->select(
-                        'syllabus_id',
-                        'course_id',
-                        'topic_id',
-                        'topic_title',
-                        'category',
-                    )
-                    ->where('course_id', $course)
-                    ->orderBy('topic_id')
-                    ->get();
+                        'syllabus.syllabus_id',
+                        'syllabus.course_id',
+                        'syllabus.topic_id',
+                        'syllabus.topic_title',
+                        'syllabus.category',
 
+                        'course.course_name',
+                    )
+                    ->join('course', 'course.course_id', 'syllabus.course_id')
+                    ->where('syllabus.course_id', $course)
+                    ->orderBy('syllabus.topic_id')
+                    ->get();
 
                     $gradeData = DB::table('learner_course')
                 ->select(
@@ -820,7 +839,8 @@ class AdminReportsController extends Controller
                 ->setOption('zoom', 1.0); // Set the scale factor to 80%
             
             // Return the PDF content as a download
-            return $pdf->download('learner_gradesheet.pdf');
+                    $filename = $gradeWithActivityData->learner_fname . "_" . $gradeWithActivityData->learner_lname + "_" +$syllabus->course_name + "_gradesheet.pdf";
+                    return $pdf->download($filename);
 
                     
 

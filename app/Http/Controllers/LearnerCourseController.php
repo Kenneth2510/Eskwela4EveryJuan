@@ -44,6 +44,10 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
 use Codedge\Fpdf\Fpdf\Fpdf;
 
+
+
+use App\Http\Controllers\PDFGenerationController;
+
 class LearnerCourseController extends Controller
 {
     public function courses (){
@@ -549,6 +553,11 @@ class LearnerCourseController extends Controller
                     ]);
 
                     LearnerCourse::firstOrCreate($courseEnrollData);
+
+                    $reportController = new PDFGenerationController();
+
+                    $reportController->courseEnrollees($course);
+                    $reportController->learnerCourseData($learner->learner_id);
 
                     session()->flash('message', 'Course enrolled Successfully');
                     return response()->json(['message' => 'Course enrolled successfully', 'redirect_url' => '/learner/courses']);
@@ -1737,8 +1746,11 @@ class LearnerCourseController extends Controller
 
             ]);
 
-          
+            $reportController = new PDFGenerationController();
 
+            $reportController->courseGradeSheet($course->course_id);
+            $reportController->learnerCourseGradeSheet($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id);
+            $reportController->learnerPreAssessmentOutput($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id);
             
             session()->flash('message', 'Learner Pre Assessment Scored successfully');
 
@@ -3427,6 +3439,15 @@ class LearnerCourseController extends Controller
 
             }
 
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseGradeSheet($learnerQuizProgress->course_id);
+
+            $reportController->learnerCourseGradeSheet($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id);
+
+            $reportController->learnerQuizOutput($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id, $syllabus->syllabus_id, $attempt);
+
+
             $data = [
                 'message' => 'Learner Quiz Scored successfully',
                 ];
@@ -4310,6 +4331,12 @@ class LearnerCourseController extends Controller
 
           $this->overallGrade($course, $learner_course);
 
+          $reportController = new PDFGenerationController();
+
+          $reportController->courseGradeSheet($course->course_id);
+          $reportController->learnerCourseGradeSheet($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id);
+          $reportController->learnerPreAssessmentOutput($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id, $attempt);
+          
             
             session()->flash('message', 'Learner Post Assessment Scored successfully');
 
@@ -4747,7 +4774,13 @@ class LearnerCourseController extends Controller
                 'finish_period' => $timestampString,
             ]);
 
-        } catch (\Exception $e) {
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseEnrollees($course);
+
+
+
+        } catch (\Exception $e) { 
             dd($e->getMessage());
         }
     }

@@ -50,6 +50,9 @@ use Illuminate\Support\Facades\Hash;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\URL;
 
+
+use App\Http\Controllers\PDFGenerationController;
+
 class AdminCourseManageController extends Controller
 {
     public function coursesManage() {
@@ -1470,6 +1473,11 @@ class AdminCourseManageController extends Controller
                         ->update($lessonContentData);
 
 
+                        $reportController = new PDFGenerationController();
+
+                        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
+
+
             session()->flash('message', 'Lesson Content updated Successfully');
             return response()->json(['message' => 'Lesson Content updated successfully', 'redirect_url' => "/admin/courseManage/content/$course->course_id/$syllabus->syllabus_id/lesson/$topic_id"]);
                         
@@ -1497,6 +1505,10 @@ class AdminCourseManageController extends Controller
             'lesson_id' => $lesson->lesson_id,
             'lesson_content_order' => $lessonContentData['lesson_content_order']
         ]);
+
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
 
 
         session()->flash('message', 'Lesson Content updated Successfully');
