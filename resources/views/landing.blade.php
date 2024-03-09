@@ -21,7 +21,7 @@
             </div>
         </nav> --}}
 
-        <nav class="fixed z-50 text-black navbar bg-base-100">
+        <nav class="fixed z-50 text-black border-b-2 border-gray-300 navbar bg-base-100">
             <div class="navbar-start">
                 <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -450,21 +450,25 @@
     </section>
 
 <script>
-$("nav").find("a").click(function(e) {
-    e.preventDefault();
-    var section = $(this).attr("href");
-    var $target = $(section);
-    
-    // Check if the target element exists
-    if ($target.length) {
-        // Scroll to the target element
-        $("html, body").animate({
-            scrollTop: $target.offset().top
+
+    $(document).ready(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 600) { // Change 50 to the desired scroll position
+                $('nav').removeClass('bg-opacity-40');
+            } else {
+                $('nav').addClass('bg-opacity-40');
+            }
         });
-    } else {
-        console.error("Target element not found:", section);
-    }
-});
+
+        $("nav").find("a").click(function(e) {
+            e.preventDefault();
+            var section = $(this).attr("href");
+            $("html, body").animate({
+                scrollTop: $(section).offset().top
+            });
+        });
+    });
+
 
 </script>
 
