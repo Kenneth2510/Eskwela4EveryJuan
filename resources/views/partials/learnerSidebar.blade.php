@@ -1,12 +1,9 @@
-
-
-<section class="fixed z-20 w-full h-auto overflow-hidden text-black md:w-1/3 lg:w-2/12 md:relative" id="sidebar_full">
-
+<section class="fixed z-20 w-auto h-auto overflow-hidden text-black md:w-full lg:w-2/12 md:relative" id="sidebar_full">
     
-    <div class="fixed flex flex-col justify-between w-full px-5 border-r-4 bg-mainwhitebg md:h-screen md:pt-16 md:relative border-darthmouthgreen" id="instructorSidebar">
+    <div class="fixed flex flex-col justify-between w-full bg-mainwhitebg md:h-screen md:relative lg:border-r-4 border-darthmouthgreen" id="instructorSidebar">
 
         <div class="">
-            <div class="">
+            <div class="p-2 md:p-4 md:pb-8">
                 <div class="flex items-center justify-center hidden md:justify-start md:px-4 " id="logo_half">
                     <a href="{{ url('/learner/dashboard') }}">
                         <i class="mx-2 text-4xl fa-solid fa-book-bookmark"></i>
@@ -14,7 +11,7 @@
                 </div>
                 <div class="" id="logo_full">
                     <a href="{{ url('/learner/dashboard') }}">
-                        <span class="self-center text-lg font-semibold text-darthmouthgreen font-semibbold whitespace-nowrap md:text-2xl">
+                        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
                             Eskwela4EveryJuan
                         </span>
                     </a>
@@ -23,8 +20,8 @@
      
     
     
-            <ul class="flex flex-row justify-between mt-10 md:flex-col md:text-base">
-                <li id="" class="w-full py-3 rounded-lg instructor_dashboard hover:bg-darthmouthgreen group md:py-4">
+            <ul class="flex flex-row justify-between md:flex-col md:text-base">
+                <li id="instructor_dashboard" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4 " href="{{ url('/learner/dashboard')}}">
                         <svg class="mx-3 duration-500 stroke-black group-hover:stroke-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g opacity="0.7">
@@ -35,7 +32,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_discussions hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_discussions" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="/learner/discussions">
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3.84962 17.0976C3.99883 17.2474 4.11317 17.4282 4.18448 17.6273C4.25579 17.8263 4.28232 18.0386 4.26219 18.2491C4.16116 19.2231 3.96962 20.1856 3.69006 21.1241C5.69537 20.6597 6.92013 20.1221 7.47644 19.8404C7.79197 19.6806 8.15535 19.6427 8.49706 19.734C9.47662 19.9951 10.4862 20.1266 11.5 20.125C17.2442 20.125 21.5625 16.0899 21.5625 11.5C21.5625 6.9115 17.2442 2.875 11.5 2.875C5.75575 2.875 1.4375 6.9115 1.4375 11.5C1.4375 13.6102 2.32444 15.5681 3.84962 17.0976ZM3.14094 22.7111C2.80035 22.7786 2.45865 22.8404 2.116 22.8965C1.8285 22.9425 1.61 22.6435 1.72356 22.3761C1.8512 22.0751 1.96819 21.7697 2.07431 21.4604L2.07862 21.4461C2.43512 20.4111 2.7255 19.2208 2.83188 18.1125C1.06806 16.3444 0 14.03 0 11.5C0 5.94262 5.14912 1.4375 11.5 1.4375C17.8509 1.4375 23 5.94262 23 11.5C23 17.0574 17.8509 21.5625 11.5 21.5625C10.361 21.564 9.22672 21.4161 8.12619 21.1226C7.37869 21.5007 5.77012 22.1892 3.14094 22.7111Z" fill-opacity="0.75"/>
@@ -44,7 +41,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_courses hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_courses" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/learner/courses') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +52,7 @@
                     </a>
                 </li>
 
-                <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_message" class="w-full py-3 rounded-lg hover:text-white hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/learner/message') }}">
 
                         <i class="mx-3 text-xl duration-500 fa-regular fa-message fill-black group-hover:fill-white group-hover:animate-bounce"></i>
@@ -64,7 +61,7 @@
                     </a>
                 </li>
     
-                <li id="" class="w-full py-3 rounded-lg instructor_performances hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_performances" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url("/learner/performances") }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +72,7 @@
                     </a>
                 </li>
 
-                <li id="" class="w-full py-3 rounded-lg instructor_settings hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_settings" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/learner/profile') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +84,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_profile hover:bg-darthmouthgreen group md:py-4 md:hidden">
+                <li id="instructor_profile" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4 md:hidden">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
@@ -108,25 +105,12 @@
         </div>
         
 
-        <div class="flex flex-row items-center justify-center w-full h-12 hover:cursor-pointer" id="sidebar_half_btn">
+        <div class="flex-row items-center justify-center hidden w-full h-12 md:flex hover:cursor-pointer" id="sidebar_half_btn">
             <i class="mb-5 text-3xl fa-regular fa-square-caret-left"></i>
         </div>
     </div>
     
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

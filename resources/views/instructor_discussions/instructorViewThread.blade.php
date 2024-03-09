@@ -1,32 +1,28 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
+@section('content')
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
-            <h1 class="mx-5 text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>
-            <hr class="my-6 border-t-2 border-gray-300">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
+            <div class="py-4 border-b-2 border-gray-300">
+                <h1 class="text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>
+            </div>
 
-
-            <div class="w-full px-40 my-5" id="mainContainer">
+            <div class="w-full" id="mainContainer">
             
-                <div data-thread-id="{{ $thread->thread_id }}" class="flex w-full my-5 bg-white border-2 border-opacity-75 rounded-lg border-darthmouthgreen thread" id="thread_{{ $thread->thread_id }}">
-                    <div class="w-1/12 border-r-2 border-opacity-50 border-darthmouthgreen" id="upvoteArea">
-                    <div class="flex flex-col items-center mt-5">
-                        <button class="my-3 upvote_button">
-                            <i class="text-4xl text-darthmouthgreen fa-regular fa-circle-up"></i>
-                        </button>
-                        <span class="text-darthmouthgreen upvote_count" id="">{{ $thread->randomized_display_upvote }}</span>
-                        <button class="my-3 downvote_button">
-                            <i class="text-4xl text-darthmouthgreen fa-regular fa-circle-down"></i>
-                        </button>
+                <div data-thread-id="{{ $thread->thread_id }}" class="flex w-full my-4 bg-white border-2 border-opacity-75 rounded-lg border-darthmouthgreen thread" id="thread_{{ $thread->thread_id }}">
+                    <div class="w-2/12 border-r-2 border-opacity-50 md:w-1/12 border-darthmouthgreen" id="upvoteArea">
+                        <div class="flex flex-col items-center mt-5">
+                            <button class="my-3 upvote_button">
+                                <i class="text-4xl text-darthmouthgreen fa-regular fa-circle-up"></i>
+                            </button>
+                            <span class="text-darthmouthgreen upvote_count" id="">{{ $thread->randomized_display_upvote }}</span>
+                            <button class="my-3 downvote_button">
+                                <i class="text-4xl text-darthmouthgreen fa-regular fa-circle-down"></i>
+                            </button>
+                        </div>
                     </div>
-                        
-                    </div>
-                    <div class="w-11/12 py-3 mx-5" id="threadMainContentArea">
+                    <div class="w-10/12 py-3 mx-5 md:w-11/12" id="threadMainContentArea">
                         <div class="flex items-center w-full" id="userInfoArea">
                             <div class="rounded-full w-[35px] h-[35px] bg-green-950 mx-3">
                                 <img class="rounded-full w-[35px] h-[35px]" src="{{ asset('storage/' . $thread->profile_picture) }}" alt="">
@@ -187,20 +183,13 @@
                                     </div> --}}
 
                                 </div>
-
-
                             </div>
                     </div>
                 </div>
-
-            
             </div>
-
-            
-
         </div>
     </section>
-
+    
     <div id="loaderModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
         <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="three-body">
@@ -228,8 +217,5 @@
             <p class="mt-5 text-xl text-darthmouthgreen">Error</p>  
         </div>
     </div>
+@endsection
 
-    
-@include('partials.instructorProfile')
-</section>
-@include('partials.footer')

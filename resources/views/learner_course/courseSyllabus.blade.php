@@ -1,11 +1,8 @@
-@include('partials.header')
-<section class="flex flex-row w-full h-screen text-sm bg-mainwhitebg md:text-base lg:h-screen">
+@extends('layouts.learner_layout')
 
-
-@include('partials.learnerSidebar')
-
-<section class="w-full px-2 pt-[100px] mx-2 mt-2 md:overflow-auto md:w-3/4 lg:w-9/12">
-    <div  class="p-3 pb-4 overflow-auto bg-white rounded-lg shadow-lg overscroll-auto">
+@section('content')
+<section class="w-full h-screen md:w-3/4 lg:w-10/12">
+    <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-6">
                   
 
             @php
@@ -189,7 +186,6 @@
                                     @endif
 
                         @elseif ($topic->category == 'ACTIVITY')
-
                                     @if($topic->status == "LOCKED")
                                         <h1 style="background-color:{{$mainBackgroundCol}}" onmouseover="this.style.backgroundColor='{{$darkenedColor}}'"
                                             onmouseout="this.style.backgroundColor='{{$mainBackgroundCol}}'" class="flex items-center justify-between px-2 py-4 my-2 rounded-lg shadow-lg bg-seagreen">
@@ -294,21 +290,21 @@
             </div>
             
         </div>
-        <div id="syllabusModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[1000px] h-[700px] overflow-y-auto">
+        <div id="syllabusModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-full lg:w-2/5 lg:h-3/4 min-h-[500px] overflow-y-auto">
                 <div class="flex justify-end w-full">
                     <button id="removeModalBtn">
                         <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
                     </button>
                 </div>
-                <span class="absolute top-0 right-0 mt-2 mr-4 text-2xl text-gray-600 cursor-pointer close">&times;</span>
+                {{-- <span class="absolute top-0 right-0 mt-2 mr-4 text-2xl text-gray-600 cursor-pointer close">&times;</span> --}}
                 <h2 class="mb-2 text-2xl font-semibold">Course Syllabus</h2>
-                <table class="w-full mt-5 border-collapse rounded-xl">
+                <table class="table w-full mt-5 border-collapse table-fixed rounded-xl">
                     <thead>
                         <tr class="text-white bg-seagreen border-seagreen">
-                            <th class="w-1/12 p-2 text-center border">Topic ID</th>
-                            <th class="p-2 text-center border">Topic Title</th>
-                            <th class="p-2 text-center border">Category</th>
+                            <th class="w-auto p-2 text-center border">Topic ID</th>
+                            <th class="w-[150px] p-2 text-center border">Topic Title</th>
+                            <th class="w-[150px] p-2 text-center border">Category</th>
                         </tr>
                     </thead>
                     <tbody id="syllabusTableBody" class="overflow-y-auto">
@@ -320,8 +316,6 @@
         </div>
 
     </section>
-
-    {{-- @include('partials.learnerProfile') --}}
     @include('partials.chatbot')
-</section>
-@include('partials.footer')
+@endsection
+

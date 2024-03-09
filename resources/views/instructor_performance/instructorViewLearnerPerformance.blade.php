@@ -1,12 +1,9 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
+@section('content')
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
+    <section class="w-full h-auto md:h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
             <a href="{{ url("/instructor/performances/course/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
@@ -118,21 +115,21 @@
             
             <hr class="my-6 border-t-2 border-gray-300">
 
-            <h1 class="mx-5 mb-5 text-2xl">Activity Progress</h1>
-            <div class=" px-7" id="learnerActivityProgressChartContainer">
-                <div class="flex justify-between">
-                    <div class="w-1/2 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerActivityProgressChartArea">
+            <h1 class="mb-5 text-2xl">Activity Progress</h1>
+            <div class="" id="learnerActivityProgressChartContainer">
+                <div class="flex flex-col justify-between space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                    <div class="md:w-1/2 h-[350px] border-2 border-darthmouthgreen" id="learnerActivityProgressChartArea">
                         <canvas id="learnerActivityProgressChart"></canvas>
                     </div>
     
-                    <div class="w-1/2 h-[350px] ml-5 border-2 border-darthmouthgreen overflow-y-scroll" id="learnerActivityProgressChartTable">
+                    <div class="md:w-1/2 h-[350px] border-2 border-darthmouthgreen overflow-auto" id="learnerActivityProgressChartTable">
                         <table class="table-fixed">
-                            <thead class="py-3 text-white text-md bg-darthmouthgreen">
-                                <th class="w-1/5">Activity Title</th>
-                                <th class="w-1/5">Status</th>
-                                <th class="w-1/5">Start Period</th>
-                                <th class="w-1/5">Finish Period</th>
-                                <th class="w-1/5"></th>
+                            <thead class="text-white text-md bg-darthmouthgreen">
+                                <th class="w-[130px] py-2">Activity Title</th>
+                                <th class="w-[130px] py-2">Status</th>
+                                <th class="w-[130px] py-2">Start Period</th>
+                                <th class="w-[130px] py-2">Finish Period</th>
+                                <th class="w-[130px] py-2"></th>
                             </thead>
                             <tbody class="text-sm text-center learnerActivityProgressRowData" style="max-height: 350px;">
                         
@@ -142,11 +139,11 @@
                 </div>
                 
 
-                <div class="flex justify-between">
-                    <div class="w-full mt-5 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerActivityProgressLineChartArea">
+                <div class="flex flex-col justify-between space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                    <div class="md:w-full mt-5 h-[350px] border-2 border-darthmouthgreen" id="learnerActivityProgressLineChartArea">
                         <canvas id="learnerActivityProgressLineChart"></canvas>
                     </div>
-                    <div class="w-1/3 mt-5 h-[350px] ml-5 border-2 border-darthmouthgreen"  id="learnerActivityProgressRemarksChartArea">
+                    <div class="md:w-1/3 mt-5 h-[350px] border-2 border-darthmouthgreen"  id="learnerActivityProgressRemarksChartArea">
                         <canvas id="learnerActivityProgressRemarksChart"></canvas>
                     </div>
                 </div>
@@ -155,24 +152,24 @@
 
             <hr class="my-6 border-t-2 border-gray-300">
 
-            <h1 class="mx-5 mb-5 text-2xl">Quiz Progress</h1>
-            <div class=" px-7" id="learnerQuizProgressChartContainer">
-                <div class="flex justify-between">
-                    <div class="w-1/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerQuizProgressChartArea">
+            <h1 class="mb-5 text-2xl ">Quiz Progress</h1>
+            <div class="" id="learnerQuizProgressChartContainer">
+                <div class="flex flex-col justify-between space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                    <div class="md:w-1/3 h-[350px] border-2 border-darthmouthgreen" id="learnerQuizProgressChartArea">
                         <canvas id="learnerQuizProgressChart"></canvas>
                     </div>
     
-                    <div class="w-2/3 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerQuizProgressChartTable">
-                        <table>
-                            <thead class="py-3 text-white text-md bg-darthmouthgreen">
-                                <th class="w-2/12">Quiz Title</th>
-                                <th class="w-1/12">Status</th>
-                                <th class="w-1/12">Attempt</th>
-                                <th class="w-1/12">Score</th>
-                                <th class="w-1/12">Remarks</th>
-                                <th class="w-2/12">Start Period</th>
-                                <th class="w-2/12">Finish Period</th>
-                                <th class="w-2/12"></th>
+                    <div class="md:w-2/3 h-[350px] border-2 border-darthmouthgreen overflow-auto" id="learnerQuizProgressChartTable">
+                        <table class="w-full mt-5 table-fixed">
+                            <thead class="text-white text-md bg-darthmouthgreen">
+                                <th class="py-2 w-[130px]">Quiz Title</th>
+                                <th class="py-2 w-[130px]">Status</th>
+                                <th class="py-2 w-[130px]">Attempt</th>
+                                <th class="py-2 w-[130px]">Score</th>
+                                <th class="py-2 w-[130px]">Remarks</th>
+                                <th class="py-2 w-[130px]">Start Period</th>
+                                <th class="py-2 w-[130px]">Finish Period</th>
+                                <th class="py-2 w-[130px]"></th>
                             </thead>
                             <tbody class="text-sm text-center learnerQuizProgressRowData">
             
@@ -181,22 +178,16 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-between">
-                    <div class="w-2/3 mt-5 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerQuizProgressLineChartArea">
+                <div class="flex flex-col justify-between space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                    <div class="md:w-2/3 mt-5 h-[350px] ml-5 border-2 border-darthmouthgreen" id="learnerQuizProgressLineChartArea">
                         <canvas id="learnerQuizProgressLineChart"></canvas>
                     </div>
-                    <div class="w-1/3 mt-5 h-[350px] ml-5 border-2 border-darthmouthgreen"  id="learnerQuizProgressRemarksChartArea">
+                    <div class="md:w-1/3 mt-5 h-[350px] ml-5 border-2 border-darthmouthgreen"  id="learnerQuizProgressRemarksChartArea">
                         <canvas id="learnerQuizProgressRemarksChart"></canvas>
                     </div>
                 </div>
-                
-
-
             </div>
-
-
          </div>
-    </section>
-@include('partials.instructorProfile')
-</section>
-@include('partials.footer')
+    </section>  
+@endsection
+

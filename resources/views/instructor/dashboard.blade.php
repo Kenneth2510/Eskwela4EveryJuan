@@ -1,63 +1,52 @@
-@include('partials.header')
-    
-    <section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
+@extends('layouts.instructor_layout')
 
+@section('content')
+    {{-- MAIN START --}}
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
 
-        @include('partials.instructorNav')
-        @include('partials.instructorSidebar')
-        
-    
-        {{-- SIDEBAR END --}}
+            <div class="py-4" id="welcome">
+                <h1 class="text-2xl font-semibold md:text-3xl">Welcome back, <span class="text-darthmouthgreen">{{$instructor->instructor_fname}}</span>!</h1>
+            </div>
 
-        {{-- MAIN START --}}
-        <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-            <div class="px-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
+            <div class="py-4 border-t-2 border-gray-300">
+                <h1 class="py-2 text-2xl font-semibold">Overview</h1>
 
-                <div class="" id="welcome">
-                    <h1 class="text-4xl font-semibold">Welcome back, {{$instructor->instructor_fname}}!</h1>
-                </div>
-
-                <hr class="border-t-2 border-gray-300 my-6">
-
-                <h1 class="mx-5 text-2xl font-semibold">Overview</h1>
-
-                <div class="mx-10 mt-5 flex justify-between" id="overview_area">
-                    <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
-                        <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalCoursesText">#</h1>
-                        <p class="text-2xl mt-5  text-darthmouthgreen">Active Courses Managed</p>
+                <div class="flex items-center justify-between text-sm md:text-base text-darthmouthgreen" id="overview_area">
+                    <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 border-darthmouthgreen rounded-2xl" id="totalActiveCoursesArea">
+                        <h1 class="text-lg font-semibold md:text-4xl lg:text-7xl" id="totalCoursesText">#</h1>
+                        <p class="font-medium text-black">Active Courses Managed</p>
                     </div>
-                    <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalLearnersArea">
-                        <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalLearnersCountText">#</h1>
-                        <p class="text-2xl mt-5  text-darthmouthgreen">Learners Enrolled</p>
+                    <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 border-darthmouthgreen rounded-2xl" id="totalLearnersArea">
+                        <h1 class="text-lg font-semibold md:text-4xl lg:text-7xl" id="totalLearnersCountText">#</h1>
+                        <p class="font-medium text-black">Learners Enrolled</p>
                     </div>
-                    <div class="text-center flex flex-col justify-between py-10 w-3/12 h-[250px] border-2 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
-                        <h1 class="text-[100px] pt-10 font-semibold text-darthmouthgreen" id="totalSyllabusCountText">#</h1>
-                        <p class="text-2xl mt-5  text-darthmouthgreen">Topics Created</p>
+                    <div class="flex flex-col items-center justify-between w-1/3 h-24 mx-2 text-center border-2 md:py-4 lg:py-8 md:h-36 lg:h-56 border-darthmouthgreen rounded-2xl" id="totalTopicsArea">
+                        <h1 class="text-lg font-semibold md:text-4xl lg:text-7xl" id="totalSyllabusCountText">#</h1>
+                        <p class="font-medium text-black">Topics Created</p>
                     </div>
-                </div>
+                </div>                    
+            </div>
 
-
-
-                <hr class="border-t-2 border-gray-300 my-6">
-
+            <div class="py-4 border-t-2 border-gray-300">
                 <div class="flex justify-between">
-                    <h1 class="mx-5 text-2xl font-semibold">Manage your courses</h1>
-                    <a href="{{ url('/instructor/courses') }}" class="text-lg mx-10">view all</a>
+                    <h1 class="text-2xl font-semibold">Manage your courses</h1>
+                    <a href="{{ url('/instructor/courses') }}" class="">view all</a>
                 </div>
-              
+            
 
-                <div class="h-80 relative overflow-hidden px-20" id="courseCarouselArea">
-                    <button id="course_carousel_left_btn" class="mx-5 h-full absolute flex justify-center items-center left-0">
-                        <i class="fa-solid fa-angle-left text-2xl"></i>
+                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                    <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
-                    <button id="course_carousel_right_btn" class="mx-5 h-full absolute flex justify-center items-center right-0">
-                        <i class="fa-solid fa-angle-right text-2xl"></i>
+                    <button id="course_carousel_right_btn" class="absolute right-0 flex items-center justify-center h-full mx-5">
+                        <i class="text-2xl fa-solid fa-angle-right"></i>
                     </button>
-                    <div class="h-80 flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
+                    <div class="flex overflow-x-auto h-80 scroll scroll-smooth" id="courseCardContainer">
                         @foreach ($courses as $course)
 
-                        <div style="background-color: #00693e" class="px-3 py-2 relative m-4 rounded-lg shadow-lg h-72 w-52">
-                            <div style="background-color: #9DB0A3" class="relative h-32 mx-auto my-4 rounded w-44">
+                        <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">
+                            <div style="background-color: #9DB0A3" class="relative h-32 mx-auto rounded w-44">
                                 <img class="absolute w-16 h-16 bg-yellow-500 rounded-full right-3 -bottom-4" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="">
                             </div>
                             
@@ -77,42 +66,36 @@
 
                         @endforeach
                     </div>
+                </div>                    
+            </div>
+
+            <div class="py-4 border-t-2 border-gray-300">
+                <div class="flex justify-between">
+                    <h1 class="mx-5 text-2xl font-semibold">Enrolled Learners</h1>
+                    <a href="{{ url('/instructor/courses') }}" class="">view all</a>
                 </div>
 
-
-            
-            <hr class="border-t-2 border-gray-300 my-6">
-
-            <div class="flex justify-between">
-                <h1 class="mx-5 text-2xl font-semibold">Enrolled Learners</h1>
-                <a href="{{ url('/instructor/courses') }}" class="text-lg mx-10">view all</a>
+                <div class="w-11/12 mx-5" id="enrolledLearnersArea">
+                    <table class="w-full mt-5">
+                        <thead class="text-left">
+                            <th class="text-lg">Course Name</th>
+                            <th class="text-lg">Number of Enrollees</th>
+                        </thead>
+                        <tbody id="enrollePercentArea">
+                            {{-- <tr>
+                                <td>Course 1</td>
+                                <td>
+                                    <div class="h-7 rounded-xl" style="background: #9DB0A3" id="skill_bar">
+                                        <div class="relative py-1 text-center text-white h-7 bg-darthmouthgreen rounded-xl" id="skill_per" per="70%" style="max-width: 70%">70%</div>
+                                    </div>
+                                </td>
+                            </tr> --}}
+                        </tbody>
+                    </table>
+                </div>                
             </div>
-
-            <div class="mx-5 w-11/12" id="enrolledLearnersArea">
-                <table class="w-full mt-5">
-                    <thead class="text-left">
-                        <th class="text-lg">Course Name</th>
-                        <th class="text-lg">Number of Enrollees</th>
-                    </thead>
-                    <tbody id="enrollePercentArea">
-                        {{-- <tr>
-                            <td>Course 1</td>
-                            <td>
-                                <div class="h-7 rounded-xl" style="background: #9DB0A3" id="skill_bar">
-                                    <div class="h-7 relative bg-darthmouthgreen rounded-xl text-white text-center py-1" id="skill_per" per="70%" style="max-width: 70%">70%</div>
-                                </div>
-                            </td>
-                        </tr> --}}
-                    </tbody>
-                </table>
-            </div>
-
-            </div>
-        </section>
-        {{-- MAIN END --}}  
-        
-        @include('partials.instructorProfile')  
-
+        </div>
     </section>
+    {{-- MAIN END --}}     
+@endsection
 
-@include('partials.footer')
