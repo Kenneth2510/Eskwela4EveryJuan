@@ -160,15 +160,11 @@
                     </div>
 
                     <div class="flex justify-center mt-5" id="learnerSessionDataArea">
-                            <div class="mx-5 w-11/12 h-[350px] border-2 border-darthmouthgreen rounded-xl" id="learnerSessionGraphArea">
-                                <canvas id="learnerSessionGraph"></canvas>
-                            </div>
+                        <div class="mx-5 w-11/12 h-[350px] border-2 border-darthmouthgreen rounded-xl" id="learnerSessionGraphArea">
+                            <canvas id="learnerSessionGraph"></canvas>
+                        </div>
                     </div>    
                 </div>
-
-                
-
-            
             </div>
         </section>
 
