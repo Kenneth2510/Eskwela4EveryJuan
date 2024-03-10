@@ -1,14 +1,12 @@
 @extends('layouts.learner_login')
 
 @section('content')
-    <section class="flex flex-row w-full h-screen text-base ">
-        
         {{-- MAIN --}}
-        <div class="relative w-full h-screen text-black lg:overflow-auto md:flex md:justify-center md:items-center md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-24" id="loginForm">
-            <div class="rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent">
+        <div class="relative w-full h-screen text-black lg:overflow-auto md:flex md:justify-center md:items-center md:bg-mainwhitebg lg:w-1/2 lg:text-mainwhitebg lg:pt-16" id="loginForm">
+            <div class="max-w-screen-xl pt-16 mx-auto rounded-lg md:shadow-xl md:w-3/4 md:mx-auto md:bg-mainwhitebg lg:bg-opacity-0 lg:shadow-transparent lg:pt-10">
                 
-                <h1 class="text-6xl font-bold text-darthmouthgreen">Learner Login</h1>
-                <p class="mt-3 text-sm text-darthmouthgreen md:text-base">Welcome, learner! Please enter your credentials to access the learning platform.</p>
+                <h1 class="text-4xl font-bold text-center text-darthmouthgreen lg:text-left lg:text-6xl">Learner Login</h1>
+                <p class="mt-3 text-darthmouthgreen">Welcome, learner! Please enter your credentials to access the learning platform.</p>
 
                 <form class="flex flex-col justify-center rounded-lg md:mt-4 h-96 md:w-3/4 md:mx-auto lg:w-full lg:text-mainwhitebg" action="{{ url('/learner/login') }}" method="POST">
                     @csrf
@@ -26,16 +24,17 @@
                                 style="border-color: #00693e;">
                             </div> --}}
                             <label class="flex items-center gap-2 input input-bordered">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="green" class="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-                            <input class="text-black grow"
-                            type="text"
-                            name="learner_username"
-                            id="learner_username"
-                            value="{{ old('learner_username') }}"
-                            placeholder="Username" 
-                            required
-                            />
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="green" class="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
+                                <input class="text-black grow"
+                                type="text"
+                                name="learner_username"
+                                id="learner_username"
+                                value="{{ old('learner_username') }}"
+                                placeholder="Username" 
+                                required
+                                />
                             </label>
+                            
                         </div>
 
                         <div class="flex flex-col my-4 lg:flex-row lg:justify-between lg:items-center">
@@ -56,6 +55,7 @@
                                 <svg class="absolute h-4 right-3" id="showPwd" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="green" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clip-rule="evenodd" /></svg>
                                 <input class="text-black grow "
+                                required
                                 type="password"
                                 name="password"
                                 id="password"
