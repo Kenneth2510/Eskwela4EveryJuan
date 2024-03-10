@@ -4,7 +4,7 @@
 <section class="w-full h-screen md:w-3/4 lg:w-10/12">
     <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-6">
         
-        <div style="background-color:{{$mainBackgroundCol}};" class="p-2 text-white fill-white rounded-xl">
+        <div style="background-color:{{$mainBackgroundCol}};" class="z-50 p-2 text-white fill-white rounded-xl">
             <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
@@ -15,9 +15,8 @@
             </div>
         </div> 
 
-
         <div class="mx-2">
-            <div class="mt-1 text-gray-600 text-l">
+            <div class="mt-1 text-gray-600">
                 <a href="{{ url('/learner/courses') }}" class="">course></a>
                 <a href="{{ url("/learner/course/$learnerCourseData->course_id") }}">{{$learnerCourseData->course_name}}></a>
                 <a href="{{ url("/learner/course/manage/$learnerCourseData->course_id/overview") }}">content></a>
@@ -31,11 +30,11 @@
                 </div>
                 <h1 class="mx-2 text-xl font-semibold">
                     @if ($preAssessmentData->status === "NOT YET STARTED")
-                    <p >STATUS: <span class=" text-danger">NOT YET STARTED</span></p>
+                    <p>STATUS: <span class="text-danger">NOT YET STARTED</span></p>
                     @elseif ($preAssessmentData->status === "COMPLETED")
-                    <p >STATUS: <span class=" text-primary">COMPLETED</span></p>
+                    <p>STATUS: <span class="text-primary">COMPLETED</span></p>
                     @else
-                    <p >STATUS: <span class=" text-warning">IN PROGRESS</span></p>
+                    <p>STATUS: <span class="text-warning">IN PROGRESS</span></p>
                     @endif
                 </h1>
             </div>

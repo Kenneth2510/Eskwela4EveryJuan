@@ -3,12 +3,12 @@
 @section('content')
         {{-- MAIN --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-0">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-auto md:pt-0">
             <div class="py-4">
                 <h1 class="text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>                
             </div>
 
-            <div class="w-full" id="mainContainer">
+            <div class="w-full lg:px-24" id="mainContainer">
                 <div class="w-full py-4 border-t-2 border-gray-300" id="createThread">
                     <a href="/learner/discussions/create">
                         <div class="flex items-center w-full p-5 border-2 border-opacity-75 rounded-lg border-darthmouthgreen" id="createThreadBtnContent">
