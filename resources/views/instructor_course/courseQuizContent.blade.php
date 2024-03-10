@@ -1,20 +1,17 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
+@section('content')
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[120px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="p-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="relative w-full h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-4">
             <div style="background-color:{{$mainBackgroundCol}}" class="p-2 text-white fill-white rounded-xl">
                 <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
                     <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                 </a>
-                <h1 class="w-1/2 py-4 text-5xl font-bold"><span class="">{{ $course->course_name }}</span></h1>
+                <h1 class="w-1/2 py-4 text-2xl font-bold md:text-4xl"><span class="">{{ $course->course_name }}</span></h1>
             {{-- subheaders --}}
                 <div class="flex flex-col fill-mainwhitebg">
-                    <h1 class="w-1/2 py-4 text-4xl font-bold"><span class="">{{ $quizInfo->quiz_title }}</span></h1>
+                    <h1 class="w-1/2 py-4 text-lg"><span class="">{{ $quizInfo->quiz_title }}</span></h1>
                 </div>
             </div>
             
@@ -33,8 +30,7 @@
                             </svg>
                         <h1 class="mx-2 text-2xl font-semibold">{{$quizInfo->quiz_title}}</h1>
                     </div>
-                    <button class="px-5 py-3 text-lg font-medium text-white saveQuizContent bg-darthmouthgreen rounded-2xl hover:bg-green-950">Save Changes</button>
-                    
+                    <button class="p-3 font-medium text-white saveQuizContent bg-darthmouthgreen rounded-2xl hover:bg-green-950">Save Changes</button>
                 </div>
 
                 <div class="border-b-2 border-black">
@@ -136,13 +132,7 @@
                                 
                             </div> --}}
                         {{-- end sample multiple choice item --}}
-{{--             
-                        
-                        
-
-
-
-
+                        {{--             
 
                         {{-- sample identification item --}}
                         {{-- <div class="w-4/5 p-5 my-5 border-2 rounded-lg questionContainer border-darthmouthgreen">
@@ -224,92 +214,75 @@
                         </div> --}}
                         {{-- end sample longanswer item --}}
 
-
-
-
-
-
-
                     </div>
 
                     <div class="flex justify-center w-full py-5 quizOptions">
-                        <button class="px-5 py-5 mx-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-950 w-max" id="addExistingQuestionBtn">
+                        <button class="p-3 mx-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-950 w-max" id="addExistingQuestionBtn">
                             Add Existing Question
                         </button>
-                        <button class="px-5 py-5 mx-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-950 w-max" id="addNewQuestionBtn">
+                        <button class="p-3 mx-3 text-white rounded-xl bg-darthmouthgreen hover:bg-green-950 w-max" id="addNewQuestionBtn">
                             Add New Question
                         </button>
                     </div>
                     <div class="flex justify-center w-full py-5 mt-5 border-t-2 border-gray-400">
-                        
-                        <a id="cancelQuizBuild" href="{{ url("/instructor/course/content/$course->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id") }}" class="w-1/2 px-5 py-3 mx-3 text-lg font-medium text-center text-white bg-darthmouthgreen rounded-2xl hover:bg-green-950">
+                        <button class="w-1/2 p-3 mx-3 text-lg font-medium text-center text-white bg-darthmouthgreen rounded-2xl hover:bg-green-950">
+                            <a id="cancelQuizBuild" href="{{ url("/instructor/course/content/$course->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id") }}" class="">
                         Cancel
-                        </a>
-                        <button class="w-1/2 px-5 py-3 mx-3 text-lg font-medium text-white saveQuizContent bg-darthmouthgreen rounded-2xl hover:bg-green-950">
+                            </a>
+                        </button>
+                        <button class="w-1/2 p-3 mx-3 text-lg font-medium text-white saveQuizContent bg-darthmouthgreen rounded-2xl hover:bg-green-950">
                             Save Changes
                         </button>
                     </div>
                 </div>
             </div>
-
-
-
         </div>
-    
-    
-    </section>
-    @include('partials.instructorProfile')
-</section>
-           
+    </section> 
 
-<div id="addExistingQuestionModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-        <div class="flex justify-end w-full">
-            <button class="cancelAddExistingQuestionBtn">
-                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-            </button>
-        </div>
-        <h2 class="mb-2 text-2xl font-semibold">Add Topic</h2>
-        <hr>
-        <div id="existingQuestionArea" class="w-full mt-5 ">
-            <label for="questionSelection">Question</label><br>
-            <select name="questionSelection" id="questionSelection" class="w-full py-3 text-lg">
-                <option value="" disabled>Choose Existing Question</option>
-            </select>
-        </div>
+            <div id="addExistingQuestionModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+                <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+                    <div class="flex justify-end w-full">
+                        <button class="cancelAddExistingQuestionBtn">
+                            <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                        </button>
+                    </div>
+                    <h2 class="mb-2 text-2xl font-semibold">Add Topic</h2>
+                    <hr>
+                    <div id="existingQuestionArea" class="w-full mt-5 ">
+                        <label for="questionSelection">Question</label><br>
+                        <select name="questionSelection" id="questionSelection" class="w-full py-3 text-lg">
+                            <option value="" disabled>Choose Existing Question</option>
+                        </select>
+                    </div>
 
-        <div class="flex justify-center w-full mt-5">
-            <button id="confirmAddExistingQuestionBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-            <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded cancelAddExistingQuestionBtn">Cancel</button>
-        </div>
-        
-    </div>
-</div>
+                    <div class="flex justify-center w-full mt-5">
+                        <button id="confirmAddExistingQuestionBtn" class="p-3 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                        <button id="" class="p-3 mx-2 mt-4 text-white bg-red-500 rounded cancelAddExistingQuestionBtn">Cancel</button>
+                    </div>
+                    
+                </div>
+            </div>
 
+            <div id="confirmSaveQuizContentModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+                <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+                    <div class="flex justify-end w-full">
+                        <button class="cancelSaveQuizContentBtn">
+                            <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                        </button>
+                    </div>
 
-<div id="confirmSaveQuizContentModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-        <div class="flex justify-end w-full">
-            <button class="cancelSaveQuizContentBtn">
-                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-            </button>
-        </div>
+                    <h2 class="mb-2 text-xl font-semibold">Are you sure to apply changes to the quiz?</h2>
 
-        <h2 class="mb-2 text-xl font-semibold">Are you sure to apply changes to the quiz?</h2>
-
-        <div class="flex justify-center w-full mt-5">
-            <button id="confirmSaveQuizContentBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-            <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded cancelSaveQuizContentBtn">Cancel</button>
-        </div>
-    </div>
-</div>
-
-
-<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
-    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
-        <span class="loading loading-spinner text-primary loading-lg"></span> 
-            
-        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
-    </div>
-</div>
-@include('partials.footer')
+                    <div class="flex justify-center w-full mt-5">
+                        <button id="confirmSaveQuizContentBtn" class="p-3 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+                        <button id="" class="p-3 mx-2 mt-4 text-white bg-red-500 rounded cancelSaveQuizContentBtn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+              <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+                  <span class="loading loading-spinner text-primary loading-lg"></span> 
+                  <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+              </div>
+            </div>
+@endsection

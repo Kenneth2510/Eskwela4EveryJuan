@@ -15,7 +15,7 @@
     </section>
 
 
-@include('partials.learnerProfile')
+{{-- @include('partials.learnerProfile') --}}
 </section>
 
 {{-- modal area --}}

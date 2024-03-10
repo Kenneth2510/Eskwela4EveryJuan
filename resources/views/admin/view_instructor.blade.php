@@ -12,7 +12,6 @@
         <div class="">
             <p class="text-xl font-semibold text-darthmouthgreen">{{$admin->admin_codename}}</p>
         </div>
-    </div>
 
     <div class="w-full px-3 pb-4 mt-10 rounded-lg shadow-lg b">
         <div class="mb-5">

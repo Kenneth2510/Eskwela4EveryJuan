@@ -1,15 +1,12 @@
-@include('partials.header')
+@extends('layouts.learner_layout')
 
-<section class="flex flex-row w-full h-screen bg-mainwhitebg">
-    @include('partials.instructorNav')
-    
-
-    @include('partials.learnerSidebar')
-
+@section('content')
         {{-- MAIN START --}}
-        <section class="relative w-full h-screen px-4 pt-28 md:overflow-auto md:w-3/4 lg:w-9/12 md:pt-20">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
+             
             {{-- MAIN HEADER --}}
-            <div class="flex flex-row items-center justify-between h-20 px-4">
+            <div class="flex flex-row items-center justify-between px-4">
                 <h1 class="text-xl font-semibold md:text-4xl ">My Courses</h1>
                 <form class="relative flex flex-row items-center" action="">
                     <button class="absolute left-0" type="submit">
@@ -21,11 +18,10 @@
     
             {{-- MAIN CONTENT --}}
             <div class="mt-5">
-                <div class="flex justify-between">
-                    <h1 class="mx-5 text-2xl font-semibold">Recents</h1>
+                <div class="mx-5">
+                    <h1 class="text-lg font-semibold md:text-xl">Recents</h1>
                 </div>
-              
-        
+             
                 <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
                     <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
                         <i class="text-2xl fa-solid fa-angle-left"></i>
@@ -63,11 +59,11 @@
 
             <hr class="my-6 border-t-2 border-gray-300">
 
-            <div class="flex justify-between">
-                <h1 class="mx-5 text-2xl font-semibold">All your courses</h1>
+            <div class="mx-5">
+                <h1 class="text-lg font-semibold md:text-xl">All your courses</h1>
             </div>
 
-            <div class="flex flex-row flex-wrap items-center justify-center mx-auto border-2 rounded-lg shadow grow lg:justify-start">
+            <div class="flex flex-row flex-wrap items-center justify-center mx-auto mt-5 border-2 rounded-lg shadow grow lg:justify-start">
                 
                 <div class="flex flex-row flex-wrap items-center justify-center" id="coursesArea">
                     <div class="flex flex-row flex-wrap items-center justify-center" id="courses">
@@ -140,19 +136,8 @@
                     </div>
                 </div>
             </div>
-
-
-        </section>
-        {{-- MAIN END --}}
-    
-        {{--! variables undefined --}}
-        {{-- @include('partials.learnerProfile') --}}
-        
-@include('partials.chatbot')
-        
-    
+        </div>
     </section>
-    
-    @include('partials.footer')
-
-</section>
+    @include('partials.chatbot')
+        {{-- MAIN END --}}
+@endsection
