@@ -86,7 +86,7 @@
                     </a>
                 </li>
                 
-                <li id="eBot-md" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4 lg:hidden">
+                <li id="eBot-md" class="hidden w-full py-3 hover:bg-darthmouthgreen md:block group md:py-4 lg:hidden">
                     <button class="flex items-center justify-center md:justify-start md:px-4">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.5 15.5c0 1.11-.89 2-2 2s-2-.89-2-2s.9-2 2-2s2 .9 2 2m-9-2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.89 2-2s-.89-2-2-2M23 15v3c0 .55-.45 1-1 1h-1v1c0 1.11-.89 2-2 2H5a2 2 0 0 1-2-2v-1H2c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1c0-3.87 3.13-7 7-7h1V5.73c-.6-.34-1-.99-1-1.73c0-1.1.9-2 2-2s2 .9 2 2c0 .74-.4 1.39-1 1.73V7h1c3.87 0 7 3.13 7 7h1c.55 0 1 .45 1 1m-2 1h-2v-2c0-2.76-2.24-5-5-5h-4c-2.76 0-5 2.24-5 5v2H3v1h2v3h14v-3h2z"/></svg>
@@ -293,7 +293,11 @@
             $('#instructor_settings').addClass('bg-green-100');
         }
 
-
+        // hides the chatbot when learner is answering
+        if (currentUrl.includes('/answer')) {
+            $('#eBot').addClass('hidden')
+            $('#eBot-md').removeClass('md:block')
+        }
 
         $('#sidebar_half_btn').on('click', function() {
             $('#sidebar_full').addClass('hidden');
