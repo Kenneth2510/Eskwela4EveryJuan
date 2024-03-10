@@ -30,9 +30,9 @@
                             {{-- <input class="border IN-V-INP border-darthmouthgreen" type="text" name="instructor_fname" id="instructor_fname" value="{{old('instructor_fname')}}"> --}}
                             <input class="w-full input input-bordered"
                             type="text"
-                            name="instructor_name"
-                            id="instructor_name"
-                            value="{{old('instructor_name')}}"
+                            name="instructor_fname"
+                            id="instructor_fname"
+                            value="{{old('instructor_fname')}}"
                             placeholder="First Name" 
                             />
                             <span id="firstNameError" class="text-red-500"></span>
@@ -335,8 +335,8 @@
                                 name="Create my account"/> --}}
 
                                 <button class="px-5 py-3 mx-2 text-white rounded-xl bg-mintgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="prevBtn2" name="Back">Back</button>
-                                <button class="px-5 py-3 mx-2 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="register_submit_btn" type="submit" name="Create my account">Create my account</button>
-                                {{-- <button class="btn btn-primary" onclick="terms_condition.showModal()">Create my account</button> --}}
+                                {{-- <button class="px-5 py-3 mx-2 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="register_submit_btn" type="submit" name="Create my account">Create my account</button> --}}
+                                <button class="btn btn-primary" onclick="terms_condition.showModal()">Create my account</button>
                             </div>
                         </div>
                     </div>
@@ -356,7 +356,7 @@
             </div>
         </div>
 
-    <dialog id="terms_condition" class="modal">
+    <dialog id="terms_condition" class="text-black modal">
         <div class=" modal-box">
             <h1 class="text-xl font-bold md:text-3xl">Terms & Conditions</h1>
         <div class="overflow-auto h-52">
@@ -394,7 +394,7 @@
         </div>
     </dialog>
 
-    <dialog id="privacy_statement" class="modal">
+    <dialog id="privacy_statement" class="text-black modal">
         <div class="modal-box">
             <h3 class="text-xl font-bold md:text-3xl">Data Privacy Statement</h3>
             <div class="overflow-auto h-52">
@@ -444,7 +444,7 @@
     </div>
 
         {{-- MAIN LEFT --}}
-        <div class="relative hidden h-screen bg-seagreen md:w-1/2 lg:block">
+    <div class="relative hidden h-screen bg-seagreen md:w-1/2 lg:block">
         {{-- IMAGE HOLDER --}}
         <div class="relative w-full h-full overflow-hidden rounded-lg">
             {{-- img-1 --}}
