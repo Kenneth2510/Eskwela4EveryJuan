@@ -96,7 +96,6 @@
                             </div>
                         </div>
                         
-
                     <button id="editQuizInfoBtn" class="w-32 px-5 py-3 mx-3 mt-10 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Edit</button>
                     <div class="hidden mt-5" id="editQuizInfo_clickedBtns">
                         <button id="saveQuizInfoBtn" class="p-3 m-2 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
@@ -122,6 +121,15 @@
                     <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
                 </button>
             </div>
+
+    <div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+            <span class="loading loading-spinner text-primary loading-lg"></span> 
+                
+            <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+        </div>
+    </div>
+
             <h1 class="text-2xl font-bold ">View All Responses</h1>
             
             <div id="responsesContent" class="mt-5 overflow-y-auto text-sm">
@@ -154,4 +162,3 @@
         </div>
     </div>
 @endsection
-

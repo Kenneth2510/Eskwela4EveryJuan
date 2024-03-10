@@ -275,6 +275,7 @@ $(document).ready(function() {
      $('#saveQuizInfoBtn').on('click', function(e) {
         e.preventDefault();
 
+        $('#loaderModal').removeClass('hidden');
 
         console.log(quizReferenceData);
     let loopCounter = 0; // Initialize loop counter outside the loop
@@ -378,6 +379,8 @@ $(document).ready(function() {
                 // Handle success if needed
                  
                 console.log(response);
+                
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
         
             

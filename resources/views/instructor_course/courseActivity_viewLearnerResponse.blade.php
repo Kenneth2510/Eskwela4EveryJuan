@@ -78,7 +78,7 @@
                                            data-activity-content-criteria-id="{{ $criteria->activity_content_criteria_id }}"
                                             
                                            data-learner-activity-criteria-score-id="{{ $criteria->learner_activity_criteria_score_id }}"  
-                                           class="flex px-3 w-16 py-3 text-center border-2 border-gray-500 criteriaScore" 
+                                           class="flex w-16 px-3 py-3 text-center border-2 border-gray-500 criteriaScore" 
                                            max="{{ $criteria->criteria_score }}" 
                                            min="0"
                                            value="{{$criteria->score}}" disabled>
@@ -104,10 +104,10 @@
                         <textarea name="remarks" id="remarks" class="border-2 border-gray-200 rounded-xl px-3 py-3 w-full max-w-full min-w-full activity_instructions h-[200px]" disabled>{{$learnerActivityOutput->remarks}}</textarea>
                     </div>
 
-                    <div class="bg-gray-100 p-6 rounded-xl shadow-md">
-                        <h1 class="text-3xl font-bold mb-4">Score:</h1>
+                    <div class="p-6 bg-gray-100 shadow-md rounded-xl">
+                        <h1 class="mb-4 text-3xl font-bold">Score:</h1>
                         <div class="flex items-center">
-                            <input type="number" id="overallScore_input" class=" px-5 py-5 text-4xl font-semibold text-darthmouthgreen" value="{{$learnerActivityOutput->total_score}}" max="{{$activity->total_score}}" min="0" disabled>
+                            <input type="number" id="overallScore_input" class="px-5 py-5 text-4xl font-semibold  text-darthmouthgreen" value="{{$learnerActivityOutput->total_score}}" max="{{$activity->total_score}}" min="0" disabled>
                             <span class="text-2xl font-normal text-black"> / {{$activity->total_score}}</span>
                         </div>
                     
@@ -125,14 +125,14 @@
                                 @if($learnerActivityOutput->attempt >= $learnerActivityOutput->max_attempt)
                                 @else 
                                     <div class="my-5">
-                                        <a href="{{ url("/instructor/course/content/activity/$learnerActivityOutput->learner_activity_output_id/$learnerActivityOutput->learner_course_id/$learnerActivityOutput->activity_id/$learnerActivityOutput->activity_content_id/$learnerActivityOutput->attempt/reattempt") }}"  class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white font-semibold rounded-xl">Allow Re-Attempt Activity</a>
+                                        <a href="{{ url("/instructor/course/content/activity/$learnerActivityOutput->learner_activity_output_id/$learnerActivityOutput->learner_course_id/$learnerActivityOutput->activity_id/$learnerActivityOutput->activity_content_id/$learnerActivityOutput->attempt/reattempt") }}"  class="px-5 py-3 text-lg font-semibold text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">Allow Re-Attempt Activity</a>
                                     </div>
                                 @endif
                             @endif
                         
                         @else
                             <div class="my-5">
-                                <a href="{{ url("/instructor/course/content/$activity->course_id/$activity->syllabus_id/activity/$activity->topic_id/$learnerActivityOutput_2nd->learner_course_id/$learnerActivityOutput_2nd->attempt") }}"  class="py-3 px-5 bg-darthmouthgreen hover:bg-green-950 text-lg text-white font-semibold rounded-xl">View Second Attempt</a>
+                                <a href="{{ url("/instructor/course/content/$activity->course_id/$activity->syllabus_id/activity/$activity->topic_id/$learnerActivityOutput_2nd->learner_course_id/$learnerActivityOutput_2nd->attempt") }}"  class="px-5 py-3 text-lg font-semibold text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">View Second Attempt</a>
                             </div>
                         @endif
 
@@ -155,35 +155,48 @@
 
         </section>
 
-        <div id="confirmationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50 ">
-            <div class="flex items-center justify-center min-h-screen">
-                <div class="relative mx-auto bg-white shadow-lg w-96 rounded-xl">
-                    <div class="flex flex-col items-start p-6">
-                        <div class="flex items-center justify-between w-full mb-4">
-                            <h2 class="text-xl font-semibold">Confirmation</h2>
-                            <button id="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <p class="text-gray-600">Are you sure you want to submit the score?</p>
-                        <div class="flex justify-end w-full mt-6">
-                            <button id="confirmSubmit" class="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none"
-                            data-learner-activity-output-id="{{$learnerActivityOutput->learner_activity_output_id}}" 
-                            data-learner-course-id="{{$learnerActivityOutput->learner_course_id}}" 
-                            data-activity-id="{{$learnerActivityOutput->activity_id}}" 
-                            data-activity-content-id="{{$learnerActivityOutput->activity_content_id}}" 
-                            data-attempt="{{$learnerActivityOutput->attempt}}"
-                            >Yes</button>
-                            <button id="cancelSubmit" class="px-4 py-2 ml-4 text-gray-700 bg-gray-300 rounded-md hover:bg-gray-400 focus:outline-none">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
 @include('partials.instructorProfile')
 </section>
+
+
+
+<div id="confirmationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50 ">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="relative mx-auto bg-white shadow-lg w-96 rounded-xl">
+            <div class="flex flex-col items-start p-6">
+                <div class="flex items-center justify-between w-full mb-4">
+                    <h2 class="text-xl font-semibold">Confirmation</h2>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-gray-600">Are you sure you want to submit the score?</p>
+                <div class="flex justify-end w-full mt-6">
+                    <button id="confirmSubmit" class="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none"
+                    data-learner-activity-output-id="{{$learnerActivityOutput->learner_activity_output_id}}" 
+                    data-learner-course-id="{{$learnerActivityOutput->learner_course_id}}" 
+                    data-activity-id="{{$learnerActivityOutput->activity_id}}" 
+                    data-activity-content-id="{{$learnerActivityOutput->activity_content_id}}" 
+                    data-attempt="{{$learnerActivityOutput->attempt}}"
+                    >Yes</button>
+                    <button id="cancelSubmit" class="px-4 py-2 ml-4 text-gray-700 bg-gray-300 rounded-md hover:bg-gray-400 focus:outline-none">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
         
 @include('partials.footer')

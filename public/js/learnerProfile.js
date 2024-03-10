@@ -160,6 +160,8 @@ $(document).ready(function() {
     
             var url = baseUrl + "/update_user_info";
     
+            
+        $('#loaderModal').removeClass('hidden');
             $.ajax ({
                 type: "POST",
                 url: url,
@@ -174,6 +176,8 @@ $(document).ready(function() {
                     // } else {
                     
                     // }
+                    
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -256,6 +260,8 @@ $(document).ready(function() {
             }
     
             var url = baseUrl + "/update_business_info";
+            
+        $('#loaderModal').removeClass('hidden');
     
             $.ajax ({
                 type: "POST",
@@ -266,6 +272,8 @@ $(document).ready(function() {
                 data: businessInfo,
                 success: function (response){
                     // console.log(response)
+                    
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -358,6 +366,8 @@ $(document).ready(function() {
     
             var url = baseUrl + "/update_login_info";
     
+            
+        $('#loaderModal').removeClass('hidden');
             $.ajax ({
                 type: "POST",
                 url: url,
@@ -368,6 +378,7 @@ $(document).ready(function() {
                 success: function (response){
                     console.log(response)
     
+                    $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -396,6 +407,10 @@ $(document).ready(function() {
 
 
 
+
+
+
+
     
 
     function getLearnerData() {
@@ -411,6 +426,9 @@ $(document).ready(function() {
 
                     var learner = response['learner']
                     var session_id = learner['learner_id']
+
+                    init_chatbot(session_id)
+                    add_learner_data(session_id)
                     process_files(session_id)
 
                     
@@ -472,6 +490,44 @@ $(document).ready(function() {
                 }
             });
     }
+
+
+
+    
+    function init_chatbot(learner_id) {
+        // var learner_id = learner['learner_id'];
+        var url = `/chatbot/init/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    
+    function add_learner_data(learner_id) {
+        // console.log(learner);
+        var url = `/chatbot/learner/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+                 },
+                 error: function(error) {
+                     console.log(error);
+                 }
+             });
+}
 
     function process_files(session_id) {
         var url = `/chatbot/process/${session_id}`;

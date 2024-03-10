@@ -79,29 +79,30 @@
             <h2>Course Data</h2>
         </div>
 
-        <div>
-            <h1>Enrollees Data for {{ $courseName->course_name }}</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Updated At</th>
-                        <th>Progress</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($learnerCourseData as $enrollee)
-                        <tr>
-                            <td>{{ $enrollee->name }}</td>
-                            <td>{{ $enrollee->status }}</td>
-                            <td>{{ $enrollee->updated_at }}</td>
-                            <td>{{ $enrollee->course_progress }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">{{ $courseData->course_name }}</h1>
+                <h2>Lesson: {{ $lessonInfo->lesson_title }}</h2>
+            </div>
+    
+            <div>
+                <h3>Course Information</h3>
+                <p>Instructor: {{ $courseData->name }}</p>
+    
+                <h3>Lesson Details</h3>
+                <p>Duration: {{ $formattedDuration }}</p>
+    
+                <h3>Lesson Content</h3>
+                @foreach ($lessonContent as $content)
+                    <div class="lesson-content">
+                        <h4 class="lesson-content-title">{{ $content->lesson_content_title }}</h4>
+                        <div>{!! $content->lesson_content !!}</div>
+                        {{-- <p>Picture: {{ $content->picture }}</p> --}}
+                    </div>
+                @endforeach
+            </div>
         </div>
+
     </div>
 </body>
 </html>

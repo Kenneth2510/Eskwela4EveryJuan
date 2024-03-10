@@ -60,6 +60,9 @@ $(document).ready(function() {
             var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
             var url = "/learner/course/content/"+ courseID +"/"+ learnerCourseID +"/activity/"+ syllabusID +"/answer/"+ attemptID + "/" + activityID +"/" + activityContentID; 
 
+
+            $('#loaderModal').removeClass('hidden');
+            hideModal()
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -69,6 +72,7 @@ $(document).ready(function() {
                 },
                 success: function (response) {
                     if (response && response.redirect_url) {
+                        $('#loaderModal').addClass('hidden');
                         window.location.href = response.redirect_url;
                     } 
                     // else {

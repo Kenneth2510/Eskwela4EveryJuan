@@ -135,7 +135,14 @@
 
    
 </section>
-<div id="confirmationModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+
+
+
+@include('partials.learnerProfile')
+</section>
+
+
+<div id="confirmationModal" class="fixed z-[99] top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
     <div class="p-5 text-center bg-white rounded-lg">
         <p class="mb-4 text-xl font-semibold">Are you sure you want to submit?</p>
         <div class="flex justify-end">
@@ -152,7 +159,11 @@
     </div>
 </div>
 
-
-@include('partials.learnerProfile')
-</section>
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
 @include('partials.footer')

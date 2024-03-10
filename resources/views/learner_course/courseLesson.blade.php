@@ -89,28 +89,34 @@
                 </button>         
             </div>
         </div>
-        
-        <div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-                <div class="flex justify-end w-full">
-                    <button class="cancelFinishLessonBtn">
-                        <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                    </button>
-                </div>
-
-                <h2 class="mb-2 text-xl font-semibold">Do you wish to proceed to the next topic?</h2>
-
-                <div class="flex justify-center w-full mt-5">
-                    <button data-course-id="{{$syllabus->course_id}}" data-learner-course-id="{{$syllabus->learner_course_id}}" data-syllabus-id="{{$syllabus->syllabus_id}}" id="confirmFinishLessonBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded-lg hover:bg-green-950 bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                    <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-red-900 cancelFinishLessonBtn">Cancel</button>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
-
-{{-- @include('partials.learnerProfile') --}}
 @include('partials.chatbot')
+
+<div id="finishLessonModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+        <div class="flex justify-end w-full">
+            <button class="cancelFinishLessonBtn">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+
+        <h2 class="mb-2 text-xl font-semibold">Do you wish to proceed to the next topic?</h2>
+
+        <div class="flex justify-center w-full mt-5">
+            <button data-course-id="{{$syllabus->course_id}}" data-learner-course-id="{{$syllabus->learner_course_id}}" data-syllabus-id="{{$syllabus->syllabus_id}}" id="confirmFinishLessonBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded-lg hover:bg-green-950 bg-seagreen hover:bg-darkenedColor">Confirm</button>
+            <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-red-900 cancelFinishLessonBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
 @endsection
 

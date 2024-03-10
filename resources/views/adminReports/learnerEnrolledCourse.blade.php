@@ -79,24 +79,30 @@
             <h2>Course Data</h2>
         </div>
 
-        <div>
-            <h1>Enrollees Data for {{ $courseName->course_name }}</h1>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">{{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
+                <h2>Enrolled Courses</h2>
+            </div>
+    
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Course Name</th>
                         <th>Status</th>
-                        <th>Updated At</th>
-                        <th>Progress</th>
+                        <th>Course Progress</th>
+                        <th>Start Period</th>
+                        <th>Finish Period</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($learnerCourseData as $enrollee)
+                    @foreach ($learnerCourseData as $courseData)
                         <tr>
-                            <td>{{ $enrollee->name }}</td>
-                            <td>{{ $enrollee->status }}</td>
-                            <td>{{ $enrollee->updated_at }}</td>
-                            <td>{{ $enrollee->course_progress }}</td>
+                            <td>{{ $courseData->course_name }}</td>
+                            <td>{{ $courseData->status }}</td>
+                            <td>{{ $courseData->course_progress }}</td>
+                            <td>{{ $courseData->start_period }}</td>
+                            <td>{{ $courseData->finish_period }}</td>
                         </tr>
                     @endforeach
                 </tbody>

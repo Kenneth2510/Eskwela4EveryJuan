@@ -350,6 +350,7 @@ $(document).ready(function() {
                 }
             }
     
+            $('#loaderModal').removeClass('hidden');
             var url = baseUrl + "/send";
     
             $.ajax({
@@ -363,6 +364,8 @@ $(document).ready(function() {
                 processData: false,
                 success: function(response) {
                     // console.log(response);
+                    
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -381,6 +384,7 @@ $(document).ready(function() {
     var searchVal  = "";
     function getMessages(searchVal) {
 
+        $('#loaderModal').removeClass('hidden');
         var url = baseUrl + "/getMessages";
 
         $.ajax({
@@ -392,6 +396,8 @@ $(document).ready(function() {
             success: function(response) {
                 // console.log(response)
 
+                
+        $('#loaderModal').addClass('hidden');
                 var learnerData = response['learner']
                 var messageData = response['messageData'];
                 dispSideMessageArea(messageData, learnerData)
@@ -809,7 +815,7 @@ $(document).ready(function() {
 
 
 
-    
+        
     function getLearnerData() {
         var url = `/learner/learnerData`;
             $.ajax({
@@ -823,6 +829,9 @@ $(document).ready(function() {
 
                     var learner = response['learner']
                     var session_id = learner['learner_id']
+
+                    init_chatbot(session_id)
+                    add_learner_data(session_id)
                     process_files(session_id)
 
                     
@@ -885,6 +894,42 @@ $(document).ready(function() {
             });
     }
 
+    
+    function init_chatbot(learner_id) {
+        // var learner_id = learner['learner_id'];
+        var url = `/chatbot/init/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    
+    function add_learner_data(learner_id) {
+        // console.log(learner);
+        var url = `/chatbot/learner/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+                 },
+                 error: function(error) {
+                     console.log(error);
+                 }
+             });
+}
+
     function process_files(session_id) {
         var url = `/chatbot/process/${session_id}`;
         $.ajax({
@@ -898,6 +943,7 @@ $(document).ready(function() {
             }
         });
     }
+
 
 
     

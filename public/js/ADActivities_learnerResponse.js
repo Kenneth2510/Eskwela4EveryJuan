@@ -135,6 +135,9 @@ $('#confirmSubmit').on('click', function (e) {
         return;
     }
 
+    $('#confirmationModal').addClass('hidden');
+    $('#loaderModal').removeClass('hidden');
+
     // Validate criteria scores
     for (var i = 0; i < criteriaScores.length; i++) {
         var criteriaScore = $(criteriaScores[i]).val();
@@ -241,6 +244,8 @@ function addLearnerOutputCriteriaScore(learnerActivityOutputID, learnerCourseID,
         .then(function (responses) {
             // Redirect after all AJAX calls have completed
             if (responses.length > 0 && responses[responses.length - 1].redirect_url) {
+                
+    $('#loaderModal').addClass('hidden');
                 window.location.href = responses[responses.length - 1].redirect_url;
             }
         })

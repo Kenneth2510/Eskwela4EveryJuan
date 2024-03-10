@@ -88,9 +88,9 @@
 
                     </div>
                     <div id="pagination" class="mx-10 mt-4 mb-8">
-                        <button id="prevPage" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg">Previous</button>
+                        <button id="prevPage" class="px-4 py-2 text-white bg-gray-600 rounded-lg hover:bg-white hover:text-gray-600 hover:border hover:border-gray-600 ">Previous</button>
                         <span id="currentPage" class="mx-4 text-lg font-semibold">Page 1</span>
-                        <button id="nextPage" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg">Next</button>
+                        <button id="nextPage" class="px-4 py-2 text-white bg-gray-600 rounded-lg hover:bg-white hover:text-gray-600 hover:border hover:border-gray-600 ">Next</button>
                     </div>
                     
                 
@@ -104,30 +104,37 @@
 
         </div>
 
-
-        <div id="confirmSubmitQuizModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-            <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-                <div class="flex justify-end w-full">
-                    <button class="cancelConfirmSubmitQuiz">
-                        <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                    </button>
-                </div>
-        
-                <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your assessment?</h2>
-        
-                <p class="text-gray-600">Once you submit, you won't be able to make any changes. Make sure you have answered all the questions.</p>
-        
-                <div class="flex justify-center w-full mt-5">
-                    <button id="confirmSubmitQuizBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Submit Quiz</button>
-                    <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded cancelConfirmSubmitQuiz">Cancel</button>
-                </div>
-            </div>
-        </div>
-        
-
     </div>
 </section>
 
 @include('partials.learnerProfile')
 </section>
+
+<div id="confirmSubmitQuizModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+        <div class="flex justify-end w-full">
+            <button class="cancelConfirmSubmitQuiz">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+
+        <h2 class="mb-2 text-xl font-semibold">Are you sure you want to submit your assessment?</h2>
+
+        <p class="text-gray-600">Once you submit, you won't be able to make any changes. Make sure you have answered all the questions.</p>
+
+        <div class="flex justify-center w-full mt-5">
+            <button id="confirmSubmitQuizBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Submit Quiz</button>
+            <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded cancelConfirmSubmitQuiz">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
 @include('partials.footer')
