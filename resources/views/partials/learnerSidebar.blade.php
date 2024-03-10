@@ -1,5 +1,4 @@
 <section class="fixed z-20 w-auto h-auto overflow-hidden text-black md:w-full lg:w-2/12 md:relative" id="sidebar_full">
-    
     <div class="fixed flex flex-col justify-between w-full bg-mainwhitebg md:h-screen md:relative lg:border-r-4 border-darthmouthgreen" id="instructorSidebar">
 
         <div class="">
@@ -9,12 +8,15 @@
                         <i class="mx-2 text-4xl fa-solid fa-book-bookmark"></i>
                     </a>
                 </div>
-                <div class="" id="logo_full">
+                <div class="flex items-center justify-between" id="logo_full">
                     <a href="{{ url('/learner/dashboard') }}">
                         <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
                             Eskwela4EveryJuan
                         </span>
                     </a>
+                    <button class="px-2 md:hidden" id="eBot">
+                        <svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17.5 15.5c0 1.11-.89 2-2 2s-2-.89-2-2s.9-2 2-2s2 .9 2 2m-9-2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.89 2-2s-.89-2-2-2M23 15v3c0 .55-.45 1-1 1h-1v1c0 1.11-.89 2-2 2H5a2 2 0 0 1-2-2v-1H2c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1c0-3.87 3.13-7 7-7h1V5.73c-.6-.34-1-.99-1-1.73c0-1.1.9-2 2-2s2 .9 2 2c0 .74-.4 1.39-1 1.73V7h1c3.87 0 7 3.13 7 7h1c.55 0 1 .45 1 1m-2 1h-2v-2c0-2.76-2.24-5-5-5h-4c-2.76 0-5 2.24-5 5v2H3v1h2v3h14v-3h2z"/></svg>
+                    </button>
                 </div>
             </div>
      
@@ -84,13 +86,13 @@
                     </a>
                 </li>
                 
-                <li id="instructor_profile" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4 md:hidden">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="">
+                <li id="eBot-md" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4 lg:hidden">
+                    <button class="flex items-center justify-center md:justify-start md:px-4">
                         
-                        <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                        <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.5 15.5c0 1.11-.89 2-2 2s-2-.89-2-2s.9-2 2-2s2 .9 2 2m-9-2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.89 2-2s-.89-2-2-2M23 15v3c0 .55-.45 1-1 1h-1v1c0 1.11-.89 2-2 2H5a2 2 0 0 1-2-2v-1H2c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1c0-3.87 3.13-7 7-7h1V5.73c-.6-.34-1-.99-1-1.73c0-1.1.9-2 2-2s2 .9 2 2c0 .74-.4 1.39-1 1.73V7h1c3.87 0 7 3.13 7 7h1c.55 0 1 .45 1 1m-2 1h-2v-2c0-2.76-2.24-5-5-5h-4c-2.76 0-5 2.24-5 5v2H3v1h2v3h14v-3h2z"/></svg>
     
-                        <h1 class="hidden group-hover:text-white">Profile</h1>
-                    </a>
+                        <h1 class=" group-hover:text-white">Eskwela Bot</h1>
+                    </button>
                 </li>
                 
                 <form class="hidden mx-4 mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-white hover:border-2 hover:border-darthmouthgreen" action="{{ url('/learner/logout') }}" method="POST"> 
@@ -226,7 +228,6 @@
                 
             </ul>
         </div>
-        
 
         <div class="flex flex-row items-center justify-center w-full h-12 hover:cursor-pointer" id="sidebar_full_btn">
             <i class="mb-5 text-3xl fa-regular fa-square-caret-right"></i>
@@ -234,6 +235,47 @@
     </div>
     
 </section>
+
+<div class="fixed z-50 hidden w-full h-screen bg-white bg-opacity-60" id="bot-for-sm">
+    <div id="bot-container" class="fixed bottom-0 w-full p-3 ease-in-out bg-white fade-in h-3/4 md:w-3/4 md:h-full md:right-0">
+
+        <div class="flex flex-col justify-between hidden h-full p-3 overflow-hidden rounded-lg shadow-lg mainchatbotarea">
+            {{-- head --}}
+            <div>
+                <div class="relative py-3 text-center border-b-2 border-gray-300">
+                    <i class="absolute top-0 right-0 px-3 cursor-pointer fa-solid fa-xmark" id="sm-AIClose"></i>
+                    <h1 class="text-2xl font-bold">Eskwela Bot</h1>
+                </div>        
+            </div>
+        
+            {{-- body --}}
+            <div class="h-full overflow-auto">
+                <div class="flex flex-col chatContainer">
+                    
+                    {{-- chat area --}}
+        
+                    
+                </div>      
+            </div>
+        
+            {{-- foot --}}
+            <div class="py-3 border-t-2 border-gray-300">
+                
+                <p class="bottom-0 hidden text-lg text-gray-700 botloader">the bot is typing...</p>
+                <div class="flex items-center justify-between">
+                    <textarea type="text" placeholder="Type here" class="w-full lg:w-4/5 question input input-bordered input-primary"></textarea>
+                    <button class="w-1/5 mx-1 submitQuestion btn btn-primary"><i class="rotate-90 fa-solid fa-arrow-turn-down"></i></button>
+                </div>  
+            </div>
+        
+        </div>
+
+        <div style="height: 80%;" class="absolute inset-0 flex items-center justify-center w-full z-100 loaderArea">
+            <div class="chatbotloader"></div><br>
+            <p class="mt-3 text-darthmouthgreen">preparing your bot</p>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {
@@ -264,5 +306,20 @@
             $('#sidebar_full').removeClass('hidden');
             $('#sidebar_full, #sidebar_half').css('width', '23%');
         });
+        $('#eBot').on('click', (e)=> {
+            e.preventDefault();
+            $('#bot-for-sm').toggleClass('hidden')
+        //   $('#bot-for-sm').toggleClass('fade-in')
+            
+        })
+
+        $('#sm-AIClose').on('click', ()=> {
+            $('#bot-for-sm').toggleClass('hidden')
+        //   $('#bot-for-sm').toggleClass('fade-out')
+        })
+
+        $('#eBot-md').on('click', ()=> {
+            $('#bot-for-sm').toggleClass('hidden')
+        })
     });
 </script>

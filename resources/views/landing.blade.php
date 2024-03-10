@@ -93,8 +93,11 @@
                 <div class="max-w-md">
                 <h1 class="mb-5 text-6xl font-bold">Next-Level Learning, Made Easy.</h1>
                 <p class="mb-5">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                <button class="btn btn-sm md:btn-md lg:btn-lg btn-primary">Student</button>
-                <button class="btn btn-sm md:btn-md lg:btn-lg">Instructor</button>
+                <div class="space-y-4">
+                    <button class="btn btn-sm md:btn-md lg:btn-lg btn-primary btn-wide">Student</button>
+                    <button class="btn btn-sm md:btn-md lg:btn-lg btn-wide">Instructor</button>                    
+                </div>
+
                 </div>
             </div>
         </section>
