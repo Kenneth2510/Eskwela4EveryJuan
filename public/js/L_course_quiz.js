@@ -264,6 +264,8 @@ getLearnerQuizData();
             const rowData = quizLearnerAnswers[i];
             
             // console.log(element);
+            $('#confirmSubmitQuizModal').addClass('hidden');
+            $('#loaderModal').removeClass('hidden');
 
             var url = baseUrl + "/submit";
                     $.ajax({
@@ -313,6 +315,7 @@ getLearnerQuizData();
             },
             success: function (response) {
                 // Handle success if needed
+                $('#loaderModal').addClass('hidden');
                 var baseUrl = window.location.href;
                 var modifiedUrl = baseUrl.replace(/\/answer\/\d+$/, '');
         

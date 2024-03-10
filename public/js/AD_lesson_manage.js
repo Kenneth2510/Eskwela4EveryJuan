@@ -883,6 +883,8 @@ $('#save_lesson_btn').on('click', function(e) {
     $('#saveEditBtn').on('click', function(e){
         e.preventDefault();
 
+        
+        $('#loaderModal').removeClass('hidden');
             // Check if the request is already in progress
             if ($(this).data('request-in-progress')) {
                 return;
@@ -978,6 +980,8 @@ $('#save_lesson_btn').on('click', function(e) {
                     },
                     async: false,
                     success: function(response) {
+                        
+        $('#loaderModal').addClass('hidden');
                         // Handle success if needed
                         location.reload();
                         console.log(response);

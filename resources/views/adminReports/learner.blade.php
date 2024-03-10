@@ -79,29 +79,30 @@
             <h2>Course Data</h2>
         </div>
 
-        <div>
-            <h1>Enrollees Data for {{ $courseName->course_name }}</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Updated At</th>
-                        <th>Progress</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($learnerCourseData as $enrollee)
-                        <tr>
-                            <td>{{ $enrollee->name }}</td>
-                            <td>{{ $enrollee->status }}</td>
-                            <td>{{ $enrollee->updated_at }}</td>
-                            <td>{{ $enrollee->course_progress }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">{{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
+                <h2>Learner Details</h2>
+            </div>
+    
+            <div>
+                <h3>Personal Information</h3>
+                <p><strong>Status:</strong> {{ $learnerData->status }}</p>
+                <p><strong>Birthday:</strong> {{ $learnerData->learner_bday }}</p>
+                <p><strong>Gender:</strong> {{ $learnerData->learner_gender }}</p>
+            </div>
+    
+            <div>
+                <h3>Business Information</h3>
+                <p><strong>Name:</strong> {{ $businessData->business_name }}</p>
+                <p><strong>Address:</strong> {{ $businessData->business_address }}</p>
+                <p><strong>Owner Name:</strong> {{ $businessData->business_owner_name }}</p>
+                <p><strong>Category:</strong> {{ $businessData->business_category }}</p>
+                <p><strong>Classification:</strong> {{ $businessData->business_classification }}</p>
+                <p><strong>Description:</strong> {{ $businessData->business_description }}</p>
+            </div>
         </div>
+
     </div>
 </body>
 </html>

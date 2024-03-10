@@ -188,6 +188,7 @@ $(document).ready(function () {
                     var learner = response['learner']
                     // init_chatbot(learner);
                     getCourseData(learner)
+                    process_files(learner);
 
                     $('.loaderArea').addClass('hidden');
                     $('.mainchatbotarea').removeClass('hidden');
@@ -199,6 +200,22 @@ $(document).ready(function () {
                 }
             });
     }
+
+    
+    function process_files(session_id) {
+        var url = `/chatbot/process/${session_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
 
     function getCourseData(learner) {
         var course_id = $('#titleArea').data('course-id');

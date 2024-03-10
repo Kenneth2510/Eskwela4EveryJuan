@@ -277,7 +277,8 @@ getLearnerAssessmentData();
             const rowData = assessmentLearnerAnswers[i];
             
             // console.log(element);
-
+            $('#confirmSubmitQuizModal').addClass('hidden');
+            $('#loaderModal').removeClass('hidden');
             var url = baseUrl + "/submit";
                     $.ajax({
                         type: "POST",
@@ -331,6 +332,7 @@ getLearnerAssessmentData();
                 // window.location.href = "/learner/course/content/" + rowData.course_id + "/" + rowData.learner_course_id + "/pre_assessment";
                 // console.log(response)
                     // window.location.href = modifiedUrl;
+                    $('#loaderModal').addClass('hidden');
                 window.location.href = response.redirect_url;
                 
             },

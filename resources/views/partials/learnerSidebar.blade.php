@@ -80,7 +80,7 @@
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.55225 12.4999C7.55225 11.1876 8.07354 9.92913 9.00146 9.00121C9.92937 8.0733 11.1879 7.552 12.5002 7.552C13.8124 7.552 15.071 8.0733 15.9989 9.00121C16.9268 9.92913 17.4481 11.1876 17.4481 12.4999C17.4481 13.8122 16.9268 15.0707 15.9989 15.9986C15.071 16.9265 13.8124 17.4478 12.5002 17.4478C11.1879 17.4478 9.92937 16.9265 9.00146 15.9986C8.07354 15.0707 7.55225 13.8122 7.55225 12.4999ZM12.5002 9.1145C11.6023 9.1145 10.7412 9.47118 10.1063 10.1061C9.47142 10.741 9.11475 11.6021 9.11475 12.4999C9.11475 13.3978 9.47142 14.2589 10.1063 14.8938C10.7412 15.5287 11.6023 15.8853 12.5002 15.8853C13.398 15.8853 14.2591 15.5287 14.894 14.8938C15.5289 14.2589 15.8856 13.3978 15.8856 12.4999C15.8856 11.6021 15.5289 10.741 14.894 10.1061C14.2591 9.47118 13.398 9.1145 12.5002 9.1145Z" fill-opacity="0.75"/>
                         </svg>
     
-                        <h1 class="hidden md:block group-hover:text-white">Settings</h1>
+                        <h1 class="hidden md:block group-hover:text-white">Profile</h1>
                     </a>
                 </li>
                 
@@ -214,14 +214,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_profile hover:bg-darthmouthgreen group md:py-4 md:hidden">
-                    <a class="flex items-center justify-center text-xl md:justify-start md:px-4" href="">
-                        
-                        <svg class="flex-shrink-0 mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
-    
-                        {{-- <h1 class="hidden group-hover:text-white">Profile</h1> --}}
-                    </a>
-                </li>
+
                 
                 <form class="hidden mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-white hover:border-2 hover:border-darthmouthgreen" action="{{ url('/learner/logout') }}" method="POST"> 
                     @csrf

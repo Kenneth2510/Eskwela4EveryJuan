@@ -50,6 +50,8 @@ use Barryvdh\Snappy\Facades\SnappyPdf;
 use Codedge\Fpdf\Fpdf\Fpdf;
 
 
+use App\Http\Controllers\PDFGenerationController;
+
 class InstructorCourseController extends Controller
 {
     public function courses(){
@@ -627,6 +629,10 @@ class InstructorCourseController extends Controller
 
                 $course->update($courseData);
 
+                $reportController = new PDFGenerationController();
+
+                $reportController->courseDetails($course);
+
                 session()->flash('message', 'Course updated Successfully');
                 return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/$course->course_id"]);
                 
@@ -891,7 +897,9 @@ class InstructorCourseController extends Controller
             $quiz = Quizzes::create($quizData);
         }
 
-       
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseDetails($syllabus->course_id);
         // $latestSyllabus = DB::table('syllabus')->orderBy('created_at', 'DESC')->first();
 
         session()->flash('message', 'Syllabus created Successfully');
@@ -1111,6 +1119,10 @@ class InstructorCourseController extends Controller
                     $quizData
                 );
             }
+
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseDetails($course);
     
             session()->flash('message', 'Syllabus updated Successfully');
             return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id"]);
@@ -1158,6 +1170,10 @@ class InstructorCourseController extends Controller
                     'quiz_title' => $syllabus->topic_title,
                 ]);
             }
+
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseDetails($course);
     
             session()->flash('message', 'Syllabus updated Successfully');
             return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id"]);
@@ -1549,6 +1565,9 @@ class InstructorCourseController extends Controller
                         ->where('lesson_content_id', $lessonContentData['lesson_content_id'])
                         ->update($lessonContentData);
 
+                        $reportController = new PDFGenerationController();
+
+                        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
 
             session()->flash('message', 'Lesson Content updated Successfully');
             return response()->json(['message' => 'Lesson Content updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id/$syllabus->syllabus_id/lesson/$topic_id"]);
@@ -1576,6 +1595,11 @@ class InstructorCourseController extends Controller
             'lesson_id' => $lesson->lesson_id,
             'lesson_content_order' => $lessonContentData['lesson_content_order']
         ]);
+
+        
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
 
 
         session()->flash('message', 'Lesson Content updated Successfully');
@@ -2417,6 +2441,14 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
     
             try {
+                $learnerCourse_learner_id = DB::table('learner_course')
+                ->select(
+                    'learner_course_id',
+                    'learner_id',
+                )
+                ->where('learner_course_id', $learner_course)
+                ->first();
+
                 $remarks = $request->input('remarks');
                 $totalScore = $request->input('total_score');
 
@@ -2573,7 +2605,13 @@ class InstructorCourseController extends Controller
                     }
                 }
                 
+                $reportController = new PDFGenerationController();
 
+                $reportController->courseGradeSheet($learnerActivityOutputData->course_id);
+                $reportController->learnerCourseGradeSheet($learnerCourse_learner_id->learner_id, $learnerActivityOutputData->course_id, $learner_course);
+                $reportController->learnerActivityOutput($learnerCourse_learner_id->learner_id, $learnerActivityOutputData->course_id, $learner_course, $learnerActivityOutputData->syllabus_id, $attempt);
+
+                
                 $response = [
                     'message' => 'Output Scored Successfully',
                 ];
