@@ -45,7 +45,7 @@
                 </ul>
             </div>
             <div class="navbar-end">
-                <a class="btn">Button</a>
+                {{-- <a class="btn">Button</a> --}}
             </div>
         </nav>
 
@@ -91,10 +91,10 @@
             <div class="hero-overlay bg-opacity-80"></div>
             <div class="text-center hero-content text-neutral-content">
                 <div class="max-w-md">
-                <h1 class="mb-5 text-5xl font-bold">Next-Level Learning, Made Easy.</h1>
+                <h1 class="mb-5 text-6xl font-bold">Next-Level Learning, Made Easy.</h1>
                 <p class="mb-5">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                <button class="w-32 btn btn-primary">Student</button>
-                <button class="w-32 btn btn-accent">Instructor</button>
+                <button class="btn btn-sm md:btn-md lg:btn-lg btn-primary">Student</button>
+                <button class="btn btn-sm md:btn-md lg:btn-lg">Instructor</button>
                 </div>
             </div>
         </section>

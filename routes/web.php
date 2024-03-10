@@ -48,12 +48,12 @@ use Illuminate\Support\Facades\Response;
 
 
 Route::controller(UserController::class)->group(function() {
-    Route::get('/', 'index');
+    // Route::get('/', 'index');
     // Route::get('/home', 'home');
 });
 
 Route::controller(UserController::class)->group(function() {
-    Route::get('/landing', 'landing');
+    Route::get('/', 'landing');
     Route::get('/terms', 'terms');
     Route::get('/data-privacy', 'data_privacy');
 });

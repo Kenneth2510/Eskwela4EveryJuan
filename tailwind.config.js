@@ -47,7 +47,7 @@ export default {
             {
                 mytheme: {
                     primary: "#025C26",
-                    secondary: "#048A37",
+                    secondary: "#79C586",
                     accent: "#FFB300",
                     neutral: "#E0E0E0",
                     "base-100": "#F5F5F5",
@@ -61,4 +61,3 @@ export default {
     },
     plugins: [require("daisyui")],
 };
-
