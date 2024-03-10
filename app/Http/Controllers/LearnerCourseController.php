@@ -452,21 +452,34 @@ class LearnerCourseController extends Controller
 
             // dd($gradeWithQuizData);
 
-                            // $folderName = "{$course->course_id} {$course->course_name}";
-                            $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+                            // // $folderName = "{$course->course_id} {$course->course_name}";
+                            // $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
 
-                            // $directoryPath = "/public/courses/{$folderName}/lesson_1.pdf";
+                            // // $directoryPath = "/public/courses/{$folderName}/lesson_1.pdf";
                 
-                            // // $courseFiles = Storage::disk('public')->files($folderName);
+                            // // // $courseFiles = Storage::disk('public')->files($folderName);
                 
-                            // $courseFiles = Storage::files($directoryPath);
-                            // $courseFiles = Storage::allFiles($directoryPath);
+                            // // $courseFiles = Storage::files($directoryPath);
+                            // // $courseFiles = Storage::allFiles($directoryPath);
                 
-                            $directory = "public/courses/$folderName/documents";
+                            // $directory = "public/courses/$folderName/documents";
                             
                 
+                            // // Get all files in the specified directory
+                            // $courseFiles = Storage::files($directory);
+
+
+                            $folderName = Str::slug("{$course->course_id} {$course->course_name}", '_');
+                            $directory = "public/courses/$folderName/documents";
+
                             // Get all files in the specified directory
-                            $courseFiles = Storage::files($directory);
+                            $allFiles = glob(storage_path("app/$directory/*.pdf"), GLOB_BRACE);
+
+                            // Filter out files containing the keywords
+                            $filteredFiles = array_filter($allFiles, function($file) {
+                                return strpos($file, 'gradesheet') === false && strpos($file, 'enrollees') === false;
+                            });
+
 
 
                 if($isEnrolled) {
@@ -491,7 +504,7 @@ class LearnerCourseController extends Controller
                         'gradesheet' => $gradeWithQuizData,
                         'activitySyllabus' => $activitySyllabusData,
                         'quizSyllabus' => $quizSyllabusData,
-                        'courseFiles' => $courseFiles,
+                        'courseFiles' => $filteredFiles,
                         'courseProgress' => $courseProgress,
                         'preAssessmentGrade' => $learnerPreAssessmentGrade,
                         'postAssessmentGrade' => $learnerPostAssessmentGrade->average_score,
@@ -518,7 +531,7 @@ class LearnerCourseController extends Controller
                         'gradesheet' => null,
                         'activitySyllabus' => $activitySyllabusData,
                         'quizSyllabus' => $quizSyllabusData,
-                        'courseFiles' => $courseFiles,
+                        'courseFiles' => null,
                     ];
                 }
 
@@ -556,7 +569,7 @@ class LearnerCourseController extends Controller
 
                     $reportController = new PDFGenerationController();
 
-                    $reportController->courseEnrollees($course);
+                    $reportController->courseEnrollees($course->course_id);
                     $reportController->learnerCourseData($learner->learner_id);
 
                     session()->flash('message', 'Course enrolled Successfully');
@@ -2670,7 +2683,7 @@ class LearnerCourseController extends Controller
                 ->where('course_id', $course->course_id)
                 ->where('activity_id', $activity->activity_id)
                 ->update([
-                    'status' => 'IN PROGRESS',
+                    'status' => 'COMPLETED',
                     'finish_period' => $timestampString,
                 ]);
 
@@ -2678,10 +2691,49 @@ class LearnerCourseController extends Controller
                 ->where('learner_course_id' , $learner_course->learner_course_id)
                 ->where('syllabus_id', $syllabus->syllabus_id)
                 ->where('course_id', $course->course_id)
-                ->update(['status' => 'IN PROGRESS']);
+                ->update(['status' => 'COMPLETED']);
 
                 
+                $learnerSyllabusProgress = DB::table('learner_syllabus_progress')
+                ->select(
+                    'learner_syllabus_progress_id', 
+                    'syllabus_id', 
+                    'category', 
+                    'status',
+                    )
+                ->where('learner_course_id', $learner_course->learner_course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->orderBy('learner_syllabus_progress_id', 'ASC')
+                ->first();
 
+            if ($learnerSyllabusProgress) {
+                $nextSyllabusProgress = DB::table('learner_syllabus_progress')
+                ->select(
+                    'learner_syllabus_progress_id', 
+                    'syllabus_id', 
+                    'category', 
+                    'status',
+                    )
+                ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                ->orderBy('learner_syllabus_progress_id', 'ASC')
+                ->limit(1)
+                ->first();
+
+                if($nextSyllabusProgress) {
+                    DB::table('learner_syllabus_progress')
+                    ->where('learner_syllabus_progress_id', '>', $learnerSyllabusProgress->learner_syllabus_progress_id)
+                    ->orderBy('learner_syllabus_progress_id', 'ASC')
+                    ->limit(1)
+                    ->update(['status' => 'NOT YET STARTED']);
+                } else {
+                    DB::table('learner_post_assessment_progress')
+                    ->where('learner_course_id', $learner_course->learner_course_id)
+                    ->where('course_id', $course->course_id)
+                    ->update(['status' => 'NOT YET STARTED']);
+                    
+                    session()->flash('message', "You have finished all of the topics! \n Be ready for the Post Assessment to finish this course!");
+                }
+            }
 
 
 
@@ -4335,7 +4387,7 @@ class LearnerCourseController extends Controller
 
           $reportController->courseGradeSheet($course->course_id);
           $reportController->learnerCourseGradeSheet($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id);
-          $reportController->learnerPreAssessmentOutput($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id, $attempt);
+          $reportController->learnerPostAssessmentOutput($learner_course->learner_id, $course->course_id, $learner_course->learner_course_id, $attempt);
           
             
             session()->flash('message', 'Learner Post Assessment Scored successfully');
@@ -4776,7 +4828,7 @@ class LearnerCourseController extends Controller
 
             $reportController = new PDFGenerationController();
 
-            $reportController->courseEnrollees($course);
+            $reportController->courseEnrollees($course->course_id);
 
 
 

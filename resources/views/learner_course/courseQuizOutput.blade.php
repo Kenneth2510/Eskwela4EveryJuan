@@ -64,11 +64,10 @@
                       
                     </div>
                     <div id="pagination" class="mx-10 mt-4 mb-8">
-                        <button id="prevPage" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg">Previous</button>
+                        <button id="prevPage" class="px-4 py-2 text-white bg-gray-600 rounded-lg hover:bg-white hover:text-gray-600 hover:border hover:border-gray-600 ">Previous</button>
                         <span id="currentPage" class="mx-4 text-lg font-semibold">Page 1</span>
-                        <button id="nextPage" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg">Next</button>
+                        <button id="nextPage" class="px-4 py-2 text-white bg-gray-600 rounded-lg hover:bg-white hover:text-gray-600 hover:border hover:border-gray-600 ">Next</button>
                     </div>
-                    
                 
                 </div>
 

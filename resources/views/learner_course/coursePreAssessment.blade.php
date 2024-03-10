@@ -184,4 +184,6 @@
 {{-- @include('partials.learnerProfile') --}}
 @include('partials.chatbot')
 </section>
+
+
 @include('partials.footer')

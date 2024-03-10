@@ -20,6 +20,8 @@ $(document).ready(function() {
         var button = $(this)
     
         button.prop('disabled', true)
+        $('#enrollCourseModal').addClass('hidden');
+        $('#loaderModal').removeClass('hidden');
         $.ajax({
             type: 'POST',
             url: '/learner/course/enroll/' + courseID,
@@ -28,7 +30,7 @@ $(document).ready(function() {
             },
             success: function (response) {
                 if (response && response.redirect_url) {
-                    
+                    $('#loaderModal').addClass('hidden');
                     button.prop('disabled', false)
                     window.location.href = response.redirect_url;
                 } else {
@@ -58,6 +60,9 @@ $(document).ready(function() {
         e.preventDefault();
         var button = $(this)
         var lessonCourseID = $(this).data("learner-course-id");
+
+        $('#unenrollCourseModal').addClass('hidden');
+        $('#loaderModal').removeClass('hidden');
         button.prop('disabled', true)
     
         $.ajax({
@@ -69,6 +74,8 @@ $(document).ready(function() {
             success: function (response) {
                 button.prop('disabled', false)
                 if (response && response.redirect_url) {
+                    
+                    $('#loaderModal').addClass('hidden');
                     button.prop('disabled', false)
                     window.location.href = response.redirect_url;
                 } else {

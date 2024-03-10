@@ -277,227 +277,239 @@
 </div>
 
 
-    <div id="pictureModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-        <div class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md">
-            <div class="px-6 py-4 text-left modal-content">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between pb-3">
-                    <p class="text-2xl font-bold">Upload Picture</p>
-                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M12.293 7.293a1 1 0 00-1.414 0L10 8.586 8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 000-1.414z"/>
-                        </svg>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="mb-4">
-                    <!-- Your form for uploading pictures goes here -->
-                    <form id="pictureUploadForm" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" enctype="multipart/form-data" method="POST">
-                        <input type="file" name="picture" id="lesson_title_picture" accept=".jpeg, .png, .jpg, .gif" />
-
-                        <div class="flex justify-between mt-4">
-                            <button type="submit" class="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-900">Confirm</button>
-                            <button id="cancelUpload" class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="lesson_content_pictureModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-        <div class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md">
-            <div class="px-6 py-4 text-left modal-content">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between pb-3">
-                    <p class="text-2xl font-bold">Upload Picture</p>
-                    <button id="closeModal_lesson_content_picture" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M12.293 7.293a1 1 0 00-1.414 0L10 8.586 8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 000-1.414z"/>
-                        </svg>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="mb-4">
-                    <!-- Your form for uploading pictures goes here -->
-                    <form id="lesson_content_pictureUploadForm" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" enctype="multipart/form-data" method="POST">
-                        <input type="file" name="picture" id="lesson_title_picture" accept=".jpeg, .png, .jpg, .gif" />
-
-                        <div class="flex justify-between mt-4">
-                            <button type="submit" class="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-900">Confirm</button>
-                            <button id="cancelUpload_lesson_content_picture" class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="deleteLessonContentModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
-        {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
-            {{-- @csrf --}}
-            <div class="p-5 text-center bg-white rounded-lg">
-                <p>Are you sure you want to delete this content?</p>
-                <button type="button" id="confirmDelete" data-course-id="{{$course->course_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
-                <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
-            </div>
-        {{-- </form> --}}
-        
-    </div>
-
-    <div id="deleteLessonContentPictureModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
-        {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
-            {{-- @csrf --}}
-            <div class="p-5 text-center bg-white rounded-lg">
-                <p>Are you sure you want to delete this content?</p>
-                <button type="button" id="confirmDelete_lessonContentPicture" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" data-topic_id="{{$lessonInfo->topic_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
-                <button type="button" id="cancelDelete_lessonContentPicture" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
-            </div>
-        {{-- </form> --}}
-        
-    </div>
-
-
-
-    <div id="addLessonContentModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
-            <div class="flex justify-end w-full">
-                <button id="closeAddLessonContentModal">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            <h2 class="mb-2 text-2xl font-semibold">Add Lesson Content</h2>
-            <div class="mt-4">
-                <label for="insertLessonContentTitle" class="text-lg font-semibold">Enter Title:</label>
-                <input type="text" name="insertLessonContentTitle" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
-            </div>
-
-            <div class="mt-4">
-                <label for="insertLessonContent" class="text-lg font-semibold">Enter Content:</label>
-                {{-- <input type="text" name="insertLessonContent" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"> --}}
-                <textarea
-                  name="insertLessonContent"
-                    id="insertLessonContent"
-                    class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"
-                    cols="30"
-                    rows="10"
-                    style="white-space: pre;"
-                  ></textarea>
-              
-            </div>
-    
-            <div class="mt-4">
-                <label for="insertLocation" class="text-lg font-semibold">Insert Location:</label>
-                <select id="insertLocation" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
-                        <option value="START">At the Beginning</option>
-                    @forelse ($lessonContent as $lesson)
-                        <option value="{{ $lesson->lesson_content_title }}">AFTER {{ $lesson->lesson_content_title }}</option>
-                    @empty
-                        <option value="">At the Beginning</option>
-                    @endforelse
-                        <option value="END">In the End</option>
-                </select>
-            </div>
-            
-            <div class="flex justify-center w-full mt-5">
-                <button id="confirmAddLessonContentBtn" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="cancelAddLessonContentBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-
-
-    
-    <div id="editLessonContentModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
-            <div class="flex justify-end w-full">
-                <button class="closeEditLessonContentModal">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            <h2 class="mb-2 text-2xl font-semibold">Edit Lesson Content</h2>
-            <div class="mt-4">
-                <label for="insertEditLessonContentTitle" class="text-lg font-semibold">Enter Title:</label>
-                <input type="text" name="insertLessonContentTitle" id="insertEditLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
-            </div>
-
-            <div class="mt-4">
-                <label for="insertEditLessonContent" class="text-lg font-semibold">Enter Content:</label>
-                {{-- <input type="text" name="insertLessonContent" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"> --}}
-                <textarea
-                  name="insertEditLessonContent"
-                    id="insertEditLessonContent"
-                    class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"
-                    cols="30"
-                    rows="10"
-                    style="white-space: pre;"
-                  ></textarea>
-              
-            </div>
-    
-            <div class="flex justify-center w-full mt-5">
-                <button id="confirmEditLessonContentBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeEditLessonContentModal">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="addLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
-            <div class="flex justify-end w-full">
-                <button class="closeAddLessonContentUrlModal">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            <h2 class="mb-2 text-2xl font-semibold">Embed Video from Youtube</h2>
-            <div class="mt-4">
-                <label for="insertAddLessonContentUrl" class="text-lg font-semibold">Enter Embed Code copied</label>
-                <input type="text" name="insertAddLessonContentUrl" id="insertAddLessonContentUrl" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
-            </div>
-        
-            <div class="flex justify-center w-full mt-5">
-                <button id="confirmAddLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="cancelAddLessonContentUrlBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeAddLessonContentUrlModal">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    {{-- <div id="editLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
-            <div class="flex justify-end w-full">
-                <button class="closeEditLessonContentUrlModal">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            <h2 class="mb-2 text-2xl font-semibold">Embed Video from Youtube</h2>
-            <div class="mt-4">
-                <label for="insertEditLessonContentUrl" class="text-lg font-semibold">Enter Embed Code copied</label>
-                <input type="text" name="insertEditLessonContentUrl" id="insertEditLessonContentUrl" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
-            </div>
-
-            <div class="flex justify-center w-full mt-5">
-                <button id="confirmEditLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
-                <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeEditLessonContentUrlModal">Cancel</button>
-            </div>
-        </div>
-    </div> --}}
-
-    
-    <div id="deleteLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
-        {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
-            {{-- @csrf --}}
-            <div class="p-5 text-center bg-white rounded-lg">
-                <p>Are you sure you want to delete this content?</p>
-                <button type="button" id="confirmDelete_lessonContentUrl" data-content-order="" data-lesson-content-id="" data-lesson-id="" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" data-topic_id="{{$lessonInfo->topic_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
-                <button type="button" id="cancelDelete_lessonContentUrl" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
-            </div>
-        {{-- </form> --}}
-        
-    </div>
 
     @include('partials.instructorProfile')
 </section>
+
+
+<div id="pictureModal" class="fixed inset-0 z-[99] flex items-center justify-center hidden">
+    <div class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md">
+        <div class="px-6 py-4 text-left modal-content">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between pb-3">
+                <p class="text-2xl font-bold">Upload Picture</p>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M12.293 7.293a1 1 0 00-1.414 0L10 8.586 8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 000-1.414z"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="mb-4">
+                <!-- Your form for uploading pictures goes here -->
+                <form id="pictureUploadForm" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" enctype="multipart/form-data" method="POST">
+                    <input type="file" name="picture" id="lesson_title_picture" accept=".jpeg, .png, .jpg, .gif" />
+
+                    <div class="flex justify-between mt-4">
+                        <button type="submit" class="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-900">Confirm</button>
+                        <button id="cancelUpload" class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="lesson_content_pictureModal" class="z-[99] fixed inset-0  flex items-center justify-center hidden">
+    <div class="z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md">
+        <div class="px-6 py-4 text-left modal-content">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between pb-3">
+                <p class="text-2xl font-bold">Upload Picture</p>
+                <button id="closeModal_lesson_content_picture" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M12.293 7.293a1 1 0 00-1.414 0L10 8.586 8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 000-1.414z"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="mb-4">
+                <!-- Your form for uploading pictures goes here -->
+                <form id="lesson_content_pictureUploadForm" data-lesson-id="{{$lessonInfo->lesson_id}}" data-course-id="{{$lessonInfo->course_id}}" data-topic_id="{{$lessonInfo->topic_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" enctype="multipart/form-data" method="POST">
+                    <input type="file" name="picture" id="lesson_title_picture" accept=".jpeg, .png, .jpg, .gif" />
+
+                    <div class="flex justify-between mt-4">
+                        <button type="submit" class="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-900">Confirm</button>
+                        <button id="cancelUpload_lesson_content_picture" class="px-4 py-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="deleteLessonContentModal" class=" z-[99] fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+    {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
+        {{-- @csrf --}}
+        <div class="p-5 text-center bg-white rounded-lg">
+            <p>Are you sure you want to delete this content?</p>
+            <button type="button" id="confirmDelete" data-course-id="{{$course->course_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+            <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
+        </div>
+    {{-- </form> --}}
+    
+</div>
+
+<div id="deleteLessonContentPictureModal" class="z-[99] fixed top-0 left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+    {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
+        {{-- @csrf --}}
+        <div class="p-5 text-center bg-white rounded-lg">
+            <p>Are you sure you want to delete this content?</p>
+            <button type="button" id="confirmDelete_lessonContentPicture" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" data-topic_id="{{$lessonInfo->topic_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+            <button type="button" id="cancelDelete_lessonContentPicture" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
+        </div>
+    {{-- </form> --}}
+    
+</div>
+
+
+
+<div id="addLessonContentModal" class="fixed z-[99] top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+        <div class="flex justify-end w-full">
+            <button id="closeAddLessonContentModal">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+        <h2 class="mb-2 text-2xl font-semibold">Add Lesson Content</h2>
+        <div class="mt-4">
+            <label for="insertLessonContentTitle" class="text-lg font-semibold">Enter Title:</label>
+            <input type="text" name="insertLessonContentTitle" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+        </div>
+
+        <div class="mt-4">
+            <label for="insertLessonContent" class="text-lg font-semibold">Enter Content:</label>
+            {{-- <input type="text" name="insertLessonContent" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"> --}}
+            <textarea
+              name="insertLessonContent"
+                id="insertLessonContent"
+                class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"
+                cols="30"
+                rows="10"
+                style="white-space: pre;"
+              ></textarea>
+          
+        </div>
+
+        <div class="mt-4">
+            <label for="insertLocation" class="text-lg font-semibold">Insert Location:</label>
+            <select id="insertLocation" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+                    <option value="START">At the Beginning</option>
+                @forelse ($lessonContent as $lesson)
+                    <option value="{{ $lesson->lesson_content_title }}">AFTER {{ $lesson->lesson_content_title }}</option>
+                @empty
+                    <option value="">At the Beginning</option>
+                @endforelse
+                    <option value="END">In the End</option>
+            </select>
+        </div>
+        
+        <div class="flex justify-center w-full mt-5">
+            <button id="confirmAddLessonContentBtn" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+            <button id="cancelAddLessonContentBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="editLessonContentModal" class="fixed top-0 z-[99] left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+        <div class="flex justify-end w-full">
+            <button class="closeEditLessonContentModal">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+        <h2 class="mb-2 text-2xl font-semibold">Edit Lesson Content</h2>
+        <div class="mt-4">
+            <label for="insertEditLessonContentTitle" class="text-lg font-semibold">Enter Title:</label>
+            <input type="text" name="insertLessonContentTitle" id="insertEditLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+        </div>
+
+        <div class="mt-4">
+            <label for="insertEditLessonContent" class="text-lg font-semibold">Enter Content:</label>
+            {{-- <input type="text" name="insertLessonContent" id="insertLessonContentTitle" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"> --}}
+            <textarea
+              name="insertEditLessonContent"
+                id="insertEditLessonContent"
+                class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50"
+                cols="30"
+                rows="10"
+                style="white-space: pre;"
+              ></textarea>
+          
+        </div>
+
+        <div class="flex justify-center w-full mt-5">
+            <button id="confirmEditLessonContentBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+            <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeEditLessonContentModal">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="addLessonContentUrlModal" class="fixed top-0 left-0 z-[99] flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+        <div class="flex justify-end w-full">
+            <button class="closeAddLessonContentUrlModal">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+        <h2 class="mb-2 text-2xl font-semibold">Embed Video from Youtube</h2>
+        <div class="mt-4">
+            <label for="insertAddLessonContentUrl" class="text-lg font-semibold">Enter Embed Code copied</label>
+            <input type="text" name="insertAddLessonContentUrl" id="insertAddLessonContentUrl" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+        </div>
+    
+        <div class="flex justify-center w-full mt-5">
+            <button id="confirmAddLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+            <button id="cancelAddLessonContentUrlBtn" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeAddLessonContentUrlModal">Cancel</button>
+        </div>
+    </div>
+</div>
+
+{{-- <div id="editLessonContentUrlModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+        <div class="flex justify-end w-full">
+            <button class="closeEditLessonContentUrlModal">
+                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+            </button>
+        </div>
+        <h2 class="mb-2 text-2xl font-semibold">Embed Video from Youtube</h2>
+        <div class="mt-4">
+            <label for="insertEditLessonContentUrl" class="text-lg font-semibold">Enter Embed Code copied</label>
+            <input type="text" name="insertEditLessonContentUrl" id="insertEditLessonContentUrl" class="block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring focus:ring-seagreen focus:ring-opacity-50">
+        </div>
+
+        <div class="flex justify-center w-full mt-5">
+            <button id="confirmEditLessonContentUrlBtn" data-content-order="" data-lesson-id="{{$lessonInfo->lesson_id}}" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Confirm</button>
+            <button id="" class="px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded closeEditLessonContentUrlModal">Cancel</button>
+        </div>
+    </div>
+</div> --}}
+
+
+<div id="deleteLessonContentUrlModal" class="fixed top-0 z-[99] left-0 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
+    {{-- <form id="deleteCourse" action="" data-course-id="{{ $course->course_id }}"> --}}
+        {{-- @csrf --}}
+        <div class="p-5 text-center bg-white rounded-lg">
+            <p>Are you sure you want to delete this content?</p>
+            <button type="button" id="confirmDelete_lessonContentUrl" data-content-order="" data-lesson-content-id="" data-lesson-id="" data-course-id="{{$course->course_id}}" data-syllabus-id="{{$lessonInfo->syllabus_id}}" data-topic_id="{{$lessonInfo->topic_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+            <button type="button" id="cancelDelete_lessonContentUrl" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
+        </div>
+    {{-- </form> --}}
+    
+</div>
+
+
+<div id="loaderModal" class="fixed top-0 left-0 z-[99] flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
+
 @include('partials.footer')

@@ -935,6 +935,8 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                     'learnerActivityOutput_2nd' => $learnerActivityData_2nd,
                     'learnerActivityScore' => $learnerActivityScoreData,
                     'learnerData' => $learnerData,
+                    'activityData' => $activityData,
+                    'attempt' => $attempt,
                 ])->render();
     
         
@@ -976,6 +978,14 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                 'learner_id',
             )
             ->where('learner_id', $learner)
+            ->first();
+
+            $courseData = DB::table('course')
+            ->select(
+                'course_id',
+                'course_name',
+            )
+            ->where('course_id', $course)
             ->first();
 
 
@@ -1084,6 +1094,8 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                             'quizProgressData' => $learnerQuizProgressData,
                             'quizLearnerData' => $learnerQuizData,
                             'learnerData' => $learnerData,
+                            'courseData' => $courseData,
+                            'attempt' => $attempt,
                         ])->render();
             
                 

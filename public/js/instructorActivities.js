@@ -191,6 +191,7 @@ $(document).ready(() => {
         var syllabusID = $(this).data('syllabus-id');
         var topicID = $(this).data('topic_id');
 
+        $('#loaderModal').removeClass('hidden');
 
         var url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/activity/"+ topicID +"/json";
 
@@ -203,6 +204,8 @@ $(document).ready(() => {
                 activityData = response['activityContent']
                 activityCriteriaData = response['activityContentCriteria']
                 // console.log(activityCriteriaData)
+                
+        $('#loaderModal').addClass('hidden');
                 reDisplayActivity(activityData, activityCriteriaData);
             },
             error: function(error) {
@@ -482,8 +485,7 @@ $(document).ready(() => {
     })
 
     $('.saveInstructionsBtn').on('click', function(e) {
-        e.preventDefault();
-
+        $('#loaderModal').removeClass('hidden');
         const activityContentID = $(this).data('activity-content-id');
         const activityID = $(this).data('activity-id');
         const activity_instructions = $(this).closest('.editInstructions_clickedBtn').siblings('textarea.activity_instructions').val();
@@ -508,6 +510,8 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response) {
+                
+        $('#loaderModal').addClass('hidden');
                 window.location.reload();
             },
             error: function(error) {
@@ -663,6 +667,7 @@ $(document).ready(() => {
             }
             console.log(rowCriteria);
 
+            $('#loaderModal').removeClass('hidden');
             if (criteriaCounter === 0) {
                 
             var url = baseUrl + "/title/"+ activityID +"/" + activityContentID+"/criteria";
@@ -676,6 +681,8 @@ $(document).ready(() => {
                     },
                     success: function(response) {
                         if(activityCriteriaData.length === criteriaCounter++) {
+                            
+        $('#loaderModal').addClass('hidden');
                             window.location.reload();
                         }
                     },
@@ -696,6 +703,8 @@ $(document).ready(() => {
                         'X-CSRF-TOKEN': csrfToken
                     },
                     success: function(response) {
+                        
+        $('#loaderModal').addClass('hidden');
                         window.location.reload();
                     },
                     error: function(error) {
@@ -722,6 +731,8 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response) {
+                
+        $('#loaderModal').addClass('hidden');
                 window.location.reload();
             },
             error: function(error) {
@@ -839,6 +850,8 @@ $(document).ready(() => {
         // console.log(baseUrl);
         var url = baseUrl + "/title/"+ activityID +"/" + activityContentID+"/score";
         // console.log(url)
+        
+        $('#loaderModal').removeClass('hidden');
 
         $.ajax({
             type: "POST",
@@ -848,6 +861,8 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response) {
+                
+        $('#loaderModal').addClass('hidden');
                 window.location.reload();
             },
             error: function(error) {

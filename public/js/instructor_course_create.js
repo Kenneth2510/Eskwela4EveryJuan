@@ -275,6 +275,8 @@ $(document).ready(function () {
         } else {
             var formData = new FormData(this);
     
+            
+        $('#loaderModal').removeClass('hidden');
             $.ajax({
                 type: "POST",
                 url: "/instructor/courses/create",
@@ -293,9 +295,13 @@ $(document).ready(function () {
                             uploadFiles(response.course_id);
                         } else {
                             // If no files selected, redirect to the specified URL
+                            
+        $('#loaderModal').addClass('hidden');
                             window.location.href = response.redirect_url;
                         }
                     } else {
+                        
+        $('#loaderModal').addClass('hidden');
                         window.location.href = response.redirect_url;
                     }
                 },

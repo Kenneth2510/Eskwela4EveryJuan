@@ -14,7 +14,7 @@
 
                 <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
                     <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
-                        <img class="z-0 w-40 rounded-full h-40" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="Profile Picture">
+                        <img class="z-0 w-40 h-40 rounded-full" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="Profile Picture">
                         <button id="update_profile_photo_btn" style="position: absolute; bottom: -6px; right: 10px;" class="w-12 h-12 text-white rounded-full z-5 bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border-2 hover:text-darthmouthgreen"><i class="fa-solid fa-camera"></i></button>
                     </div>
 
@@ -114,25 +114,25 @@
 
                             <div class="mt-3" id="instructorPasswordArea">
                                 <label for="password">Password</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-gray-300" type="text" name="password" id="password" disabled>
+                                <input class="w-full h-12 px-5 py-1 border-2 border-gray-300 rounded-lg" type="text" name="password" id="password" disabled>
                             </div>
                             
-                            <div class="mt-3 hidden" id="new_passwordArea">
+                            <div class="hidden mt-3" id="new_passwordArea">
                                 <label for="instructorNewPassword">New Password</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-gray-300" type="password" name="instructorNewPassword" id="instructorNewPassword">
+                                <input class="w-full h-12 px-5 py-1 border-2 border-gray-300 rounded-lg" type="password" name="instructorNewPassword" id="instructorNewPassword">
                                 
                                 <span id="newPasswordError" class="text-red-500"></span><br>
-                                <span id="passwordRequirements" class="text-gray-500 text-sm">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
+                                <span id="passwordRequirements" class="text-sm text-gray-500">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
                             </div>
                             
-                            <div id="passwordCheckbox" class="mt-3 hidden">
+                            <div id="passwordCheckbox" class="hidden mt-3">
                                 <input type="checkbox" id="showNewPassword" class="mr-2">
                                 <label for="showNewPassword" class="cursor-pointer">Show New Password</label>
                             </div>
                             
-                            <div class="mt-3 hidden" id="instructorPasswordConfirmArea">
+                            <div class="hidden mt-3" id="instructorPasswordConfirmArea">
                                 <label for="instructorNewPasswordConfirm">Confirm New Password</label><br>
-                                <input class="w-full h-12 px-5 py-1 border-2 rounded-lg border-gray-300" type="password" name="instructorNewPasswordConfirm" id="instructorNewPasswordConfirm">
+                                <input class="w-full h-12 px-5 py-1 border-2 border-gray-300 rounded-lg" type="password" name="instructorNewPasswordConfirm" id="instructorNewPasswordConfirm">
                                 
                                 <span id="newPasswordConfirmError" class="text-red-500"></span>
                             </div>
@@ -189,7 +189,7 @@
                                         <td class="py-5">{{$course->course_name}}</td>
                                         <td>{{$course->course_status}}</td>
                                         <td>
-                                            <a href="{{ url("/instructor/course/$course->course_id") }}" class="py-1 px-3 bg-darthmouthgreen text-white rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">view</a>
+                                            <a href="{{ url("/instructor/course/$course->course_id") }}" class="px-3 py-1 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border hover:border-darthmouthgreen">view</a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -227,7 +227,7 @@
                 <input type="hidden" name="_method" value="PUT">
                 <div class="mb-4">
                     <input type="file" name="profile_picture" id="profile_picture" class=""><br>
-                    <label for="profile_picture" class="px-4 py-2 text-white bg-darthmouthgreen rounded-lg cursor-pointer hover:border hover:border-darthmouthgreen hover:bg-white hover:text-darthmouthgreen">
+                    <label for="profile_picture" class="px-4 py-2 text-white rounded-lg cursor-pointer bg-darthmouthgreen hover:border hover:border-darthmouthgreen hover:bg-white hover:text-darthmouthgreen">
                         Select Image
                     </label>
                     @error('profile_picture')
@@ -236,13 +236,22 @@
                         </p>
                     @enderror
                 </div>
-                <div class="mb-4 mt-5 flex justify-center">
-                    <button type="submit" class="px-5 py-3 mx-1 text-white bg-darthmouthgreen rounded-lg hover:border hover:border-darthmouthgreen hover:bg-white hover:text-darthmouthgreen">Upload</button>
+                <div class="flex justify-center mt-5 mb-4">
+                    <button type="submit" class="px-5 py-3 mx-1 text-white rounded-lg bg-darthmouthgreen hover:border hover:border-darthmouthgreen hover:bg-white hover:text-darthmouthgreen">Upload</button>
                     <button type="button" class="px-5 py-3 mx-1 text-white bg-red-500 rounded-lg cancelUpdate hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
                 </div>
             </form>
             
             
+        </div>
+    </div>
+
+
+    <div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+            <span class="loading loading-spinner text-primary loading-lg"></span> 
+                
+            <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
         </div>
     </div>
 

@@ -154,6 +154,16 @@
     
 </section>
 
+
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
 
@@ -318,6 +328,7 @@
             
             var url = baseUrl;
     
+            $('#loaderModal').removeClass('hidden');
             $.ajax({
 
                 url: baseUrl,
@@ -332,6 +343,8 @@
                     // Handle success response
                     console.log(response);
                     if (response.redirect_url) {
+                        
+        $('#loaderModal').addClass('hidden');
                         window.location.href = response.redirect_url;
                     }
                 },

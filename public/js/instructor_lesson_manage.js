@@ -880,8 +880,8 @@ $('#save_lesson_btn').on('click', function(e) {
 
     // save all
     $('#saveEditBtn').on('click', function(e){
-        e.preventDefault();
 
+        $('#loaderModal').removeClass('hidden');
             // Check if the request is already in progress
             if ($(this).data('request-in-progress')) {
                 return;
@@ -979,6 +979,8 @@ $('#save_lesson_btn').on('click', function(e) {
                     success: function(response) {
                         // Handle success if needed
                         location.reload();
+                        
+        $('#loaderModal').addClass('hidden');
                         console.log(response);
                     },
                     error: function(error) {
@@ -1022,6 +1024,7 @@ $('#save_lesson_btn').on('click', function(e) {
         var formData = new FormData(this);
         const url = "/instructor/course/content/"+ courseID +"/"+ syllabusID +"/lesson/"+ topicID +"/title/"+ lessonID +"/picture"
 
+        $('#loaderModal').removeClass('hidden');
         $.ajax({
             type: "POST",
             url: url,
@@ -1033,6 +1036,8 @@ $('#save_lesson_btn').on('click', function(e) {
             processData: false,
             success: function(response) {
                 // alert('Upload successful!');
+                
+        $('#loaderModal').addClass('hidden');
                 location.reload();
             },
             error: function(xhr, status, error) {
@@ -1058,6 +1063,7 @@ $('#save_lesson_btn').on('click', function(e) {
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
+        $('#loaderModal').removeClass('hidden');
         $.ajax({
             type: "POST",
             url: url,
@@ -1067,6 +1073,8 @@ $('#save_lesson_btn').on('click', function(e) {
             },
             success: function(response) {
                 console.log("success");
+                
+        $('#loaderModal').addClass('hidden');
                 location.reload();
                 // console.log(response);
             },

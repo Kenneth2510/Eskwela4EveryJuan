@@ -31,6 +31,10 @@ $(document).ready(function() {
     
         var url = "/learner/course/content/"+ courseID +"/"+ learnerCourseID +"/lesson/"+ syllabusID +"/finish";
 
+
+        
+        $('#finishLessonModal').addClass('hidden');
+        $('#loaderModal').removeClass('hidden');
         $.ajax ({
             type: "POST",
             url: url,
@@ -40,6 +44,8 @@ $(document).ready(function() {
             success: function (response){
                 console.log(response)
                 if (response && response.redirect_url) {
+                    
+                    $('#loaderModal').addClass('hidden');
                     window.location.href = response.redirect_url;
                 } else {
                 
@@ -50,6 +56,14 @@ $(document).ready(function() {
             }
       })
     })
+
+
+
+
+
+
+
+
 
     function getLearnerData() {
         var url = `/learner/learnerData`;
