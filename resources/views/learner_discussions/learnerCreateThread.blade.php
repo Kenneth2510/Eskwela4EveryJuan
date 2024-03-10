@@ -70,14 +70,10 @@
     @include('partials.chatbot')
 
     <div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
-        <div class="modal-content flex flex-col justify-center items-center p-20 bg-white p-4 rounded-lg shadow-lg w-[500px]">
-            <div class="three-body">
-                <div class="three-body__dot"></div>
-                <div class="three-body__dot"></div>
-                <div class="three-body__dot"></div>
-            </div>
-            
-        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+        <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+            <span class="loading loading-spinner text-primary loading-lg"></span> 
+                
+            <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
         </div>
     </div>
 

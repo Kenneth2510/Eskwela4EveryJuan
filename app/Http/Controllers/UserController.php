@@ -21,4 +21,8 @@ class UserController extends Controller
     public function terms() {
         return view('terms&condition')->with('title', 'Terms & Services');
     }
+    
+    public function data_privacy() {
+        return view ('data_privacy')->with('title', 'Data Privacy Act of 2012');
+    }
 }
