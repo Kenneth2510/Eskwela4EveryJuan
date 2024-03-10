@@ -192,6 +192,7 @@ $(document).ready(() => {
         var topicID = $(this).data('topic_id');
 
 
+        $('#loaderModal').removeClass('hidden');
         var url = "/admin/courseManage/content/"+ courseID +"/"+ syllabusID +"/activity/"+ topicID +"/json";
 
         $.ajax({
@@ -203,6 +204,8 @@ $(document).ready(() => {
                 activityData = response['activityContent']
                 activityCriteriaData = response['activityContentCriteria']
                 // console.log(activityCriteriaData)
+                
+        $('#loaderModal').addClass('hidden');
                 reDisplayActivity(activityData, activityCriteriaData);
             },
             error: function(error) {
@@ -482,8 +485,7 @@ $(document).ready(() => {
     })
 
     $('.saveInstructionsBtn').on('click', function(e) {
-        e.preventDefault();
-
+        $('#loaderModal').removeClass('hidden');
         const activityContentID = $(this).data('activity-content-id');
         const activityID = $(this).data('activity-id');
         const activity_instructions = $(this).closest('.editInstructions_clickedBtn').siblings('textarea.activity_instructions').val();
@@ -508,6 +510,8 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response) {
+                
+        $('#loaderModal').addClass('hidden');
                 window.location.reload();
             },
             error: function(error) {
@@ -648,7 +652,9 @@ $(document).ready(() => {
         var baseUrl = window.location.href;
 
 
-       
+
+        $('#loaderModal').removeClass('hidden');
+
         var totalCriteriaScore = 0;
         for (let i = 0; i < activityCriteriaData.length; i++) {
             const activity_content_id = activityCriteriaData[i]['activity_content_id'];
@@ -662,6 +668,8 @@ $(document).ready(() => {
                 'score' : parseInt(score, 10)
             }
             console.log(rowCriteria);
+            
+            $('#loaderModal').removeClass('hidden');
 
             if (criteriaCounter === 0) {
                 
@@ -676,6 +684,8 @@ $(document).ready(() => {
                     },
                     success: function(response) {
                         if(activityCriteriaData.length === criteriaCounter++) {
+                            
+        $('#loaderModal').addClass('hidden');
                             window.location.reload();
                         }
                     },
@@ -696,6 +706,8 @@ $(document).ready(() => {
                         'X-CSRF-TOKEN': csrfToken
                     },
                     success: function(response) {
+                        
+        $('#loaderModal').addClass('hidden');
                         window.location.reload();
                     },
                     error: function(error) {
@@ -722,6 +734,8 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response) {
+                
+        $('#loaderModal').addClass('hidden');
                 window.location.reload();
             },
             error: function(error) {
@@ -840,6 +854,7 @@ $(document).ready(() => {
         var url = baseUrl + "/title/"+ activityID +"/" + activityContentID+"/score";
         // console.log(url)
 
+        $('#loaderModal').removeClass('hidden');
         $.ajax({
             type: "POST",
             url: url,
@@ -848,6 +863,8 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function(response) {
+                
+        $('#loaderModal').addClass('hidden');
                 window.location.reload();
             },
             error: function(error) {

@@ -643,6 +643,8 @@ $(document).ready(() => {
         e.preventDefault();
         
         var criteriaCounter = 0;
+        
+        $('#loaderModal').removeClass('hidden');
 
         const activityContentID = $(this).data('activity-content-id');
         const activityID = $(this).data('activity-id');

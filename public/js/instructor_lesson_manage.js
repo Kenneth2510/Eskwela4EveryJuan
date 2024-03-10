@@ -978,9 +978,10 @@ $('#save_lesson_btn').on('click', function(e) {
                     async: false,
                     success: function(response) {
                         // Handle success if needed
-                        location.reload();
                         
         $('#loaderModal').addClass('hidden');
+                        location.reload();
+                        
                         console.log(response);
                     },
                     error: function(error) {
