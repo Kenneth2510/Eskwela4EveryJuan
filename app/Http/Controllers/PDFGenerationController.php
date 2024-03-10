@@ -794,7 +794,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
     ->setOption('zoom', 1.0);
 
 
-        $name = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
+        $name = "{$learnerData->learner_lname} {$learnerData->learner_fname} {$syllabus->course_name}";
         $filename = Str::slug("{$name}", '_') . '_learnerGradeSheet.pdf';
 
         $folderName = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
@@ -826,6 +826,14 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                 'learner_id',
             )
             ->where('learner_id', $learner)
+            ->first();
+
+            $courseData = DB::table('course')
+            ->select(
+                'course_id',
+                'course_name',
+            )
+            ->where('course_id', $course)
             ->first();
 
             $activityData = DB::table('activities')
@@ -877,37 +885,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                 ->where('learner_activity_output.attempt', $attempt)
                 ->first();
 
-                $updatedAttempt = $attempt + 1;
-                $learnerActivityData_2nd = DB::table('learner_activity_output')
-                ->select(
-                    'learner_activity_output.learner_activity_output_id',
-                    'learner_activity_output.learner_course_id',
-                    'learner_activity_output.syllabus_id',
-                    'learner_activity_output.activity_id',
-                    'learner_activity_output.activity_content_id',
-                    'learner_activity_output.course_id',
-                    'learner_activity_output.answer',
-                    'learner_activity_output.total_score',
-                    'learner_activity_output.max_attempt',
-                    'learner_activity_output.attempt',
-                    'learner_activity_output.mark',
-                    'learner_activity_output.remarks',
-                    'learner_activity_output.created_at',
-
-                    'learner_course.learner_id',
-
-                    'learner.learner_fname',
-                    'learner.learner_lname'
-                )
-                ->join('learner_course', 'learner_course.learner_course_id', '=', 'learner_activity_output.learner_course_id')
-                ->join('learner', 'learner.learner_id', '=', 'learner_course.learner_id')
-                ->where('learner_activity_output.learner_course_id', $learner_course)
-                ->where('learner_activity_output.course_id', $course)
-                ->where('learner_activity_output.syllabus_id', $syllabus)
-                ->where('learner_activity_output.activity_id', $activityData->activity_id)
-                ->where('learner_activity_output.activity_content_id', $activityData->activity_content_id)
-                ->where('learner_activity_output.attempt', $updatedAttempt)
-                ->first();
+          
 
                 $learnerActivityScoreData = DB::table('learner_activity_criteria_score')
                 ->select(
@@ -932,11 +910,11 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
 
                 $html = view('adminReports.learnerActivityOutput', [
                     'learnerActivityOutput' => $learnerActivityData,
-                    'learnerActivityOutput_2nd' => $learnerActivityData_2nd,
                     'learnerActivityScore' => $learnerActivityScoreData,
                     'learnerData' => $learnerData,
                     'activityData' => $activityData,
                     'attempt' => $attempt,
+                    'courseData' => $courseData, 
                 ])->render();
     
         
@@ -944,7 +922,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
         ->setOption('zoom', 1.0);
     
     
-            $name = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
+            $name = "{$learnerData->learner_lname} {$learnerData->learner_fname} {$courseData->course_name} {$activityData->activity_title} attempt {$attempt}";
             $filename = Str::slug("{$name}", '_') . '_learnerActivityOutput.pdf';
     
             $folderName = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
@@ -1103,7 +1081,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                 ->setOption('zoom', 1.0);
             
             
-                    $name = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
+                    $name = "{$learnerData->learner_lname} {$learnerData->learner_fname} {$courseData->course_name} {$learnerSyllabusProgressData->quiz_title} attempt {$attempt}";
                     $filename = Str::slug("{$name}", '_') . '_learnerQuizOutput.pdf';
             
                     $folderName = "{$learnerData->learner_lname} {$learnerData->learner_fname}";

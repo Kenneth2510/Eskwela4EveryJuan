@@ -81,7 +81,7 @@
 
 
         <div>
-            <h1>Course Gradesheets</h1>
+            <h1>{{$syllabus->course_name}} -  Gradesheet</h1>
             <h2>Overall Course Grades and Remarks</h2>
             <table>
                 <thead>

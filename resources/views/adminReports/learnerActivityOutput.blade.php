@@ -82,13 +82,23 @@
 
         <div class="container">
             <div class="header">
-                <h1 class="title">{{ $activityData->activity_title }} - Attempt {{ $attempt }} - {{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
+                <h1 class="title">{{$courseData->course_name}}</h1>
+                <h1 class="title">{{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
+                <h1 class="title">{{ $activityData->activity_title }} - Attempt {{ $attempt }}</h1>
             </div>
             
             <div class="activityInstructions">
                 <h2>Activity Instructions:</h2>
                 <p>{{ $activityData->activity_instructions }}</p>
             </div>
+
+
+            <div class="activityOutput">
+                <h2>Your Output:</h2>
+                <p>{{ $learnerActivityOutput->answer }}</p>
+            </div>
+
+
             
             <div class="criteriaScores">
                 <h2>Criteria Scores:</h2>
@@ -98,6 +108,18 @@
                         <p>Score: {{ $score->score }} / {{ $score->criteria_score }}</p>
                     </div>
                 @endforeach
+            </div>
+
+            @php
+            $totalCriteriaScore = 0;
+            foreach ($learnerActivityScore as $score) {
+                $totalCriteriaScore += $score->criteria_score;
+            }
+            @endphp
+            
+            <div class="totalScore">
+                <h2>Total:</h2>
+                <p>{{ $learnerActivityOutput->total_score }} / {{ $totalCriteriaScore }}</p>
             </div>
             
             <div class="remarks">
