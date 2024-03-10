@@ -85,6 +85,8 @@
                 <h1 class="title">{{$courseData->course_name}}</h1>
                 <h1 class="title">{{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
                 <h1 class="title">{{ $activityData->activity_title }} - Attempt {{ $attempt }}</h1>
+                
+                <h1 class="title">{{$learnerActivityOutput->created_at}}</h1>
             </div>
             
             <div class="activityInstructions">

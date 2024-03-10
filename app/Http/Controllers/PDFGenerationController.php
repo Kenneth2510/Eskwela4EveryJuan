@@ -1011,6 +1011,8 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                         'learner_quiz_progress.max_attempt',
                         'learner_quiz_progress.attempt',
                         'learner_quiz_progress.score',
+                        'learner_quiz_progress.start_period',
+                        'learner_quiz_progress.finish_period',
                     )
                     ->where('learner_quiz_progress.learner_course_id', $learner_course)
                     ->where('learner_quiz_progress.course_id', $course)
@@ -1199,7 +1201,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
     ->setOption('zoom', 1.0);
 
 
-        $name = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
+        $name = "{$learnerData->learner_lname} {$learnerData->learner_fname} {$courseData->course_name}";
         $filename = Str::slug("{$name}", '_') . '_learnerPreAssessment.pdf';
 
         $folderName = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
@@ -1313,6 +1315,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
                     'postAssessmentOutputData' => $postAssessmentOutputData,
                     'learnerData' => $learnerData,
                     'courseData' => $courseData,
+                    'attempt' => $attempt,
                 ])->render();
     
         
@@ -1320,7 +1323,7 @@ $learnerPostAssessmentData = DB::table('learner_post_assessment_progress')
         ->setOption('zoom', 1.0);
     
     
-            $name = "{$learnerData->learner_lname} {$learnerData->learner_fname}";
+            $name = "{$learnerData->learner_lname} {$learnerData->learner_fname} {$courseData->course_name} attempt {$attempt}";
             $filename = Str::slug("{$name}", '_') . '_learnerPostAssessment.pdf';
     
             $folderName = "{$learnerData->learner_lname} {$learnerData->learner_fname}";

@@ -68,19 +68,24 @@
                 <h1 class="title">{{$courseData->course_name}}</h1>
                 <h1 class="title">{{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
                 <h1 class="title">{{ $learnerSyllabusProgressData->quiz_title }} - Attempt {{ $attempt }}</h1>
+                <h1 class="title">{{$quizProgressData->start_period}} - {{$quizProgressData->finish_period}}</h1>
             </div>
 
-            
+{{--             
             @php
             $totalCriteriaScore = 0;
             foreach ($quizLearnerData as $score) {
                 $totalCriteriaScore += $score->criteria_score;
             }
+            @endphp --}}
+
+            @php
+            $totalRowCount = count($quizLearnerData);
             @endphp
             
             <div class="totalScore">
                 <h2>Total:</h2>
-                <p>{{ $quizProgressData->score }} / {{ $totalCriteriaScore }}</p>
+                <p>{{ $quizProgressData->score }} / {{ $totalRowCount }}</p>
             </div>
 
 

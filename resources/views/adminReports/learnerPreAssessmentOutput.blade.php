@@ -65,9 +65,35 @@
 
 
         <div class="container">
-            <div class="header">
+            {{-- <div class="header">
                 <h1 class="title">{{ $courseData->course_name }} - {{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }} Pre-Assessment Output</h1>
+            </div> --}}
+
+
+            <div class="header">
+                <h1 class="title">{{$courseData->course_name}}</h1>
+                <h1 class="title">{{ $learnerData->learner_fname }} {{ $learnerData->learner_lname }}</h1>
+                <h1 class="title">Pre-Assessment Output</h1>
+                <h1 class="title">{{$preAssessmentData->start_period}} - {{$preAssessmentData->finish_period}}</h1>
+                
             </div>
+            {{-- @php
+            $totalScore = 0;
+            foreach ($preAssessmentOutputData as $score) {
+                $totalScore += $score->criteria_score;
+            }
+            @endphp --}}
+
+            
+            @php
+            $totalRowCount = count($preAssessmentOutputData);
+            @endphp
+
+            <div class="totalScore">
+                <h2>Total:</h2>
+                <p>{{ $preAssessmentData->score }} / {{ $totalRowCount }}</p>
+            </div>
+
     
             @foreach ($preAssessmentOutputData as $question)
             <div class="my-5 py-5 px-3 questionData @if ($question->isCorrect == 1) border-darthmouthgreen @else border-red-600 @endif rounded-lg">
