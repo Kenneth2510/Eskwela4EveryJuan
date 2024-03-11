@@ -3,16 +3,16 @@
 @section('content')
             {{-- MAIN --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
+        <div class="h-full px-2 py-4 pt-24 overflow-auto rounded-lg shadow-lg md:pt-0">
             <div class="relative space-y-4">
-                <a href="{{ url("/instructor/discussions") }}" class="my-2 bg-gray-300 rounded-full ">
+                <a href="{{ url("/learner/discussions") }}" class="my-2 bg-gray-300 rounded-full ">
                     <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                 </a>
                 <h1 class="text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>
                 <h1 class="text-xl font-semibold md:text-2xl">Create a Discussion</h1>                
             </div>
             
-            <div class="w-full pt-5" id="mainContainer">
+            <div class="w-full pt-5 lg:px-24" id="mainContainer">
                 <div class="w-3/5" id="selectCommunityArea">
                     <label for="">Choose a group to post:</label>
                     <select name="" class="w-1/2 p-2 border-2 border-darthmouthgreen rounded-xl" id="selectCommunity">

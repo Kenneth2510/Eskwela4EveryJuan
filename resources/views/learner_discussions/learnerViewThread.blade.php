@@ -3,13 +3,13 @@
 @section('content')
     {{-- MAIN --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
+        <div class="h-full px-2 py-4 pt-24 overflow-auto rounded-lg shadow-lg md:pt-0">
             <div class="py-4 border-b-2 border-gray-300">
                 <h1 class="text-2xl font-semibold md:text-3xl">DISCUSSION FORUMS</h1>
             </div>
 
 
-            <div class="w-full" id="mainContainer">
+            <div class="w-full lg:px-24" id="mainContainer">
             
                 <div data-thread-id="{{ $thread->thread_id }}" class="flex w-full my-5 bg-white border-2 border-opacity-75 rounded-lg border-darthmouthgreen thread" id="thread_{{ $thread->thread_id }}">
                     <div class="w-2/12 border-r-2 border-opacity-50 md:w-1/12 border-darthmouthgreen" id="upvoteArea">

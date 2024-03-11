@@ -4,7 +4,7 @@
       {{-- head --}}
       <div>
           <div class="relative py-3 text-center border-b-2 border-gray-300">
-              <i class="absolute top-0 right-0 px-3 fa-solid fa-xmark" id="AIClose"></i>
+              {{-- <i class="absolute top-0 right-0 px-3 fa-solid fa-xmark" id="AIClose"></i> --}}
               <h1 class="text-2xl font-bold">Eskwela Bot</h1>
           </div>        
       </div>

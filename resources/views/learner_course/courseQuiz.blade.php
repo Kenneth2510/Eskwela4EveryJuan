@@ -8,15 +8,14 @@
             <a href="{{ url("/learner/course/manage/$learnerSyllabusProgressData->course_id/overview") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
-            <h1 class="w-1/2 py-4 text-2xl font-bold md:text-4xl"><span class="">{{ $learnerSyllabusProgressData->course_name }}</span></h1>
+            <h1 class="w-1/2 py-4 text-2xl font-bold md:text-3xl lg:text-4xl"><span class="">{{ $learnerSyllabusProgressData->course_name }}</span></h1>
         {{-- subheaders --}}
             <div class="flex flex-col justify-between fill-mainwhitebg">
-                <h1 class="w-1/2 py-4 text-lg"><span class="">{{ $learnerSyllabusProgressData->quiz_title }}</span></h1>
+                <h1 class="w-1/2 py-4 text-lg font-bold md:text-xl"><span class="">{{ $learnerSyllabusProgressData->quiz_title }}</span></h1>
             </div>
         </div> 
 
-
-        <div class="px-2">
+        <div class="mx-2">
             <div class="mt-1 text-gray-600">
                 <a href="{{ url('/learner/courses') }}" class="">course></a>
                 <a href="{{ url("/learner/course/$learnerSyllabusProgressData->course_id") }}">{{$learnerSyllabusProgressData->course_name}}></a>
@@ -24,18 +23,18 @@
                 <a href="">{{ $learnerSyllabusProgressData->quiz_title }}</a>
             </div>
             {{-- head --}}
-            <div class="flex justify-between py-4 mt-10 border-b-2">
+            <div class="flex flex-col justify-between py-4 border-b-2 lg:flex-row">
                 <div class="flex flex-row items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M12 29a1 1 0 0 1-.92-.62L6.33 17H2v-2h5a1 1 0 0 1 .92.62L12 25.28l8.06-21.63A1 1 0 0 1 21 3a1 1 0 0 1 .93.68L25.72 15H30v2h-5a1 1 0 0 1-.95-.68L21 7l-8.06 21.35A1 1 0 0 1 12 29Z"/></svg>
                     <h1 class="mx-2 text-2xl font-semibold" id="quiz_title" data-course-id="{{$learnerSyllabusProgressData->course_id}}" data-syllabus-id="{{$learnerSyllabusProgressData->syllabus_id}}">{{$learnerSyllabusProgressData->quiz_title}}</h1>
                 </div>
-                <h1 class="mx-2 text-2xl font-semibold">
+                <h1 class="mx-2 text-xl font-semibold">
                     @if ($learnerSyllabusProgressData->status === "NOT YET STARTED")
-                    <span class="">STATUS: NOT YET STARTED</span>
+                    <p>STATUS: <span class="text-danger">NOT YET STARTED</span></p>
                     @elseif ($learnerSyllabusProgressData->status === "COMPLETED")
-                    <span class="">STATUS: COMPLETED</span>
+                    <p>STATUS: <span class="text-primary">COMPLETED</span></p>
                     @else
-                    <span class="">STATUS: IN PROGRESS</span>
+                    <p>STATUS: <span class="text-warning">IN PROGRESS</span></p>
                     @endif
                 </h1>
             </div>
@@ -46,7 +45,7 @@
 
             <div id="coverageArea" class="mt-5">
                 <table class="w-full">
-                    <thead class="h-10 text-2xl text-white bg-green-700 rounded-xl">
+                    <thead class="table w-full h-10 text-2xl text-white bg-green-700 table-fixed rounded-xl">
                       
                         <th class="w-4/5">Title</th>
                         <th class="w-3/5"></th>
@@ -73,15 +72,21 @@
 
             <div class="mt-16" id="durationArea">
                 <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
-                <div class="">
-                    <label class="text-lg" for="hours">Hours:</label>
-                    <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
-            
-                    <label class="text-lg" for="minutes">Minutes:</label>
-                    <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
-            
-                    <label class="text-lg" for="seconds">Seconds:</label>
-                    <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                <div class="flex flex-col justify-start w-1/2 md:flex-row">
+                    <div class="w-1/3">
+                        <label class="text-lg" for="hours">Hours:</label>
+                        <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
+                    </div>
+                    
+                    <div class="w-1/3">
+                        <label class="text-lg" for="minutes">Minutes:</label>
+                        <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
+                    </div>
+                    
+                    <div class="w-1/3">
+                        <label class="text-lg" for="seconds">Seconds:</label>
+                        <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>    
+                    </div>
                 </div>
             </div>
 
@@ -140,7 +145,7 @@
         
             
 
-        <div class="px-10 mt-[50px] flex justify-between">
+        <div class="mt-[50px] flex justify-between items-center flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
             @if(count($learnerQuizProgressData) == 1)
                 @foreach ($learnerQuizProgressData as $quizAttemptData)
                     
