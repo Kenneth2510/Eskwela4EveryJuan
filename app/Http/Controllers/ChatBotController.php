@@ -74,7 +74,19 @@ class ChatBotController extends Controller
             $fileName = pathinfo($file, PATHINFO_BASENAME);
     
             // Send the PDF file to the Flask application
-            $response = $client->request('POST', "http://127.0.0.1:5000/add_file/$session_id", [
+            // $response = $client->request('POST', "http://127.0.0.1:5000/add_file/$session_id", [
+            //     'multipart' => [
+            //         [
+            //             'name'     => 'files',
+            //             'contents' => fopen($filePath, 'r'),
+            //             'filename' => $fileName,
+            //         ],
+            //     ],
+            // ]);
+
+            
+            //     Send the PDF file to the Flask application
+            $response = $client->request('POST', "https://eskwela4everyjuanchatbot-e5285e41c4cf.herokuapp.com/add_file/$session_id", [
                 'multipart' => [
                     [
                         'name'     => 'files',
@@ -83,7 +95,6 @@ class ChatBotController extends Controller
                     ],
                 ],
             ]);
-    
             // Output the response for debugging
             echo $response->getBody();
         }
@@ -139,7 +150,7 @@ class ChatBotController extends Controller
             $fileName = pathinfo($file, PATHINFO_BASENAME);
     
             // Send the PDF file to the Flask application
-            $response = $client->request('POST', "http://127.0.0.1:5000/add_file/$session_id", [
+            $response = $client->request('POST', "https://eskwela4everyjuanchatbot-e5285e41c4cf.herokuapp.com/add_file/$session_id", [
                 'multipart' => [
                     [
                         'name'     => 'files',
@@ -162,7 +173,7 @@ class ChatBotController extends Controller
     
                 try {
                     // Send the reset request to the Flask application
-                    $response = $client->request('GET', "http://127.0.0.1:5000/process_session/$session_id");
+                    $response = $client->request('GET', "https://eskwela4everyjuanchatbot-e5285e41c4cf.herokuapp.com/process_session/$session_id");
             
                     // Output the response for debugging
                     echo $response->getBody();
@@ -179,7 +190,7 @@ class ChatBotController extends Controller
     
         try {
             // Send the reset request to the Flask application
-            $response = $client->request('POST', "http://127.0.0.1:5000/reset/$session_id");
+            $response = $client->request('POST', "https://eskwela4everyjuanchatbot-e5285e41c4cf.herokuapp.com/reset/$session_id");
     
             // Output the response for debugging
             echo $response->getBody();
@@ -202,7 +213,7 @@ class ChatBotController extends Controller
 
     try {
         // Send the chat request to the Flask application
-        $response = $client->request('POST', "http://127.0.0.1:5000/chat/$session_id", [
+        $response = $client->request('POST', "https://eskwela4everyjuanchatbot-e5285e41c4cf.herokuapp.com/chat/$session_id", [
             'json' => [
                 'question' => $user_message,
                 'course' => $course,
