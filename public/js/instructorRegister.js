@@ -219,6 +219,9 @@ $(document).ready(function () {
         if (instructor_fname === '') {
             $('#firstNameError').text('Please enter a first name.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#firstNameError').text('');
         }
@@ -226,6 +229,9 @@ $(document).ready(function () {
         if (instructor_bday === '') {
             $('#bdayError').text('Please enter a birthday.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#bdayError').text('');
         }
@@ -233,6 +239,9 @@ $(document).ready(function () {
         if (instructor_lname === '') {
             $('#lastNameError').text('Please enter a last name.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#lastNameError').text('');
         }
@@ -240,6 +249,9 @@ $(document).ready(function () {
         if (instructor_gender === '') {
             $('#genderError').text('Please select a gender.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#genderError').text('');
         }
@@ -248,6 +260,9 @@ $(document).ready(function () {
         if (instructor_email === '') {
             $('#emailError').text('Please enter your email.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#emailError').text('');
         }
@@ -255,6 +270,9 @@ $(document).ready(function () {
         if (instructor_contactno === '') {
             $('#contactnoError').text('Please enter your contact number.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#contactError').text('');
         }
@@ -262,6 +280,9 @@ $(document).ready(function () {
         if (instructor_username === '') {
             $('#usernameError').text('Please enter a username.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#usernameError').text('');
         }
@@ -271,6 +292,9 @@ $(document).ready(function () {
         if (password === '') {
             $('#passwordError').text('Please enter a password.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#passwordError').text('');
         }
@@ -278,9 +302,15 @@ $(document).ready(function () {
         if (password_confirmation === '') {
             $('#passwordConfirmationError').text('Please enter a password confirmation.');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else if (password !== password_confirmation) {
             $('#passwordConfirmationError').text('Your password does not match');
             isValid = false;
+            firstForm.removeClass("hidden")
+            secondForm.addClass("hidden");
+            thirdForm.addClass("hidden");
         } else {
             $('#passwordConfirmationError').text('');
         }
@@ -293,6 +323,7 @@ $(document).ready(function () {
         security_code_6 === '') {
             $('#securityCodeError').text('Please enter a security code.');
             isValid = false;
+            
         } else {
             $('#securityCodeError').text('');
         }
@@ -335,6 +366,26 @@ $(document).ready(function () {
                 },
                 error: function(error) {
                     console.log(error);
+                    if (error.responseJSON && error.responseJSON.errors) {
+                        if (error.responseJSON.errors.instructor_email) {
+                            $('#emailError').text(error.responseJSON.errors.instructor_email[0]);
+                            firstForm.removeClass("hidden")
+                            secondForm.addClass("hidden");
+                            thirdForm.addClass("hidden");
+                        }
+                        if (error.responseJSON.errors.instructor_contactno) {
+                            $('#contactnoError').text(error.responseJSON.errors.instructor_contactno[0]);
+                            firstForm.removeClass("hidden")
+                            secondForm.addClass("hidden");
+                            thirdForm.addClass("hidden");
+                        }
+                        if (error.responseJSON.errors.instructor_username) {
+                            $('#usernameError').text(error.responseJSON.errors.instructor_username[0]);
+                            firstForm.removeClass("hidden")
+                            secondForm.addClass("hidden");
+                            thirdForm.addClass("hidden");
+                        }
+                    }
                 }
             });
         }

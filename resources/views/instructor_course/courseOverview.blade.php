@@ -15,7 +15,7 @@
                     <h4 class="text-xl">{{$course->course_code}}</h4>
                     <h4 class="mt-10">Course Level: {{$course->course_difficulty}}</h4>
                     <h4 class=""><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
-                    <h4 class="mt-3">Total  Units: {{$totalSyllabusCount}}</h4>
+                    {{-- <h4 class="mt-3">Total  Units: {{$totalSyllabusCount}}</h4> --}}
                     <h4>&emsp;<i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
                     <h4>&emsp;<i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
                     <h4>&emsp;<i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
@@ -111,7 +111,7 @@
                                 <td>{{$enrollee->course_progress}}</td>
                                 <td>
                                     <button class="p-3 bg-darthmouthgreen rounded-xl hover:bg-white hover:border-2 hover:border-darthmouthgreen">
-                                        <a class="text-white hover:text-darthmouthgreen" href="{{ url("instructor/viewProfile/$enrollee->learner_id") }}">
+                                        <a class="text-white hover:text-darthmouthgreen" href="{{ url("instructor/profile/learner/$enrollee->learner_email") }}">
                                         view profile
                                         </a>
                                     </button>
@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="py-5 mx-5" id="courseDetailsContentArea">
-                    <div class="flex flex-col-reverse items-center justify-between md:flex-row" id="courseInfoArea">
+                    {{-- <div class="flex flex-col-reverse items-center justify-between md:flex-row" id="courseInfoArea">
 
                         <div class="w-full py-5 mx-5 md:w-1/2" id="courseInfo_left">
                             <h1 class="text-2xl font-semibold md:text-4xl" id="courseName">{{$course->course_name}}</h1>
@@ -172,46 +172,119 @@
                             <button id="courseEditBtn" class="px-5 py-3 text-white bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen rounded-xl">Edit</button>
                         </div>
                     </div>
+                </div> --}}
 
-
-                <!-- start-generate-pdf -->
-                <div class="" id="generatedPdfArea">
-                    <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
-                    <h1 class="text-2xl font-semibold">Learners Enrolled</h1>
+                <div class="flex flex-col-reverse items-center justify-between md:flex-row" id="courseInfoArea">
+                    <div class="w-full py-5 mx-5 md:w-1/2" id="courseInfo_left">
+                        <h1 class="text-2xl font-semibold md:text-4xl" id="courseName">{{$course->course_name}}</h1>
+                        <h4 class="text-4xl">{{$course->course_code}}</h4>
+                        <h4 class="mt-10 text-xl">Course Level: {{$course->course_difficulty}}</h4>
+                        <h4 class="text-xl"><i class="fa-regular fa-clock text-darthmouthgreen"></i> Est. Time:  {{$totalCourseTime}}</h4>
+                        {{-- <h4 class="mt-3 text-xl">Total  Units: {{$totalSyllabusCount}}</h4> --}}
+                        <h4 class="pl-5 text-xl"><i class="fa-regular fa-file text-darthmouthgreen"></i> Lessons: {{$totalLessonsCount}}</h4>
+                        <h4 class="pl-5 text-xl"><i class="fa-regular fa-clipboard text-darthmouthgreen"></i> Activities: {{$totalActivitiesCount}}</h4>
+                        <h4 class="pl-5 text-xl"><i class="fa-regular fa-pen-to-square text-darthmouthgreen"></i> Quizzes:  {{$totalQuizzesCount}}</h4>
+                        <h4 class="mt-10 text-xl">Course Description</h4>
+                        <div class="whitespace-pre-line w-full overflow-y-auto h-[180px]" id="courseDescription">
+                            {{$course->course_description}}
+                        </div>
+                        <div class="">
+                            <button id="deleteCourseBtn" data-course-id="{{ $course->course_id }}" class="px-5 py-3 text-white bg-red-600 hover:bg-white hover:text-red-600 hover:border-2 hover:border-red-600 rounded-xl">Delete Course</button>
+                        </div>
                     
-                    <div class="m-5 mt-5 px-5 overflow-auto h-[600px]">
-                        <table class="">
-                            <thead class="px-3 text-left text-white bg-darthmouthgreen">
-                                <th class="w-3/12 pl-5">Name</th>
-                                <th class="w-2/12">Email</th>
-                                <th class="w-1/12">Enrollment Status</th>
-                                <th class="w-2/12">Date Enrolled</th>
-                                <th class="w-1/12">Course Progress</th>
-                                <th class="w-2/12"></th>
-                            </thead>
-                            <tbody class="">
-                                @forelse ($courseEnrollees as $enrollee)
-                                <tr class="border-b-2 border-gray-500">
-                                    <td class="py-3 pl-5">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
-                                    <td>{{ $enrollee->learner_email }}</td>
-                                    <td>{{ $enrollee->status }}</td>
-                                    <td>{{ $enrollee->created_at }}</td>
-                                    <td>{{ $enrollee->course_progress }}</td>
-                                    <td>
-                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td class="py-3">No enrollees enrolled</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
                     </div>
+                    <div class="flex flex-col items-center justify-center w-full md:w-1/2" id="courseInfo_right">
+                        <img class="w-40 h-40 my-4 mb-10 bg-red-500 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="Profile Picture">
+                        <h4 class="text-xl">{{$instructor->instructor_fname}} {{$instructor->instructor_lname}}</h4>
+                        <h4 class="text-xl">INSTRUCTOR</h4>
+                        <button id="courseEditBtn" class="px-5 py-3 text-white bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen rounded-xl">Edit</button>
+                    </div>
+                </div>
 
 
-            <div class="hidden py-5 mx-5" id="gradesheetArea">
+
+                {{-- <div class="" id="learnersEnrolledArea">
+                    <div class="" id="generatedPdfArea">
+                        <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
+                        <h1 class="text-2xl font-semibold">Learners Enrolled</h1>
+                        
+                        <div class="m-5 mt-5 px-5 overflow-auto h-[600px]">
+                            <table class="">
+                                <thead class="px-3 text-left text-white bg-darthmouthgreen">
+                                    <th class="w-3/12 pl-5">Name</th>
+                                    <th class="w-2/12">Email</th>
+                                    <th class="w-1/12">Enrollment Status</th>
+                                    <th class="w-2/12">Date Enrolled</th>
+                                    <th class="w-1/12">Course Progress</th>
+                                    <th class="w-2/12"></th>
+                                </thead>
+                                <tbody class="">
+                                    @forelse ($courseEnrollees as $enrollee)
+                                    <tr class="border-b-2 border-gray-500">
+                                        <td class="py-3 pl-5">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
+                                        <td>{{ $enrollee->learner_email }}</td>
+                                        <td>{{ $enrollee->status }}</td>
+                                        <td>{{ $enrollee->created_at }}</td>
+                                        <td>{{ $enrollee->course_progress }}</td>
+                                        <td>
+                                            <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td class="py-3">No enrollees enrolled</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> --}}
+                <!-- start-generate-pdf -->
+
+                <div class="hidden py-5" id="learnersEnrolledArea">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    
+                    <!-- start-generate-pdf -->
+                    <div class="" id="generatedPdfArea">
+                        <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
+                        <h1 class="text-2xl font-semibold">Learners Enrolled</h1>
+                        
+                        <div class="mt-5 px-5 overflow-auto h-[600px]">
+                            <table class="">
+                                <thead class="px-3 text-left text-white bg-darthmouthgreen">
+                                    <th class="w-3/12 pl-5">Name</th>
+                                    <th class="w-2/12">Email</th>
+                                    <th class="w-1/12">Enrollment Status</th>
+                                    <th class="w-2/12">Date Enrolled</th>
+                                    <th class="w-1/12">Course Progress</th>
+                                </thead>
+                                <tbody class="">
+                                    @forelse ($courseEnrollees as $enrollee)
+                                    <tr class="border-b-2 border-gray-500">
+                                        <td class="py-3 pl-5">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
+                                        <td>{{ $enrollee->learner_email }}</td>
+                                        <td>{{ $enrollee->status }}</td>
+                                        <td>{{ $enrollee->created_at }}</td>
+                                        <td>{{ $enrollee->course_progress }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td class="py-3">No enrollees enrolled</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+    
+    <!-- end-generate-pdf -->
+                    {{-- <button id="generateEnrolledLearnersBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Download PDF</button> --}}
+                </div>
+
+
+
+            {{-- <div class="hidden py-5 mx-5" id="gradesheetArea">
                 <div class="" id="exportExcelGrades">
                     <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
                     <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
@@ -267,9 +340,79 @@
                         </table>
                         
                     </div>
+                </div>
+            </div> --}}
 
+            <div class="hidden py-5 mx-5" id="gradesheetArea">
+                <div class="" id="exportExcelGrades">
+                    <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
+                    <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
+                    <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
+                        <table id="gradesheet" class="table-fixed border-collapse w-[3000px] border">
+                            <thead class="px-3 text-center text-white bg-darthmouthgreen">
+                                <th class="w-4/12 pl-5 border">Name</th>
+                                <th class="w-4/12 border">Status</th>
+                                <th class="w-4/12 border">Date Started</th>
+                                <th class="w-4/12 border">Pre Assessment</th>
+                                
+                                @foreach ($activitySyllabus as $activity)
+                                    <th class="w-4/12 border">{{ $activity->activity_title }}</th>
+                                @endforeach
+                                
+                                @foreach ($quizSyllabus as $quiz)
+                                    <th class="w-4/12 border">{{ $quiz->quiz_title }}</th>
+                                @endforeach
+                        
+                                <th class="w-4/12 border">Post Assessment</th>
+                                <th class="w-4/12 border">Grade</th>
+                                <th class="w-4/12 border">Remarks</th>
+                                <th class="w-4/12 border">Date Finished</th>
+                            </thead>
+                        
+                            <tbody class="text-center">
+                                @forelse ($gradesheet as $grade)
+                                    <tr>
+                                        <td class="py-3 pl-5 border">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                                        <td class="border">{{ $grade->course_progress }}</td>
+                                        <td class="border">{{ $grade->start_period }}</td>
+                                        <td class="border">{{$grade->pre_assessment->score}}</td>
+                                        
+                                        {{-- Display activity scores --}}
+                                        @foreach ($activitySyllabus as $activity)
+                                            @php
+                                                $activityScore = $grade->activities->firstWhere('activity_id', $activity->activity_id);
+                                            @endphp
+                                            <td class="border">{{ $activityScore ? $activityScore->average_score : '#' }}</td>
+                                        @endforeach
+                                        
+                                        {{-- Display quiz scores --}}
+                                        @foreach ($quizSyllabus as $quiz)
+                                            @php
+                                                $quizScore = $grade->quizzes->firstWhere('quiz_id', $quiz->quiz_id);
+                                            @endphp
+                                            <td class="border">{{ $quizScore ? $quizScore->average_score : '#' }}</td>
+                                        @endforeach
+                                        
+                                        <td class="border">{{$grade->post_assessment->average_score}}</td>
+                                        <td class="border">{{$grade->grade}}</td>
+                                        <td class="border">{{$grade->remarks}}</td>
+                                        <td class="border">{{ $grade->finish_period }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No gradesheet available</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <button id="generateGradesheetBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Export Excel File</button>
+                {{-- <button id="generateGradesheetPDFBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Generate PDF</button> --}}
+            </div>
 
-                    <div class="hidden py-5 mx-5" id="filesArea">
+                    {{-- <div class="hidden py-5 mx-5" id="filesArea">
                         <h1 class="text-2xl font-semibold md:text-4xl">Your Files</h1>
                         <div class="w-auto overflow-auto overflow-x-auto">
                             <table class="table w-full table-fixed">
@@ -301,11 +444,49 @@
                             </table>
                             <button id="addNewFileBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Add New File</button>
                         </div>
+                    </div> --}}
+
+
+                    <div class="hidden py-5 mx-5" id="filesArea">
+                        <h1 class="text-4xl font-semibold">Your Files</h1>
+                        <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
+                            <table class="table-fixed">
+                                <thead class="w-full text-left">
+                                    <th class="w-1/2 text-xl">File</th>
+                                    <th class="w-1/3"></th>
+                                    <th class="w-1/3"></th>
+                                    <th class="w-1/3"></th>
+                                </thead>
+                                <tbody>
+                    
+                                    @foreach($courseFiles as $file)
+                                        <tr>
+                                            <td class="py-3">{{ basename($file) }}</td>
+                                            <td>
+                                                <a href="{{ Storage::url("$file") }}" target="_blank" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">View File</a>
+                                            </td>  
+                                            <td>
+                                                <a href="{{ Storage::url($file) }}" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen" download>Download</a>
+                                            </td>     
+                                            <td>
+                                                <a href="{{ url("/instructor/course/$course->course_id/delete_file/" . basename($file)) }}" class="px-5 py-3 text-white bg-red-500 rounded-xl hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500" onclick="return confirm('Are you sure you want to delete this file?')">Delete</a>
+                                            </td>
+                                                                         
+                                        </tr>
+                                    @endforeach
+                             
+                                </tbody>
+                            </table>
+                            <button id="addNewFileBtn" class="px-5 py-3 text-white bg-darthmouthgreen rounded-xl hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Add New File</button>
+                        </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
     </div>
+
 
     <div id="courseDetailsEditModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
@@ -330,32 +511,9 @@
         </div>
     </div>
 
-    <div id="addNewFileModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-            <div class="flex justify-end w-full">
-                <button class="cancelEdit">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            
-            <form id="uploadFileForm" action="{{ url("/instructor/course/$course->course_id/add_file") }}" method="POST" enctype="multipart/form-data">
-                
-                @csrf
-                <div class="flex flex-col items-center w-full mt-5">
-                    <label for="file" class="mb-2 text-lg font-semibold">Choose File:</label>
-                    <input type="file" name="file" id="file" class="w-full p-2 border border-gray-300 rounded-md">
-                </div>
 
-<div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-        <div class="flex justify-end w-full">
-            <button class="cancelAddNewFile">
-                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-            </button>
-        </div>
-    </div>
 
-    <div id="deleteCourseModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="deleteCourseModal" class="fixed z-[90] top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelDelete">
@@ -369,14 +527,36 @@
             </div>
             
             <div class="flex justify-center w-full mt-5">
-                <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
-                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+                <button type="button" data-course-id="{{ $course->course_id }}" id="confirmDeleteCourseBtn" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Delete Course</button>
+                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelDelete hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
             </div>
-        </form>
-    </div>
-</div>
-
-        
+          
         </div>
     </div>
+
+
+    <div id="addNewFileModal" class="fixed top-0 left-0 z-[90] flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <div class="flex justify-end w-full">
+                <button class="cancelAddNewFile">
+                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                </button>
+            </div>
+            
+            <form id="uploadFileForm" action="{{ url("/instructor/course/$course->course_id/add_file") }}" method="POST" enctype="multipart/form-data">
+                
+                @csrf
+                <div class="flex flex-col items-center w-full mt-5">
+                    <label for="file" class="mb-2 text-lg font-semibold">Choose File:</label>
+                    <input type="file" name="file" id="file" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+    
+                <div class="flex justify-center w-full mt-5">
+                    <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
+                    <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
 @endsection

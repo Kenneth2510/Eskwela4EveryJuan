@@ -660,10 +660,10 @@ class InstructorController extends Controller
         } else {
             return redirect('/instructor');
         }
-        return view('instructor.settings', compact('instructor'))
+        return view('instructor.profile', compact('instructor'))
         ->with([
             'title' => 'Instructor Profile',
-            'scripts' => ['instructorSettings.js'],
+            'scripts' => ['instructorProfile.js'],
         ]);
     }
 

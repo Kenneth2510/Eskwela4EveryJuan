@@ -172,7 +172,7 @@
                         </div>
 
 
-                        <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="courseProgress">
+                        {{-- <div class="w-full px-5 py-10 mt-5 bg-white shadow-lg rounded-xl" id="courseProgress">
                             <h1 class="text-4xl font-semibold text-darthmouthgreen">Courses Managed</h1>
 
                             <hr class="my-6 border-t-2 border-gray-300">
@@ -184,6 +184,7 @@
                                     <th></th>
                                 </thead>
                                 <tbody>
+                                    @if($courses)
                                     @foreach ($courses as $course)
                                     <tr>
                                         <td class="py-5">{{$course->course_name}}</td>
@@ -193,9 +194,10 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
-                        </div>
+                        </div> --}}
 
 
                     </div>

@@ -277,6 +277,15 @@ $(document).ready(function() {
         }
     }
 
+    $('#mainRecipientListArea').on('click', '.mainListRemove', function() {
+        const emailToRemove = $(this).data('user-email');
+        const typeToRemove = $(this).data('user-type');
+        
+        // Remove the element from tempRecipientList
+        mainRecipientList = mainRecipientList.filter(item => item.email !== emailToRemove);
+        displayMainRecipientList(mainRecipientList)
+    });
+
 
     var filesArray = []; // Array to store files
 

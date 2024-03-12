@@ -1842,55 +1842,45 @@ class InstructorCourseController extends Controller
     {
         if (session()->has('instructor')) {
             $instructor = session('instructor');
-            
+    
             // Retrieve the data from the session
             $lessonData = session('lesson_data');
-
-            
-
+    
             $lessonInfo = DB::table('lessons')
-            ->select(
-                'lesson_id',
-                'course_id',
-                'syllabus_id',
-                'topic_id',
-                'lesson_title',
-                'picture',
-                'duration',
-            )
-            ->where('course_id', $course->course_id)
-            ->where('syllabus_id', $syllabus->syllabus_id)
-            ->where('topic_id', $topic_id)
-            ->first();
-
-
+                ->select(
+                    'lesson_id',
+                    'course_id',
+                    'syllabus_id',
+                    'topic_id',
+                    'lesson_title',
+                    'picture',
+                    'duration',
+                )
+                ->where('course_id', $course->course_id)
+                ->where('syllabus_id', $syllabus->syllabus_id)
+                ->where('topic_id', $topic_id)
+                ->first();
+    
             $lessonContent = DB::table('lesson_content')
-                            ->select(
-                                'lesson_content_id',
-                                'lesson_id',
-                                'lesson_content_title',
-                                'lesson_content',
-                                'lesson_content_order',
-                                'picture',
-                                'video_url'
-                            )
-                            ->where('lesson_id', $lessonInfo->lesson_id)
-                            ->orderBy('lesson_content_order', 'ASC')
-                            ->get();
-
-                            $durationInSeconds = $lessonInfo->duration;
-                            $hours = floor($durationInSeconds / 3600);
-                            $minutes = floor(($durationInSeconds % 3600) / 60);
-                            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
-
-
-            // if (!$lessonData) {
-            //     // Handle the case where the session data is not found
-            //     return response('Session data not found', 500);
-            // }
-        
+                ->select(
+                    'lesson_content_id',
+                    'lesson_id',
+                    'lesson_content_title',
+                    'lesson_content',
+                    'lesson_content_order',
+                    'picture',
+                    'video_url'
+                )
+                ->where('lesson_id', $lessonInfo->lesson_id)
+                ->orderBy('lesson_content_order', 'ASC')
+                ->get();
+    
+            $durationInSeconds = $lessonInfo->duration;
+            $hours = floor($durationInSeconds / 3600);
+            $minutes = floor(($durationInSeconds % 3600) / 60);
+            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
+    
             $response = $this->course_content($course);
-            // Extract the data you need from the session
             $title = 'Course Lesson';
             $scripts = ['instructor_lesson_manage.js'];
             $courseData = $lessonData['courseData'];
@@ -1905,15 +1895,15 @@ class InstructorCourseController extends Controller
             $html = view('instructor_course.courseLessonPreview', compact('instructor'))
                 ->with([
                     'title' => 'Course Lesson',
-                        'scripts' => ['instructor_lesson_manage.js'],
-                        'lessonCount' => $response['lessonCount'],
-                        'activityCount' => $response['activityCount'],
-                        'quizCount' => $response['quizCount'],
-                        'course' => $response['course'],
-                        'syllabus' => $response['syllabus'],
-                        'lessonInfo' => $lessonInfo,
-                        'lessonContent' => $lessonContent,
-                        'formattedDuration' => $formattedDuration,
+                    'scripts' => ['instructor_lesson_manage.js'],
+                    'lessonCount' => $response['lessonCount'],
+                    'activityCount' => $response['activityCount'],
+                    'quizCount' => $response['quizCount'],
+                    'course' => $response['course'],
+                    'syllabus' => $response['syllabus'],
+                    'lessonInfo' => $lessonInfo,
+                    'lessonContent' => $lessonContent,
+                    'formattedDuration' => $formattedDuration,
                 ])
                 ->render();
     
@@ -1929,10 +1919,12 @@ class InstructorCourseController extends Controller
                 Storage::disk('public')->delete($folderPath . '/' . $filename);
             }
     
-            // Generate the PDF using Snappy PDF
-            $pdf = SnappyPdf::loadHTML($html)
-            ->setOption('zoom', 0.8) // Set the scale factor to 80%
-            ->output();
+            // Generate the PDF using Dompdf
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+            $pdf = $dompdf->output();
     
             // Store the new PDF in the public directory within the course-specific folder
             Storage::disk('public')->put($folderPath . '/' . $filename, $pdf);

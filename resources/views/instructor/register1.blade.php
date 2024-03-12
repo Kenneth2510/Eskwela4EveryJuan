@@ -168,7 +168,13 @@
                             minlength="8" 
                             />
                         <span id="passwordError" class="text-red-500"></span>
+                        <span id="passwordRequirements" class="text-sm text-gray-500">Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.</span>
                     </div>
+
+                    <div class="text-darthmouthgreen">
+                        <input type="checkbox" id="showPassword"> Show Password
+                    </div>
+
                     <div class="FORM-CTNR">
                         <label for="password_confirmation" class=" text-darthmouthgreen">Confirm Password:</label>
                         {{-- <input class="border IN-V-INP border-darthmouthgreen" type="password" name="password_confirmation" id="password_confirmation"> --}}
@@ -180,6 +186,9 @@
                             />
                         <span id="passwordConfirmationError" class="text-red-500"></span>
                     </div>
+
+                    
+
 
                     <div class="grid h-auto mt-5 text-black place-items-end" >
                         <button class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:text-darthmouthgreen hover:ring-2 hover:ring-darthmouthgreen" id="nxtBtn" name="Next">Next</button>
@@ -212,7 +221,7 @@
                                 </span>
                             @enderror
                         {{-- <input type="file" name="instructor_credentials" id="instructor_credentials" accept="application/pdf" class="text-darthmouthgreen"> --}}
-                        <input class="w-full max-w-xs file-input file-input-bordered file-input-primary"
+                        <input class="w-full text-black max-w-xs file-input file-input-bordered file-input-primary"
                         type="file"
                         name="instructor_credentials"
                         id="instructor_credentials"
@@ -321,10 +330,10 @@
                 
 
                     <div class="">
-                        <div class="flex flex-row">
+                        {{-- <div class="flex flex-row">
                             <input class="mx-2" type="checkbox" name="" id="">
                             <p class=" text-darthmouthgreen">I've read and accept <span class="font-bold text-darthmouthgreen"><a href="">Terms & Condition</a></span></p>
-                        </div>
+                        </div> --}}
                         
                         <div class="grid h-auto mt-5 text-black place-items-end" >
                             <div class="flex">

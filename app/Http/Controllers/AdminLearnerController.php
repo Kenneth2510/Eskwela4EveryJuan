@@ -344,11 +344,11 @@ class AdminLearnerController extends Controller
 
             $data = [
                 'subject' => 'Your Learner Account Approval',
-                'body' => 'Hello! Your learner account has been successfully approved by the admin. You can now log in using the link below:
+                'body' => "Hello! Your learner account has been successfully approved by the admin. You can now log in using the link below: \n \n
             
-                [Learner Login](http://127.0.0.1:8000/learner)
+                [Learner Login](http://127.0.0.1:8000/learner) \n
             
-                Thank you for joining our platform!',
+                Thank you for joining our platform!",
             ];
             
 
