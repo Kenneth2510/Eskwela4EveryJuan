@@ -912,6 +912,7 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
     $('#confirmSaveQuizContentBtn').on('click', function (e) {
         e.preventDefault();
     
+        $('#loaderModal').removeClass('hidden');
         let loopCounter = 0;
         let completedRequests = 0;
     
@@ -984,6 +985,7 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
                             completedRequests++;
     
                             if (completedRequests === temp_questionsData.length) {
+                                $('#loaderModal').addClass('hidden');
                                 window.location.reload();
                             }
                         },
@@ -992,6 +994,7 @@ function resetQuestionNumber(questionsData, quizReferenceData) {
                             completedRequests++;
     
                             if (completedRequests === temp_questionsData.length) {
+                                $('#loaderModal').addClass('hidden');
                                 window.location.reload();
                             }
                         }

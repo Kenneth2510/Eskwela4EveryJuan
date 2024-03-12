@@ -1,30 +1,29 @@
-
-
-<section class="fixed z-20 w-full h-auto overflow-hidden text-black md:w-1/3 lg:w-2/12 md:relative" id="sidebar_full">
-
-    
-    <div class="fixed flex flex-col justify-between w-full px-5 border-r-4 bg-mainwhitebg md:h-screen md:pt-16 md:relative border-darthmouthgreen" id="instructorSidebar">
+<section class="fixed z-20 w-auto h-auto overflow-hidden text-black md:w-full lg:w-2/12 md:relative" id="sidebar_full">
+    <div class="fixed flex flex-col justify-between w-full bg-mainwhitebg md:h-screen md:relative lg:border-r-4 border-darthmouthgreen" id="instructorSidebar">
 
         <div class="">
-            <div class="">
+            <div class="p-2 md:p-4 md:pb-8">
                 <div class="flex items-center justify-center hidden md:justify-start md:px-4 " id="logo_half">
                     <a href="{{ url('/learner/dashboard') }}">
                         <i class="mx-2 text-4xl fa-solid fa-book-bookmark"></i>
                     </a>
                 </div>
-                <div class="" id="logo_full">
+                <div class="flex items-center justify-between" id="logo_full">
                     <a href="{{ url('/learner/dashboard') }}">
-                        <span class="self-center text-lg font-semibold text-darthmouthgreen font-semibbold whitespace-nowrap md:text-2xl">
+                        <span class="self-center text-lg font-semibold font-semibbold whitespace-nowrap md:text-2xl text-darthmouthgreen">
                             Eskwela4EveryJuan
                         </span>
                     </a>
+                    <button class="px-2 md:hidden" id="eBot">
+                        <svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17.5 15.5c0 1.11-.89 2-2 2s-2-.89-2-2s.9-2 2-2s2 .9 2 2m-9-2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.89 2-2s-.89-2-2-2M23 15v3c0 .55-.45 1-1 1h-1v1c0 1.11-.89 2-2 2H5a2 2 0 0 1-2-2v-1H2c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1c0-3.87 3.13-7 7-7h1V5.73c-.6-.34-1-.99-1-1.73c0-1.1.9-2 2-2s2 .9 2 2c0 .74-.4 1.39-1 1.73V7h1c3.87 0 7 3.13 7 7h1c.55 0 1 .45 1 1m-2 1h-2v-2c0-2.76-2.24-5-5-5h-4c-2.76 0-5 2.24-5 5v2H3v1h2v3h14v-3h2z"/></svg>
+                    </button>
                 </div>
             </div>
      
     
     
-            <ul class="flex flex-row justify-between mt-10 md:flex-col md:text-base">
-                <li id="" class="w-full py-3 rounded-lg instructor_dashboard hover:bg-darthmouthgreen group md:py-4">
+            <ul class="flex flex-row justify-between md:flex-col md:text-base">
+                <li id="instructor_dashboard" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4 " href="{{ url('/learner/dashboard')}}">
                         <svg class="mx-3 duration-500 stroke-black group-hover:stroke-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g opacity="0.7">
@@ -35,7 +34,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_discussions hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_discussions" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="/learner/discussions">
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3.84962 17.0976C3.99883 17.2474 4.11317 17.4282 4.18448 17.6273C4.25579 17.8263 4.28232 18.0386 4.26219 18.2491C4.16116 19.2231 3.96962 20.1856 3.69006 21.1241C5.69537 20.6597 6.92013 20.1221 7.47644 19.8404C7.79197 19.6806 8.15535 19.6427 8.49706 19.734C9.47662 19.9951 10.4862 20.1266 11.5 20.125C17.2442 20.125 21.5625 16.0899 21.5625 11.5C21.5625 6.9115 17.2442 2.875 11.5 2.875C5.75575 2.875 1.4375 6.9115 1.4375 11.5C1.4375 13.6102 2.32444 15.5681 3.84962 17.0976ZM3.14094 22.7111C2.80035 22.7786 2.45865 22.8404 2.116 22.8965C1.8285 22.9425 1.61 22.6435 1.72356 22.3761C1.8512 22.0751 1.96819 21.7697 2.07431 21.4604L2.07862 21.4461C2.43512 20.4111 2.7255 19.2208 2.83188 18.1125C1.06806 16.3444 0 14.03 0 11.5C0 5.94262 5.14912 1.4375 11.5 1.4375C17.8509 1.4375 23 5.94262 23 11.5C23 17.0574 17.8509 21.5625 11.5 21.5625C10.361 21.564 9.22672 21.4161 8.12619 21.1226C7.37869 21.5007 5.77012 22.1892 3.14094 22.7111Z" fill-opacity="0.75"/>
@@ -44,7 +43,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_courses hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_courses" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/learner/courses') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +54,7 @@
                     </a>
                 </li>
 
-                <li id="" class="w-full py-3 rounded-lg instructor_courses hover:text-white hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_message" class="w-full py-3 rounded-lg hover:text-white hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/learner/message') }}">
 
                         <i class="mx-3 text-xl duration-500 fa-regular fa-message fill-black group-hover:fill-white group-hover:animate-bounce"></i>
@@ -64,7 +63,7 @@
                     </a>
                 </li>
     
-                <li id="" class="w-full py-3 rounded-lg instructor_performances hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_performances" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url("/learner/performances") }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +74,7 @@
                     </a>
                 </li>
 
-                <li id="" class="w-full py-3 rounded-lg instructor_settings hover:bg-darthmouthgreen group md:py-4">
+                <li id="instructor_settings" class="w-full py-3 hover:bg-darthmouthgreen group md:py-4">
                     <a class="flex items-center justify-center md:justify-start md:px-4" href="{{ url('/learner/profile') }}">
                         
                         <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,17 +82,17 @@
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.55225 12.4999C7.55225 11.1876 8.07354 9.92913 9.00146 9.00121C9.92937 8.0733 11.1879 7.552 12.5002 7.552C13.8124 7.552 15.071 8.0733 15.9989 9.00121C16.9268 9.92913 17.4481 11.1876 17.4481 12.4999C17.4481 13.8122 16.9268 15.0707 15.9989 15.9986C15.071 16.9265 13.8124 17.4478 12.5002 17.4478C11.1879 17.4478 9.92937 16.9265 9.00146 15.9986C8.07354 15.0707 7.55225 13.8122 7.55225 12.4999ZM12.5002 9.1145C11.6023 9.1145 10.7412 9.47118 10.1063 10.1061C9.47142 10.741 9.11475 11.6021 9.11475 12.4999C9.11475 13.3978 9.47142 14.2589 10.1063 14.8938C10.7412 15.5287 11.6023 15.8853 12.5002 15.8853C13.398 15.8853 14.2591 15.5287 14.894 14.8938C15.5289 14.2589 15.8856 13.3978 15.8856 12.4999C15.8856 11.6021 15.5289 10.741 14.894 10.1061C14.2591 9.47118 13.398 9.1145 12.5002 9.1145Z" fill-opacity="0.75"/>
                         </svg>
     
-                        <h1 class="hidden md:block group-hover:text-white">Settings</h1>
+                        <h1 class="hidden md:block group-hover:text-white">Profile</h1>
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_profile hover:bg-darthmouthgreen group md:py-4 md:hidden">
-                    <a class="flex items-center justify-center md:justify-start md:px-4" href="">
+                <li id="eBot-md" class="hidden w-full py-3 hover:bg-darthmouthgreen md:block group md:py-4 lg:hidden">
+                    <button class="flex items-center justify-center md:justify-start md:px-4">
                         
-                        <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                        <svg class="mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.5 15.5c0 1.11-.89 2-2 2s-2-.89-2-2s.9-2 2-2s2 .9 2 2m-9-2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.89 2-2s-.89-2-2-2M23 15v3c0 .55-.45 1-1 1h-1v1c0 1.11-.89 2-2 2H5a2 2 0 0 1-2-2v-1H2c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1c0-3.87 3.13-7 7-7h1V5.73c-.6-.34-1-.99-1-1.73c0-1.1.9-2 2-2s2 .9 2 2c0 .74-.4 1.39-1 1.73V7h1c3.87 0 7 3.13 7 7h1c.55 0 1 .45 1 1m-2 1h-2v-2c0-2.76-2.24-5-5-5h-4c-2.76 0-5 2.24-5 5v2H3v1h2v3h14v-3h2z"/></svg>
     
-                        <h1 class="hidden group-hover:text-white">Profile</h1>
-                    </a>
+                        <h1 class=" group-hover:text-white">Eskwela Bot</h1>
+                    </button>
                 </li>
                 
                 <form class="hidden mx-4 mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-white hover:border-2 hover:border-darthmouthgreen" action="{{ url('/learner/logout') }}" method="POST"> 
@@ -108,25 +107,12 @@
         </div>
         
 
-        <div class="flex flex-row items-center justify-center w-full h-12 hover:cursor-pointer" id="sidebar_half_btn">
+        <div class="flex-row items-center justify-center hidden w-full h-12 md:flex hover:cursor-pointer" id="sidebar_half_btn">
             <i class="mb-5 text-3xl fa-regular fa-square-caret-left"></i>
         </div>
     </div>
     
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -230,14 +216,7 @@
                     </a>
                 </li>
                 
-                <li id="" class="w-full py-3 rounded-lg instructor_profile hover:bg-darthmouthgreen group md:py-4 md:hidden">
-                    <a class="flex items-center justify-center text-xl md:justify-start md:px-4" href="">
-                        
-                        <svg class="flex-shrink-0 mx-3 duration-500 fill-black group-hover:fill-white group-hover:animate-bounce" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
-    
-                        {{-- <h1 class="hidden group-hover:text-white">Profile</h1> --}}
-                    </a>
-                </li>
+
                 
                 <form class="hidden mt-10 rounded-lg bg-darthmouthgreen md:block group hover:bg-white hover:border-2 hover:border-darthmouthgreen" action="{{ url('/learner/logout') }}" method="POST"> 
                     @csrf
@@ -249,7 +228,6 @@
                 
             </ul>
         </div>
-        
 
         <div class="flex flex-row items-center justify-center w-full h-12 hover:cursor-pointer" id="sidebar_full_btn">
             <i class="mb-5 text-3xl fa-regular fa-square-caret-right"></i>
@@ -257,6 +235,47 @@
     </div>
     
 </section>
+
+<div class="fixed z-50 hidden w-full h-screen bg-white bg-opacity-60" id="bot-for-sm">
+    <div id="bot-container" class="fixed bottom-0 w-full p-3 ease-in-out bg-white fade-in h-3/4 md:w-3/4 md:h-full md:right-0">
+
+        <div class="flex flex-col justify-between hidden h-full p-3 overflow-hidden rounded-lg shadow-lg mainchatbotarea">
+            {{-- head --}}
+            <div>
+                <div class="relative py-3 text-center border-b-2 border-gray-300">
+                    <i class="absolute top-0 right-0 px-3 cursor-pointer fa-solid fa-xmark" id="sm-AIClose"></i>
+                    <h1 class="text-2xl font-bold">Eskwela Bot</h1>
+                </div>        
+            </div>
+        
+            {{-- body --}}
+            <div class="h-full overflow-auto">
+                <div class="flex flex-col chatContainer">
+                    
+                    {{-- chat area --}}
+        
+                    
+                </div>      
+            </div>
+        
+            {{-- foot --}}
+            <div class="py-3 border-t-2 border-gray-300">
+                
+                <p class="bottom-0 hidden text-lg text-gray-700 botloader">the bot is typing...</p>
+                <div class="flex items-center justify-between">
+                    <textarea type="text" placeholder="Type here" class="w-full lg:w-4/5 question input input-bordered input-primary"></textarea>
+                    <button class="w-1/5 mx-1 submitQuestion btn btn-primary"><i class="rotate-90 fa-solid fa-arrow-turn-down"></i></button>
+                </div>  
+            </div>
+        
+        </div>
+
+        <div style="height: 80%;" class="absolute inset-0 flex items-center justify-center w-full z-100 loaderArea">
+            <div class="chatbotloader"></div><br>
+            <p class="mt-3 text-darthmouthgreen">preparing your bot</p>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {
@@ -274,7 +293,11 @@
             $('#instructor_settings').addClass('bg-green-100');
         }
 
-
+        // hides the chatbot when learner is answering
+        if (currentUrl.includes('/answer')) {
+            $('#eBot').addClass('hidden')
+            $('#eBot-md').removeClass('md:block')
+        }
 
         $('#sidebar_half_btn').on('click', function() {
             $('#sidebar_full').addClass('hidden');
@@ -287,5 +310,20 @@
             $('#sidebar_full').removeClass('hidden');
             $('#sidebar_full, #sidebar_half').css('width', '23%');
         });
+        $('#eBot').on('click', (e)=> {
+            e.preventDefault();
+            $('#bot-for-sm').toggleClass('hidden')
+        //   $('#bot-for-sm').toggleClass('fade-in')
+            
+        })
+
+        $('#sm-AIClose').on('click', ()=> {
+            $('#bot-for-sm').toggleClass('hidden')
+        //   $('#bot-for-sm').toggleClass('fade-out')
+        })
+
+        $('#eBot-md').on('click', ()=> {
+            $('#bot-for-sm').toggleClass('hidden')
+        })
     });
 </script>

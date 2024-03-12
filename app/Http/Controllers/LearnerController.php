@@ -22,6 +22,8 @@ use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 
+use App\Http\Controllers\PDFGenerationController;
+
 
 class LearnerController extends Controller
 {
@@ -416,6 +418,8 @@ class LearnerController extends Controller
             "business_owner_name" => ['required'],
             "bplo_account_number" => ['required'],
             "business_category" => ['required'],
+            "business_classification" => ['required'],
+            "business_description" => ['required'],
         ]);
 
         $LearnerLoginData = $request->validate([
@@ -460,7 +464,7 @@ class LearnerController extends Controller
         // $isExists = Storage::exists($defaultPhoto_path);
         // dd($isExists);
 
-        Learner::create($LearnerData);
+        $newCreatedLearner = Learner::firstOrCreate($LearnerData);
 
         $latestStudent = DB::table('learner')->orderBy('created_at', 'DESC')->first();
 
@@ -468,7 +472,7 @@ class LearnerController extends Controller
 
         $businessData['learner_id'] = $latestStudentId;
 
-        Business::create($businessData);
+        Business::firstOrCreate($businessData);
 
         $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
         $folderName = Str::slug($folderName, '_');
@@ -480,6 +484,10 @@ class LearnerController extends Controller
         if(!Storage::exists($folderPath)) { 
             Storage::makeDirectory($folderPath);
         }
+
+        $reportController = new PDFGenerationController();
+
+        $reportController->learnerData($newCreatedLearner->learner_id);
 
         session()->flash('message', 'Learner Account Created successfully');
         return redirect('/learner')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored');
@@ -536,6 +544,11 @@ class LearnerController extends Controller
                     ->get();
 
                 // dd($enrolledCourses);
+
+                $reportController = new PDFGenerationController();
+
+                $reportController->learnerSessionData($learner->learner_id);
+
     
             } catch (\Exception $e) {
                 dd($e->getMessage());
@@ -561,6 +574,7 @@ class LearnerController extends Controller
                 ->select(
                     'learner_course_progress.learner_course_progress_id',
                     'learner_course_progress.learner_course_id',
+                    'learner_course_progress.learner_id',
                     'learner_course_progress.course_id',
                     'learner_course_progress.course_progress',
                     'learner_course_progress.start_period',
@@ -672,6 +686,7 @@ class LearnerController extends Controller
 
                 $data = [
                     'title' => 'Performance',
+                    'learner' => $learner,
                     'learnerCourseData' => $learnerCourseData,
                     'totalLearnerCourseCount' => $totalLearnerCourseCount,
                     'totalLearnerApprovedCourseCount' => $totalLearnerApprovedCourseCount,
@@ -805,6 +820,11 @@ class LearnerController extends Controller
         $learner->learner_lname = $updated_learnerData['learner_lname'];
         $learner->learner_bday = $updated_learnerData['learner_bday'];
         $learner->learner_gender = $updated_learnerData['learner_gender'];
+
+
+        $reportController = new PDFGenerationController();
+
+        $reportController->learnerData($learner->learner_id);
             
         session(['learner' => $learner]);
 
@@ -863,6 +883,9 @@ class LearnerController extends Controller
                 Learner::where('learner_id', $learner->learner_id)
                 ->update($updated_learnerData);
 
+                $reportController = new PDFGenerationController();
+
+                $reportController->learnerData($learner->learner_id);
                 
                 session()->flash('message', 'User Info changed successfully');
                 
@@ -910,6 +933,12 @@ class LearnerController extends Controller
                     "business_description" => $business_description,
                 ]);
                 
+
+                $reportController = new PDFGenerationController();
+
+                $reportController->learnerData($learner->learner_id);
+
+
                 session()->flash('message', 'User Info changed successfully');
                 
                 // return redirect('/learner/profile')->with('message' , 'Profile updated successfully');
@@ -1166,6 +1195,17 @@ class LearnerController extends Controller
             // Optionally, return an error response or redirect the user
             return response()->json(['success' => false, 'message' => 'Failed to generate PDF']);
             }
+        } else {
+            return redirect('/learner');
+        }  
+    }
+
+
+    public function learnerData() {
+        if (session()->has('learner')) {
+            $learner= session('learner');
+
+            return response()->json(['learner' => $learner]);
         } else {
             return redirect('/learner');
         }  

@@ -23,14 +23,14 @@
                 </div>
             
         
-                <div class="relative px-20 overflow-hidden h-80" id="courseCarouselArea">
+                <div class="relative px-20 overflow-hidden" id="courseCarouselArea">
                     <button id="course_carousel_left_btn" class="absolute left-0 flex items-center justify-center h-full mx-5">
                         <i class="text-2xl fa-solid fa-angle-left"></i>
                     </button>
                     <button id="course_carousel_right_btn" class="absolute right-0 flex items-center justify-center h-full mx-5">
                         <i class="text-2xl fa-solid fa-angle-right"></i>
                     </button>
-                    <div class="flex overflow-x-auto h-80 scroll scroll-smooth" id="courseCardContainer">
+                    <div class="flex overflow-x-auto scroll scroll-smooth" id="courseCardContainer">
                         @foreach ($courses as $course)
         
                         <div style="background-color: #00693e" class="relative px-3 py-2 m-4 rounded-lg shadow-lg h-72 w-52">

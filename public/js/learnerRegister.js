@@ -210,6 +210,8 @@ $(document).ready(function () {
         var business_owner_name = $('#business_owner_name').val()
         var bplo_account_number = $('#bplo_account_number').val()
         var business_category = $('#business_category').val()
+        var business_classification = $('#business_classification').val()
+        var business_description = $('#business_description').val()
 
         
         var security_code_1 = $('#security_code_1').val()
@@ -300,6 +302,22 @@ $(document).ready(function () {
             $('#bploCategoryError').text('');
         }
 
+        
+        if (business_classification === '') {
+            $('#businessClassificationError').text('Please select a classification.');
+            isValid = false;
+        } else {
+            $('#businessClassificationError').text('');
+        }
+    
+
+        if (business_description === '') {
+            $('#businessDescriptionError').text('Please enter your business description.');
+            isValid = false;
+        } else {
+            $('#businessDescriptionError').text('');
+        }
+
 
 
         if (learner_username === '') {
@@ -359,6 +377,8 @@ $(document).ready(function () {
                 business_owner_name: business_owner_name,
                 bplo_account_number: bplo_account_number,
                 business_category: business_category,
+                business_classification: business_classification,
+                business_description: business_description,
 
                 security_code_1: security_code_1,
                 security_code_2: security_code_2,
@@ -384,6 +404,8 @@ $(document).ready(function () {
             var business_owner_name = $('#business_owner_name').val()
             var bplo_account_number = $('#bplo_account_number').val()
             var business_category = $('#business_category').val()
+            var business_classification = $('#business_classification').val()
+            var business_description = $('#business_description').val()
     
             
             var security_code_1 = $('#security_code_1').val()

@@ -20,7 +20,7 @@
                     <div class="flex flex-col justify-center md:flex-row">
                         <div class="flex items-center">
                             <div class="w-3 h-3 mx-3 rounded-full bg-darthmouthgreen"></div>
-                            <p class="text-lg font-bold">Approved: <span id="totalApprovedCourse" class="">0</span></p>
+                            <p class="font-bold text-md">Approved: <span id="totalApprovedCourse" class="">0</span></p>
                         </div>
 
                         <div class="flex items-center">

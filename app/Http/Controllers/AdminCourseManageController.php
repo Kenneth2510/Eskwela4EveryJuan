@@ -50,6 +50,9 @@ use Illuminate\Support\Facades\Hash;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\URL;
 
+
+use App\Http\Controllers\PDFGenerationController;
+
 class AdminCourseManageController extends Controller
 {
     public function coursesManage() {
@@ -1171,7 +1174,7 @@ class AdminCourseManageController extends Controller
 
                     return view('adminCourse.courseLesson')->with([
                         'title' => 'Course Lesson',
-                        'scripts' => ['instructor_lesson_manage.js'],
+                        'scripts' => ['AD_lesson_manage.js'],
                         'lessonCount' => $response['lessonCount'],
                         'activityCount' => $response['activityCount'],
                         'quizCount' => $response['quizCount'],
@@ -1470,6 +1473,11 @@ class AdminCourseManageController extends Controller
                         ->update($lessonContentData);
 
 
+                        $reportController = new PDFGenerationController();
+
+                        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
+
+
             session()->flash('message', 'Lesson Content updated Successfully');
             return response()->json(['message' => 'Lesson Content updated successfully', 'redirect_url' => "/admin/courseManage/content/$course->course_id/$syllabus->syllabus_id/lesson/$topic_id"]);
                         
@@ -1497,6 +1505,10 @@ class AdminCourseManageController extends Controller
             'lesson_id' => $lesson->lesson_id,
             'lesson_content_order' => $lessonContentData['lesson_content_order']
         ]);
+
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
 
 
         session()->flash('message', 'Lesson Content updated Successfully');
@@ -1728,18 +1740,56 @@ class AdminCourseManageController extends Controller
 
     public function lesson_generate_pdf(Course $course, Syllabus $syllabus, $topic_id, Lessons $lesson)
     {
-
+   
+            
             // Retrieve the data from the session
             $lessonData = session('lesson_data');
+
             
-            if (!$lessonData) {
-                // Handle the case where the session data is not found
-                return response('Session data not found', 500);
-            }
+
+            $lessonInfo = DB::table('lessons')
+            ->select(
+                'lesson_id',
+                'course_id',
+                'syllabus_id',
+                'topic_id',
+                'lesson_title',
+                'picture',
+                'duration',
+            )
+            ->where('course_id', $course->course_id)
+            ->where('syllabus_id', $syllabus->syllabus_id)
+            ->where('topic_id', $topic_id)
+            ->first();
+
+
+            $lessonContent = DB::table('lesson_content')
+                            ->select(
+                                'lesson_content_id',
+                                'lesson_id',
+                                'lesson_content_title',
+                                'lesson_content',
+                                'lesson_content_order',
+                                'picture',
+                                'video_url'
+                            )
+                            ->where('lesson_id', $lessonInfo->lesson_id)
+                            ->orderBy('lesson_content_order', 'ASC')
+                            ->get();
+
+                            $durationInSeconds = $lessonInfo->duration;
+                            $hours = floor($durationInSeconds / 3600);
+                            $minutes = floor(($durationInSeconds % 3600) / 60);
+                            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
+
+
+            // if (!$lessonData) {
+            //     // Handle the case where the session data is not found
+            //     return response('Session data not found', 500);
+            // }
         
+            $response = $this->course_content($course);
             // Extract the data you need from the session
-            $lessonInfo = $lessonData['lessonInfo'];
-            $lessonContent = $lessonData['lessonContent'];
             $title = 'Course Lesson';
             $scripts = ['instructor_lesson_manage.js'];
             $courseData = $lessonData['courseData'];
@@ -1753,15 +1803,16 @@ class AdminCourseManageController extends Controller
             // Render the view with the Blade template
             $html = view('adminCourse.courseLessonPreview')
                 ->with([
-                    'title' => $title,
-                    'scripts' => $scripts,
-                    'lessonCount' => $lessonCount,
-                    'activityCount' => $activityCount,
-                    'quizCount' => $quizCount,
-                    'course' => $course,
-                    'syllabus' => $syllabus,
-                    'lessonInfo' => $lessonInfo,
-                    'lessonContent' => $lessonContent,
+                    'title' => 'Course Lesson',
+                        'scripts' => ['instructor_lesson_manage.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'formattedDuration' => $formattedDuration,
                 ])
                 ->render();
     
@@ -1792,7 +1843,7 @@ class AdminCourseManageController extends Controller
             session()->flash('message', 'Course Lesson updated');
             return response()->json(['pdf_url' => $pdfUrl]);
     }
-
+    
 
 
     

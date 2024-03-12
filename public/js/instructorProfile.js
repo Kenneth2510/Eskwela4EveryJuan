@@ -160,6 +160,7 @@ $(document).ready(function() {
     
             var url = baseUrl + "/update_user_info";
     
+            $('#loaderModal').removeClass('hidden');
             $.ajax ({
                 type: "POST",
                 url: url,
@@ -174,6 +175,8 @@ $(document).ready(function() {
                     // } else {
                     
                     // }
+                    
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -268,6 +271,7 @@ $(document).ready(function() {
     
             var url = baseUrl + "/update_login_info";
     
+            $('#loaderModal').removeClass('hidden');
             $.ajax ({
                 type: "POST",
                 url: url,
@@ -277,6 +281,8 @@ $(document).ready(function() {
                 data: userInfo,
                 success: function (response){
                     console.log(response)
+                    
+        $('#loaderModal').addClass('hidden');
     
                     window.location.reload();
                 },

@@ -15,10 +15,14 @@ class UserController extends Controller
     }
 
     public function landing() {
-        return view('landing')->with('title', 'Eskwela4EveryJuan | Landing Page');
+        return view('landing')->with('title', 'Eskwela4EveryJuan | Home Page');
     }
 
     public function terms() {
         return view('terms&condition')->with('title', 'Terms & Services');
+    }
+    
+    public function data_privacy() {
+        return view ('data_privacy')->with('title', 'Data Privacy Act of 2012');
     }
 }

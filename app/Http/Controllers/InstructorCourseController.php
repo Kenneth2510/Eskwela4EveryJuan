@@ -29,6 +29,7 @@ use App\Models\QuizReferences;
 use App\Models\Questions;
 use App\Models\QuestionAnswers;
 use App\Models\LearnerQuizOutputs;
+use App\Models\Certificates;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -46,7 +47,10 @@ use Illuminate\Support\Facades\File;
 use Dompdf\Dompdf;
 use Carbon\Carbon;
 use Barryvdh\Snappy\Facades\SnappyPdf;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
+
+use App\Http\Controllers\PDFGenerationController;
 
 class InstructorCourseController extends Controller
 {
@@ -135,9 +139,65 @@ class InstructorCourseController extends Controller
         
     }
 
+    // public function courseCreate_process(Request $request) {
+    //     $instructor = session('instructor');
+
+    //     if($instructor->status !== 'Approved') {
+    //         session()->flash('message', 'Account is not yet Approved');
+    //         return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
+    //     } else {
+    //         try {
+    //             $courseData = $request->validate([
+    //                 'course_name' => ['required'],
+    //                 'course_description' => ['required'],
+    //                 'course_difficulty' => ['required'],
+    //             ]);
+
+    //             $courseData['course_code'] = Str::random(6);
+    //             $courseData['instructor_id'] = $instructor->instructor_id;
+    
+                
+    //             $course = Course::create($courseData);
+
+    //             CourseGrading::create([
+    //                 'course_id' => $course->course_id,
+    //             ]);
+                
+    //             $folderName = $course->course_id . ' ' . $courseData['course_name'];
+    //             $folderName = Str::slug($folderName, '_');
+    //             $folderPath = 'public/courses/' . $folderName;
+    
+    //             if(!Storage::exists($folderPath)) {
+    //                 Storage::makeDirectory($folderPath);
+    //             }
+
+       
+    //             // $latestCourse = DB::table('course')->orderBy('created_at', 'DESC')->first();
+    //             // $latestCourseID = $latestCourse->course_id;
+    
+    //             session()->flash('message', 'Course created Successfully');
+
+    //             $response = [
+    //                 'message' => 'Course created successfully',
+    //                 'redirect_url' => '/instructor/courses',
+    //                 'course_id' => $course->course_id,
+    //             ];
+        
+    //             return response()->json($response);
+
+
+    //             // return response()->json(['message' => 'Course created successfully', 'redirect_url' => '/instructor/courses']);
+    //         } catch (ValidationException $e) {
+    //             $errors = $e->validator->errors();
+        
+    //             return response()->json(['errors' => $errors], 422);
+    //         }
+    //     }
+    // }
+
     public function courseCreate_process(Request $request) {
         $instructor = session('instructor');
-
+    
         if($instructor->status !== 'Approved') {
             session()->flash('message', 'Account is not yet Approved');
             return response()->json(['message' => 'Account is not yet Approved', 'redirect_url' => '/instructor/courses']);
@@ -148,17 +208,26 @@ class InstructorCourseController extends Controller
                     'course_description' => ['required'],
                     'course_difficulty' => ['required'],
                 ]);
-
+    
+                $existingCourse = Course::where('course_name', $courseData['course_name'])
+                                        ->where('course_description', $courseData['course_description'])
+                                        ->where('course_difficulty', $courseData['course_difficulty'])
+                                        ->where('instructor_id', $instructor->instructor_id)
+                                        ->first();
+    
+                if ($existingCourse) {
+                    return response()->json(['message' => 'Course already exists', 'redirect_url' => '/instructor/courses']);
+                }
+    
                 $courseData['course_code'] = Str::random(6);
                 $courseData['instructor_id'] = $instructor->instructor_id;
     
-                
                 $course = Course::create($courseData);
-
+    
                 CourseGrading::create([
                     'course_id' => $course->course_id,
                 ]);
-                
+    
                 $folderName = $course->course_id . ' ' . $courseData['course_name'];
                 $folderName = Str::slug($folderName, '_');
                 $folderPath = 'public/courses/' . $folderName;
@@ -166,31 +235,22 @@ class InstructorCourseController extends Controller
                 if(!Storage::exists($folderPath)) {
                     Storage::makeDirectory($folderPath);
                 }
-
-       
-                // $latestCourse = DB::table('course')->orderBy('created_at', 'DESC')->first();
-                // $latestCourseID = $latestCourse->course_id;
     
                 session()->flash('message', 'Course created Successfully');
-
+    
                 $response = [
                     'message' => 'Course created successfully',
                     'redirect_url' => '/instructor/courses',
                     'course_id' => $course->course_id,
                 ];
-        
+    
                 return response()->json($response);
-
-
-                // return response()->json(['message' => 'Course created successfully', 'redirect_url' => '/instructor/courses']);
             } catch (ValidationException $e) {
                 $errors = $e->validator->errors();
-        
                 return response()->json(['errors' => $errors], 422);
             }
         }
     }
-
 
     public function courseCreateUploadFiles(Course $course, Request $request) {
         $instructor = session('instructor');
@@ -569,6 +629,10 @@ class InstructorCourseController extends Controller
 
                 $course->update($courseData);
 
+                $reportController = new PDFGenerationController();
+
+                $reportController->courseDetails($course);
+
                 session()->flash('message', 'Course updated Successfully');
                 return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/$course->course_id"]);
                 
@@ -833,7 +897,9 @@ class InstructorCourseController extends Controller
             $quiz = Quizzes::create($quizData);
         }
 
-       
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseDetails($syllabus->course_id);
         // $latestSyllabus = DB::table('syllabus')->orderBy('created_at', 'DESC')->first();
 
         session()->flash('message', 'Syllabus created Successfully');
@@ -1053,6 +1119,10 @@ class InstructorCourseController extends Controller
                     $quizData
                 );
             }
+
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseDetails($course);
     
             session()->flash('message', 'Syllabus updated Successfully');
             return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id"]);
@@ -1100,6 +1170,10 @@ class InstructorCourseController extends Controller
                     'quiz_title' => $syllabus->topic_title,
                 ]);
             }
+
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseDetails($course);
     
             session()->flash('message', 'Syllabus updated Successfully');
             return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id"]);
@@ -1491,6 +1565,9 @@ class InstructorCourseController extends Controller
                         ->where('lesson_content_id', $lessonContentData['lesson_content_id'])
                         ->update($lessonContentData);
 
+                        $reportController = new PDFGenerationController();
+
+                        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
 
             session()->flash('message', 'Lesson Content updated Successfully');
             return response()->json(['message' => 'Lesson Content updated successfully', 'redirect_url' => "/instructor/course/content/$course->course_id/$syllabus->syllabus_id/lesson/$topic_id"]);
@@ -1518,6 +1595,11 @@ class InstructorCourseController extends Controller
             'lesson_id' => $lesson->lesson_id,
             'lesson_content_order' => $lessonContentData['lesson_content_order']
         ]);
+
+        
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseLessons($course, $syllabus, $topic_id, $lesson);
 
 
         session()->flash('message', 'Lesson Content updated Successfully');
@@ -1763,15 +1845,52 @@ class InstructorCourseController extends Controller
             
             // Retrieve the data from the session
             $lessonData = session('lesson_data');
+
             
-            if (!$lessonData) {
-                // Handle the case where the session data is not found
-                return response('Session data not found', 500);
-            }
+
+            $lessonInfo = DB::table('lessons')
+            ->select(
+                'lesson_id',
+                'course_id',
+                'syllabus_id',
+                'topic_id',
+                'lesson_title',
+                'picture',
+                'duration',
+            )
+            ->where('course_id', $course->course_id)
+            ->where('syllabus_id', $syllabus->syllabus_id)
+            ->where('topic_id', $topic_id)
+            ->first();
+
+
+            $lessonContent = DB::table('lesson_content')
+                            ->select(
+                                'lesson_content_id',
+                                'lesson_id',
+                                'lesson_content_title',
+                                'lesson_content',
+                                'lesson_content_order',
+                                'picture',
+                                'video_url'
+                            )
+                            ->where('lesson_id', $lessonInfo->lesson_id)
+                            ->orderBy('lesson_content_order', 'ASC')
+                            ->get();
+
+                            $durationInSeconds = $lessonInfo->duration;
+                            $hours = floor($durationInSeconds / 3600);
+                            $minutes = floor(($durationInSeconds % 3600) / 60);
+                            $formattedDuration = sprintf("%02d:%02d", $hours, $minutes);
+
+
+            // if (!$lessonData) {
+            //     // Handle the case where the session data is not found
+            //     return response('Session data not found', 500);
+            // }
         
+            $response = $this->course_content($course);
             // Extract the data you need from the session
-            $lessonInfo = $lessonData['lessonInfo'];
-            $lessonContent = $lessonData['lessonContent'];
             $title = 'Course Lesson';
             $scripts = ['instructor_lesson_manage.js'];
             $courseData = $lessonData['courseData'];
@@ -1785,15 +1904,16 @@ class InstructorCourseController extends Controller
             // Render the view with the Blade template
             $html = view('instructor_course.courseLessonPreview', compact('instructor'))
                 ->with([
-                    'title' => $title,
-                    'scripts' => $scripts,
-                    'lessonCount' => $lessonCount,
-                    'activityCount' => $activityCount,
-                    'quizCount' => $quizCount,
-                    'course' => $course,
-                    'syllabus' => $syllabus,
-                    'lessonInfo' => $lessonInfo,
-                    'lessonContent' => $lessonContent,
+                    'title' => 'Course Lesson',
+                        'scripts' => ['instructor_lesson_manage.js'],
+                        'lessonCount' => $response['lessonCount'],
+                        'activityCount' => $response['activityCount'],
+                        'quizCount' => $response['quizCount'],
+                        'course' => $response['course'],
+                        'syllabus' => $response['syllabus'],
+                        'lessonInfo' => $lessonInfo,
+                        'lessonContent' => $lessonContent,
+                        'formattedDuration' => $formattedDuration,
                 ])
                 ->render();
     
@@ -2321,6 +2441,14 @@ class InstructorCourseController extends Controller
             $instructor = session('instructor');
     
             try {
+                $learnerCourse_learner_id = DB::table('learner_course')
+                ->select(
+                    'learner_course_id',
+                    'learner_id',
+                )
+                ->where('learner_course_id', $learner_course)
+                ->first();
+
                 $remarks = $request->input('remarks');
                 $totalScore = $request->input('total_score');
 
@@ -2477,7 +2605,13 @@ class InstructorCourseController extends Controller
                     }
                 }
                 
+                $reportController = new PDFGenerationController();
 
+                $reportController->courseGradeSheet($learnerActivityOutputData->course_id);
+                $reportController->learnerCourseGradeSheet($learnerCourse_learner_id->learner_id, $learnerActivityOutputData->course_id, $learner_course);
+                $reportController->learnerActivityOutput($learnerCourse_learner_id->learner_id, $learnerActivityOutputData->course_id, $learner_course, $learnerActivityOutputData->syllabus_id, $attempt);
+
+                
                 $response = [
                     'message' => 'Output Scored Successfully',
                 ];
@@ -3539,4 +3673,132 @@ class InstructorCourseController extends Controller
 
 
 
+    protected $fpdf;
+ 
+    public function __construct()
+    {
+        $this->fpdf = new Fpdf;
+    }
+    public function generate_certificate(Course $course) {
+        if (session()->has('instructor')) {
+            $instructor = session('instructor');
+
+            try {
+                //get the data needed
+
+                $courseData = DB::table('course')
+                ->select(
+                    'course_name',
+                    'updated_at',
+                    'course_status',
+                )
+                ->where('course_id', $course->course_id)
+                ->first();
+
+                $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s', $courseData->updated_at)->format('F d, Y');
+
+                if($courseData->course_status === 'Approved') {
+                    $certData = DB::table('certificates')
+                    ->select(
+                        'certificate_id',
+                        'reference_id',
+                        'user_type',
+                        'user_id',
+                        'course_id'
+                    )
+                    ->where('user_type', 'INSTRUCTOR')
+                    ->where('user_id', $instructor->instructor_id)
+                    ->where('course_id', $course->course_id)
+                    ->first();
+    
+                    if($certData) {
+                        $referenceNumber = $certData->reference_id;
+                    } else {
+                        $datePart = Carbon::now()->format('Ymd');
+                        do {
+                            $randomPart = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                            $referenceNumber = $datePart . $randomPart;
+                        } while (Certificates::where('reference_id', $referenceNumber)->exists());
+    
+                        Certificates::create([
+                            'reference_id' => $referenceNumber,
+                            'user_type' => 'INSTRUCTOR',
+                            'user_id' => $instructor->instructor_id,
+                            'course_id' => $course->course_id
+                        ]);
+    
+    
+                    }
+                    // generate the pdf
+                    $filename = storage_path('app/public/images/cert_4.png');
+        
+                    $this->fpdf->AddPage("L");
+        
+    
+    
+        
+                    // Set the background image with low opacity
+                    $this->fpdf->Image($filename, 0, 0, $this->fpdf->GetPageWidth(), $this->fpdf->GetPageHeight(), '', '', 0, false, 300);
+                    
+                    // Set the font size for the large text
+                    // $this->fpdf->SetFont('GreatVibes', 'B', 36);
+                    $this->fpdf->SetFont('arial', 'B', 40);
+                    $text = "$instructor->instructor_fname $instructor->instructor_lname";
+                    // Get the width of the text
+                    $textWidth = $this->fpdf->GetStringWidth($text);
+                    // Calculate the X coordinate to center the text
+                    $x = ($this->fpdf->GetPageWidth() - $textWidth) / 2;
+                    // Set the X coordinate and draw the text
+                    $this->fpdf->SetXY($x, 50);
+                    $this->fpdf->Cell($textWidth, 110, $text, 0, 0, 'C');
+                    
+                    $this->fpdf->SetFont('Arial', 'B', 14);
+                    $text3 = "INSTRUCTOR - Course: $courseData->course_name";
+                    // Get the width of the text
+                    $text3Width = $this->fpdf->GetStringWidth($text);
+                    // Calculate the X coordinate to center the text
+                    $x = ($this->fpdf->GetPageWidth() - $text3Width) / 2;
+                    // Set the X coordinate and draw the text
+                    $this->fpdf->SetXY($x, 50);
+                    $this->fpdf->Cell($text3Width, 130, $text3, 0, 0, 'C');
+    
+    
+                    // Set the font size for the large text
+                    // $this->fpdf->SetFont('GreatVibes', 'B', 36);
+                    $this->fpdf->SetFont('Arial', 'i', 12);
+                    $text2 = "This is to recognize and appreciate $instructor->instructor_fname $instructor->instructor_lname for their dedication and skill as the instructor/facilitator of
+                    \n $courseData->course_name. They have demonstrated commendable commitment to learning and personal development. \n
+                    Their efforts have contributed significantly to the success of this program.\n
+                    Awarded on $formattedDate.";
+
+    
+                    $x = 10; // Set X-axis position
+                    $this->fpdf->SetXY($x, 126);
+                    $this->fpdf->MultiCell($this->fpdf->GetPageWidth() - ($x * 2), 3, $text2, 0, 'C');
+    
+    
+    
+                    $this->fpdf->SetFont('Arial', 'B', 11);
+                    $text4 = "Reference Number: $referenceNumber";
+    
+                    $this->fpdf->SetXY(10, $this->fpdf->GetPageHeight() - 39);
+                    $this->fpdf->Cell(0, 10, $text4, 0, 0, 'L');
+                    
+    
+    
+                    $this->fpdf->Output();
+                    
+        
+                }
+
+             
+                exit;
+    
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        } else {
+            return redirect('/instructor');
+        }
+    }
 }

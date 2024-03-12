@@ -80,23 +80,22 @@
                             </div>
                     </div>
 
-                    <div class="mt-16" id="durationArea">
-                        <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
-                        <div class="">
-                            <label class="text-lg" for="hours">Hours:</label>
-                            <input disabled class="w-16 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
-                    
-                            <label class="text-lg" for="minutes">Minutes:</label>
-                            <input disabled class="w-16 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="30" required>
-                    
-                            <label class="text-lg" for="seconds">Seconds:</label>
-                            <input disabled class="w-16 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
-                    
-                            <button id="saveDurationBtn" class="hidden p-3 m-2 text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">Set Duration</button>
-                        </div>
-                    </div>
+                        <div class="mt-16" id="durationArea">
+                            <h3 class="my-2 text-xl font-medium">Quiz Attempt Duration:</h3>
+                            <div class="">
+                                <label class="text-lg" for="hours">Hours:</label>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="hours" name="hours" min="0" placeholder="0" value="0" required>
                         
-
+                                <label class="text-lg" for="minutes">Minutes:</label>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0" value="0" required>
+                        
+                                <label class="text-lg" for="seconds">Seconds:</label>
+                                <input disabled class="w-1/12 px-1 mx-3 text-lg border-2 border-gray-400 rounded-lg duration_input" type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0" value="0" required>
+                        
+                                <button id="saveDurationBtn" class="hidden px-3 py-1 text-lg text-white bg-darthmouthgreen hover:bg-green-950 rounded-xl">Set Duration</button>
+                            </div>
+                        </div>
+                        
                     <button id="editQuizInfoBtn" class="w-32 px-5 py-3 mx-3 mt-10 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Edit</button>
                     <div class="hidden mt-5" id="editQuizInfo_clickedBtns">
                         <button id="saveQuizInfoBtn" class="p-3 m-2 text-white bg-darthmouthgreen hover:bg-green-900 rounded-xl">Finish Editing</button>
@@ -115,14 +114,21 @@
     </section>
 
     {{-- area for modals --}}
-    <div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+    <div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="w-full p-4 bg-white rounded-lg shadow-lg md:w-3/5 modal-content">
-
             <div class="flex justify-end w-full">
                 <button class="exitResponsesModalBtn">
                     <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
                 </button>
             </div>
+
+    <div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+        <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+            <span class="loading loading-spinner text-primary loading-lg"></span> 
+                
+            <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+        </div>
+    </div>
 
             <h1 class="text-2xl font-bold ">View All Responses</h1>
             
@@ -156,4 +162,3 @@
         </div>
     </div>
 @endsection
-

@@ -39,6 +39,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\PDFGenerationController;
+
 class AdminLearnerController extends Controller
 {
      // -------------------admin learner area------------------------
@@ -250,7 +252,7 @@ class AdminLearnerController extends Controller
                 // $isExists = Storage::exists($defaultPhoto_path);
                 // dd($isExists);
 
-                Learner::create($LearnerData);
+                $newCreatedLearner = Learner::firstOrCreate($LearnerData);
 
                 $latestStudent = DB::table('learner')->orderBy('created_at', 'DESC')->first();
 
@@ -258,7 +260,7 @@ class AdminLearnerController extends Controller
 
                 $businessData['learner_id'] = $latestStudentId;
 
-                Business::create($businessData);
+                Business::firstOrCreate($businessData);
 
                 $folderName = "{$LearnerData['learner_lname']} {$LearnerData['learner_fname']}";
                 $folderName = Str::slug($folderName, '_');
@@ -270,6 +272,10 @@ class AdminLearnerController extends Controller
                 if(!Storage::exists($folderPath)) { 
                     Storage::makeDirectory($folderPath);
                 }
+
+                $reportController = new PDFGenerationController();
+
+                $reportController->learnerData($newCreatedLearner->learner_id);
 
                 // return redirect('/admin/learners')->with('title', 'Learner Management')->with('message' , 'Data was successfully stored');
                 session()->flash('message', 'Learner Added successfully');
@@ -359,6 +365,10 @@ class AdminLearnerController extends Controller
                 dd($th);
                 return response()->json(['Error in sending email']);
             }
+
+            $reportController = new PDFGenerationController();
+
+            $reportController->learnerData($learner->learner_id);
 
 
         } catch (\Exception $e) {
@@ -456,6 +466,11 @@ class AdminLearnerController extends Controller
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
+
+        
+        $reportController = new PDFGenerationController();
+
+        $reportController->learnerData($learner->learner_id);
 
         session()->flash('message', 'Learner Updated successfully');
         // return back()->with('message' , 'Data was successfully updated'); //add ->with('message') later

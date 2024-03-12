@@ -65,17 +65,10 @@
 
                         </div>
                     </div> --}}
-
-                    
                 </div>
-
             </div>
-
         </div>
     </section>
-
-
-
-{{-- @include('partials.instructorProfile') --}}
+    @include('partials.chatbot')
 @endsection
 

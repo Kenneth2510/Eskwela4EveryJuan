@@ -129,7 +129,7 @@
 </section>
 </section>
 
-<div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+<div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
     <div class="w-3/5 p-4 bg-white rounded-lg shadow-lg modal-content">
 
         <div class="flex justify-end w-full">
@@ -167,6 +167,16 @@
             </table>
         </div>
 
+    </div>
+</div>
+
+
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
     </div>
 </div>
 

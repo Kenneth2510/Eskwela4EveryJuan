@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- MAIN --}}
-    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+    <section class="w-full lg:h-screen md:w-3/4 lg:w-10/12">
         <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-y-scroll md:overflow-hidden md:pt-0">
             <div class="py-4">
                 <h1 class="text-2xl font-semibold md:text-3xl">Instructor Settings</h1>

@@ -31,7 +31,6 @@
                         <h1 class="mx-2 text-2xl font-semibold">{{$quizInfo->quiz_title}}</h1>
                     </div>
                     <button class="p-3 font-medium text-white saveQuizContent bg-darthmouthgreen rounded-2xl hover:bg-green-950">Save Changes</button>
-                    
                 </div>
 
                 <div class="border-b-2 border-black">
@@ -226,10 +225,11 @@
                         </button>
                     </div>
                     <div class="flex justify-center w-full py-5 mt-5 border-t-2 border-gray-400">
-                        
-                        <button class="w-1/2 p-3 mx-3 text-lg font-medium text-center text-white bg-darthmouthgreen rounded-2xl hover:bg-green-950"><a id="cancelQuizBuild" href="{{ url("/instructor/course/content/$course->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id") }}" class="">
+                        <button class="w-1/2 p-3 mx-3 text-lg font-medium text-center text-white bg-darthmouthgreen rounded-2xl hover:bg-green-950">
+                            <a id="cancelQuizBuild" href="{{ url("/instructor/course/content/$course->course_id/$quizInfo->syllabus_id/quiz/$quizInfo->topic_id") }}" class="">
                         Cancel
-                        </a></button>
+                            </a>
+                        </button>
                         <button class="w-1/2 p-3 mx-3 text-lg font-medium text-white saveQuizContent bg-darthmouthgreen rounded-2xl hover:bg-green-950">
                             Save Changes
                         </button>
@@ -239,7 +239,7 @@
         </div>
     </section> 
 
-                <div id="addExistingQuestionModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+            <div id="addExistingQuestionModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
                 <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                     <div class="flex justify-end w-full">
                         <button class="cancelAddExistingQuestionBtn">
@@ -263,8 +263,7 @@
                 </div>
             </div>
 
-
-            <div id="confirmSaveQuizContentModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+            <div id="confirmSaveQuizContentModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
                 <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
                     <div class="flex justify-end w-full">
                         <button class="cancelSaveQuizContentBtn">
@@ -280,5 +279,10 @@
                     </div>
                 </div>
             </div>
+            <div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+              <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+                  <span class="loading loading-spinner text-primary loading-lg"></span> 
+                  <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+              </div>
+            </div>
 @endsection
-

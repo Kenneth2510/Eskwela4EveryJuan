@@ -26,3 +26,4 @@ return new class extends Migration
     //     // However, renaming a column usually doesn't require a specific rollback operation.
     // }
 };
+

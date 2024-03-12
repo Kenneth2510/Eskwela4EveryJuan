@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var baseUrl = window.location.href
     var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token from the meta tag
-    
+    getLearnerData()
 
     $('#contactNumber').on('input', function() {
         var phoneNumber = $(this).val();
@@ -160,6 +160,8 @@ $(document).ready(function() {
     
             var url = baseUrl + "/update_user_info";
     
+            
+        $('#loaderModal').removeClass('hidden');
             $.ajax ({
                 type: "POST",
                 url: url,
@@ -174,6 +176,8 @@ $(document).ready(function() {
                     // } else {
                     
                     // }
+                    
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -256,6 +260,8 @@ $(document).ready(function() {
             }
     
             var url = baseUrl + "/update_business_info";
+            
+        $('#loaderModal').removeClass('hidden');
     
             $.ajax ({
                 type: "POST",
@@ -266,6 +272,8 @@ $(document).ready(function() {
                 data: businessInfo,
                 success: function (response){
                     // console.log(response)
+                    
+        $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -358,6 +366,8 @@ $(document).ready(function() {
     
             var url = baseUrl + "/update_login_info";
     
+            
+        $('#loaderModal').removeClass('hidden');
             $.ajax ({
                 type: "POST",
                 url: url,
@@ -368,6 +378,7 @@ $(document).ready(function() {
                 success: function (response){
                     console.log(response)
     
+                    $('#loaderModal').addClass('hidden');
                     window.location.reload();
                 },
                 error: function(error) {
@@ -391,4 +402,202 @@ $(document).ready(function() {
         
         $('#profilePicturePopup').addClass('hidden')
     })
+
+
+
+
+
+
+
+
+
+    
+
+    function getLearnerData() {
+        var url = `/learner/learnerData`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    var learner = response['learner']
+                    var session_id = learner['learner_id']
+
+                    init_chatbot(session_id)
+                    add_learner_data(session_id)
+                    process_files(session_id)
+
+                    
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+
+                    $('.submitQuestion').on('click', function(e) {
+                        e.preventDefault();
+                        submitQuestion();
+                    });
+        
+                    $('.question').on('keydown', function(e) {
+                        if (e.keyCode === 13) {
+                            e.preventDefault();
+                            submitQuestion();
+                        }
+                    });
+        
+                    function submitQuestion() {
+                        var learner_id = learner['learner_id'];
+                        var question = $('.question').val();
+                        var course = 'ALL';
+                        var lesson = 'ALL';
+        
+                        displayUserMessage(question, learner);
+                        $('.botloader').removeClass('hidden');
+                        var chatData = {
+                            question: question,
+                            course: course,
+                            lesson: lesson,
+                        };
+        
+                        var url = `/chatbot/chat/${learner_id}`;
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: chatData,
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            success: function(response) {
+                                console.log(response);
+                                displayBotMessage(response);
+                                $('.question').val('')
+                            },
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+
+
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+    }
+
+
+
+    
+    function init_chatbot(learner_id) {
+        // var learner_id = learner['learner_id'];
+        var url = `/chatbot/init/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    
+    function add_learner_data(learner_id) {
+        // console.log(learner);
+        var url = `/chatbot/learner/${learner_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+
+                    $('.loaderArea').addClass('hidden');
+                    $('.mainchatbotarea').removeClass('hidden');
+                 },
+                 error: function(error) {
+                     console.log(error);
+                 }
+             });
+}
+
+    function process_files(session_id) {
+        var url = `/chatbot/process/${session_id}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    
+
+    function displayUserMessage(question, learner) {
+        var userMessageDisp = ``;
+        var profile = learner['profile_picture']
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        var timeString = hours + ':' + minutes;
+    
+        userMessageDisp += `
+        
+        <div class="mx-3 chat chat-end">
+            <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                <img class="bg-red-500" alt="" src="/storage/${profile}" />
+                </div>
+            </div>
+            <div class="mx-3 chat-header">
+                You
+            </div>
+            <div class="whitespace-pre-wrap chat-bubble chat-bubble-primary">${question}</div>
+            <div class="opacity-50 chat-footer">
+            ${timeString}
+            </div>
+        </div>
+        `;
+
+        $('.chatContainer').append(userMessageDisp);
+    }
+
+
+    function displayBotMessage(response) {
+
+        var message = response['message']
+
+        var botMessageDisp = ``
+        botMessageDisp += `
+        
+        <div class="chat chat-start">
+            <div class="chat-image avatar">
+                <div class="w-10 rounded-full">
+                <img class="bg-white" alt="" src="/storage/app/public/images/chatbot.png" />
+                </div>
+            </div>
+            <div class="chat-bubble ">${message}</div>
+        </div>
+        `;
+
+        $('.botloader').addClass('hidden')
+        $('.chatContainer').append(botMessageDisp);
+    }
+
 });

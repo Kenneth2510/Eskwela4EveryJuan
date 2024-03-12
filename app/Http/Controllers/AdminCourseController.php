@@ -39,6 +39,8 @@ use App\Mail\MailNotify;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+use App\Http\Controllers\PDFGenerationController;
+
 class AdminCourseController extends Controller
 {
    
@@ -287,6 +289,10 @@ public function update_course(Course $course, Request $request) {
 
             $course->update($courseData);
 
+            $reportController = new PDFGenerationController();
+
+            $reportController->courseDetails($course);
+
             session()->flash('message', 'Course updated Successfully');
             return response()->json(['message' => 'Course updated successfully', 'redirect_url' => "/admin/view_course/$course->course_id"]);
             
@@ -332,6 +338,12 @@ public function approveCourse(Course $course)
 
     try {
         $course->update(['course_status' => 'Approved']);  
+
+        $reportController = new PDFGenerationController();
+
+        $reportController->courseList();
+        $reportController->courseDetails($course);
+
     } catch (\Exception $e) {
         dd($e->getMessage());
     }
@@ -736,7 +748,8 @@ public function enrollNew(Request $request) {
             ]);
 
             if ($query === null) {
-            LearnerCourse::create($learnerCourseData);
+            LearnerCourse::firstOrCreate($learnerCourseData);
+
 
             session()->flash('message', 'Course enrolled Successfully');
             $data = [
@@ -980,6 +993,14 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
             "start_period" => $timestampString,
         ];
 
+        $course = DB::table('course')
+        ->select(
+            'course_id',
+            'course_name'
+        )
+        ->where('course_id', $learnerCourse->course_id)
+        ->first();
+
         // LearnerCourseProgress::create($courseProgressData);
         LearnerCourseProgress::firstOrCreate($courseProgressData);
 
@@ -989,8 +1010,8 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
             "course_id" => $learnerCourse->course_id,
         ];
 
-        LearnerPreAssessmentProgress::create($learnerAssessmentData);
-        LearnerPostAssessmentProgress::create($learnerAssessmentData);
+        LearnerPreAssessmentProgress::firstOrCreate($learnerAssessmentData);
+        LearnerPostAssessmentProgress::firstOrCreate($learnerAssessmentData);
 
         $syllabusData = DB::table('syllabus')
         ->select(
@@ -1013,7 +1034,7 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
             "category" => $syllabus->category
         ];
     
-        LearnerSyllabusProgress::create($rowSyllabusData);
+        LearnerSyllabusProgress::firstOrCreate($rowSyllabusData);
     
         if ($syllabus->category === "LESSON") {
             $lessonData = DB::table('lessons')
@@ -1037,7 +1058,7 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
                     "lesson_id" => $lessonData->lesson_id,
                 ];
     
-                LearnerLessonProgress::create($rowLessonData);
+                LearnerLessonProgress::firstOrCreate($rowLessonData);
             }
         } elseif ($syllabus->category === "ACTIVITY") {
             $activityData = DB::table('activities')
@@ -1061,7 +1082,7 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
                     "activity_id" => $activityData->activity_id,
                 ];
     
-                LearnerActivityProgress::create($rowActivityData);
+                LearnerActivityProgress::firstOrCreate($rowActivityData);
             }
         } elseif ($syllabus->category === "QUIZ") {
             $quizData = DB::table('quizzes')
@@ -1085,7 +1106,7 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
                     "quiz_id" => $quizData->quiz_id,
                 ];
     
-                LearnerQuizProgress::create($rowQuizData);
+                LearnerQuizProgress::firstOrCreate($rowQuizData);
             }
         }
     }
@@ -1129,6 +1150,13 @@ public function approve_learner_course(LearnerCourse $learnerCourse) {
                 break;
         }
     }
+
+
+    $reportController = new PDFGenerationController();
+
+    $reportController->courseEnrollees($course->course_id);
+    $reportController->learnerCourseData($learnerCourse->learner_id);
+
 
         
     return redirect()->back()->with('message' , 'Course Status successfully changed');

@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="flex justify-center my-2" id="learnerAreaID">
-                    <select class="w-full px-5 py-3 mx-2 text-sm border border-darthmouthgreen rounded-xl" name="learnerID" id="learnerID">
+                    <select class="w-full px-5 py-3 mx-2 text-sm border border-darthmouthgreen rounded-xl" name="learnerID" id="learnerID" disabled>
                         <option value="" selected disabled>choose a learner</option>
                         @foreach ($learners as $learner)
                         <option value="{{$learner->learner_id}}" {{$learnerCourse->learner_id == $learner->learner_id ? 'selected' : ''}}>{{$learner->name}}</option>
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="flex justify-center my-2" id="courseAreaID">
-                    <select class="w-full px-5 py-3 mx-2 text-sm border border-darthmouthgreen rounded-xl" name="courseID" id="courseID">
+                    <select class="w-full px-5 py-3 mx-2 text-sm border border-darthmouthgreen rounded-xl" name="courseID" id="courseID" disabled>
                         <option value="" selected disabled>choose a course</option>
                         @foreach ($courses as $course)
                         <option value="{{$course->course_id}}" {{$learnerCourse->course_id == $course->course_id ? 'selected' : ''}}>{{$course->course_name}}</option>

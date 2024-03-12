@@ -22,7 +22,7 @@
 
     <div class="p-3 pb-4 overflow-auto rounded-lg shadow-lg b overscroll-auto">
         <div style="background-color:{{$mainBackgroundCol}}" class="p-2 text-white fill-white rounded-xl">
-            <a href="{{ url("/instructor/course/content/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
+            <a href="{{ url("/admin/courseManage/content/$course->course_id") }}" class="my-2 bg-gray-300 rounded-full ">
                 <svg  xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="24"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
             </a>
             <h1 class="w-1/2 py-4 text-5xl font-bold"><span class="">{{ $course->course_name }}</span></h1>
@@ -151,7 +151,7 @@
 
 </section>
 </section>
-<div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 modal">
+<div id="responsesModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
     <div class="w-3/5 p-4 bg-white rounded-lg shadow-lg modal-content">
 
         <div class="flex justify-end w-full">
@@ -191,6 +191,15 @@
             </table>
         </div>
 
+    </div>
+</div>
+
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
     </div>
 </div>
 @include('partials.footer')

@@ -1,31 +1,26 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
-        
+@section('content')   
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 rounded-lg shadow-lg b">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-6">
 
             <a href="{{ back()->getTargetUrl() }}" class="w-8 h-8 m-2">
                 <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
             </a>
         
-            <div class="flex" id="upper_container">
+            <div class="flex flex-col space-y-2 lg:flex-row" id="upper_container">
 
-                <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
-                    <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
-                        <img class="z-0 w-40 h-40 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
+                <div class="flex flex-col items-center justify-start bg-white rounded-lg shadow-lg lg:w-3/12" id="upper_left_container">
+                    <div class="relative flex flex-col items-center justify-start">
+                        <img class="z-0 w-16 h-16 rounded-full lg:h-40 lg:w-40" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
                     </div>
 
-                    <div class="mt-10" id="name_area">
+                    <div class="" id="name_area">
                         <h1 class="text-2xl font-semibold text-center">{{$learner->learner_fname}} {{$learner->learner_lname}}</h1>
                     </div>
 
-                    <div class="mt-5 text-center" id="account_status_area">
+                    <div class="text-center" id="account_status_area">
                         <h1 class="text-xl">LEARNER</h1>
 
                         @if ($learner->status == 'Approved')
@@ -37,16 +32,16 @@
                         @endif
                     </div>
 
-                    <div class="mt-10 text-center" id="email_area">
+                    <div class="text-center" id="email_area">
                         <h1 class="text-xl">Email</h1>
-                        <h2 class="mb-5 text-md">{{$learner->learner_email}}</h2>
+                        <h2 class="text-md">{{$learner->learner_email}}</h2>
 
                         <a href="{{ url('/instructor/message') }}?email={{ $learner->learner_email }}&type=Learner" class="px-5 py-3 mt-10 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl">Send Message</a>
                     </div>
                 </div> 
 
                 
-                <div class="w-9/12 h-full" id="upper_right_container">
+                <div class="h-full lg:w-9/12" id="upper_right_container">
                     <div class="w-full px-5 py-10 bg-white shadow-lg rounded-xl" id="upper_right_1">
                         <h1 class="text-4xl font-semibold text-darthmouthgreen">User Details</h1>
 
@@ -202,11 +197,4 @@
             
         </div>
     </section>
-
-
-    @include('partials.instructorProfile')
-        
-    </section>
-
-
-@include('partials.footer')
+@endsection
