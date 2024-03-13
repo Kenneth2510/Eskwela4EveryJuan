@@ -298,9 +298,9 @@
                         name="business_category"
                         id="business_category">
                             <option value="" {{old('business_category') == "" ? 'selected' : ''}}></option>
-                            <option value="Micro" {{old('business_category') == "Micro" ? 'selected' : ''}}></option>
-                            <option value="Smaill" {{old('business_category') == "Small" ? 'selected' : ''}}></option>
-                            <option value="Medium" {{old('business_category') == "Medium" ? 'selected' : ''}}></option>
+                            <option value="Micro" {{old('business_category') == "Micro" ? 'selected' : ''}}>Micro</option>
+                            <option value="Smaill" {{old('business_category') == "Small" ? 'selected' : ''}}>Small</option>
+                            <option value="Medium" {{old('business_category') == "Medium" ? 'selected' : ''}}>Medium</option>
                         </select>
                         <span id="businessCategoryError" class="text-red-500"></span>
                     </div>
