@@ -3,7 +3,10 @@
 @section('content')
     {{-- MAIN START --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
+        <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-4">
+            <div class="py-4" id="welcome">
+                <h1 class="text-2xl font-semibold md:text-3xl">Instructor <span class="text-darthmouthgreen">{{$instructor->instructor_fname}}</span></h1>
+            </div>
                 
             {{-- MAIN HEADER --}}
             <div class="flex flex-row items-center justify-between px-4">

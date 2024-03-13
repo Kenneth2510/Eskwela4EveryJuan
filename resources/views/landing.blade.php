@@ -91,12 +91,12 @@
             <div class="hero-overlay bg-opacity-80"></div>
             <div class="text-center hero-content text-neutral-content">
                 <div class="max-w-md">
-                    <h1 class="text-xl text-darthmouthgreen font-semibold">Eskwela4EveryJuan</h1>
-                <h1 class="mb-5 text-7xl font-bold">Next-Level Learning, Made Easy.</h1>
-                <p class="mb-5 text-lg">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+                    <h1 class="text-xl font-semibold text-darthmouthgreen">Eskwela4EveryJuan</h1>
+                <h1 class="mb-5 text-5xl font-bold md:text-6xl lg:text-7xl">Next-Level Learning, Made Easy.</h1>
+                <p class="mb-5 lg:text-lg">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
                 <div class="space-y-4">
-                    <a href="{{  url('/learner') }}" class="btn btn-sm md:btn-md lg:btn-lg btn-primary btn-wide">Student</a>
-                    <a href="{{  url('/instructor') }}" class="btn btn-sm md:btn-md lg:btn-lg btn-wide">Instructor</a>
+                    <a href="{{  url('/learner') }}" class="btn md:btn-md lg:btn-lg btn-primary btn-wide">Student</a>
+                    <a href="{{  url('/instructor') }}" class="btn md:btn-md lg:btn-lg btn-wide">Instructor</a>
                                  
                 </div>
 
@@ -221,7 +221,7 @@
             <div class="h-full lg:pt-[150px] max-w-screen-xl mx-auto space-y-10">
 
                 <div class="flex flex-col items-center w-full lg:flex-row">
-                    <div id="left" class="leading-loose lg:w-1/2 mx-5">
+                    <div id="left" class="mx-5 leading-loose lg:w-1/2">
                         <div class="flex flex-row w-4/5 my-2">
                             <span class="text-4xl ">&#8212;</span>
                             <h1 class="text-3xl font-bold">Business Permits and Licensing Office</h1>

@@ -1,18 +1,13 @@
-@include('partials.header')
+@extends('layouts.instructor_layout')
 
-<section class="flex flex-row w-full h-screen text-sm main-container bg-mainwhitebg md:text-base">
-
-    @include('partials.instructorNav')
-    @include('partials.instructorSidebar')
-
-        
+@section('content')
     {{-- MAIN --}}
-    <section class="w-full px-2 pt-[70px] mx-2 mt-2 md:w-3/4 lg:w-9/12  overscroll-auto md:overflow-auto">
-        <div class="px-3 pb-4 rounded-lg shadow-lg b">
+    <section class="w-full h-screen md:w-3/4 lg:w-10/12">
+        <div class="h-full px-2 py-4 pt-24 rounded-lg shadow-lg md:overflow-hidden md:overflow-y-scroll md:pt-6">
 
-            <div class="flex" id="upper_container">
+            <div class="py-4 space-y-2 lg:flex lg:space-y-0 lg:space-x-2" id="upper_container">
 
-                <div class="flex flex-col items-center justify-start w-3/12 h-full py-10 mx-5 bg-white rounded-lg shadow-lg" id="upper_left_container">
+                <div class="flex flex-col items-center justify-start h-full py-4 bg-white rounded-lg shadow-lg lg:w-3/12" id="upper_left_container">
                     <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
                         <img class="z-0 w-40 h-40 rounded-full" src="{{ asset('storage/' . $instructor->profile_picture) }}" alt="Profile Picture">
                         <button id="update_profile_photo_btn" style="position: absolute; bottom: -6px; right: 10px;" class="w-12 h-12 text-white rounded-full z-5 bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border-2 hover:text-darthmouthgreen"><i class="fa-solid fa-camera"></i></button>
@@ -39,12 +34,12 @@
                         <h1 class="text-xl">Email</h1>
                         <h2 class="text-md">{{$instructor->instructor_email}}</h2>
 
-                        <button class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl">Send Message</button>
+                        {{-- <button class="px-5 py-3 text-lg text-white bg-darthmouthgreen hover:border-2 hover:bg-white hover:border-darthmouthgreen hover:text-darthmouthgreen rounded-xl">Send Message</button> --}}
                     </div>
                 </div> 
 
                 
-                <div class="w-9/12 h-full" id="upper_right_container">
+                <div class="h-full lg:w-9/12" id="upper_right_container">
                     <div class="w-full px-5 py-10 bg-white shadow-lg rounded-xl" id="upper_right_1">
                         <h1 class="text-4xl font-semibold text-darthmouthgreen">User Details</h1>
 
@@ -205,13 +200,7 @@
         </div>
     </section>
 
-
-    @include('partials.instructorProfile')
-        
-    </section>
-
-
-    <div id="profilePicturePopup" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="profilePicturePopup" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelUpdate">
@@ -254,5 +243,4 @@
             <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
         </div>
     </div>
-
-@include('partials.footer')
+@endsection

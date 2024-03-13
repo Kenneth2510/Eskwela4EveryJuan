@@ -3,7 +3,7 @@
 @section('content')
     {{-- MAIN --}}
     <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-        <div class="relative w-full h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-4">
+        <div class="relative w-full h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-6">
         
             {{-- header --}}
             {{-- <div class="relative px-2 rounded-t-lg bg-seagreen text-mainwhitebg">
@@ -209,6 +209,7 @@
             </div>
         </div>
     </section>
+    
     <div id="syllabusModal" class="fixed top-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="p-4 bg-white rounded-lg shadow-lg modal-content md:w-3/5">
             <div class="flex justify-end w-full">
@@ -231,18 +232,18 @@
                     <!-- You can populate this with your syllabus data dynamically -->
                 </tbody>
             </table>
-            <div class="flex justify-center w-full mt-5">
-                <button id="editSyllabusBtn" class="px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen hover:bg-darkenedColor">Edit</button>
-                <button id="addChangesBtn"  class="hidden px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen">Add</button>
-                <button id="saveChangesBtn" data-course-id="{{$course->course_id}}" class="hidden px-4 py-2 mx-2 mt-4 text-white rounded bg-seagreen">Save Now</button>
-                <button id="cancelChangesBtn"  class="hidden px-4 py-2 mx-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
+            <div class="flex justify-center w-full mt-5 space-x-2">
+                <button id="editSyllabusBtn" class="btn btn-primary">Edit</button>
+                <button id="addChangesBtn"  class="hidden text-white btn btn-accent">Add</button>
+                <button id="saveChangesBtn" data-course-id="{{$course->course_id}}" class="hidden btn btn-primary">Save Now</button>
+                <button id="cancelChangesBtn"  class="hidden text-white btn btn-error">Cancel</button>
             </div>
 
         </div>
     </div>
     
     <div id="addTopicModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+        <div class="p-4 bg-white rounded-lg shadow-lg modal-content md:w-3/5">
             <div class="flex justify-end w-full">
                 <button id="closeAddTopicModal">
                     <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
@@ -281,10 +282,10 @@
     </div>
 
     <div id="deleteCourseModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-screen h-screen bg-black bg-opacity-50">
-            <div class="p-5 text-center bg-white rounded-lg">
-                <p>Are you sure you want to delete this course?</p>
-                <button type="button" id="confirmDelete" data-course-id="{{$course->course_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
-                <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
-            </div>
+        <div class="p-5 text-center bg-white rounded-lg">
+            <p>Are you sure you want to delete this course?</p>
+            <button type="button" id="confirmDelete" data-course-id="{{$course->course_id}}" class="px-4 py-2 m-2 text-white bg-red-600 rounded-md">Confirm</button>
+            <button type="button" id="cancelDelete" class="px-4 py-2 m-2 text-gray-700 bg-gray-400 rounded-md">Cancel</button>
+        </div>
     </div>
 @endsection

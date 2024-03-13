@@ -197,27 +197,27 @@
 
 
 
-<div id="courseDetailsModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-screen bg-gray-200 bg-opacity-75">
-    <div class="w-full p-4 bg-white rounded-lg shadow-lg modal-content lg:w-3/5 lg:h-3/4">
+<div id="courseDetailsModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full overflow-hidden bg-gray-200 bg-opacity-75 md:py-4">
+    <div class="w-full h-full p-4 overflow-auto bg-white rounded-lg shadow-lg md:w-3/5 modal-content">
         <div class="flex justify-end w-full">
             <button class="closeCourseDetailsModal">
                 <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
             </button>
         </div>
-        <div class="flex flex-col w-full md:flex-row" id="content">
-            <div class="h-full ring-gray-300 md:ring-0 ring-2 bg-darthmouthgreen" id="courseDetailsDirectory">
-                <ul class="flex divide-x-2 md:flex-col md:divide-x-0">
-                    <li class="flex items-center justify-center w-full py-8 font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseDetailsBtn">Course Details</li>
-                    <li class="flex items-center justify-center w-full py-8 font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="learnersEnrolledBtn">Learners Enrolled</li>
-                    <li class="flex items-center justify-center w-full py-8 font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="gradesheetBtn">Gradesheet</li>
-                    <li class="flex items-center justify-center w-full py-8 font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseFilesBtn">Course Files</li>
+        <div class="flex flex-col" id="content">
+            <div class=" bg-darthmouthgreen rounded-s-xl rounded-e-xl" id="courseDetailsDirectory">
+                <ul class="flex flex-row divide-x-2 divide-white">
+                    <li class="w-full p-3 font-semibold text-center text-white rounded-s-xl hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseDetailsBtn">Course Details</li>
+                    <li class="w-full p-3 font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="learnersEnrolledBtn">Learners Enrolled</li>
+                    <li class="w-full p-3 font-semibold text-center text-white hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="gradesheetBtn">Gradesheet</li>
+                    <li class="w-full p-3 font-semibold text-center text-white rounded-e-xl hover:bg-white hover:text-darthmouthgreen bg-darthmouthgreen" id="courseFilesBtn">Course Files</li>
                 </ul>
             </div>
 
-            <div class="w-full min-h-[500px]" id="courseDetailsContentArea">
-                <div class="flex justify-between w-full" id="courseInfoArea">
+            <div class="py-5 mx-5" id="courseDetailsContentArea">
+                <div class="flex flex-col-reverse items-center justify-between md:flex-row" id="courseInfoArea">
 
-                    <div class="" id="courseInfo_left">
+                    <div class="w-full py-5 mx-5 md:w-1/2" id="courseInfo_left">
                         <h1 class="text-2xl font-semibold md:text-4xl">{{$course->course_name}}</h1>
                         <h4 class="text-xl">{{$course->course_code}}</h4>
                         <h4 class="mt-10">Course Level: <span class="font-medium text-darhmouthgreen">{{$course->course_difficulty}}</span></h4>
@@ -231,7 +231,7 @@
                             {{$course->course_description}}
                         </div>
                     </div>
-                    <div class="flex flex-col items-center justify-center" id="courseInfo_right">
+                    <div class="flex flex-col items-center justify-center w-full md:w-1/2 " id="courseInfo_right">
                         <img class="w-40 h-40 my-4 rounded-full lg:w-40 lg:h-40" src="{{ asset('storage/' . $course->profile_picture) }}" alt="Profile Picture">
                         <h4 class="text-xl">{{$course->instructor_fname}} {{$course->instructor_lname}}</h4>
                         <h4 class="text-xl">INSTRUCTOR</h4>

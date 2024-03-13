@@ -3,8 +3,8 @@
 @section('content')
     {{-- MAIN --}}
 <section class="w-full h-screen md:w-3/4 lg:w-10/12">
-    <div class="h-full px-2 py-4 pt-24 overflow-hidden overflow-y-scroll rounded-lg shadow-lg md:pt-0">
-        <div class="relative z-0 pb-4 text-black border rounded-lg shadow-lg">
+    <div class="h-full px-2 py-4 pt-24 overflow-auto rounded-lg shadow-lg md:pt-6">
+        <div class="relative z-0 p-4 text-black border rounded-lg shadow-lg">
                     {{-- course name/title --}}
             <a href="{{ url('/instructor/courses') }}" class="w-8 h-8 m-2">
                 <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" width="24"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
@@ -128,7 +128,7 @@
 </section>
 
     <div id="courseDetailsModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full overflow-hidden bg-gray-200 bg-opacity-75 md:py-4">
-        <div class="w-full h-full p-4 overflow-x-hidden overflow-y-auto bg-white rounded-lg shadow-lg md:w-3/5 modal-content overscroll-y-auto md:overflow-y-hidden">
+        <div class="w-full h-full p-4 overflow-auto bg-white rounded-lg shadow-lg md:w-3/5 modal-content">
             <div class="flex justify-end w-full">
                 <button class="closeCourseDetailsModal">
                     <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
@@ -175,127 +175,128 @@
 
 
                 <!-- start-generate-pdf -->
-                <div class="" id="generatedPdfArea">
-                    <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
-                    <h1 class="text-2xl font-semibold">Learners Enrolled</h1>
-                    
-                    <div class="m-5 mt-5 px-5 overflow-auto h-[600px]">
-                        <table class="">
-                            <thead class="px-3 text-left text-white bg-darthmouthgreen">
-                                <th class="w-3/12 pl-5">Name</th>
-                                <th class="w-2/12">Email</th>
-                                <th class="w-1/12">Enrollment Status</th>
-                                <th class="w-2/12">Date Enrolled</th>
-                                <th class="w-1/12">Course Progress</th>
-                                <th class="w-2/12"></th>
-                            </thead>
-                            <tbody class="">
-                                @forelse ($courseEnrollees as $enrollee)
-                                <tr class="border-b-2 border-gray-500">
-                                    <td class="py-3 pl-5">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
-                                    <td>{{ $enrollee->learner_email }}</td>
-                                    <td>{{ $enrollee->status }}</td>
-                                    <td>{{ $enrollee->created_at }}</td>
-                                    <td>{{ $enrollee->course_progress }}</td>
-                                    <td>
-                                        <a href="{{ url("/instructor/profile/learner/$enrollee->learner_email") }}" class="px-3 py-1 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border hover:text-darthmouthgreen">View Profile</a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td class="py-3">No enrollees enrolled</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
+                    <div class="hidden py-5" id="learnersEnrolledArea">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+            
+                            <!-- start-generate-pdf -->
+                        <div class="" id="generatedPdfArea">
+                            <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
+                            <h1 class="text-2xl font-semibold">Learners Enrolled</h1>
+                            <div class="mt-5 overflow-auto h-[600px]">
+                                <table class="table w-full table-fixed">
+                                    <thead class="px-3 text-left text-white bg-darthmouthgreen">
+                                        <th class="w-[150px]">Name</th>
+                                        <th class="w-[150px]">Email</th>
+                                        <th class="w-[150px]">Enrollment Status</th>
+                                        <th class="w-[150px]">Date Enrolled</th>
+                                        <th class="w-[150px]">Course Progress</th>
+                                    </thead>
+                                    <tbody class="">
+                                        @forelse ($courseEnrollees as $enrollee)
+                                        <tr class="border-b-2 border-gray-500">
+                                            <td class="py-3">{{ $enrollee->learner_fname }} {{ $enrollee->learner_lname }}</td>
+                                            <td>{{ $enrollee->learner_email }}</td>
+                                            <td>{{ $enrollee->status }}</td>
+                                            <td>{{ $enrollee->created_at }}</td>
+                                            <td>{{ $enrollee->course_progress }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td class="py-3">No enrollees enrolled</td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
-
-            <div class="hidden py-5 mx-5" id="gradesheetArea">
-                <div class="" id="exportExcelGrades">
-                    <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
-                    <h1 class="text-4xl font-semibold">Enrollee Gradesheet</h1>
-                    <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
-                        <table id="gradesheet" class="table-fixed w-[3000px]">
-                            <thead class="px-3 text-center text-white bg-darthmouthgreen">
-                                <th class="w-4/12 pl-5">Name</th>
-                                <th class="w-4/12">Status</th>
-                                <th class="w-4/12">Date Started</th>
-                                <th class="w-4/12">Pre Assessment</th>
-                                
-                                @foreach ($activitySyllabus as $activity)
-                                    <th class="w-4/12">{{ $activity->activity_title }}</th>
-                                @endforeach
-                                
-                                @foreach ($quizSyllabus as $quiz)
-                                    <th class="w-4/12">{{ $quiz->quiz_title }}</th>
-                                @endforeach
-                        
-                                <th class="w-4/12">Post Assessment</th>
-                                <th class="w-4/12">Grade</th>
-                                <th class="w-4/12">Remarks</th>
-                                <th class="w-4/12">Date Finished</th>
-                            </thead>
-                        
-                            <tbody class="text-center">
-                                @forelse ($gradesheet as $grade)
-                                    <tr>
-                                        <td class="py-3 pl-5">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
-                                        <td>{{ $grade->course_progress }}</td>
-                                        <td>{{ $grade->start_period }}</td>
-                                        <td>{{$grade->pre_assessment->score}}</td>
+                    <div class="hidden py-5" id="gradesheetArea">
+                        <div class="" id="exportExcelGrades">
+                            <h1 id="courseNamePdf" class="text-4xl font-semibold">{{ $course->course_name }}</h1>
+                            <h1 class="text-2xl font-semibold">Enrollee Gradesheet</h1>
+                            <div class="mt-5 overflow-auto h-[600px]">
+                                <table id="gradesheet" class="table w-full table-fixed">
+                                    <thead class="px-3 text-center text-white bg-darthmouthgreen">
+                                        <th class="w-[150px]">Name</th>
+                                        <th class="w-[150px]">Status</th>
+                                        <th class="w-[150px]">Date Started</th>
+                                        <th class="w-[150px]">Pre Assessment</th>
                                         
                                         @foreach ($activitySyllabus as $activity)
-                                            <th class="w-[130px]">{{ $activity->activity_title }}</th>
+                                            <th class="w-[150px]">{{ $activity->activity_title }}</th>
                                         @endforeach
                                         
                                         @foreach ($quizSyllabus as $quiz)
-                                            <th class="w-[130px]">{{ $quiz->quiz_title }}</th>
+                                            <th class="w-[150px]">{{ $quiz->quiz_title }}</th>
                                         @endforeach
-                                        
-                                        <td>{{$grade->post_assessment->average_score}}</td>
-                                        <td>{{$grade->grade}}</td>
-                                        <td>{{$grade->remarks}}</td>
-                                        <td>{{ $grade->finish_period }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4">No gradesheet available</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        
+                                
+                                        <th class="w-[150px]">Post Assessment</th>
+                                        <th class="w-[150px]">Grade</th>
+                                        <th class="w-[150px]">Remarks</th>
+                                        <th class="w-[150px]">Date Finished</th>
+                                    </thead>
+                                
+                                    <tbody class="text-center">
+                                        @forelse ($gradesheet as $grade)
+                                            <tr>
+                                                <td class="py-3">{{ $grade->learner_fname }} {{ $grade->learner_lname }}</td>
+                                                <td>{{ $grade->course_progress }}</td>
+                                                <td>{{ $grade->start_period }}</td>
+                                                <td>{{$grade->pre_assessment->score}}</td>
+                                                
+                                                @foreach ($activitySyllabus as $activity)
+                                                    <th class="w-[130px]">{{ $activity->activity_title }}</th>
+                                                @endforeach
+                                                
+                                                @foreach ($quizSyllabus as $quiz)
+                                                    <th class="w-[130px]">{{ $quiz->quiz_title }}</th>
+                                                @endforeach
+                                                
+                                                <td>{{$grade->post_assessment->average_score}}</td>
+                                                <td>{{$grade->grade}}</td>
+                                                <td>{{$grade->remarks}}</td>
+                                                <td>{{ $grade->finish_period }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">No gradesheet available</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
                     </div>
-
-
-                    <div class="hidden py-5 mx-5" id="filesArea">
-                        <h1 class="text-2xl font-semibold md:text-4xl">Your Files</h1>
-                        <div class="w-auto overflow-auto overflow-x-auto">
+                    
+                    <div class="hidden py-5" id="filesArea">
+                        <h1 class="text-2xl font-semibold">Your Files</h1>
+                        <div class="m-5 px-5 overflow-auto overflow-x-auto h-[600px]">
                             <table class="table w-full table-fixed">
-                                <thead class="text-left">
-                                    <th class="w-[130px] px-4">File</th>
-                                    <th class="w-[130px] px-4"></th>
-                                    <th class="w-[130px] px-4"></th>
-                                    <th class="w-[130px] px-4"></th>
+                                <thead class="text-left ">
+                                    <th class="w-1/2 text-xl">File</th>
+                                    <th class="w-1/3"></th>
+                                    <th class="w-1/3"></th>
+                                    <th class="w-1/3"></th>
                                 </thead>
                                 <tbody>
                     
-                                @foreach($courseFiles as $file)
-                                    <tr>
-                                        <td class="px-4 py-3">{{ basename($file) }}</td>
-                                        <td class="w-full px-4">
-                                            <a href="{{ Storage::url("$file") }}" target="_blank" class="p-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">View File</a>
-                                        </td>  
-                                        <td class="px-4 ">
-                                            <a href="{{ Storage::url($file) }}" class="p-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen" download>Download</a>
-                                        </td>     
-                                        <td class="px-4">
-                                            <a href="{{ url("/instructor/course/$course->course_id/delete_file/" . basename($file)) }}" class="p-3 text-white bg-red-500 rounded-xl hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500" onclick="return confirm('Are you sure you want to delete this file?')">Delete</a>
-                                        </td>
-                                                                    
-                                    </tr>
-                                @endforeach
+                                    @foreach($courseFiles as $file)
+                                        <tr>
+                                            <td class="py-3">{{ basename($file) }}</td>
+                                            <td>
+                                                <a href="{{ Storage::url("$file") }}" target="_blank" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen">View File</a>
+                                            </td>  
+                                            <td>
+                                                <a href="{{ Storage::url($file) }}" class="px-5 py-3 text-white rounded-xl bg-darthmouthgreen hover:bg-white hover:border-2 hover:border-darthmouthgreen hover:text-darthmouthgreen" download>Download</a>
+                                            </td>     
+                                            <td>
+                                                <a href="{{ url("/instructor/course/$course->course_id/delete_file/" . basename($file)) }}" class="px-5 py-3 text-white bg-red-500 rounded-xl hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500" onclick="return confirm('Are you sure you want to delete this file?')">Delete</a>
+                                            </td>
+                                                                        
+                                        </tr>
+                                    @endforeach
                             
                                 </tbody>
                             </table>
@@ -307,7 +308,7 @@
         </div>
     </div>
 
-    <div id="courseDetailsEditModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="courseDetailsEditModal" class="fixed top-0 left-0 z-[90] flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelEdit">
@@ -330,32 +331,7 @@
         </div>
     </div>
 
-    <div id="addNewFileModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-            <div class="flex justify-end w-full">
-                <button class="cancelEdit">
-                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-                </button>
-            </div>
-            
-            <form id="uploadFileForm" action="{{ url("/instructor/course/$course->course_id/add_file") }}" method="POST" enctype="multipart/form-data">
-                
-                @csrf
-                <div class="flex flex-col items-center w-full mt-5">
-                    <label for="file" class="mb-2 text-lg font-semibold">Choose File:</label>
-                    <input type="file" name="file" id="file" class="w-full p-2 border border-gray-300 rounded-md">
-                </div>
-
-<div id="addNewFileModal" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full ml-10 bg-gray-200 bg-opacity-75">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
-        <div class="flex justify-end w-full">
-            <button class="cancelAddNewFile">
-                <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
-            </button>
-        </div>
-    </div>
-
-    <div id="deleteCourseModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="deleteCourseModal" class="fixed z-[90] top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelDelete">
@@ -369,14 +345,43 @@
             </div>
             
             <div class="flex justify-center w-full mt-5">
-                <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
-                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+                <button type="button" data-course-id="{{ $course->course_id }}" id="confirmDeleteCourseBtn" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Delete Course</button>
+                <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelDelete hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
             </div>
-        </form>
-    </div>
-</div>
-
-        
+          
         </div>
     </div>
+
+
+    <div id="addNewFileModal" class="fixed top-0 left-0 z-[90] flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+        <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
+            <div class="flex justify-end w-full">
+                <button class="cancelAddNewFile">
+                    <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
+                </button>
+            </div>
+            
+            <form id="uploadFileForm" action="{{ url("/instructor/course/$course->course_id/add_file") }}" method="POST" enctype="multipart/form-data">
+                
+                @csrf
+                <div class="flex flex-col items-center w-full mt-5">
+                    <label for="file" class="mb-2 text-lg font-semibold">Choose File:</label>
+                    <input type="file" name="file" id="file" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+    
+                <div class="flex justify-center w-full mt-5">
+                    <button type="submit" class="px-5 py-3 mx-2 mt-4 text-white rounded-lg bg-seagreen hover:bg-white hover:text-darthmouthgreen hover:border-2 hover:border-darthmouthgreen">Apply File</button>
+                    <button type="button" class="px-5 py-3 mx-2 mt-4 text-white bg-red-500 rounded-lg cancelAddNewFile hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<div id="loaderModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75 ">
+    <div class="flex flex-col items-center justify-center w-full h-screen p-4 bg-white rounded-lg shadow-lg modal-content md:h-1/3 lg:w-1/3">
+        <span class="loading loading-spinner text-primary loading-lg"></span> 
+            
+        <p class="mt-5 text-xl text-darthmouthgreen">loading</p>  
+    </div>
+</div>
 @endsection

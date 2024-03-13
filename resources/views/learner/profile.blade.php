@@ -9,7 +9,7 @@
 
                 <div class="flex flex-col items-center justify-start h-full py-4 bg-white rounded-lg shadow-lg lg:w-3/12" id="upper_left_container">
                     <div class="relative flex flex-col items-center justify-start"  style="margin:0 auto; padding: auto;">
-                        <img class="z-0 w-40 h-40 bg-red-500 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
+                        <img class="z-0 w-40 h-40 rounded-full" src="{{ asset('storage/' . $learner->profile_picture) }}" alt="Profile Picture">
                         <button id="update_profile_photo_btn" style="position: absolute; bottom: -6px; right: 10px;" class="w-12 h-12 text-white rounded-full z-5 bg-darthmouthgreen hover:bg-white hover:border-darthmouthgreen hover:border-2 hover:text-darthmouthgreen"><i class="fa-solid fa-camera"></i></button>
                     </div>
 
@@ -290,7 +290,7 @@
     </section>
   @include('partials.chatbot')
 
-    <div id="profilePicturePopup" class="fixed top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
+    <div id="profilePicturePopup" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
         <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[500px]">
             <div class="flex justify-end w-full">
                 <button class="cancelUpdate">

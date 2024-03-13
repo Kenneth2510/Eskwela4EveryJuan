@@ -248,7 +248,7 @@
         </div>
     </section>    
 
-    <div id="pictureModal" class="fixed inset-0 z-50 flex items-center justify-center hidden w-full px-4 bg-white/50">
+    {{-- <div id="pictureModal" class="fixed inset-0 z-50 flex items-center justify-center hidden w-full px-4 bg-white/50">
         <div class="z-50 w-full mx-auto bg-white rounded shadow-lg modal-container md:max-w-md">
             <div class="px-6 py-4 text-left modal-content">
                 <!-- Modal header -->
@@ -273,10 +273,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-    @include('partials.instructorProfile')
+    </div> --}}
 </section>
 
 
@@ -364,7 +361,7 @@
 
 
 <div id="addLessonContentModal" class="fixed z-[99] top-0 left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+    <div class="w-full p-4 overflow-auto bg-white rounded-lg shadow-lg modal-content h-3/4 lg:w-1/2">
         <div class="flex justify-end w-full">
             <button id="closeAddLessonContentModal">
                 <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
@@ -412,9 +409,8 @@
 
 
 
-
 <div id="editLessonContentModal" class="fixed top-0 z-[99] left-0 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+    <div class="w-full p-4 overflow-auto bg-white rounded-lg shadow-lg modal-content h-3/4 lg:w-1/2">
         <div class="flex justify-end w-full">
             <button class="closeEditLessonContentModal">
                 <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>
@@ -449,7 +445,7 @@
 
 
 <div id="addLessonContentUrlModal" class="fixed top-0 left-0 z-[99] flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-    <div class="modal-content bg-white p-4 rounded-lg shadow-lg w-[750px]">
+    <div class="w-full p-4 overflow-auto bg-white rounded-lg shadow-lg modal-content h-3/4 lg:w-1/2">
         <div class="flex justify-end w-full">
             <button class="closeAddLessonContentUrlModal">
                 <i class="text-xl fa-solid fa-xmark" style="color: #949494;"></i>

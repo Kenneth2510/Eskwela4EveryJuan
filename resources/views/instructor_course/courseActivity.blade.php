@@ -155,7 +155,7 @@
 </section>
 
 <div id="responsesModal" class="fixed top-0 left-0 z-50 flex items-center justify-center hidden w-full h-full bg-gray-200 bg-opacity-75">
-    <div class="w-3/5 max-h-[400px] p-4 bg-white rounded-lg shadow-lg modal-content">
+    <div class="w-full p-4 bg-white rounded-lg shadow-lg lg:w-3/5 h-3/4 modal-content">
 
         <div class="flex justify-end w-full">
             <button class="exitResponsesModalBtn">
